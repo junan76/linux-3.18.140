@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>skb_checksum_complete</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s02.html" title="Socket Buffer Functions"><link rel="prev" href="API-skb-tx-timestamp.html" title="skb_tx_timestamp"><link rel="next" href="API-skb-checksum-none-assert.html" title="skb_checksum_none_assert"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">skb_checksum_complete</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-skb-tx-timestamp.html">Prev</a> </td><th width="60%" align="center">Socket Buffer Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-skb-checksum-none-assert.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-skb-checksum-complete"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>skb_checksum_complete — 
+     Calculate checksum of an entire packet
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">__sum16 <b class="fsfunc">skb_checksum_complete </b>(</code></td><td>struct sk_buff * <var class="pdparam">skb</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2821"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>skb</code></em></span></dt><dd><p>
+     packet to process
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2829"></a><h2>Description</h2><p>
+   This function calculates the checksum over the entire packet plus
+   the value of skb-&gt;csum.  The latter can be used to supply the
+   checksum of a pseudo header as used by TCP/UDP.  It returns the
+   checksum.
+   </p><p>
+
+   For protocols that contain complete checksums such as ICMP/TCP/UDP,
+   this function can be used to verify that checksum on received
+   packets.  In that case the function should return zero if the
+   checksum is correct.  In particular, this function will return zero
+   if skb-&gt;ip_summed is CHECKSUM_UNNECESSARY which indicates that the
+   hardware has already verified the correctness of the checksum.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-skb-tx-timestamp.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-skb-checksum-none-assert.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">skb_tx_timestamp</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">skb_checksum_none_assert</span></td></tr></table></div></body></html>

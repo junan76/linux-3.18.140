@@ -1,0 +1,12 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Things to know about uio_pci_generic</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Userspace I/O HOWTO"><link rel="up" href="uio_pci_generic.html" title="Chapter 5. Generic PCI UIO driver"><link rel="prev" href="uio_pci_generic.html" title="Chapter 5. Generic PCI UIO driver"><link rel="next" href="uio_pci_generic_userspace.html" title="Writing userspace driver using uio_pci_generic"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Things to know about uio_pci_generic</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="uio_pci_generic.html">Prev</a> </td><th width="60%" align="center">Chapter 5. Generic PCI UIO driver</th><td width="20%" align="right"> <a accesskey="n" href="uio_pci_generic_userspace.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="uio_pci_generic_internals"></a>Things to know about uio_pci_generic</h2></div></div></div><p>
+Interrupts are handled using the Interrupt Disable bit in the PCI command
+register and Interrupt Status bit in the PCI status register.  All devices
+compliant to PCI 2.3 (circa 2002) and all compliant PCI Express devices should
+support these bits.  uio_pci_generic detects this support, and won't bind to
+devices which do not support the Interrupt Disable Bit in the command register.
+	</p><p>
+On each interrupt, uio_pci_generic sets the Interrupt Disable bit.
+This prevents the device from generating further interrupts
+until the bit is cleared. The userspace driver should clear this
+bit before blocking and waiting for more interrupts.
+	</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="uio_pci_generic.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="uio_pci_generic.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="uio_pci_generic_userspace.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 5. Generic PCI UIO driver </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Writing userspace driver using uio_pci_generic</td></tr></table></div></body></html>

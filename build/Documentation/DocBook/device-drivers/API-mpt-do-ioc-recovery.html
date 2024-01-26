@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>mpt_do_ioc_recovery</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="message_devices.html#idm20108" title="Fusion message devices"><link rel="prev" href="API-mpt-mapresources.html" title="mpt_mapresources"><link rel="next" href="API-mpt-detect-bound-ports.html" title="mpt_detect_bound_ports"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">mpt_do_ioc_recovery</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-mpt-mapresources.html">Prev</a> </td><th width="60%" align="center">Fusion message devices</th><td width="20%" align="right"> <a accesskey="n" href="API-mpt-detect-bound-ports.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-mpt-do-ioc-recovery"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>mpt_do_ioc_recovery — 
+     Initialize or recover MPT adapter.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">mpt_do_ioc_recovery </b>(</code></td><td>MPT_ADAPTER * <var class="pdparam">ioc</var>, </td></tr><tr><td> </td><td>u32 <var class="pdparam">reason</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">sleepFlag</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm22051"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>ioc</code></em></span></dt><dd><p>
+     Pointer to MPT adapter structure
+    </p></dd><dt><span class="term"><em class="parameter"><code>reason</code></em></span></dt><dd><p>
+     Event word / reason
+    </p></dd><dt><span class="term"><em class="parameter"><code>sleepFlag</code></em></span></dt><dd><p>
+     Use schedule if CAN_SLEEP else use udelay.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm22069"></a><h2>Description</h2><p>
+   This routine performs all the steps necessary to bring the IOC
+   to a OPERATIONAL state.
+   </p><p>
+
+   This routine also pre-fetches the LAN MAC address of a Fibre Channel
+   MPT adapter.
+</p></div><div class="refsect1"><a name="idm22073"></a><h2>Returns</h2><p>
+   0 for success
+   -1 if failed to get board READY
+   -2 if READY but IOCFacts Failed
+   -3 if READY but PrimeIOCFifos Failed
+   -4 if READY but IOCInit Failed
+   -5 if failed to enable_device and/or request_selected_regions
+   -6 if failed to upload firmware
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-mpt-mapresources.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="message_devices.html#idm20108">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-mpt-detect-bound-ports.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">mpt_mapresources</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">mpt_detect_bound_ports</span></td></tr></table></div></body></html>

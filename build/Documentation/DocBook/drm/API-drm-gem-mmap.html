@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>drm_gem_mmap</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drm-memory-management.html#idm878" title="GEM Function Reference"><link rel="prev" href="API-drm-gem-mmap-obj.html" title="drm_gem_mmap_obj"><link rel="next" href="API-drm-vma-offset-manager-init.html" title="drm_vma_offset_manager_init"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">drm_gem_mmap</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-gem-mmap-obj.html">Prev</a> </td><th width="60%" align="center">GEM Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-vma-offset-manager-init.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-drm-gem-mmap"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>drm_gem_mmap — 
+     memory map routine for GEM objects
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">drm_gem_mmap </b>(</code></td><td>struct file * <var class="pdparam">filp</var>, </td></tr><tr><td> </td><td>struct vm_area_struct * <var class="pdparam">vma</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1414"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>filp</code></em></span></dt><dd><p>
+     DRM file pointer
+    </p></dd><dt><span class="term"><em class="parameter"><code>vma</code></em></span></dt><dd><p>
+     VMA for the area to be mapped
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1427"></a><h2>Description</h2><p>
+   If a driver supports GEM object mapping, mmap calls on the DRM file
+   descriptor will end up here.
+   </p><p>
+
+   Look up the GEM object based on the offset passed in (vma-&gt;vm_pgoff will
+   contain the fake offset we created when the GTT map ioctl was called on
+   the object) and map it with a call to <code class="function">drm_gem_mmap_obj</code>.
+   </p><p>
+
+   If the caller is not granted access to the buffer object, the mmap will fail
+   with EACCES. Please see the vma manager for more information.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-gem-mmap-obj.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drm-memory-management.html#idm878">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-vma-offset-manager-init.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_gem_mmap_obj</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_vma_offset_manager_init</span></td></tr></table></div></body></html>

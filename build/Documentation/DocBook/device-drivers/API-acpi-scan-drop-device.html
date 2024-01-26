@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>acpi_scan_drop_device</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch02s05.html" title="Device Drivers ACPI Support"><link rel="prev" href="API-acpi-bus-trim.html" title="acpi_bus_trim"><link rel="next" href="ch02s06.html" title="Device drivers PnP support"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">acpi_scan_drop_device</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-acpi-bus-trim.html">Prev</a> </td><th width="60%" align="center">Device Drivers ACPI Support</th><td width="20%" align="right"> <a accesskey="n" href="ch02s06.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-acpi-scan-drop-device"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>acpi_scan_drop_device — 
+  Drop an ACPI device object.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">acpi_scan_drop_device </b>(</code></td><td>acpi_handle <var class="pdparam">handle</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">context</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm18401"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>handle</code></em></span></dt><dd><p>
+     Handle of an ACPI namespace node, not used.
+    </p></dd><dt><span class="term"><em class="parameter"><code>context</code></em></span></dt><dd><p>
+     Address of the ACPI device object to drop.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm18414"></a><h2>Description</h2><p>
+   This is invoked by <code class="function">acpi_ns_delete_node</code> during the removal of the ACPI
+   namespace node the device object pointed to by <em class="parameter"><code>context</code></em> is attached to.
+   </p><p>
+
+   The unregistration is carried out asynchronously to avoid running
+   <code class="function">acpi_device_del</code> under the ACPICA's namespace mutex and the list is used to
+   ensure the correct ordering (the device objects must be unregistered in the
+   same order in which the corresponding namespace nodes are deleted).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-acpi-bus-trim.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s05.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">acpi_bus_trim</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Device drivers PnP support</td></tr></table></div></body></html>

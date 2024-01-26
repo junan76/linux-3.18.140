@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>sata_link_hardreset</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="libataExt.html" title="Chapter 4. libata Library"><link rel="prev" href="API-ata-std-prereset.html" title="ata_std_prereset"><link rel="next" href="API-sata-std-hardreset.html" title="sata_std_hardreset"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">sata_link_hardreset</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-ata-std-prereset.html">Prev</a> </td><th width="60%" align="center">Chapter 4. libata Library</th><td width="20%" align="right"> <a accesskey="n" href="API-sata-std-hardreset.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-sata-link-hardreset"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>sata_link_hardreset — 
+     reset link via SATA phy reset
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">sata_link_hardreset </b>(</code></td><td>struct ata_link * <var class="pdparam">link</var>, </td></tr><tr><td> </td><td>const unsigned long * <var class="pdparam">timing</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">deadline</var>, </td></tr><tr><td> </td><td>bool * <var class="pdparam">online</var>, </td></tr><tr><td> </td><td>int (*<var class="pdparam">check_ready</var>)
+     <code>(</code>struct ata_link *<code>)</code><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1631"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>link</code></em></span></dt><dd><p>
+     link to reset
+    </p></dd><dt><span class="term"><em class="parameter"><code>timing</code></em></span></dt><dd><p>
+     timing parameters { interval, duratinon, timeout } in msec
+    </p></dd><dt><span class="term"><em class="parameter"><code>deadline</code></em></span></dt><dd><p>
+     deadline jiffies for the operation
+    </p></dd><dt><span class="term"><em class="parameter"><code>online</code></em></span></dt><dd><p>
+     optional out parameter indicating link onlineness
+    </p></dd><dt><span class="term"><em class="parameter"><code>check_ready</code></em></span></dt><dd><p>
+     optional callback to check link readiness
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1659"></a><h2>Description</h2><p>
+   SATA phy-reset <em class="parameter"><code>link</code></em> using DET bits of SControl register.
+   After hardreset, link readiness is waited upon using
+   <code class="function">ata_wait_ready</code> if <em class="parameter"><code>check_ready</code></em> is specified.  LLDs are
+   allowed to not specify <em class="parameter"><code>check_ready</code></em> and wait itself after this
+   function returns.  Device classification is LLD's
+   responsibility.
+   </p><p>
+
+   *<em class="parameter"><code>online</code></em> is set to one iff reset succeeded and <em class="parameter"><code>link</code></em> is online
+   after reset.
+</p></div><div class="refsect1"><a name="idm1669"></a><h2>LOCKING</h2><p>
+   Kernel thread context (may sleep)
+</p></div><div class="refsect1"><a name="idm1672"></a><h2>RETURNS</h2><p>
+   0 on success, -errno otherwise.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-ata-std-prereset.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="libataExt.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-sata-std-hardreset.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">ata_std_prereset</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">sata_std_hardreset</span></td></tr></table></div></body></html>

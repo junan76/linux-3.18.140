@@ -1,0 +1,39 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 4. Peripheral Controller Drivers</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="index.html" title="USB Gadget API for Linux"><link rel="prev" href="re67.html" title="..//drivers/usb/gadget/function/f_serial.c"><link rel="next" href="gadget.html" title="Chapter 5. Gadget Drivers"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Peripheral Controller Drivers</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="re67.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="gadget.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="controllers"></a>Chapter 4. Peripheral Controller Drivers</h1></div></div></div><p>The first hardware supporting this API was the NetChip 2280
+controller, which supports USB 2.0 high speed and is based on PCI.
+This is the <code class="filename">net2280</code> driver module.
+The driver supports Linux kernel versions 2.4 and 2.6;
+contact NetChip Technologies for development boards and product
+information.
+</p><p>Other hardware working in the "gadget" framework includes:
+Intel's PXA 25x and IXP42x series processors
+(<code class="filename">pxa2xx_udc</code>),
+Toshiba TC86c001 "Goku-S" (<code class="filename">goku_udc</code>),
+Renesas SH7705/7727 (<code class="filename">sh_udc</code>),
+MediaQ 11xx (<code class="filename">mq11xx_udc</code>),
+Hynix HMS30C7202 (<code class="filename">h7202_udc</code>),
+National 9303/4 (<code class="filename">n9604_udc</code>),
+Texas Instruments OMAP (<code class="filename">omap_udc</code>),
+Sharp LH7A40x (<code class="filename">lh7a40x_udc</code>),
+and more.
+Most of those are full speed controllers.
+</p><p>At this writing, there are people at work on drivers in
+this framework for several other USB device controllers,
+with plans to make many of them be widely available.
+</p><p>A partial USB simulator,
+the <code class="filename">dummy_hcd</code> driver, is available.
+It can act like a net2280, a pxa25x, or an sa11x0 in terms
+of available endpoints and device speeds; and it simulates
+control, bulk, and to some extent interrupt transfers.
+That lets you develop some parts of a gadget driver on a normal PC,
+without any special hardware, and perhaps with the assistance
+of tools such as GDB running with User Mode Linux.
+At least one person has expressed interest in adapting that
+approach, hooking it up to a simulator for a microcontroller.
+Such simulators can help debug subsystems where the runtime hardware
+is unfriendly to software development, or is not yet available.
+</p><p>Support for other controllers is expected to be developed
+and contributed
+over time, as this driver framework evolves.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="re67.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="gadget.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+   ..//drivers/usb/gadget/function/f_serial.c
+   </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 5. Gadget Drivers</td></tr></table></div></body></html>

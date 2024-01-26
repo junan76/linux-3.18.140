@@ -1,0 +1,65 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 6. Host Controller APIs</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="index.html" title="The Linux-USB Host Side API"><link rel="prev" href="API-usb-hub-find-child.html" title="usb_hub_find_child"><link rel="next" href="API-usb-calc-bus-time.html" title="usb_calc_bus_time"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. Host Controller APIs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-hub-find-child.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-usb-calc-bus-time.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="hcd"></a>Chapter 6. Host Controller APIs</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="refentrytitle"><a href="API-usb-calc-bus-time.html"><span class="phrase">usb_calc_bus_time</span></a></span><span class="refpurpose"> — 
+  approximate periodic transaction time in nanoseconds
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-link-urb-to-ep.html"><span class="phrase">usb_hcd_link_urb_to_ep</span></a></span><span class="refpurpose"> — 
+     add an URB to its endpoint queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-check-unlink-urb.html"><span class="phrase">usb_hcd_check_unlink_urb</span></a></span><span class="refpurpose"> — 
+     check whether an URB may be unlinked
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-unlink-urb-from-ep.html"><span class="phrase">usb_hcd_unlink_urb_from_ep</span></a></span><span class="refpurpose"> — 
+     remove an URB from its endpoint queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-giveback-urb.html"><span class="phrase">usb_hcd_giveback_urb</span></a></span><span class="refpurpose"> — 
+     return URB from HCD to device driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-alloc-streams.html"><span class="phrase">usb_alloc_streams</span></a></span><span class="refpurpose"> — 
+     allocate bulk endpoint stream IDs.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-free-streams.html"><span class="phrase">usb_free_streams</span></a></span><span class="refpurpose"> — 
+     free bulk endpoint stream IDs.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-resume-root-hub.html"><span class="phrase">usb_hcd_resume_root_hub</span></a></span><span class="refpurpose"> — 
+     called by HCD to resume its root hub
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-bus-start-enum.html"><span class="phrase">usb_bus_start_enum</span></a></span><span class="refpurpose"> — 
+     start immediate enumeration (for OTG)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-irq.html"><span class="phrase">usb_hcd_irq</span></a></span><span class="refpurpose"> — 
+     hook IRQs to HCD framework (bus glue)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hc-died.html"><span class="phrase">usb_hc_died</span></a></span><span class="refpurpose"> — 
+     report abnormal shutdown of a host controller (bus glue)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-create-shared-hcd.html"><span class="phrase">usb_create_shared_hcd</span></a></span><span class="refpurpose"> — 
+     create and initialize an HCD structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-create-hcd.html"><span class="phrase">usb_create_hcd</span></a></span><span class="refpurpose"> — 
+     create and initialize an HCD structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-add-hcd.html"><span class="phrase">usb_add_hcd</span></a></span><span class="refpurpose"> — 
+     finish generic HCD structure initialization and register
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-remove-hcd.html"><span class="phrase">usb_remove_hcd</span></a></span><span class="refpurpose"> — 
+     shutdown processing for generic HCDs
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-pci-probe.html"><span class="phrase">usb_hcd_pci_probe</span></a></span><span class="refpurpose"> — 
+  initialize PCI-based HCDs
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-pci-remove.html"><span class="phrase">usb_hcd_pci_remove</span></a></span><span class="refpurpose"> — 
+     shutdown processing for PCI-based HCDs
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-pci-shutdown.html"><span class="phrase">usb_hcd_pci_shutdown</span></a></span><span class="refpurpose"> — 
+     shutdown host controller
+ </span></dt><dt><span class="refentrytitle"><a href="API-hcd-buffer-create.html"><span class="phrase">hcd_buffer_create</span></a></span><span class="refpurpose"> — 
+  initialize buffer pools
+ </span></dt><dt><span class="refentrytitle"><a href="API-hcd-buffer-destroy.html"><span class="phrase">hcd_buffer_destroy</span></a></span><span class="refpurpose"> — 
+     deallocate buffer pools
+ </span></dt></dl></div><p>These APIs are only for use by host controller drivers,
+    most of which implement standard register interfaces such as
+    EHCI, OHCI, or UHCI.
+    UHCI was one of the first interfaces, designed by Intel and
+    also used by VIA; it doesn't do much in hardware.
+    OHCI was designed later, to have the hardware do more work
+    (bigger transfers, tracking protocol state, and so on).
+    EHCI was designed with USB 2.0; its design has features that
+    resemble OHCI (hardware does much more work) as well as
+    UHCI (some parts of ISO support, TD list processing).
+    </p><p>There are host controllers other than the "big three",
+    although most PCI based controllers (and a few non-PCI based
+    ones) use one of those interfaces.
+    Not all host controllers use DMA; some use PIO, and there
+    is also a simulator.
+    </p><p>The same basic APIs are available to drivers for all
+    those controllers.  
+    For historical reasons they are in two layers:
+    <span class="structname">struct usb_bus</span> is a rather thin
+    layer that became available in the 2.2 kernels, while
+    <span class="structname">struct usb_hcd</span> is a more featureful
+    layer (available in later 2.4 kernels and in 2.5) that
+    lets HCDs share common code, to shrink driver size
+    and significantly reduce hcd-specific behaviors.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-hub-find-child.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-usb-calc-bus-time.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_hub_find_child</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_calc_bus_time</span></td></tr></table></div></body></html>

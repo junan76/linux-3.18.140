@@ -1,0 +1,64 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct rio_mport</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="RapidIO Subsystem Guide"><link rel="up" href="internals.html#Structures" title="Structures"><link rel="prev" href="API-struct-rio-dbell.html" title="struct rio_dbell"><link rel="next" href="API-struct-rio-net.html" title="struct rio_net"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct rio_mport</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-rio-dbell.html">Prev</a> </td><th width="60%" align="center">Structures</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-rio-net.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-rio-mport"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct rio_mport — 
+     RIO master port info
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct rio_mport {
+  struct list_head dbells;
+  struct list_head node;
+  struct list_head nnode;
+  struct resource iores;
+  struct resource riores[RIO_MAX_MPORT_RESOURCES];
+  struct rio_msg inb_msg[RIO_MAX_MBOX];
+  struct rio_msg outb_msg[RIO_MAX_MBOX];
+  int host_deviceid;
+  struct rio_ops * ops;
+  unsigned char id;
+  unsigned char index;
+  unsigned int sys_size;
+  enum rio_phy_type phy_type;
+  u32 phys_efptr;
+  unsigned char name[RIO_MAX_MPORT_NAME];
+  struct device dev;
+  void * priv;
+#ifdef CONFIG_RAPIDIO_DMA_ENGINE
+  struct dma_device dma;
+#endif
+  struct rio_scan * nscan;
+};  </pre></div><div class="refsect1"><a name="idm3201"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">dbells</span></dt><dd><p>
+   List of doorbell events
+      </p></dd><dt><span class="term">node</span></dt><dd><p>
+   Node in global list of master ports
+      </p></dd><dt><span class="term">nnode</span></dt><dd><p>
+   Node in network list of master ports
+      </p></dd><dt><span class="term">iores</span></dt><dd><p>
+   I/O mem resource that this master port interface owns
+      </p></dd><dt><span class="term">riores[RIO_MAX_MPORT_RESOURCES]</span></dt><dd><p>
+   RIO resources that this master port interfaces owns
+      </p></dd><dt><span class="term">inb_msg[RIO_MAX_MBOX]</span></dt><dd><p>
+   RIO inbound message event descriptors
+      </p></dd><dt><span class="term">outb_msg[RIO_MAX_MBOX]</span></dt><dd><p>
+   RIO outbound message event descriptors
+      </p></dd><dt><span class="term">host_deviceid</span></dt><dd><p>
+   Host device ID associated with this master port
+      </p></dd><dt><span class="term">ops</span></dt><dd><p>
+   configuration space functions
+      </p></dd><dt><span class="term">id</span></dt><dd><p>
+   Port ID, unique among all ports
+      </p></dd><dt><span class="term">index</span></dt><dd><p>
+   Port index, unique among all port interfaces of the same type
+      </p></dd><dt><span class="term">sys_size</span></dt><dd><p>
+   RapidIO common transport system size
+      </p></dd><dt><span class="term">phy_type</span></dt><dd><p>
+   RapidIO phy type
+      </p></dd><dt><span class="term">phys_efptr</span></dt><dd><p>
+   RIO port extended features pointer
+      </p></dd><dt><span class="term">name[RIO_MAX_MPORT_NAME]</span></dt><dd><p>
+   Port name string
+      </p></dd><dt><span class="term">dev</span></dt><dd><p>
+   device structure associated with an mport
+      </p></dd><dt><span class="term">priv</span></dt><dd><p>
+   Master port private data
+      </p></dd><dt><span class="term">dma</span></dt><dd><p>
+   DMA device associated with mport
+      </p></dd><dt><span class="term">nscan</span></dt><dd><p>
+   RapidIO network enumeration/discovery operations
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-rio-dbell.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="internals.html#Structures">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-rio-net.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct rio_dbell</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct rio_net</span></td></tr></table></div></body></html>

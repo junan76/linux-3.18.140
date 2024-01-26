@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>filemap_fault</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-generic-file-read-iter.html" title="generic_file_read_iter"><link rel="next" href="API-read-cache-page.html" title="read_cache_page"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">filemap_fault</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-generic-file-read-iter.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-read-cache-page.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-filemap-fault"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>filemap_fault — 
+     read in file data for page fault handling
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">filemap_fault </b>(</code></td><td>struct vm_area_struct * <var class="pdparam">vma</var>, </td></tr><tr><td> </td><td>struct vm_fault * <var class="pdparam">vmf</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9303"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>vma</code></em></span></dt><dd><p>
+     vma in which the fault was taken
+    </p></dd><dt><span class="term"><em class="parameter"><code>vmf</code></em></span></dt><dd><p>
+     struct vm_fault containing details of the fault
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9316"></a><h2>Description</h2><p>
+   <code class="function">filemap_fault</code> is invoked via the vma operations vector for a
+   mapped memory region to read in file data during a page fault.
+   </p><p>
+
+   The goto's are kind of ugly, but this streamlines the normal case of having
+   it in the page cache, and handles the special cases reasonably without
+   having a lot of duplicated code.
+   </p><p>
+
+   vma-&gt;vm_mm-&gt;mmap_sem must be held on entry.
+   </p><p>
+
+   If our return value has VM_FAULT_RETRY set, it's because
+   <code class="function">lock_page_or_retry</code> returned 0.
+   The mmap_sem has usually been released in this case.
+   See <code class="function">__lock_page_or_retry</code> for the exception.
+   </p><p>
+
+   If our return value does not have VM_FAULT_RETRY set, the mmap_sem
+   has not been released.
+   </p><p>
+
+   We never return with VM_FAULT_RETRY and a bit from VM_FAULT_ERROR set.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-generic-file-read-iter.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-read-cache-page.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">generic_file_read_iter</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">read_cache_page</span></td></tr></table></div></body></html>

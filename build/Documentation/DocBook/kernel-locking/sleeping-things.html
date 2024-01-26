@@ -1,0 +1,36 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 10. What Functions Are Safe To Call From Interrupts?</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="index.html" title="Unreliable Guide To Locking"><link rel="prev" href="mostly-hardirq.html" title="Data Which Mostly Used By An IRQ Handler"><link rel="next" href="dont-sleep.html" title="Some Functions Which Don't Sleep"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. What Functions Are Safe To Call From Interrupts?</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="mostly-hardirq.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="dont-sleep.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="sleeping-things"></a>Chapter 10. What Functions Are Safe To Call From Interrupts?</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="sleeping-things.html#sleeping">Some Functions Which Sleep</a></span></dt><dt><span class="sect1"><a href="dont-sleep.html">Some Functions Which Don't Sleep</a></span></dt></dl></div><p>
+      Many functions in the kernel sleep (ie. call schedule())
+      directly or indirectly: you can never call them while holding a
+      spinlock, or with preemption disabled.  This also means you need
+      to be in user context: calling them from an interrupt is illegal.
+    </p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sleeping"></a>Some Functions Which Sleep</h2></div></div></div><p>
+      The most common ones are listed below, but you usually have to
+      read the code to find out if other calls are safe.  If everyone
+      else who calls it can sleep, you probably need to be able to
+      sleep, too.  In particular, registration and deregistration
+      functions usually expect to be called from user context, and can
+      sleep.
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        Accesses to 
+        <a class="firstterm" href="glossary.html#gloss-userspace"><em class="firstterm"><a class="firstterm" href="glossary.html#gloss-userspace" title="Userspace">userspace</a></em></a>:
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+          <code class="function">copy_from_user()</code>
+        </p></li><li class="listitem"><p>
+          <code class="function">copy_to_user()</code>
+        </p></li><li class="listitem"><p>
+          <code class="function">get_user()</code>
+        </p></li><li class="listitem"><p>
+          <code class="function">put_user()</code>
+        </p></li></ul></div></li><li class="listitem"><p>
+        <code class="function">kmalloc(GFP_KERNEL)</code>
+      </p></li><li class="listitem"><p>
+      <code class="function">mutex_lock_interruptible()</code> and
+      <code class="function">mutex_lock()</code>
+      </p><p>
+       There is a <code class="function">mutex_trylock()</code> which does not
+       sleep.  Still, it must not be used inside interrupt context since
+       its implementation is not safe for that.
+       <code class="function">mutex_unlock()</code> will also never sleep.
+       It cannot be used in interrupt context either since a mutex
+       must be released by the same task that acquired it.
+      </p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="mostly-hardirq.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="dont-sleep.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Data Which Mostly Used By An IRQ Handler </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Some Functions Which Don't Sleep</td></tr></table></div></body></html>

@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>mutex_lock</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="apiref-mutex.html" title="Chapter 11. Mutex API reference"><link rel="prev" href="API-mutex-is-locked.html" title="mutex_is_locked"><link rel="next" href="API-mutex-unlock.html" title="mutex_unlock"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">mutex_lock</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-mutex-is-locked.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Mutex API reference</th><td width="20%" align="right"> <a accesskey="n" href="API-mutex-unlock.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-mutex-lock"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>mutex_lock — 
+  acquire the mutex
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void __sched <b class="fsfunc">mutex_lock </b>(</code></td><td>struct mutex * <var class="pdparam">lock</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm712"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>lock</code></em></span></dt><dd><p>
+     the mutex to be acquired
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm720"></a><h2>Description</h2><p>
+   Lock the mutex exclusively for this task. If the mutex is not
+   available right now, it will sleep until it can get it.
+   </p><p>
+
+   The mutex must later on be released by the same task that
+   acquired it. Recursive locking is not allowed. The task
+   may not exit without first unlocking the mutex. Also, kernel
+   memory where the mutex resides mutex must not be freed with
+   the mutex still locked. The mutex must first be initialized
+   (or statically defined) before it can be locked. <code class="function">memset</code>-ing
+   the mutex to 0 is not allowed.
+   </p><p>
+
+   ( The CONFIG_DEBUG_MUTEXES .config option turns on debugging
+   checks that will enforce the restrictions and will also do
+   deadlock debugging. )
+   </p><p>
+
+   This function is similar to (but not equivalent to) <code class="function">down</code>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-mutex-is-locked.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="apiref-mutex.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-mutex-unlock.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">mutex_is_locked</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">mutex_unlock</span></td></tr></table></div></body></html>

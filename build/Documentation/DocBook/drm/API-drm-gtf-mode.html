@@ -1,0 +1,39 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>drm_gtf_mode</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drm-mode-setting.html#idm3767" title="Display Modes Function Reference"><link rel="prev" href="API-drm-gtf-mode-complex.html" title="drm_gtf_mode_complex"><link rel="next" href="API-drm-display-mode-from-videomode.html" title="drm_display_mode_from_videomode"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">drm_gtf_mode</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-gtf-mode-complex.html">Prev</a> </td><th width="60%" align="center">Display Modes Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-display-mode-from-videomode.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-drm-gtf-mode"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>drm_gtf_mode — 
+     create the modeline based on the GTF algorithm
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct drm_display_mode * <b class="fsfunc">drm_gtf_mode </b>(</code></td><td>struct drm_device * <var class="pdparam">dev</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">hdisplay</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">vdisplay</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">vrefresh</var>, </td></tr><tr><td> </td><td>bool <var class="pdparam">interlaced</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">margins</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4164"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     drm device
+    </p></dd><dt><span class="term"><em class="parameter"><code>hdisplay</code></em></span></dt><dd><p>
+     hdisplay size
+    </p></dd><dt><span class="term"><em class="parameter"><code>vdisplay</code></em></span></dt><dd><p>
+     vdisplay size
+    </p></dd><dt><span class="term"><em class="parameter"><code>vrefresh</code></em></span></dt><dd><p>
+     vrefresh rate.
+    </p></dd><dt><span class="term"><em class="parameter"><code>interlaced</code></em></span></dt><dd><p>
+     whether to compute an interlaced mode
+    </p></dd><dt><span class="term"><em class="parameter"><code>margins</code></em></span></dt><dd><p>
+     desired margin (borders) size
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4197"></a><h2>Description</h2><p>
+   return the modeline based on GTF algorithm
+   </p><p>
+
+   This function is to create the modeline based on the GTF algorithm.
+</p></div><div class="refsect1"><a name="idm4201"></a><h2>Generalized Timing Formula is derived from</h2><p>
+   GTF Spreadsheet by Andy Morrish (1/5/97)
+</p></div><div class="refsect1"><a name="idm4204"></a><h2>available at http</h2><p>
+   //www.vesa.org
+   </p><p>
+
+   And it is copied from the file of xserver/hw/xfree86/modes/xf86gtf.c.
+   What I have done is to translate it by using integer calculation.
+   I also refer to the function of fb_get_mode in the file of
+   drivers/video/fbmon.c
+</p></div><div class="refsect1"><a name="idm4208"></a><h2>Standard GTF parameters</h2><p>
+   M = 600
+   C = 40
+   K = 128
+   J = 20
+</p></div><div class="refsect1"><a name="idm4211"></a><h2>Returns</h2><p>
+   The modeline based on the GTF algorithm stored in a drm_display_mode object.
+   The display mode object is allocated with <code class="function">drm_mode_create</code>. Returns NULL
+   when no mode could be allocated.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-gtf-mode-complex.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drm-mode-setting.html#idm3767">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-display-mode-from-videomode.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_gtf_mode_complex</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_display_mode_from_videomode</span></td></tr></table></div></body></html>

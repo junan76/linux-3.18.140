@@ -1,0 +1,109 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Delaying, scheduling, and timer routines</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="Basics.html" title="Chapter 1. Driver Basics"><link rel="prev" href="API-atomic-inc-short.html" title="atomic_inc_short"><link rel="next" href="API-struct-cputime.html" title="struct cputime"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Delaying, scheduling, and timer routines</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-atomic-inc-short.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Driver Basics</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-cputime.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm626"></a>Delaying, scheduling, and timer routines</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-cputime.html"><span class="phrase">struct cputime</span></a></span><span class="refpurpose"> — 
+  snaphsot of system and user cputime
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-task-cputime.html"><span class="phrase">struct task_cputime</span></a></span><span class="refpurpose"> — 
+     collected CPU time counts
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-thread-group-cputimer.html"><span class="phrase">struct thread_group_cputimer</span></a></span><span class="refpurpose"> — 
+     thread group interval timer counts
+ </span></dt><dt><span class="refentrytitle"><a href="API-pid-alive.html"><span class="phrase">pid_alive</span></a></span><span class="refpurpose"> — 
+     check that a task structure is not stale
+ </span></dt><dt><span class="refentrytitle"><a href="API-is-global-init.html"><span class="phrase">is_global_init</span></a></span><span class="refpurpose"> — 
+     check if a task structure is init
+ </span></dt><dt><span class="refentrytitle"><a href="API-task-nice.html"><span class="phrase">task_nice</span></a></span><span class="refpurpose"> — 
+     return the nice value of a given task.
+ </span></dt><dt><span class="refentrytitle"><a href="API-is-idle-task.html"><span class="phrase">is_idle_task</span></a></span><span class="refpurpose"> — 
+     is the specified task an idle task?
+ </span></dt><dt><span class="refentrytitle"><a href="API-threadgroup-lock.html"><span class="phrase">threadgroup_lock</span></a></span><span class="refpurpose"> — 
+     lock threadgroup
+ </span></dt><dt><span class="refentrytitle"><a href="API-threadgroup-unlock.html"><span class="phrase">threadgroup_unlock</span></a></span><span class="refpurpose"> — 
+     unlock threadgroup
+ </span></dt><dt><span class="refentrytitle"><a href="API-wake-up-process.html"><span class="phrase">wake_up_process</span></a></span><span class="refpurpose"> — 
+  Wake up a specific process
+ </span></dt><dt><span class="refentrytitle"><a href="API-preempt-notifier-register.html"><span class="phrase">preempt_notifier_register</span></a></span><span class="refpurpose"> — 
+     tell me when current is being preempted &amp; rescheduled
+ </span></dt><dt><span class="refentrytitle"><a href="API-preempt-notifier-unregister.html"><span class="phrase">preempt_notifier_unregister</span></a></span><span class="refpurpose"> — 
+     no longer interested in preemption notifications
+ </span></dt><dt><span class="refentrytitle"><a href="API-preempt-schedule-context.html"><span class="phrase">preempt_schedule_context</span></a></span><span class="refpurpose"> — 
+     preempt_schedule called by tracing
+ </span></dt><dt><span class="refentrytitle"><a href="API-sched-setscheduler.html"><span class="phrase">sched_setscheduler</span></a></span><span class="refpurpose"> — 
+     change the scheduling policy and/or RT priority of a thread.
+ </span></dt><dt><span class="refentrytitle"><a href="API-yield.html"><span class="phrase">yield</span></a></span><span class="refpurpose"> — 
+     yield the current processor to other threads.
+ </span></dt><dt><span class="refentrytitle"><a href="API-yield-to.html"><span class="phrase">yield_to</span></a></span><span class="refpurpose"> — 
+     yield the current processor to another thread in your thread group, or accelerate that thread toward the processor it's on.
+ </span></dt><dt><span class="refentrytitle"><a href="API-cpupri-find.html"><span class="phrase">cpupri_find</span></a></span><span class="refpurpose"> — 
+  find the best (lowest-pri) CPU in the system
+ </span></dt><dt><span class="refentrytitle"><a href="API-cpupri-set.html"><span class="phrase">cpupri_set</span></a></span><span class="refpurpose"> — 
+     update the cpu priority setting
+ </span></dt><dt><span class="refentrytitle"><a href="API-cpupri-init.html"><span class="phrase">cpupri_init</span></a></span><span class="refpurpose"> — 
+     initialize the cpupri structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-cpupri-cleanup.html"><span class="phrase">cpupri_cleanup</span></a></span><span class="refpurpose"> — 
+     clean up the cpupri structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-get-sd-load-idx.html"><span class="phrase">get_sd_load_idx</span></a></span><span class="refpurpose"> — 
+  Obtain the load index for a given sched domain.
+ </span></dt><dt><span class="refentrytitle"><a href="API-update-sg-lb-stats.html"><span class="phrase">update_sg_lb_stats</span></a></span><span class="refpurpose"> — 
+     Update sched_group's statistics for load balancing.
+ </span></dt><dt><span class="refentrytitle"><a href="API-update-sd-pick-busiest.html"><span class="phrase">update_sd_pick_busiest</span></a></span><span class="refpurpose"> — 
+     return 1 on busiest group
+ </span></dt><dt><span class="refentrytitle"><a href="API-update-sd-lb-stats.html"><span class="phrase">update_sd_lb_stats</span></a></span><span class="refpurpose"> — 
+     Update sched_domain's statistics for load balancing.
+ </span></dt><dt><span class="refentrytitle"><a href="API-check-asym-packing.html"><span class="phrase">check_asym_packing</span></a></span><span class="refpurpose"> — 
+     Check to see if the group is packed into the sched doman.
+ </span></dt><dt><span class="refentrytitle"><a href="API-fix-small-imbalance.html"><span class="phrase">fix_small_imbalance</span></a></span><span class="refpurpose"> — 
+     Calculate the minor imbalance that exists amongst the groups of a sched_domain, during load balancing.
+ </span></dt><dt><span class="refentrytitle"><a href="API-calculate-imbalance.html"><span class="phrase">calculate_imbalance</span></a></span><span class="refpurpose"> — 
+     Calculate the amount of imbalance present within the groups of a given sched_domain during load balance.
+ </span></dt><dt><span class="refentrytitle"><a href="API-find-busiest-group.html"><span class="phrase">find_busiest_group</span></a></span><span class="refpurpose"> — 
+     Returns the busiest group within the sched_domain if there is an imbalance. If there isn't an imbalance, and the user has opted for power-savings, it returns a group whose CPUs can be put to idle by rebalancing those tasks elsewhere, if such a group exists.
+ </span></dt><dt><span class="refentrytitle"><a href="API-DECLARE-COMPLETION.html"><span class="phrase">DECLARE_COMPLETION</span></a></span><span class="refpurpose"> — 
+  declare and initialize a completion structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-DECLARE-COMPLETION-ONSTACK.html"><span class="phrase">DECLARE_COMPLETION_ONSTACK</span></a></span><span class="refpurpose"> — 
+     declare and initialize a completion structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-init-completion.html"><span class="phrase">init_completion</span></a></span><span class="refpurpose"> — 
+     Initialize a dynamically allocated completion
+ </span></dt><dt><span class="refentrytitle"><a href="API-reinit-completion.html"><span class="phrase">reinit_completion</span></a></span><span class="refpurpose"> — 
+     reinitialize a completion structure
+ </span></dt><dt><span class="refentrytitle"><a href="API---round-jiffies.html"><span class="phrase">__round_jiffies</span></a></span><span class="refpurpose"> — 
+  function to round jiffies to a full second
+ </span></dt><dt><span class="refentrytitle"><a href="API---round-jiffies-relative.html"><span class="phrase">__round_jiffies_relative</span></a></span><span class="refpurpose"> — 
+     function to round jiffies to a full second
+ </span></dt><dt><span class="refentrytitle"><a href="API-round-jiffies.html"><span class="phrase">round_jiffies</span></a></span><span class="refpurpose"> — 
+     function to round jiffies to a full second
+ </span></dt><dt><span class="refentrytitle"><a href="API-round-jiffies-relative.html"><span class="phrase">round_jiffies_relative</span></a></span><span class="refpurpose"> — 
+     function to round jiffies to a full second
+ </span></dt><dt><span class="refentrytitle"><a href="API---round-jiffies-up.html"><span class="phrase">__round_jiffies_up</span></a></span><span class="refpurpose"> — 
+     function to round jiffies up to a full second
+ </span></dt><dt><span class="refentrytitle"><a href="API---round-jiffies-up-relative.html"><span class="phrase">__round_jiffies_up_relative</span></a></span><span class="refpurpose"> — 
+     function to round jiffies up to a full second
+ </span></dt><dt><span class="refentrytitle"><a href="API-round-jiffies-up.html"><span class="phrase">round_jiffies_up</span></a></span><span class="refpurpose"> — 
+     function to round jiffies up to a full second
+ </span></dt><dt><span class="refentrytitle"><a href="API-round-jiffies-up-relative.html"><span class="phrase">round_jiffies_up_relative</span></a></span><span class="refpurpose"> — 
+     function to round jiffies up to a full second
+ </span></dt><dt><span class="refentrytitle"><a href="API-set-timer-slack.html"><span class="phrase">set_timer_slack</span></a></span><span class="refpurpose"> — 
+     set the allowed slack for a timer
+ </span></dt><dt><span class="refentrytitle"><a href="API-init-timer-key.html"><span class="phrase">init_timer_key</span></a></span><span class="refpurpose"> — 
+     initialize a timer
+ </span></dt><dt><span class="refentrytitle"><a href="API-mod-timer-pending.html"><span class="phrase">mod_timer_pending</span></a></span><span class="refpurpose"> — 
+     modify a pending timer's timeout
+ </span></dt><dt><span class="refentrytitle"><a href="API-mod-timer.html"><span class="phrase">mod_timer</span></a></span><span class="refpurpose"> — 
+     modify a timer's timeout
+ </span></dt><dt><span class="refentrytitle"><a href="API-mod-timer-pinned.html"><span class="phrase">mod_timer_pinned</span></a></span><span class="refpurpose"> — 
+     modify a timer's timeout
+ </span></dt><dt><span class="refentrytitle"><a href="API-add-timer.html"><span class="phrase">add_timer</span></a></span><span class="refpurpose"> — 
+     start a timer
+ </span></dt><dt><span class="refentrytitle"><a href="API-add-timer-on.html"><span class="phrase">add_timer_on</span></a></span><span class="refpurpose"> — 
+     start a timer on a particular CPU
+ </span></dt><dt><span class="refentrytitle"><a href="API-del-timer.html"><span class="phrase">del_timer</span></a></span><span class="refpurpose"> — 
+     deactive a timer.
+ </span></dt><dt><span class="refentrytitle"><a href="API-try-to-del-timer-sync.html"><span class="phrase">try_to_del_timer_sync</span></a></span><span class="refpurpose"> — 
+     Try to deactivate a timer
+ </span></dt><dt><span class="refentrytitle"><a href="API-del-timer-sync.html"><span class="phrase">del_timer_sync</span></a></span><span class="refpurpose"> — 
+     deactivate a timer and wait for the handler to finish.
+ </span></dt><dt><span class="refentrytitle"><a href="API-schedule-timeout.html"><span class="phrase">schedule_timeout</span></a></span><span class="refpurpose"> — 
+     sleep until timeout
+ </span></dt><dt><span class="refentrytitle"><a href="API-msleep.html"><span class="phrase">msleep</span></a></span><span class="refpurpose"> — 
+     sleep safely even with waitqueue interruptions
+ </span></dt><dt><span class="refentrytitle"><a href="API-msleep-interruptible.html"><span class="phrase">msleep_interruptible</span></a></span><span class="refpurpose"> — 
+     sleep waiting for signals
+ </span></dt><dt><span class="refentrytitle"><a href="API-usleep-range.html"><span class="phrase">usleep_range</span></a></span><span class="refpurpose"> — 
+     Drop in replacement for udelay where wakeup is flexible
+ </span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-atomic-inc-short.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="Basics.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-cputime.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">atomic_inc_short</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct cputime</span></td></tr></table></div></body></html>

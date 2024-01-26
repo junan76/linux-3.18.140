@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct kgdb_arch</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="up" href="CommonBackEndReq.html#kgdbArchitecture" title="Architecture Specifics"><link rel="prev" href="API-kgdb-arch-late.html" title="kgdb_arch_late"><link rel="next" href="API-struct-kgdb-io.html" title="struct kgdb_io"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct kgdb_arch</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-kgdb-arch-late.html">Prev</a> </td><th width="60%" align="center">Architecture Specifics</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-kgdb-io.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-kgdb-arch"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct kgdb_arch — 
+     Describe architecture specific values.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct kgdb_arch {
+  unsigned char gdb_bpt_instr[BREAK_INSTR_SIZE];
+  unsigned long flags;
+  int (* set_breakpoint) (unsigned long, char *);
+  int (* remove_breakpoint) (unsigned long, char *);
+  int (* set_hw_breakpoint) (unsigned long, int, enum kgdb_bptype);
+  int (* remove_hw_breakpoint) (unsigned long, int, enum kgdb_bptype);
+  void (* disable_hw_break) (struct pt_regs *regs);
+  void (* remove_all_hw_break) (void);
+  void (* correct_hw_break) (void);
+  void (* enable_nmi) (bool on);
+};  </pre></div><div class="refsect1"><a name="idm972"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">gdb_bpt_instr[BREAK_INSTR_SIZE]</span></dt><dd><p>
+   The instruction to trigger a breakpoint.
+      </p></dd><dt><span class="term">flags</span></dt><dd><p>
+   Flags for the breakpoint, currently just <code class="constant">KGDB_HW_BREAKPOINT</code>.
+      </p></dd><dt><span class="term">set_breakpoint</span></dt><dd><p>
+   Allow an architecture to specify how to set a software
+   breakpoint.
+      </p></dd><dt><span class="term">remove_breakpoint</span></dt><dd><p>
+   Allow an architecture to specify how to remove a
+   software breakpoint.
+      </p></dd><dt><span class="term">set_hw_breakpoint</span></dt><dd><p>
+   Allow an architecture to specify how to set a hardware
+   breakpoint.
+      </p></dd><dt><span class="term">remove_hw_breakpoint</span></dt><dd><p>
+   Allow an architecture to specify how to remove a
+   hardware breakpoint.
+      </p></dd><dt><span class="term">disable_hw_break</span></dt><dd><p>
+   Allow an architecture to specify how to disable
+   hardware breakpoints for a single cpu.
+      </p></dd><dt><span class="term">remove_all_hw_break</span></dt><dd><p>
+   Allow an architecture to specify how to remove all
+   hardware breakpoints.
+      </p></dd><dt><span class="term">correct_hw_break</span></dt><dd><p>
+   Allow an architecture to specify how to correct the
+   hardware debug registers.
+      </p></dd><dt><span class="term">enable_nmi</span></dt><dd><p>
+   Manage NMI-triggered entry to KGDB
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-kgdb-arch-late.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="CommonBackEndReq.html#kgdbArchitecture">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-kgdb-io.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">kgdb_arch_late</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct kgdb_io</span></td></tr></table></div></body></html>

@@ -1,0 +1,36 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct usb_host_endpoint</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="hostside.html" title="Chapter 4. Host-Side Data Types and Macros"><link rel="prev" href="hostside.html" title="Chapter 4. Host-Side Data Types and Macros"><link rel="next" href="API-struct-usb-interface.html" title="struct usb_interface"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct usb_host_endpoint</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="hostside.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Host-Side Data Types and Macros</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-usb-interface.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-usb-host-endpoint"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct usb_host_endpoint — 
+  host-side endpoint descriptor and queue
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct usb_host_endpoint {
+  struct usb_endpoint_descriptor desc;
+  struct usb_ss_ep_comp_descriptor ss_ep_comp;
+  struct list_head urb_list;
+  void * hcpriv;
+  struct ep_device * ep_dev;
+  unsigned char * extra;
+  int extralen;
+  int enabled;
+  int streams;
+};  </pre></div><div class="refsect1"><a name="idm125"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">desc</span></dt><dd><p>
+descriptor for this endpoint, wMaxPacketSize in native byteorder
+      </p></dd><dt><span class="term">ss_ep_comp</span></dt><dd><p>
+SuperSpeed companion descriptor for this endpoint
+      </p></dd><dt><span class="term">urb_list</span></dt><dd><p>
+urbs queued to this endpoint; maintained by usbcore
+      </p></dd><dt><span class="term">hcpriv</span></dt><dd><p>
+for use by HCD; typically holds hardware dma queue head (QH)
+with one or more transfer descriptors (TDs) per urb
+      </p></dd><dt><span class="term">ep_dev</span></dt><dd><p>
+ep_device for sysfs info
+      </p></dd><dt><span class="term">extra</span></dt><dd><p>
+descriptors following this endpoint in the configuration
+      </p></dd><dt><span class="term">extralen</span></dt><dd><p>
+how many bytes of <span class="quote">“<span class="quote">extra</span>”</span> are valid
+      </p></dd><dt><span class="term">enabled</span></dt><dd><p>
+URBs may be submitted to this endpoint
+      </p></dd><dt><span class="term">streams</span></dt><dd><p>
+number of USB-3 streams allocated on the endpoint
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm165"></a><h2>Description</h2><p>
+   USB requests are always queued to a given endpoint, identified by a
+   descriptor within an active interface in a given USB configuration.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="hostside.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="hostside.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-usb-interface.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. Host-Side Data Types and Macros </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct usb_interface</span></td></tr></table></div></body></html>

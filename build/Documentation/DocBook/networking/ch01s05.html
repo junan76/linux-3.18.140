@@ -1,0 +1,146 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>SUN RPC subsystem</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="netcore.html" title="Chapter 1. Linux Networking"><link rel="prev" href="API-gen-estimator-active.html" title="gen_estimator_active"><link rel="next" href="API-xdr-encode-opaque-fixed.html" title="xdr_encode_opaque_fixed"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">SUN RPC subsystem</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-gen-estimator-active.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Linux Networking</th><td width="20%" align="right"> <a accesskey="n" href="API-xdr-encode-opaque-fixed.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm7956"></a>SUN RPC subsystem</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-xdr-encode-opaque-fixed.html"><span class="phrase">xdr_encode_opaque_fixed</span></a></span><span class="refpurpose"> — 
+  Encode fixed length opaque data
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-encode-opaque.html"><span class="phrase">xdr_encode_opaque</span></a></span><span class="refpurpose"> — 
+     Encode variable length opaque data
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-terminate-string.html"><span class="phrase">xdr_terminate_string</span></a></span><span class="refpurpose"> — 
+     '\0'-terminate a string residing in an xdr_buf
+ </span></dt><dt><span class="refentrytitle"><a href="API--copy-from-pages.html"><span class="phrase">_copy_from_pages</span></a></span><span class="refpurpose"> — 
+   </span></dt><dt><span class="refentrytitle"><a href="API-xdr-stream-pos.html"><span class="phrase">xdr_stream_pos</span></a></span><span class="refpurpose"> — 
+     Return the current offset from the start of the xdr_stream
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-init-encode.html"><span class="phrase">xdr_init_encode</span></a></span><span class="refpurpose"> — 
+     Initialize a struct xdr_stream for sending data.
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-commit-encode.html"><span class="phrase">xdr_commit_encode</span></a></span><span class="refpurpose"> — 
+     Ensure all data is written to buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-reserve-space.html"><span class="phrase">xdr_reserve_space</span></a></span><span class="refpurpose"> — 
+     Reserve buffer space for sending
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-truncate-encode.html"><span class="phrase">xdr_truncate_encode</span></a></span><span class="refpurpose"> — 
+     truncate an encode buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-restrict-buflen.html"><span class="phrase">xdr_restrict_buflen</span></a></span><span class="refpurpose"> — 
+     decrease available buffer space
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-write-pages.html"><span class="phrase">xdr_write_pages</span></a></span><span class="refpurpose"> — 
+     Insert a list of pages into an XDR buffer for sending
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-init-decode.html"><span class="phrase">xdr_init_decode</span></a></span><span class="refpurpose"> — 
+     Initialize an xdr_stream for decoding data.
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-init-decode-pages.html"><span class="phrase">xdr_init_decode_pages</span></a></span><span class="refpurpose"> — 
+     Initialize an xdr_stream for decoding data.
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-set-scratch-buffer.html"><span class="phrase">xdr_set_scratch_buffer</span></a></span><span class="refpurpose"> — 
+     Attach a scratch buffer for decoding data.
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-inline-decode.html"><span class="phrase">xdr_inline_decode</span></a></span><span class="refpurpose"> — 
+     Retrieve XDR data to decode
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-read-pages.html"><span class="phrase">xdr_read_pages</span></a></span><span class="refpurpose"> — 
+     Ensure page-based XDR data to decode is aligned at current pointer position
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-enter-page.html"><span class="phrase">xdr_enter_page</span></a></span><span class="refpurpose"> — 
+     decode data from the XDR page
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-buf-subsegment.html"><span class="phrase">xdr_buf_subsegment</span></a></span><span class="refpurpose"> — 
+     set subbuf to a portion of buf
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-buf-trim.html"><span class="phrase">xdr_buf_trim</span></a></span><span class="refpurpose"> — 
+     lop at most <span class="quote">“<span class="quote">len</span>”</span> bytes off the end of <span class="quote">“<span class="quote">buf</span>”</span>
+ </span></dt><dt><span class="refentrytitle"><a href="API-svc-print-addr.html"><span class="phrase">svc_print_addr</span></a></span><span class="refpurpose"> — 
+  Format rq_addr field for printing
+ </span></dt><dt><span class="refentrytitle"><a href="API-svc-reserve.html"><span class="phrase">svc_reserve</span></a></span><span class="refpurpose"> — 
+     change the space reserved for the reply to a request.
+ </span></dt><dt><span class="refentrytitle"><a href="API-svc-find-xprt.html"><span class="phrase">svc_find_xprt</span></a></span><span class="refpurpose"> — 
+     find an RPC transport instance
+ </span></dt><dt><span class="refentrytitle"><a href="API-svc-xprt-names.html"><span class="phrase">svc_xprt_names</span></a></span><span class="refpurpose"> — 
+     format a buffer with a list of transport names
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-register-transport.html"><span class="phrase">xprt_register_transport</span></a></span><span class="refpurpose"> — 
+  register a transport implementation
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-unregister-transport.html"><span class="phrase">xprt_unregister_transport</span></a></span><span class="refpurpose"> — 
+     unregister a transport implementation
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-load-transport.html"><span class="phrase">xprt_load_transport</span></a></span><span class="refpurpose"> — 
+     load a transport implementation
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-reserve-xprt.html"><span class="phrase">xprt_reserve_xprt</span></a></span><span class="refpurpose"> — 
+     serialize write access to transports
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-release-xprt.html"><span class="phrase">xprt_release_xprt</span></a></span><span class="refpurpose"> — 
+     allow other requests to use a transport
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-release-xprt-cong.html"><span class="phrase">xprt_release_xprt_cong</span></a></span><span class="refpurpose"> — 
+     allow other requests to use a transport
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-release-rqst-cong.html"><span class="phrase">xprt_release_rqst_cong</span></a></span><span class="refpurpose"> — 
+     housekeeping when request is complete
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-adjust-cwnd.html"><span class="phrase">xprt_adjust_cwnd</span></a></span><span class="refpurpose"> — 
+     adjust transport congestion window
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-wake-pending-tasks.html"><span class="phrase">xprt_wake_pending_tasks</span></a></span><span class="refpurpose"> — 
+     wake all tasks on a transport's pending queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-wait-for-buffer-space.html"><span class="phrase">xprt_wait_for_buffer_space</span></a></span><span class="refpurpose"> — 
+     wait for transport output buffer to clear
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-write-space.html"><span class="phrase">xprt_write_space</span></a></span><span class="refpurpose"> — 
+     wake the task waiting for transport output buffer space
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-set-retrans-timeout-def.html"><span class="phrase">xprt_set_retrans_timeout_def</span></a></span><span class="refpurpose"> — 
+     set a request's retransmit timeout
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-set-retrans-timeout-rtt.html"><span class="phrase">xprt_set_retrans_timeout_rtt</span></a></span><span class="refpurpose"> — 
+     set a request's retransmit timeout
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-disconnect-done.html"><span class="phrase">xprt_disconnect_done</span></a></span><span class="refpurpose"> — 
+     mark a transport as disconnected
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-lookup-rqst.html"><span class="phrase">xprt_lookup_rqst</span></a></span><span class="refpurpose"> — 
+     find an RPC request corresponding to an XID
+ </span></dt><dt><span class="refentrytitle"><a href="API-xprt-complete-rqst.html"><span class="phrase">xprt_complete_rqst</span></a></span><span class="refpurpose"> — 
+     called when reply processing is complete
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-wake-up.html"><span class="phrase">rpc_wake_up</span></a></span><span class="refpurpose"> — 
+  wake up all rpc_tasks
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-wake-up-status.html"><span class="phrase">rpc_wake_up_status</span></a></span><span class="refpurpose"> — 
+     wake up all rpc_tasks and set their status value.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-malloc.html"><span class="phrase">rpc_malloc</span></a></span><span class="refpurpose"> — 
+     allocate an RPC buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-free.html"><span class="phrase">rpc_free</span></a></span><span class="refpurpose"> — 
+     free buffer allocated via rpc_malloc
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-skb-read-bits.html"><span class="phrase">xdr_skb_read_bits</span></a></span><span class="refpurpose"> — 
+  copy some data bits from skb to internal buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-xdr-partial-copy-from-skb.html"><span class="phrase">xdr_partial_copy_from_skb</span></a></span><span class="refpurpose"> — 
+     copy data out of an skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-csum-partial-copy-to-xdr.html"><span class="phrase">csum_partial_copy_to_xdr</span></a></span><span class="refpurpose"> — 
+     checksum and copy data
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-alloc-iostats.html"><span class="phrase">rpc_alloc_iostats</span></a></span><span class="refpurpose"> — 
+  allocate an rpc_iostats structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-free-iostats.html"><span class="phrase">rpc_free_iostats</span></a></span><span class="refpurpose"> — 
+     release an rpc_iostats structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-count-iostats.html"><span class="phrase">rpc_count_iostats</span></a></span><span class="refpurpose"> — 
+     tally up per-task stats
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-queue-upcall.html"><span class="phrase">rpc_queue_upcall</span></a></span><span class="refpurpose"> — 
+  queue an upcall message to userspace
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-mkpipe-dentry.html"><span class="phrase">rpc_mkpipe_dentry</span></a></span><span class="refpurpose"> — 
+     make an rpc_pipefs file for kernel&lt;-&gt;userspace communication
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-unlink.html"><span class="phrase">rpc_unlink</span></a></span><span class="refpurpose"> — 
+     remove a pipe
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-init-pipe-dir-head.html"><span class="phrase">rpc_init_pipe_dir_head</span></a></span><span class="refpurpose"> — 
+     initialise a struct rpc_pipe_dir_head
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-init-pipe-dir-object.html"><span class="phrase">rpc_init_pipe_dir_object</span></a></span><span class="refpurpose"> — 
+     initialise a struct rpc_pipe_dir_object
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-add-pipe-dir-object.html"><span class="phrase">rpc_add_pipe_dir_object</span></a></span><span class="refpurpose"> — 
+     associate a rpc_pipe_dir_object to a directory
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-remove-pipe-dir-object.html"><span class="phrase">rpc_remove_pipe_dir_object</span></a></span><span class="refpurpose"> — 
+     remove a rpc_pipe_dir_object from a directory
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-find-or-alloc-pipe-dir-object.html"><span class="phrase">rpc_find_or_alloc_pipe_dir_object</span></a></span><span class="refpurpose"> — 
+   </span></dt><dt><span class="refentrytitle"><a href="API-rpcb-getport-async.html"><span class="phrase">rpcb_getport_async</span></a></span><span class="refpurpose"> — 
+  obtain the port for a given RPC service on a given host
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-create.html"><span class="phrase">rpc_create</span></a></span><span class="refpurpose"> — 
+  create an RPC client and transport with one call
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-clone-client.html"><span class="phrase">rpc_clone_client</span></a></span><span class="refpurpose"> — 
+     Clone an RPC client structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-clone-client-set-auth.html"><span class="phrase">rpc_clone_client_set_auth</span></a></span><span class="refpurpose"> — 
+     Clone an RPC client structure and set its auth
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-switch-client-transport.html"><span class="phrase">rpc_switch_client_transport</span></a></span><span class="refpurpose"> — 
+   </span></dt><dt><span class="refentrytitle"><a href="API-rpc-bind-new-program.html"><span class="phrase">rpc_bind_new_program</span></a></span><span class="refpurpose"> — 
+     bind a new RPC program to an existing client
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-run-task.html"><span class="phrase">rpc_run_task</span></a></span><span class="refpurpose"> — 
+     Allocate a new RPC task, then run rpc_execute against it
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-call-sync.html"><span class="phrase">rpc_call_sync</span></a></span><span class="refpurpose"> — 
+     Perform a synchronous RPC call
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-call-async.html"><span class="phrase">rpc_call_async</span></a></span><span class="refpurpose"> — 
+     Perform an asynchronous RPC call
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-peeraddr.html"><span class="phrase">rpc_peeraddr</span></a></span><span class="refpurpose"> — 
+     extract remote peer address from clnt's xprt
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-peeraddr2str.html"><span class="phrase">rpc_peeraddr2str</span></a></span><span class="refpurpose"> — 
+     return remote peer address in printable format
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-localaddr.html"><span class="phrase">rpc_localaddr</span></a></span><span class="refpurpose"> — 
+     discover local endpoint address for an RPC client
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-protocol.html"><span class="phrase">rpc_protocol</span></a></span><span class="refpurpose"> — 
+     Get transport protocol number for an RPC client
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-net-ns.html"><span class="phrase">rpc_net_ns</span></a></span><span class="refpurpose"> — 
+     Get the network namespace for this RPC client
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-max-payload.html"><span class="phrase">rpc_max_payload</span></a></span><span class="refpurpose"> — 
+     Get maximum payload size for a transport, in bytes
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-get-timeout.html"><span class="phrase">rpc_get_timeout</span></a></span><span class="refpurpose"> — 
+     Get timeout for transport in units of HZ
+ </span></dt><dt><span class="refentrytitle"><a href="API-rpc-force-rebind.html"><span class="phrase">rpc_force_rebind</span></a></span><span class="refpurpose"> — 
+     force transport to check that remote port is unchanged
+ </span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-gen-estimator-active.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="netcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-xdr-encode-opaque-fixed.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">gen_estimator_active</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">xdr_encode_opaque_fixed</span></td></tr></table></div></body></html>

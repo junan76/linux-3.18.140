@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>pci_add_dynid</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch09s05.html" title="PCI Support Library"><link rel="prev" href="API-pci-select-bars.html" title="pci_select_bars"><link rel="next" href="API-pci-match-id.html" title="pci_match_id"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">pci_add_dynid</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-pci-select-bars.html">Prev</a> </td><th width="60%" align="center">PCI Support Library</th><td width="20%" align="right"> <a accesskey="n" href="API-pci-match-id.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-pci-add-dynid"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>pci_add_dynid — 
+  add a new PCI device ID to this driver and re-probe devices
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">pci_add_dynid </b>(</code></td><td>struct pci_driver * <var class="pdparam">drv</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">vendor</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">device</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">subvendor</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">subdevice</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">class</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">class_mask</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">driver_data</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm20218"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>drv</code></em></span></dt><dd><p>
+     target pci driver
+    </p></dd><dt><span class="term"><em class="parameter"><code>vendor</code></em></span></dt><dd><p>
+     PCI vendor ID
+    </p></dd><dt><span class="term"><em class="parameter"><code>device</code></em></span></dt><dd><p>
+     PCI device ID
+    </p></dd><dt><span class="term"><em class="parameter"><code>subvendor</code></em></span></dt><dd><p>
+     PCI subvendor ID
+    </p></dd><dt><span class="term"><em class="parameter"><code>subdevice</code></em></span></dt><dd><p>
+     PCI subdevice ID
+    </p></dd><dt><span class="term"><em class="parameter"><code>class</code></em></span></dt><dd><p>
+     PCI class
+    </p></dd><dt><span class="term"><em class="parameter"><code>class_mask</code></em></span></dt><dd><p>
+     PCI class mask
+    </p></dd><dt><span class="term"><em class="parameter"><code>driver_data</code></em></span></dt><dd><p>
+     private driver data
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm20261"></a><h2>Description</h2><p>
+   Adds a new dynamic pci device ID to this driver and causes the
+   driver to probe for all devices again.  <em class="parameter"><code>drv</code></em> must have been
+   registered prior to calling this function.
+</p></div><div class="refsect1"><a name="idm20265"></a><h2>CONTEXT</h2><p>
+   Does GFP_KERNEL allocation.
+</p></div><div class="refsect1"><a name="idm20268"></a><h2>RETURNS</h2><p>
+   0 on success, -errno on failure.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-pci-select-bars.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch09s05.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-pci-match-id.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">pci_select_bars</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">pci_match_id</span></td></tr></table></div></body></html>

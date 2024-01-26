@@ -1,0 +1,89 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct usb_gadget</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="core.html" title="Core Objects and Methods"><link rel="prev" href="API-usb-ep-fifo-flush.html" title="usb_ep_fifo_flush"><link rel="next" href="API-usb-ep-align.html" title="usb_ep_align"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct usb_gadget</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-ep-fifo-flush.html">Prev</a> </td><th width="60%" align="center">Core Objects and Methods</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-ep-align.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-usb-gadget"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct usb_gadget — 
+     represents a usb slave device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct usb_gadget {
+  struct work_struct work;
+  const struct usb_gadget_ops * ops;
+  struct usb_ep * ep0;
+  struct list_head ep_list;
+  enum usb_device_speed speed;
+  enum usb_device_speed max_speed;
+  enum usb_device_state state;
+  const char * name;
+  struct device dev;
+  unsigned out_epnum;
+  unsigned in_epnum;
+  unsigned sg_supported:1;
+  unsigned is_otg:1;
+  unsigned is_a_peripheral:1;
+  unsigned b_hnp_enable:1;
+  unsigned a_hnp_support:1;
+  unsigned a_alt_hnp_support:1;
+  unsigned quirk_ep_out_aligned_size:1;
+};  </pre></div><div class="refsect1"><a name="idm858"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">work</span></dt><dd><p>
+   (internal use) Workqueue to be used for <code class="function">sysfs_notify</code>
+      </p></dd><dt><span class="term">ops</span></dt><dd><p>
+   Function pointers used to access hardware-specific operations.
+      </p></dd><dt><span class="term">ep0</span></dt><dd><p>
+   Endpoint zero, used when reading or writing responses to
+   driver <code class="function">setup</code> requests
+      </p></dd><dt><span class="term">ep_list</span></dt><dd><p>
+   List of other endpoints supported by the device.
+      </p></dd><dt><span class="term">speed</span></dt><dd><p>
+   Speed of current connection to USB host.
+      </p></dd><dt><span class="term">max_speed</span></dt><dd><p>
+   Maximal speed the UDC can handle.  UDC must support this
+   and all slower speeds.
+      </p></dd><dt><span class="term">state</span></dt><dd><p>
+   the state we are now (attached, suspended, configured, etc)
+      </p></dd><dt><span class="term">name</span></dt><dd><p>
+   Identifies the controller hardware type.  Used in diagnostics
+   and sometimes configuration.
+      </p></dd><dt><span class="term">dev</span></dt><dd><p>
+   Driver model state for this abstract device.
+      </p></dd><dt><span class="term">out_epnum</span></dt><dd><p>
+   last used out ep number
+      </p></dd><dt><span class="term">in_epnum</span></dt><dd><p>
+   last used in ep number
+      </p></dd><dt><span class="term">sg_supported</span></dt><dd><p>
+   true if we can handle scatter-gather
+      </p></dd><dt><span class="term">is_otg</span></dt><dd><p>
+   True if the USB device port uses a Mini-AB jack, so that the
+   gadget driver must provide a USB OTG descriptor.
+      </p></dd><dt><span class="term">is_a_peripheral</span></dt><dd><p>
+   False unless is_otg, the <span class="quote">“<span class="quote">A</span>”</span> end of a USB cable
+   is in the Mini-AB jack, and HNP has been used to switch roles
+   so that the <span class="quote">“<span class="quote">A</span>”</span> device currently acts as A-Peripheral, not A-Host.
+      </p></dd><dt><span class="term">b_hnp_enable</span></dt><dd><p>
+   OTG device feature flag, indicating that the A-Host
+   enabled HNP support.
+      </p></dd><dt><span class="term">a_hnp_support</span></dt><dd><p>
+   OTG device feature flag, indicating that the A-Host
+   supports HNP at this port.
+      </p></dd><dt><span class="term">a_alt_hnp_support</span></dt><dd><p>
+   OTG device feature flag, indicating that the A-Host
+   only supports HNP on a different root port.
+      </p></dd><dt><span class="term">quirk_ep_out_aligned_size</span></dt><dd><p>
+   epout requires buffer size to be aligned to
+   MaxPacketSize.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm937"></a><h2>Description</h2><p>
+   Gadgets have a mostly-portable <span class="quote">“<span class="quote">gadget driver</span>”</span> implementing device
+   functions, handling all usb configurations and interfaces.  Gadget
+   drivers talk to hardware-specific code indirectly, through ops vectors.
+   That insulates the gadget driver from hardware details, and packages
+   the hardware endpoints through generic i/o queues.  The <span class="quote">“<span class="quote">usb_gadget</span>”</span>
+   and <span class="quote">“<span class="quote">usb_ep</span>”</span> interfaces provide that insulation from the hardware.
+   </p><p>
+
+   Except for the driver data, all fields in this structure are
+   read-only to the gadget driver.  That driver data is part of the
+   <span class="quote">“<span class="quote">driver model</span>”</span> infrastructure in 2.6 (and later) kernels, and for
+   earlier systems is grouped in a similar structure that's not known
+   to the rest of the kernel.
+   </p><p>
+
+   Values of the three OTG device feature flags are updated before the
+   <code class="function">setup</code> call corresponding to USB_REQ_SET_CONFIGURATION, and before
+   driver <code class="function">suspend</code> calls.  They are valid only when is_otg, and when the
+   device is acting as a B-Peripheral (so is_a_peripheral is false).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-ep-fifo-flush.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="core.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-ep-align.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_ep_fifo_flush</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_ep_align</span></td></tr></table></div></body></html>

@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>bdev_write_page</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="other_functions.html" title="Other Functions"><link rel="prev" href="API-bdev-read-page.html" title="bdev_read_page"><link rel="next" href="API-bdgrab.html" title="bdgrab"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">bdev_write_page</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-bdev-read-page.html">Prev</a> </td><th width="60%" align="center">Other Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-bdgrab.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-bdev-write-page"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>bdev_write_page — 
+     Start writing a page to a block device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">bdev_write_page </b>(</code></td><td>struct block_device * <var class="pdparam">bdev</var>, </td></tr><tr><td> </td><td>sector_t <var class="pdparam">sector</var>, </td></tr><tr><td> </td><td>struct page * <var class="pdparam">page</var>, </td></tr><tr><td> </td><td>struct writeback_control * <var class="pdparam">wbc</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm7169"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>bdev</code></em></span></dt><dd><p>
+     The device to write the page to
+    </p></dd><dt><span class="term"><em class="parameter"><code>sector</code></em></span></dt><dd><p>
+     The offset on the device to write the page to (need not be aligned)
+    </p></dd><dt><span class="term"><em class="parameter"><code>page</code></em></span></dt><dd><p>
+     The page to write
+    </p></dd><dt><span class="term"><em class="parameter"><code>wbc</code></em></span></dt><dd><p>
+     The writeback_control for the write
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm7192"></a><h2>Description</h2><p>
+   On entry, the page should be locked and not currently under writeback.
+   On exit, if the write started successfully, the page will be unlocked and
+   under writeback.  If the write failed already (eg the driver failed to
+   queue the page to the device), the page will still be locked.  If the
+   caller is a -&gt;writepage implementation, it will need to unlock the page.
+   </p><p>
+
+   Errors returned by this function are usually <span class="quote">“<span class="quote">soft</span>”</span>, eg out of memory, or
+   queue full; callers should try a different route to write this page rather
+   than propagate an error back up the stack.
+</p></div><div class="refsect1"><a name="idm7197"></a><h2>Return</h2><p>
+   negative errno if an error occurs, 0 if submission was successful.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-bdev-read-page.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="other_functions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-bdgrab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">bdev_read_page</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">bdgrab</span></td></tr></table></div></body></html>

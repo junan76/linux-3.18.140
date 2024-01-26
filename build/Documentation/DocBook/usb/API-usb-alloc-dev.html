@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_alloc_dev</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbcore.html" title="Chapter 5. USB Core APIs"><link rel="prev" href="API-usb-for-each-dev.html" title="usb_for_each_dev"><link rel="next" href="API-usb-get-dev.html" title="usb_get_dev"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_alloc_dev</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-for-each-dev.html">Prev</a> </td><th width="60%" align="center">Chapter 5. USB Core APIs</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-get-dev.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-alloc-dev"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_alloc_dev — 
+     usb device constructor (usbcore-internal)
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct usb_device * <b class="fsfunc">usb_alloc_dev </b>(</code></td><td>struct usb_device * <var class="pdparam">parent</var>, </td></tr><tr><td> </td><td>struct usb_bus * <var class="pdparam">bus</var>, </td></tr><tr><td> </td><td>unsigned <var class="pdparam">port1</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4556"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>parent</code></em></span></dt><dd><p>
+     hub to which device is connected; null to allocate a root hub
+    </p></dd><dt><span class="term"><em class="parameter"><code>bus</code></em></span></dt><dd><p>
+     bus used to access the device
+    </p></dd><dt><span class="term"><em class="parameter"><code>port1</code></em></span></dt><dd><p>
+     one-based index of port; ignored for root hubs
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4574"></a><h2>Context</h2><p>
+   !<code class="function">in_interrupt</code>
+</p></div><div class="refsect1"><a name="idm4578"></a><h2>Description</h2><p>
+   Only hub drivers (including virtual root hub drivers for host
+   controllers) should ever call this.
+   </p><p>
+
+   This call may not be used in a non-sleeping context.
+</p></div><div class="refsect1"><a name="idm4582"></a><h2>Return</h2><p>
+   On success, a pointer to the allocated usb device. <code class="constant">NULL</code> on
+   failure.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-for-each-dev.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-get-dev.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_for_each_dev</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_get_dev</span></td></tr></table></div></body></html>

@@ -1,0 +1,75 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Core Objects and Methods</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="api.html" title="Chapter 3. Kernel Mode Gadget API"><link rel="prev" href="API-usb-state-string.html" title="usb_state_string"><link rel="next" href="API-struct-usb-request.html" title="struct usb_request"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Core Objects and Methods</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-state-string.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Kernel Mode Gadget API</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-usb-request.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="core"></a>Core Objects and Methods</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-usb-request.html"><span class="phrase">struct usb_request</span></a></span><span class="refpurpose"> — 
+  describes one i/o request
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-ep.html"><span class="phrase">struct usb_ep</span></a></span><span class="refpurpose"> — 
+     device side representation of USB endpoint
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-set-maxpacket-limit.html"><span class="phrase">usb_ep_set_maxpacket_limit</span></a></span><span class="refpurpose"> — 
+     set maximum packet size limit for endpoint
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-enable.html"><span class="phrase">usb_ep_enable</span></a></span><span class="refpurpose"> — 
+     configure endpoint, making it usable
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-disable.html"><span class="phrase">usb_ep_disable</span></a></span><span class="refpurpose"> — 
+     endpoint is no longer usable
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-alloc-request.html"><span class="phrase">usb_ep_alloc_request</span></a></span><span class="refpurpose"> — 
+     allocate a request object to use with this endpoint
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-free-request.html"><span class="phrase">usb_ep_free_request</span></a></span><span class="refpurpose"> — 
+     frees a request object
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-queue.html"><span class="phrase">usb_ep_queue</span></a></span><span class="refpurpose"> — 
+     queues (submits) an I/O request to an endpoint.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-dequeue.html"><span class="phrase">usb_ep_dequeue</span></a></span><span class="refpurpose"> — 
+     dequeues (cancels, unlinks) an I/O request from an endpoint
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-set-halt.html"><span class="phrase">usb_ep_set_halt</span></a></span><span class="refpurpose"> — 
+     sets the endpoint halt feature.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-clear-halt.html"><span class="phrase">usb_ep_clear_halt</span></a></span><span class="refpurpose"> — 
+     clears endpoint halt, and resets toggle
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-set-wedge.html"><span class="phrase">usb_ep_set_wedge</span></a></span><span class="refpurpose"> — 
+     sets the halt feature and ignores clear requests
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-fifo-status.html"><span class="phrase">usb_ep_fifo_status</span></a></span><span class="refpurpose"> — 
+     returns number of bytes in fifo, or error
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-fifo-flush.html"><span class="phrase">usb_ep_fifo_flush</span></a></span><span class="refpurpose"> — 
+     flushes contents of a fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-gadget.html"><span class="phrase">struct usb_gadget</span></a></span><span class="refpurpose"> — 
+     represents a usb slave device
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-align.html"><span class="phrase">usb_ep_align</span></a></span><span class="refpurpose"> — 
+     returns <em class="parameter"><code>len</code></em> aligned to ep's maxpacketsize.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ep-align-maybe.html"><span class="phrase">usb_ep_align_maybe</span></a></span><span class="refpurpose"> — 
+     returns <em class="parameter"><code>len</code></em> aligned to ep's maxpacketsize if gadget requires quirk_ep_out_aligned_size, otherwise returns len.
+ </span></dt><dt><span class="refentrytitle"><a href="API-gadget-is-dualspeed.html"><span class="phrase">gadget_is_dualspeed</span></a></span><span class="refpurpose"> — 
+     return true iff the hardware handles high speed
+ </span></dt><dt><span class="refentrytitle"><a href="API-gadget-is-superspeed.html"><span class="phrase">gadget_is_superspeed</span></a></span><span class="refpurpose"> — 
+     return true if the hardware handles superspeed
+ </span></dt><dt><span class="refentrytitle"><a href="API-gadget-is-otg.html"><span class="phrase">gadget_is_otg</span></a></span><span class="refpurpose"> — 
+     return true iff the hardware is OTG-ready
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-frame-number.html"><span class="phrase">usb_gadget_frame_number</span></a></span><span class="refpurpose"> — 
+     returns the current frame number
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-wakeup.html"><span class="phrase">usb_gadget_wakeup</span></a></span><span class="refpurpose"> — 
+     tries to wake up the host connected to this gadget
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-set-selfpowered.html"><span class="phrase">usb_gadget_set_selfpowered</span></a></span><span class="refpurpose"> — 
+     sets the device selfpowered feature.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-clear-selfpowered.html"><span class="phrase">usb_gadget_clear_selfpowered</span></a></span><span class="refpurpose"> — 
+     clear the device selfpowered feature.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-vbus-connect.html"><span class="phrase">usb_gadget_vbus_connect</span></a></span><span class="refpurpose"> — 
+     Notify controller that VBUS is powered
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-vbus-draw.html"><span class="phrase">usb_gadget_vbus_draw</span></a></span><span class="refpurpose"> — 
+     constrain controller's VBUS power usage
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-vbus-disconnect.html"><span class="phrase">usb_gadget_vbus_disconnect</span></a></span><span class="refpurpose"> — 
+     notify controller about VBUS session end
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-connect.html"><span class="phrase">usb_gadget_connect</span></a></span><span class="refpurpose"> — 
+     software-controlled connect to USB host
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-disconnect.html"><span class="phrase">usb_gadget_disconnect</span></a></span><span class="refpurpose"> — 
+     software-controlled disconnect from USB host
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-gadget-driver.html"><span class="phrase">struct usb_gadget_driver</span></a></span><span class="refpurpose"> — 
+     driver for usb 'slave' devices
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-probe-driver.html"><span class="phrase">usb_gadget_probe_driver</span></a></span><span class="refpurpose"> — 
+     probe a gadget driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-gadget-unregister-driver.html"><span class="phrase">usb_gadget_unregister_driver</span></a></span><span class="refpurpose"> — 
+     unregister a gadget driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-string.html"><span class="phrase">struct usb_string</span></a></span><span class="refpurpose"> — 
+     wraps a C string and its USB id
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-gadget-strings.html"><span class="phrase">struct usb_gadget_strings</span></a></span><span class="refpurpose"> — 
+     a set of USB strings in a given language
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-free-descriptors.html"><span class="phrase">usb_free_descriptors</span></a></span><span class="refpurpose"> — 
+     free descriptors returned by <code class="function">usb_copy_descriptors</code>
+ </span></dt></dl></div><p>These are declared in
+<code class="filename">&lt;linux/usb/gadget.h&gt;</code>,
+and are used by gadget drivers to interact with
+USB peripheral controller drivers.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-state-string.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="api.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-usb-request.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_state_string</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct usb_request</span></td></tr></table></div></body></html>

@@ -1,0 +1,96 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Linux Filesystems API</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="next" href="vfs.html" title="Chapter 1. The Linux VFS"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Linux Filesystems API</th></tr><tr><td width="20%" align="left"> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="vfs.html">Next</a></td></tr></table><hr></div><div class="book"><div class="titlepage"><div><div><h1 class="title"><a name="Linux-filesystems-API"></a>Linux Filesystems API</h1></div><div><div class="legalnotice"><a name="idm4"></a><p>
+     This documentation is free software; you can redistribute
+     it and/or modify it under the terms of the GNU General Public
+     License as published by the Free Software Foundation; either
+     version 2 of the License, or (at your option) any later
+     version.
+   </p><p>
+     This program is distributed in the hope that it will be
+     useful, but WITHOUT ANY WARRANTY; without even the implied
+     warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+     See the GNU General Public License for more details.
+   </p><p>
+     You should have received a copy of the GNU General Public
+     License along with this program; if not, write to the Free
+     Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+     MA 02111-1307 USA
+   </p><p>
+     For more details see the file COPYING in the source
+     distribution of Linux.
+   </p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="chapter"><a href="vfs.html">1. The Linux VFS</a></span></dt><dd><dl><dt><span class="sect1"><a href="vfs.html#the_filesystem_types">The Filesystem types</a></span></dt><dt><span class="sect1"><a href="the_directory_cache.html">The Directory Cache</a></span></dt><dt><span class="sect1"><a href="inode_handling.html">Inode Handling</a></span></dt><dt><span class="sect1"><a href="registration_and_superblocks.html">Registration and Superblocks</a></span></dt><dt><span class="sect1"><a href="file_locks.html">File Locks</a></span></dt><dt><span class="sect1"><a href="other_functions.html">Other Functions</a></span></dt></dl></dd><dt><span class="chapter"><a href="proc.html">2. The proc filesystem</a></span></dt><dd><dl><dt><span class="sect1"><a href="proc.html#sysctl_interface">sysctl interface</a></span></dt><dt><span class="sect1"><a href="proc_filesystem_interface.html">proc filesystem interface</a></span></dt></dl></dd><dt><span class="chapter"><a href="fs_events.html">3. Events based on file descriptors</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-eventfd-signal.html"><span class="phrase">eventfd_signal</span></a></span><span class="refpurpose"> — 
+  Adds <em class="parameter"><code>n</code></em> to the eventfd counter.
+ </span></dt><dt><span class="refentrytitle"><a href="API-eventfd-ctx-get.html"><span class="phrase">eventfd_ctx_get</span></a></span><span class="refpurpose"> — 
+     Acquires a reference to the internal eventfd context.
+ </span></dt><dt><span class="refentrytitle"><a href="API-eventfd-ctx-put.html"><span class="phrase">eventfd_ctx_put</span></a></span><span class="refpurpose"> — 
+     Releases a reference to the internal eventfd context.
+ </span></dt><dt><span class="refentrytitle"><a href="API-eventfd-ctx-remove-wait-queue.html"><span class="phrase">eventfd_ctx_remove_wait_queue</span></a></span><span class="refpurpose"> — 
+     Read the current counter and removes wait queue.
+ </span></dt><dt><span class="refentrytitle"><a href="API-eventfd-ctx-read.html"><span class="phrase">eventfd_ctx_read</span></a></span><span class="refpurpose"> — 
+     Reads the eventfd counter or wait if it is zero.
+ </span></dt><dt><span class="refentrytitle"><a href="API-eventfd-fget.html"><span class="phrase">eventfd_fget</span></a></span><span class="refpurpose"> — 
+     Acquire a reference of an eventfd file descriptor.
+ </span></dt><dt><span class="refentrytitle"><a href="API-eventfd-ctx-fdget.html"><span class="phrase">eventfd_ctx_fdget</span></a></span><span class="refpurpose"> — 
+     Acquires a reference to the internal eventfd context.
+ </span></dt><dt><span class="refentrytitle"><a href="API-eventfd-ctx-fileget.html"><span class="phrase">eventfd_ctx_fileget</span></a></span><span class="refpurpose"> — 
+     Acquires a reference to the internal eventfd context.
+ </span></dt></dl></dd><dt><span class="chapter"><a href="sysfs.html">4. The Filesystem for Exporting Kernel Objects</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-sysfs-create-file-ns.html"><span class="phrase">sysfs_create_file_ns</span></a></span><span class="refpurpose"> — 
+  create an attribute file for an object with custom ns
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-add-file-to-group.html"><span class="phrase">sysfs_add_file_to_group</span></a></span><span class="refpurpose"> — 
+     add an attribute file to a pre-existing group.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-chmod-file.html"><span class="phrase">sysfs_chmod_file</span></a></span><span class="refpurpose"> — 
+     update the modified mode value on an object attribute.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-break-active-protection.html"><span class="phrase">sysfs_break_active_protection</span></a></span><span class="refpurpose"> — 
+     break <span class="quote">“<span class="quote">active</span>”</span> protection
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-unbreak-active-protection.html"><span class="phrase">sysfs_unbreak_active_protection</span></a></span><span class="refpurpose"> — 
+     restore <span class="quote">“<span class="quote">active</span>”</span> protection
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-remove-file-ns.html"><span class="phrase">sysfs_remove_file_ns</span></a></span><span class="refpurpose"> — 
+     remove an object attribute with a custom ns tag
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-remove-file-from-group.html"><span class="phrase">sysfs_remove_file_from_group</span></a></span><span class="refpurpose"> — 
+     remove an attribute file from a group.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-create-bin-file.html"><span class="phrase">sysfs_create_bin_file</span></a></span><span class="refpurpose"> — 
+     create binary file for object.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-remove-bin-file.html"><span class="phrase">sysfs_remove_bin_file</span></a></span><span class="refpurpose"> — 
+     remove binary file for object.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-create-link.html"><span class="phrase">sysfs_create_link</span></a></span><span class="refpurpose"> — 
+  create symlink between two objects.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-remove-link.html"><span class="phrase">sysfs_remove_link</span></a></span><span class="refpurpose"> — 
+     remove symlink in object's directory.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sysfs-rename-link-ns.html"><span class="phrase">sysfs_rename_link_ns</span></a></span><span class="refpurpose"> — 
+     rename symlink in object's directory.
+ </span></dt></dl></dd><dt><span class="chapter"><a href="debugfs.html">5. The debugfs filesystem</a></span></dt><dd><dl><dt><span class="sect1"><a href="debugfs.html#debugfs_interface">debugfs interface</a></span></dt></dl></dd><dt><span class="chapter"><a href="LinuxJDBAPI.html">6. The Linux Journalling API</a></span></dt><dd><dl><dt><span class="sect1"><a href="LinuxJDBAPI.html#journaling_overview">Overview</a></span></dt><dd><dl><dt><span class="sect2"><a href="LinuxJDBAPI.html#journaling_details">Details</a></span></dt><dt><span class="sect2"><a href="LinuxJDBAPI.html#jbd_summary">Summary</a></span></dt></dl></dd><dt><span class="sect1"><a href="data_types.html">Data Types</a></span></dt><dd><dl><dt><span class="sect2"><a href="data_types.html#structures">Structures</a></span></dt></dl></dd><dt><span class="sect1"><a href="functions.html">Functions</a></span></dt><dd><dl><dt><span class="sect2"><a href="functions.html#journal_level">Journal Level</a></span></dt><dt><span class="sect2"><a href="functions.html#transaction_level">Transasction Level</a></span></dt></dl></dd><dt><span class="sect1"><a href="see_also.html">See also</a></span></dt></dl></dd><dt><span class="chapter"><a href="splice.html">7. splice API</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-splice-to-pipe.html"><span class="phrase">splice_to_pipe</span></a></span><span class="refpurpose"> — 
+  fill passed data into a pipe
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-file-splice-read.html"><span class="phrase">generic_file_splice_read</span></a></span><span class="refpurpose"> — 
+     splice data from file to a pipe
+ </span></dt><dt><span class="refentrytitle"><a href="API-splice-from-pipe-feed.html"><span class="phrase">splice_from_pipe_feed</span></a></span><span class="refpurpose"> — 
+     feed available data from a pipe to a file
+ </span></dt><dt><span class="refentrytitle"><a href="API-splice-from-pipe-next.html"><span class="phrase">splice_from_pipe_next</span></a></span><span class="refpurpose"> — 
+     wait for some data to splice from
+ </span></dt><dt><span class="refentrytitle"><a href="API-splice-from-pipe-begin.html"><span class="phrase">splice_from_pipe_begin</span></a></span><span class="refpurpose"> — 
+     start splicing from pipe
+ </span></dt><dt><span class="refentrytitle"><a href="API-splice-from-pipe-end.html"><span class="phrase">splice_from_pipe_end</span></a></span><span class="refpurpose"> — 
+     finish splicing from pipe
+ </span></dt><dt><span class="refentrytitle"><a href="API---splice-from-pipe.html"><span class="phrase">__splice_from_pipe</span></a></span><span class="refpurpose"> — 
+     splice data from a pipe to given actor
+ </span></dt><dt><span class="refentrytitle"><a href="API-splice-from-pipe.html"><span class="phrase">splice_from_pipe</span></a></span><span class="refpurpose"> — 
+     splice data from a pipe to a file
+ </span></dt><dt><span class="refentrytitle"><a href="API-iter-file-splice-write.html"><span class="phrase">iter_file_splice_write</span></a></span><span class="refpurpose"> — 
+     splice data from a pipe to a file
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-splice-sendpage.html"><span class="phrase">generic_splice_sendpage</span></a></span><span class="refpurpose"> — 
+     splice data from a pipe to a socket
+ </span></dt><dt><span class="refentrytitle"><a href="API-splice-direct-to-actor.html"><span class="phrase">splice_direct_to_actor</span></a></span><span class="refpurpose"> — 
+     splices data directly between two non-pipes
+ </span></dt><dt><span class="refentrytitle"><a href="API-do-splice-direct.html"><span class="phrase">do_splice_direct</span></a></span><span class="refpurpose"> — 
+     splices data directly between two files
+ </span></dt></dl></dd><dt><span class="chapter"><a href="pipes.html">8. pipes API</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-struct-pipe-buffer.html"><span class="phrase">struct pipe_buffer</span></a></span><span class="refpurpose"> — 
+  a linux kernel pipe buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-pipe-inode-info.html"><span class="phrase">struct pipe_inode_info</span></a></span><span class="refpurpose"> — 
+     a linux kernel pipe
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-pipe-buf-steal.html"><span class="phrase">generic_pipe_buf_steal</span></a></span><span class="refpurpose"> — 
+  attempt to take ownership of a <span class="structname">pipe_buffer</span>
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-pipe-buf-get.html"><span class="phrase">generic_pipe_buf_get</span></a></span><span class="refpurpose"> — 
+     get a reference to a <span class="structname">struct pipe_buffer</span>
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-pipe-buf-confirm.html"><span class="phrase">generic_pipe_buf_confirm</span></a></span><span class="refpurpose"> — 
+     verify contents of the pipe buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-pipe-buf-release.html"><span class="phrase">generic_pipe_buf_release</span></a></span><span class="refpurpose"> — 
+     put a reference to a <span class="structname">struct pipe_buffer</span>
+ </span></dt></dl></dd></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="vfs.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"> </td><td width="40%" align="right" valign="top"> Chapter 1. The Linux VFS</td></tr></table></div></body></html>

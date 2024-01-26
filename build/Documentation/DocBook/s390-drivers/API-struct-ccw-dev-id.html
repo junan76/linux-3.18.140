@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct ccw_dev_id</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing s390 channel device drivers"><link rel="up" href="ccw.html#channelIO" title="I/O functions for channel-attached devices"><link rel="prev" href="API-struct-ciw.html" title="struct ciw"><link rel="next" href="API-ccw-dev-id-is-equal.html" title="ccw_dev_id_is_equal"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct ccw_dev_id</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-ciw.html">Prev</a> </td><th width="60%" align="center">I/O functions for channel-attached devices</th><td width="20%" align="right"> <a accesskey="n" href="API-ccw-dev-id-is-equal.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-ccw-dev-id"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct ccw_dev_id — 
+     unique identifier for ccw devices
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct ccw_dev_id {
+  u8 ssid;
+  u16 devno;
+};  </pre></div><div class="refsect1"><a name="idm491"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">ssid</span></dt><dd><p>
+   subchannel set id
+      </p></dd><dt><span class="term">devno</span></dt><dd><p>
+   device number
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm502"></a><h2>Description</h2><p>
+   This structure is not directly based on any hardware structure. The
+   hardware identifies a device by its device number and its subchannel,
+   which is in turn identified by its id. In order to get a unique identifier
+   for ccw devices across subchannel sets, <em class="parameter"><code>struct</code></em> ccw_dev_id has been
+   introduced.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-ciw.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ccw.html#channelIO">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-ccw-dev-id-is-equal.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct ciw</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ccw_dev_id_is_equal</span></td></tr></table></div></body></html>

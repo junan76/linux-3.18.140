@@ -1,0 +1,88 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>enum wimax_st</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s06.html" title="WiMAX"><link rel="prev" href="API-struct-wimax-dev.html" title="struct wimax_dev"><link rel="next" href="netdev.html" title="Chapter 2. Network device support"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">enum wimax_st</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-wimax-dev.html">Prev</a> </td><th width="60%" align="center">WiMAX</th><td width="20%" align="right"> <a accesskey="n" href="netdev.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-enum-wimax-st"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>enum wimax_st — 
+  The different states of a WiMAX device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+enum wimax_st {
+  __WIMAX_ST_NULL,
+  WIMAX_ST_DOWN,
+  __WIMAX_ST_QUIESCING,
+  WIMAX_ST_UNINITIALIZED,
+  WIMAX_ST_RADIO_OFF,
+  WIMAX_ST_READY,
+  WIMAX_ST_SCANNING,
+  WIMAX_ST_CONNECTING,
+  WIMAX_ST_CONNECTED,
+  __WIMAX_ST_INVALID
+};  </pre></div><div class="refsect1"><a name="idm11767"></a><h2>Constants</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">__WIMAX_ST_NULL</span></dt><dd><p>
+The device structure has been allocated and zeroed,
+but still <code class="function">wimax_dev_add</code> hasn't been called. There is no state.
+      </p></dd><dt><span class="term">WIMAX_ST_DOWN</span></dt><dd><p>
+The device has been registered with the WiMAX and
+networking stacks, but it is not initialized (normally that is
+done with 'ifconfig DEV up' [or equivalent], which can upload
+firmware and enable communications with the device).
+In this state, the device is powered down and using as less
+power as possible.
+This state is the default after a call to <code class="function">wimax_dev_add</code>. It
+is ok to have drivers move directly to <code class="constant">WIMAX_ST_UNINITIALIZED</code>
+or <code class="constant">WIMAX_ST_RADIO_OFF</code> in <code class="function">_probe</code> after the call to
+<code class="function">wimax_dev_add</code>.
+It is recommended that the driver leaves this state when
+calling 'ifconfig DEV up' and enters it back on 'ifconfig DEV
+down'.
+      </p></dd><dt><span class="term">__WIMAX_ST_QUIESCING</span></dt><dd><p>
+The device is being torn down, so no API
+operations are allowed to proceed except the ones needed to
+complete the device clean up process.
+      </p></dd><dt><span class="term">WIMAX_ST_UNINITIALIZED</span></dt><dd><p>
+[optional] Communication with the device
+is setup, but the device still requires some configuration
+before being operational.
+Some WiMAX API calls might work.
+      </p></dd><dt><span class="term">WIMAX_ST_RADIO_OFF</span></dt><dd><p>
+The device is fully up; radio is off (wether
+by hardware or software switches).
+It is recommended to always leave the device in this state
+after initialization.
+      </p></dd><dt><span class="term">WIMAX_ST_READY</span></dt><dd><p>
+The device is fully up and radio is on.
+      </p></dd><dt><span class="term">WIMAX_ST_SCANNING</span></dt><dd><p>
+[optional] The device has been instructed to
+scan. In this state, the device cannot be actively connected to
+a network.
+      </p></dd><dt><span class="term">WIMAX_ST_CONNECTING</span></dt><dd><p>
+The device is connecting to a network. This
+state exists because in some devices, the connect process can
+include a number of negotiations between user space, kernel
+space and the device. User space needs to know what the device
+is doing. If the connect sequence in a device is atomic and
+fast, the device can transition directly to CONNECTED
+      </p></dd><dt><span class="term">WIMAX_ST_CONNECTED</span></dt><dd><p>
+The device is connected to a network.
+      </p></dd><dt><span class="term">__WIMAX_ST_INVALID</span></dt><dd><p>
+This is an invalid state used to mark the
+maximum numeric value of states.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm11816"></a><h2>Description</h2><p>
+   </p><p>
+
+   Transitions from one state to another one are atomic and can only
+   be caused in kernel space with <code class="function">wimax_state_change</code>. To read the
+   state, use <code class="function">wimax_state_get</code>.
+   </p><p>
+
+   States starting with __ are internal and shall not be used or
+   referred to by drivers or userspace. They look ugly, but that's the
+   point -- if any use is made non-internal to the stack, it is easier
+   to catch on review.
+   </p><p>
+
+   All API operations [with well defined exceptions] will take the
+   device mutex before starting and then check the state. If the state
+   is <code class="constant">__WIMAX_ST_NULL</code>, <code class="constant">WIMAX_ST_DOWN</code>, <code class="constant">WIMAX_ST_UNINITIALIZED</code> or
+   <code class="constant">__WIMAX_ST_QUIESCING</code>, it will drop the lock and quit with
+   -<code class="constant">EINVAL</code>, -<code class="constant">ENOMEDIUM</code>, -<code class="constant">ENOTCONN</code> or -<code class="constant">ESHUTDOWN</code>.
+   </p><p>
+
+   The order of the definitions is important, so we can do numerical
+   comparisons (eg: &lt; <code class="constant">WIMAX_ST_RADIO_OFF</code> means the device is not ready
+   to operate).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-wimax-dev.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s06.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="netdev.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct wimax_dev</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. Network device support</td></tr></table></div></body></html>

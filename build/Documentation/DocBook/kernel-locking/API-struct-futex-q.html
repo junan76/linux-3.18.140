@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct futex_q</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="apiref-futex.html" title="Chapter 12. Futex API reference"><link rel="prev" href="apiref-futex.html" title="Chapter 12. Futex API reference"><link rel="next" href="API-get-futex-key.html" title="get_futex_key"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct futex_q</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="apiref-futex.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Futex API reference</th><td width="20%" align="right"> <a accesskey="n" href="API-get-futex-key.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-futex-q"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct futex_q — 
+  The hashed futex queue entry, one per waiting task
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct futex_q {
+  struct plist_node list;
+  struct task_struct * task;
+  spinlock_t * lock_ptr;
+  union futex_key key;
+  struct futex_pi_state * pi_state;
+  struct rt_mutex_waiter * rt_waiter;
+  union futex_key * requeue_pi_key;
+  u32 bitset;
+};  </pre></div><div class="refsect1"><a name="idm926"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">list</span></dt><dd><p>
+priority-sorted list of tasks waiting on this futex
+      </p></dd><dt><span class="term">task</span></dt><dd><p>
+the task waiting on the futex
+      </p></dd><dt><span class="term">lock_ptr</span></dt><dd><p>
+the hash bucket lock
+      </p></dd><dt><span class="term">key</span></dt><dd><p>
+the key the futex is hashed on
+      </p></dd><dt><span class="term">pi_state</span></dt><dd><p>
+optional priority inheritance state
+      </p></dd><dt><span class="term">rt_waiter</span></dt><dd><p>
+rt_waiter storage for use with requeue_pi
+      </p></dd><dt><span class="term">requeue_pi_key</span></dt><dd><p>
+the requeue_pi target futex key
+      </p></dd><dt><span class="term">bitset</span></dt><dd><p>
+bitset for the optional bitmasked wakeup
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm961"></a><h2>Description</h2><p>
+   We use this hashed waitqueue, instead of a normal wait_queue_t, so
+   we can wake only the relevant ones (hashed queues may be shared).
+   </p><p>
+
+   A futex_q has a woken state, just like tasks have TASK_RUNNING.
+   It is considered woken when plist_node_empty(<span class="structname">q</span>-&gt;list) || q-&gt;lock_ptr == 0.
+   The order of wakeup is always to make the first condition true, then
+   the second.
+   </p><p>
+
+   PI futexes are typically woken before they are removed from the hash list via
+   the rt_mutex code. See <code class="function">unqueue_me_pi</code>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apiref-futex.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="apiref-futex.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-get-futex-key.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 12. Futex API reference </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">get_futex_key</span></td></tr></table></div></body></html>

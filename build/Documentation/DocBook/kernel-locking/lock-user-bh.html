@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Locking Between User Context and Softirqs</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="locks.html" title="Chapter 3. Locking in the Linux Kernel"><link rel="prev" href="usercontextlocking.html" title="Locking Only In User Context"><link rel="next" href="lock-user-tasklet.html" title="Locking Between User Context and Tasklets"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Locking Between User Context and Softirqs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="usercontextlocking.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Locking in the Linux Kernel</th><td width="20%" align="right"> <a accesskey="n" href="lock-user-tasklet.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="lock-user-bh"></a>Locking Between User Context and Softirqs</h2></div></div></div><p>
+      If a <a class="firstterm" href="glossary.html#gloss-softirq"><em class="firstterm"><a class="firstterm" href="glossary.html#gloss-softirq" title="Software Interrupt / softirq">softirq</a></em></a> shares
+      data with user context, you have two problems.  Firstly, the current 
+      user context can be interrupted by a softirq, and secondly, the
+      critical region could be entered from another CPU.  This is where
+      <code class="function">spin_lock_bh()</code> 
+      (<code class="filename">include/linux/spinlock.h</code>) is
+      used.  It disables softirqs on that CPU, then grabs the lock.
+      <code class="function">spin_unlock_bh()</code> does the reverse.  (The
+      '_bh' suffix is a historical reference to "Bottom Halves", the
+      old name for software interrupts.  It should really be
+      called spin_lock_softirq()' in a perfect world).
+    </p><p>
+      Note that you can also use <code class="function">spin_lock_irq()</code>
+      or <code class="function">spin_lock_irqsave()</code> here, which stop
+      hardware interrupts as well: see <a class="xref" href="hardirq-context.html" title="Chapter 4. Hard IRQ Context">Chapter 4, <i>Hard IRQ Context</i></a>.
+    </p><p>
+      This works perfectly for <a class="firstterm" href="glossary.html#gloss-up"><em class="firstterm"><a class="firstterm" href="glossary.html#gloss-up" title="UP"><acronym class="acronym">UP
+      </acronym></a></em></a> as well: the spin lock vanishes, and this macro 
+      simply becomes <code class="function">local_bh_disable()</code>
+      (<code class="filename">include/linux/interrupt.h</code>), which
+      protects you from the softirq being run.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="usercontextlocking.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="locks.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="lock-user-tasklet.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Locking Only In User Context </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Locking Between User Context and Tasklets</td></tr></table></div></body></html>

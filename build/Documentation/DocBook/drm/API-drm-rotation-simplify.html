@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>drm_rotation_simplify</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drm-kms-init.html#idm5217" title="KMS API Functions"><link rel="prev" href="API-drm-format-vert-chroma-subsampling.html" title="drm_format_vert_chroma_subsampling"><link rel="next" href="API-drm-mode-config-init.html" title="drm_mode_config_init"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">drm_rotation_simplify</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-format-vert-chroma-subsampling.html">Prev</a> </td><th width="60%" align="center">KMS API Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-mode-config-init.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-drm-rotation-simplify"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>drm_rotation_simplify — 
+     Try to simplify the rotation
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">unsigned int <b class="fsfunc">drm_rotation_simplify </b>(</code></td><td>unsigned int <var class="pdparam">rotation</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">supported_rotations</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm7615"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>rotation</code></em></span></dt><dd><p>
+     Rotation to be simplified
+    </p></dd><dt><span class="term"><em class="parameter"><code>supported_rotations</code></em></span></dt><dd><p>
+     Supported rotations
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm7628"></a><h2>Description</h2><p>
+   Attempt to simplify the rotation to a form that is supported.
+   Eg. if the hardware supports everything except DRM_REFLECT_X
+</p></div><div class="refsect1"><a name="idm7631"></a><h2>one could call this function like this</h2><p>
+   </p><p>
+
+   drm_rotation_simplify(rotation, BIT(DRM_ROTATE_0) |
+   BIT(DRM_ROTATE_90) | BIT(DRM_ROTATE_180) |
+   BIT(DRM_ROTATE_270) | BIT(DRM_REFLECT_Y));
+   </p><p>
+
+   to eliminate the DRM_ROTATE_X flag. Depending on what kind of
+   transforms the hardware supports, this function may not
+   be able to produce a supported transform, so the caller should
+   check the result afterwards.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-format-vert-chroma-subsampling.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drm-kms-init.html#idm5217">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-mode-config-init.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_format_vert_chroma_subsampling</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_mode_config_init</span></td></tr></table></div></body></html>

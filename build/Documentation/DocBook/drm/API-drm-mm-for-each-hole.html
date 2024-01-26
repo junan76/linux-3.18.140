@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>drm_mm_for_each_hole</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drm-memory-management.html#idm2693" title="DRM MM Range Allocator Function References"><link rel="prev" href="API-drm-mm-for-each-node.html" title="drm_mm_for_each_node"><link rel="next" href="API-drm-mm-insert-node.html" title="drm_mm_insert_node"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">drm_mm_for_each_hole</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-mm-for-each-node.html">Prev</a> </td><th width="60%" align="center">DRM MM Range Allocator Function References</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-mm-insert-node.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-drm-mm-for-each-hole"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>drm_mm_for_each_hole — 
+     iterator to walk over all holes
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef"> <b class="fsfunc">drm_mm_for_each_hole </b>(</code></td><td> <var class="pdparam">entry</var>, </td></tr><tr><td> </td><td> <var class="pdparam">mm</var>, </td></tr><tr><td> </td><td> <var class="pdparam">hole_start</var>, </td></tr><tr><td> </td><td> <var class="pdparam">hole_end</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm3575"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>entry</code></em></span></dt><dd><p>
+     drm_mm_node used internally to track progress
+    </p></dd><dt><span class="term"><em class="parameter"><code>mm</code></em></span></dt><dd><p>
+     drm_mm allocator to walk
+    </p></dd><dt><span class="term"><em class="parameter"><code>hole_start</code></em></span></dt><dd><p>
+     ulong variable to assign the hole start to on each iteration
+    </p></dd><dt><span class="term"><em class="parameter"><code>hole_end</code></em></span></dt><dd><p>
+     ulong variable to assign the hole end to on each iteration
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm3598"></a><h2>Description</h2><p>
+   This iterator walks over all holes in the range allocator. It is implemented
+   with list_for_each, so not save against removal of elements. <em class="parameter"><code>entry</code></em> is used
+   internally and will not reflect a real drm_mm_node for the very first hole.
+   Hence users of this iterator may not access it.
+</p></div><div class="refsect1"><a name="idm3602"></a><h2>Implementation Note</h2><p>
+   We need to inline list_for_each_entry in order to be able to set hole_start
+   and hole_end on each iteration while keeping the macro sane.
+   </p><p>
+
+   The __drm_mm_for_each_hole version is similar, but with added support for
+   going backwards.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-mm-for-each-node.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drm-memory-management.html#idm2693">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-mm-insert-node.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_mm_for_each_node</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_mm_insert_node</span></td></tr></table></div></body></html>

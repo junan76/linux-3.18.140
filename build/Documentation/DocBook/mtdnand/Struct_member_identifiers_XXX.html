@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Struct member identifiers [XXX]</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="MTD NAND Driver Programming Interface"><link rel="up" href="dochints.html" title="Chapter 3. Documentation hints"><link rel="prev" href="dochints.html" title="Chapter 3. Documentation hints"><link rel="next" href="basicboarddriver.html" title="Chapter 4. Basic board driver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Struct member identifiers [XXX]</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="dochints.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Documentation hints</th><td width="20%" align="right"> <a accesskey="n" href="basicboarddriver.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Struct_member_identifiers_XXX"></a>Struct member identifiers [XXX]</h2></div></div></div><p>
+	The struct members are marked with [XXX] identifiers in the 
+	comment. The identifiers explain the usage and scope of the
+	members. Following identifiers are used:
+     	</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	  	[INTERN]</p><p>
+		These members are for NAND driver internal use only and must not be
+		modified. Most of these values are calculated from the chip geometry
+		information which is evaluated during nand_scan().
+		</p></li><li class="listitem"><p>
+	  	[REPLACEABLE]</p><p>
+		Replaceable members hold hardware related functions which can be 
+		provided by the board driver. The board driver can set the functions which
+		should be replaced by board dependent functions before calling nand_scan().
+		If the function pointer is NULL on entry to nand_scan() then the pointer
+		is set to the default function which is suitable for the detected chip type.
+		</p></li><li class="listitem"><p>
+	  	[BOARDSPECIFIC]</p><p>
+		Board specific members hold hardware related information which must
+		be provided by the board driver. The board driver must set the function
+		pointers and datafields before calling nand_scan().
+		</p></li><li class="listitem"><p>
+	  	[OPTIONAL]</p><p>
+		Optional members can hold information relevant for the board driver. The
+		generic NAND driver code does not use this information.
+		</p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dochints.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="dochints.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="basicboarddriver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. Documentation hints </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 4. Basic board driver</td></tr></table></div></body></html>

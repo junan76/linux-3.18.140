@@ -1,0 +1,74 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct regulation_constraints</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Voltage and current regulator API"><link rel="up" href="api.html" title="Chapter 5. API reference"><link rel="prev" href="API-struct-regulator-state.html" title="struct regulator_state"><link rel="next" href="API-struct-regulator-consumer-supply.html" title="struct regulator_consumer_supply"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct regulation_constraints</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-regulator-state.html">Prev</a> </td><th width="60%" align="center">Chapter 5. API reference</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-regulator-consumer-supply.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-regulation-constraints"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct regulation_constraints — 
+     regulator operating constraints.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct regulation_constraints {
+  const char * name;
+  int min_uV;
+  int max_uV;
+  int uV_offset;
+  int min_uA;
+  int max_uA;
+  unsigned int valid_modes_mask;
+  unsigned int valid_ops_mask;
+  int input_uV;
+  struct regulator_state state_disk;
+  struct regulator_state state_mem;
+  struct regulator_state state_standby;
+  suspend_state_t initial_state;
+  unsigned int initial_mode;
+  unsigned int ramp_delay;
+  unsigned int enable_time;
+  unsigned always_on:1;
+  unsigned boot_on:1;
+  unsigned apply_uV:1;
+  unsigned ramp_disable:1;
+};  </pre></div><div class="refsect1"><a name="idm231"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">name</span></dt><dd><p>
+   Descriptive name for the constraints, used for display purposes.
+      </p></dd><dt><span class="term">min_uV</span></dt><dd><p>
+   Smallest voltage consumers may set.
+      </p></dd><dt><span class="term">max_uV</span></dt><dd><p>
+   Largest voltage consumers may set.
+      </p></dd><dt><span class="term">uV_offset</span></dt><dd><p>
+   Offset applied to voltages from consumer to compensate for
+   voltage drops.
+      </p></dd><dt><span class="term">min_uA</span></dt><dd><p>
+   Smallest current consumers may set.
+      </p></dd><dt><span class="term">max_uA</span></dt><dd><p>
+   Largest current consumers may set.
+      </p></dd><dt><span class="term">valid_modes_mask</span></dt><dd><p>
+   Mask of modes which may be configured by consumers.
+      </p></dd><dt><span class="term">valid_ops_mask</span></dt><dd><p>
+   Operations which may be performed by consumers.
+      </p></dd><dt><span class="term">input_uV</span></dt><dd><p>
+   Input voltage for regulator when supplied by another regulator.
+      </p></dd><dt><span class="term">state_disk</span></dt><dd><p>
+   State for regulator when system is suspended in disk mode.
+      </p></dd><dt><span class="term">state_mem</span></dt><dd><p>
+   State for regulator when system is suspended in mem mode.
+      </p></dd><dt><span class="term">state_standby</span></dt><dd><p>
+   State for regulator when system is suspended in standby
+   mode.
+      </p></dd><dt><span class="term">initial_state</span></dt><dd><p>
+   Suspend state to set by default.
+      </p></dd><dt><span class="term">initial_mode</span></dt><dd><p>
+   Mode to set at startup.
+      </p></dd><dt><span class="term">ramp_delay</span></dt><dd><p>
+   Time to settle down after voltage change (unit: uV/us)
+      </p></dd><dt><span class="term">enable_time</span></dt><dd><p>
+   Turn-on time of the rails (unit: microseconds)
+      </p></dd><dt><span class="term">always_on</span></dt><dd><p>
+   Set if the regulator should never be disabled.
+      </p></dd><dt><span class="term">boot_on</span></dt><dd><p>
+   Set if the regulator is enabled when the system is initially
+   started.  If the regulator is not enabled by the hardware or
+   bootloader then it will be enabled when the constraints are
+   applied.
+      </p></dd><dt><span class="term">apply_uV</span></dt><dd><p>
+   Apply the voltage constraint when initialising.
+      </p></dd><dt><span class="term">ramp_disable</span></dt><dd><p>
+   Disable ramp delay when initialising or when setting voltage.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm314"></a><h2>Description</h2><p>
+   </p><p>
+
+   This struct describes regulator and board/machine specific constraints.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-regulator-state.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="api.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-regulator-consumer-supply.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct regulator_state</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct regulator_consumer_supply</span></td></tr></table></div></body></html>

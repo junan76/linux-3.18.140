@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>z8530_rx</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Z8530 Programming Guide"><link rel="up" href="intfunctions.html" title="Chapter 10. Internal Functions"><link rel="prev" href="API-z8530-rtsdtr.html" title="z8530_rtsdtr"><link rel="next" href="API-z8530-tx.html" title="z8530_tx"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">z8530_rx</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-z8530-rtsdtr.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Internal Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-z8530-tx.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-z8530-rx"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>z8530_rx — 
+     Handle a PIO receive event
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">z8530_rx </b>(</code></td><td>struct z8530_channel * <var class="pdparam">c</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm970"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>c</code></em></span></dt><dd><p>
+     Z8530 channel to process
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm978"></a><h2>Description</h2><p>
+   Receive handler for receiving in PIO mode. This is much like the 
+   async one but not quite the same or as complex
+</p></div><div class="refsect1"><a name="idm981"></a><h2>Note</h2><p>
+   Its intended that this handler can easily be separated from
+   the main code to run realtime. That'll be needed for some machines
+   (eg to ever clock 64kbits on a sparc ;)).
+   </p><p>
+
+   The RT_LOCK macros don't do anything now. Keep the code covered
+   by them as short as possible in all circumstances - clocks cost
+   baud. The interrupt handler is assumed to be atomic w.r.t. to
+   other code - this is true in the RT case too.
+   </p><p>
+
+   We only cover the sync cases for this. If you want 2Mbit async
+   do it yourself but consider medical assistance first. This non DMA 
+   synchronous mode is portable code. The DMA mode assumes PCI like 
+   ISA DMA
+   </p><p>
+
+   Called with the device lock held
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-z8530-rtsdtr.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="intfunctions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-z8530-tx.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">z8530_rtsdtr</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">z8530_tx</span></td></tr></table></div></body></html>

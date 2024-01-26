@@ -1,0 +1,195 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Mode Setting</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drmInternals.html" title="Chapter 2. DRM Internals"><link rel="prev" href="API-drm-mm-insert-node-in-range.html" title="drm_mm_insert_node_in_range"><link rel="next" href="API-drm-mode-is-stereo.html" title="drm_mode_is_stereo"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Mode Setting</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-mm-insert-node-in-range.html">Prev</a> </td><th width="60%" align="center">Chapter 2. DRM Internals</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-mode-is-stereo.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="drm-mode-setting"></a>Mode Setting</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="drm-mode-setting.html#idm3767">Display Modes Function Reference</a></span></dt><dt><span class="sect2"><a href="drm-mode-setting.html#idm4852">Frame Buffer Creation</a></span></dt><dt><span class="sect2"><a href="drm-mode-setting.html#idm4892">Dumb Buffer Objects</a></span></dt><dt><span class="sect2"><a href="drm-mode-setting.html#idm4921">Output Polling</a></span></dt><dt><span class="sect2"><a href="drm-mode-setting.html#idm4926">Locking</a></span></dt></dl></div><p>
+      Drivers must initialize the mode setting core by calling
+      <code class="function">drm_mode_config_init</code> on the DRM device. The function
+      initializes the <span class="structname">drm_device</span>
+      <em class="structfield"><code>mode_config</code></em> field and never fails. Once done,
+      mode configuration must be setup by initializing the following fields.
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">int min_width, min_height;
+int max_width, max_height;</pre><p>
+	  Minimum and maximum width and height of the frame buffers in pixel
+	  units.
+	</p></li><li class="listitem"><pre class="synopsis">struct drm_mode_config_funcs *funcs;</pre><p>Mode setting functions.</p></li></ul></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm3767"></a>Display Modes Function Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-drm-mode-is-stereo.html"><span class="phrase">drm_mode_is_stereo</span></a></span><span class="refpurpose"> — 
+  check for stereo mode flags
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-debug-printmodeline.html"><span class="phrase">drm_mode_debug_printmodeline</span></a></span><span class="refpurpose"> — 
+  print a mode to dmesg
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-create.html"><span class="phrase">drm_mode_create</span></a></span><span class="refpurpose"> — 
+     create a new display mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-destroy.html"><span class="phrase">drm_mode_destroy</span></a></span><span class="refpurpose"> — 
+     remove a mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-probed-add.html"><span class="phrase">drm_mode_probed_add</span></a></span><span class="refpurpose"> — 
+     add a mode to a connector's probed_mode list
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-cvt-mode.html"><span class="phrase">drm_cvt_mode</span></a></span><span class="refpurpose"> — 
+     create a modeline based on the CVT algorithm
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-gtf-mode-complex.html"><span class="phrase">drm_gtf_mode_complex</span></a></span><span class="refpurpose"> — 
+     create the modeline based on the full GTF algorithm
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-gtf-mode.html"><span class="phrase">drm_gtf_mode</span></a></span><span class="refpurpose"> — 
+     create the modeline based on the GTF algorithm
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-display-mode-from-videomode.html"><span class="phrase">drm_display_mode_from_videomode</span></a></span><span class="refpurpose"> — 
+     fill in <em class="parameter"><code>dmode</code></em> using <em class="parameter"><code>vm</code></em>,
+ </span></dt><dt><span class="refentrytitle"><a href="API-of-get-drm-display-mode.html"><span class="phrase">of_get_drm_display_mode</span></a></span><span class="refpurpose"> — 
+     get a drm_display_mode from devicetree
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-set-name.html"><span class="phrase">drm_mode_set_name</span></a></span><span class="refpurpose"> — 
+     set the name on a mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-vrefresh.html"><span class="phrase">drm_mode_vrefresh</span></a></span><span class="refpurpose"> — 
+     get the vrefresh of a mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-set-crtcinfo.html"><span class="phrase">drm_mode_set_crtcinfo</span></a></span><span class="refpurpose"> — 
+     set CRTC modesetting timing parameters
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-copy.html"><span class="phrase">drm_mode_copy</span></a></span><span class="refpurpose"> — 
+     copy the mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-duplicate.html"><span class="phrase">drm_mode_duplicate</span></a></span><span class="refpurpose"> — 
+     allocate and duplicate an existing mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-equal.html"><span class="phrase">drm_mode_equal</span></a></span><span class="refpurpose"> — 
+     test modes for equality
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-equal-no-clocks-no-stereo.html"><span class="phrase">drm_mode_equal_no_clocks_no_stereo</span></a></span><span class="refpurpose"> — 
+     test modes for equality
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-validate-size.html"><span class="phrase">drm_mode_validate_size</span></a></span><span class="refpurpose"> — 
+     make sure modes adhere to size constraints
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-prune-invalid.html"><span class="phrase">drm_mode_prune_invalid</span></a></span><span class="refpurpose"> — 
+     remove invalid modes from mode list
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-sort.html"><span class="phrase">drm_mode_sort</span></a></span><span class="refpurpose"> — 
+     sort mode list
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-connector-list-update.html"><span class="phrase">drm_mode_connector_list_update</span></a></span><span class="refpurpose"> — 
+     update the mode list for the connector
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-parse-command-line-for-connector.html"><span class="phrase">drm_mode_parse_command_line_for_connector</span></a></span><span class="refpurpose"> — 
+     parse command line modeline for connector
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-create-from-cmdline-mode.html"><span class="phrase">drm_mode_create_from_cmdline_mode</span></a></span><span class="refpurpose"> — 
+     convert a command line modeline into a DRM display mode
+ </span></dt></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm4852"></a>Frame Buffer Creation</h3></div></div></div><pre class="synopsis">struct drm_framebuffer *(*fb_create)(struct drm_device *dev,
+				     struct drm_file *file_priv,
+				     struct drm_mode_fb_cmd2 *mode_cmd);</pre><p>
+        Frame buffers are abstract memory objects that provide a source of
+        pixels to scanout to a CRTC. Applications explicitly request the
+        creation of frame buffers through the DRM_IOCTL_MODE_ADDFB(2) ioctls and
+        receive an opaque handle that can be passed to the KMS CRTC control,
+        plane configuration and page flip functions.
+      </p><p>
+        Frame buffers rely on the underneath memory manager for low-level memory
+        operations. When creating a frame buffer applications pass a memory
+        handle (or a list of memory handles for multi-planar formats) through
+	the <em class="parameter"><code>drm_mode_fb_cmd2</code></em> argument. For drivers using
+	GEM as their userspace buffer management interface this would be a GEM
+	handle.  Drivers are however free to use their own backing storage object
+	handles, e.g. vmwgfx directly exposes special TTM handles to userspace
+	and so expects TTM handles in the create ioctl and not GEM handles.
+      </p><p>
+        Drivers must first validate the requested frame buffer parameters passed
+        through the mode_cmd argument. In particular this is where invalid
+        sizes, pixel formats or pitches can be caught.
+      </p><p>
+        If the parameters are deemed valid, drivers then create, initialize and
+        return an instance of struct <span class="structname">drm_framebuffer</span>.
+        If desired the instance can be embedded in a larger driver-specific
+	structure. Drivers must fill its <em class="structfield"><code>width</code></em>,
+	<em class="structfield"><code>height</code></em>, <em class="structfield"><code>pitches</code></em>,
+        <em class="structfield"><code>offsets</code></em>, <em class="structfield"><code>depth</code></em>,
+        <em class="structfield"><code>bits_per_pixel</code></em> and
+        <em class="structfield"><code>pixel_format</code></em> fields from the values passed
+        through the <em class="parameter"><code>drm_mode_fb_cmd2</code></em> argument. They
+        should call the <code class="function">drm_helper_mode_fill_fb_struct</code>
+        helper function to do so.
+      </p><p>
+	The initialization of the new framebuffer instance is finalized with a
+	call to <code class="function">drm_framebuffer_init</code> which takes a pointer
+	to DRM frame buffer operations (struct
+	<span class="structname">drm_framebuffer_funcs</span>). Note that this function
+	publishes the framebuffer and so from this point on it can be accessed
+	concurrently from other threads. Hence it must be the last step in the
+	driver's framebuffer initialization sequence. Frame buffer operations
+	are
+        </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">int (*create_handle)(struct drm_framebuffer *fb,
+		     struct drm_file *file_priv, unsigned int *handle);</pre><p>
+              Create a handle to the frame buffer underlying memory object. If
+              the frame buffer uses a multi-plane format, the handle will
+              reference the memory object associated with the first plane.
+            </p><p>
+              Drivers call <code class="function">drm_gem_handle_create</code> to create
+              the handle.
+            </p></li><li class="listitem"><pre class="synopsis">void (*destroy)(struct drm_framebuffer *framebuffer);</pre><p>
+              Destroy the frame buffer object and frees all associated
+              resources. Drivers must call
+              <code class="function">drm_framebuffer_cleanup</code> to free resources
+              allocated by the DRM core for the frame buffer object, and must
+              make sure to unreference all memory objects associated with the
+              frame buffer. Handles created by the
+              <code class="methodname">create_handle</code> operation are released by
+              the DRM core.
+            </p></li><li class="listitem"><pre class="synopsis">int (*dirty)(struct drm_framebuffer *framebuffer,
+	     struct drm_file *file_priv, unsigned flags, unsigned color,
+	     struct drm_clip_rect *clips, unsigned num_clips);</pre><p>
+              This optional operation notifies the driver that a region of the
+              frame buffer has changed in response to a DRM_IOCTL_MODE_DIRTYFB
+              ioctl call.
+            </p></li></ul></div><p>
+      </p><p>
+	The lifetime of a drm framebuffer is controlled with a reference count,
+	drivers can grab additional references with
+	<code class="function">drm_framebuffer_reference</code>and drop them
+	again with <code class="function">drm_framebuffer_unreference</code>. For
+	driver-private framebuffers for which the last reference is never
+	dropped (e.g. for the fbdev framebuffer when the struct
+	<span class="structname">drm_framebuffer</span> is embedded into the fbdev
+	helper struct) drivers can manually clean up a framebuffer at module
+	unload time with
+	<code class="function">drm_framebuffer_unregister_private</code>.
+      </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm4892"></a>Dumb Buffer Objects</h3></div></div></div><p>
+	The KMS API doesn't standardize backing storage object creation and
+	leaves it to driver-specific ioctls. Furthermore actually creating a
+	buffer object even for GEM-based drivers is done through a
+	driver-specific ioctl - GEM only has a common userspace interface for
+	sharing and destroying objects. While not an issue for full-fledged
+	graphics stacks that include device-specific userspace components (in
+	libdrm for instance), this limit makes DRM-based early boot graphics
+	unnecessarily complex.
+      </p><p>
+        Dumb objects partly alleviate the problem by providing a standard
+        API to create dumb buffers suitable for scanout, which can then be used
+        to create KMS frame buffers.
+      </p><p>
+        To support dumb objects drivers must implement the
+        <code class="methodname">dumb_create</code>,
+        <code class="methodname">dumb_destroy</code> and
+        <code class="methodname">dumb_map_offset</code> operations.
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">int (*dumb_create)(struct drm_file *file_priv, struct drm_device *dev,
+                   struct drm_mode_create_dumb *args);</pre><p>
+            The <code class="methodname">dumb_create</code> operation creates a driver
+	    object (GEM or TTM handle) suitable for scanout based on the
+	    width, height and depth from the struct
+	    <span class="structname">drm_mode_create_dumb</span> argument. It fills the
+	    argument's <em class="structfield"><code>handle</code></em>,
+	    <em class="structfield"><code>pitch</code></em> and <em class="structfield"><code>size</code></em>
+	    fields with a handle for the newly created object and its line
+            pitch and size in bytes.
+          </p></li><li class="listitem"><pre class="synopsis">int (*dumb_destroy)(struct drm_file *file_priv, struct drm_device *dev,
+                    uint32_t handle);</pre><p>
+            The <code class="methodname">dumb_destroy</code> operation destroys a dumb
+            object created by <code class="methodname">dumb_create</code>.
+          </p></li><li class="listitem"><pre class="synopsis">int (*dumb_map_offset)(struct drm_file *file_priv, struct drm_device *dev,
+                       uint32_t handle, uint64_t *offset);</pre><p>
+            The <code class="methodname">dumb_map_offset</code> operation associates an
+            mmap fake offset with the object given by the handle and returns
+            it. Drivers must use the
+            <code class="function">drm_gem_create_mmap_offset</code> function to
+            associate the fake offset as described in
+            <a class="xref" href="drm-memory-management.html#drm-gem-objects-mapping" title="GEM Objects Mapping">the section called “GEM Objects Mapping”</a>.
+          </p></li></ul></div><p>
+        Note that dumb objects may not be used for gpu acceleration, as has been
+	attempted on some ARM embedded platforms. Such drivers really must have
+	a hardware-specific ioctl to allocate suitable buffer objects.
+      </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm4921"></a>Output Polling</h3></div></div></div><pre class="synopsis">void (*output_poll_changed)(struct drm_device *dev);</pre><p>
+        This operation notifies the driver that the status of one or more
+        connectors has changed. Drivers that use the fb helper can just call the
+        <code class="function">drm_fb_helper_hotplug_event</code> function to handle this
+        operation.
+      </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm4926"></a>Locking</h3></div></div></div><p>
+        Beside some lookup structures with their own locking (which is hidden
+	behind the interface functions) most of the modeset state is protected
+	by the <code class="code">dev-&lt;mode_config.lock</code> mutex and additionally
+	per-crtc locks to allow cursor updates, pageflips and similar operations
+	to occur concurrently with background tasks like output detection.
+	Operations which cross domains like a full modeset always grab all
+	locks. Drivers there need to protect resources shared between crtcs with
+	additional locking. They also need to be careful to always grab the
+	relevant crtc locks if a modset functions touches crtc state, e.g. for
+	load detection (which does only grab the <code class="code">mode_config.lock</code>
+	to allow concurrent screen updates on live crtcs).
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-mm-insert-node-in-range.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drmInternals.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-mode-is-stereo.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_mm_insert_node_in_range</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_mode_is_stereo</span></td></tr></table></div></body></html>

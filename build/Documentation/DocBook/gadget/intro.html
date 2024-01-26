@@ -1,0 +1,51 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 1. Introduction</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="index.html" title="USB Gadget API for Linux"><link rel="prev" href="index.html" title="USB Gadget API for Linux"><link rel="next" href="structure.html" title="Chapter 2. Structure of Gadget Drivers"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. Introduction</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="structure.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="intro"></a>Chapter 1. Introduction</h1></div></div></div><p>This document presents a Linux-USB "Gadget"
+kernel mode
+API, for use within peripherals and other USB devices
+that embed Linux.
+It provides an overview of the API structure,
+and shows how that fits into a system development project.
+This is the first such API released on Linux to address
+a number of important problems, including: </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Supports USB 2.0, for high speed devices which
+	can stream data at several dozen megabytes per second.
+	</p></li><li class="listitem"><p>Handles devices with dozens of endpoints just as
+	well as ones with just two fixed-function ones.  Gadget drivers
+	can be written so they're easy to port to new hardware.
+	</p></li><li class="listitem"><p>Flexible enough to expose more complex USB device
+	capabilities such as multiple configurations, multiple interfaces,
+	composite devices,
+	and alternate interface settings.
+	</p></li><li class="listitem"><p>USB "On-The-Go" (OTG) support, in conjunction
+	with updates to the Linux-USB host side.
+	</p></li><li class="listitem"><p>Sharing data structures and API models with the
+	Linux-USB host side API.  This helps the OTG support, and
+	looks forward to more-symmetric frameworks (where the same
+	I/O model is used by both host and device side drivers).
+	</p></li><li class="listitem"><p>Minimalist, so it's easier to support new device
+	controller hardware.  I/O processing doesn't imply large
+	demands for memory or CPU resources.
+	</p></li></ul></div><p>Most Linux developers will not be able to use this API, since they
+have USB "host" hardware in a PC, workstation, or server.
+Linux users with embedded systems are more likely to
+have USB peripheral hardware.
+To distinguish drivers running inside such hardware from the
+more familiar Linux "USB device drivers",
+which are host side proxies for the real USB devices,
+a different term is used:
+the drivers inside the peripherals are "USB gadget drivers".
+In USB protocol interactions, the device driver is the master
+(or "client driver")
+and the gadget driver is the slave (or "function driver").
+</p><p>The gadget API resembles the host side Linux-USB API in that both
+use queues of request objects to package I/O buffers, and those requests
+may be submitted or canceled.
+They share common definitions for the standard USB
+<span class="emphasis"><em>Chapter 9</em></span> messages, structures, and constants.
+Also, both APIs bind and unbind drivers to devices.
+The APIs differ in detail, since the host side's current
+URB framework exposes a number of implementation details
+and assumptions that are inappropriate for a gadget API.
+While the model for control transfers and configuration
+management is necessarily different (one side is a hardware-neutral master,
+the other is a hardware-aware slave), the endpoint I/0 API used here
+should also be usable for an overhead-reduced host side API.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="structure.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">USB Gadget API for Linux </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. Structure of Gadget Drivers</td></tr></table></div></body></html>

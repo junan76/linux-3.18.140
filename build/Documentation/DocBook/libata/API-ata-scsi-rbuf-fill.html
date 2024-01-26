@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ata_scsi_rbuf_fill</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="libataScsiInt.html" title="Chapter 6. libata SCSI translation/emulation"><link rel="prev" href="API-ata-scsi-rbuf-put.html" title="ata_scsi_rbuf_put"><link rel="next" href="API-ata-scsiop-inq-std.html" title="ata_scsiop_inq_std"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">ata_scsi_rbuf_fill</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-ata-scsi-rbuf-put.html">Prev</a> </td><th width="60%" align="center">Chapter 6. libata SCSI translation/emulation</th><td width="20%" align="right"> <a accesskey="n" href="API-ata-scsiop-inq-std.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-ata-scsi-rbuf-fill"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ata_scsi_rbuf_fill — 
+     wrapper for SCSI command simulators
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">ata_scsi_rbuf_fill </b>(</code></td><td>struct ata_scsi_args * <var class="pdparam">args</var>, </td></tr><tr><td> </td><td>unsigned int (*<var class="pdparam">actor</var>)
+     <code>(</code>struct ata_scsi_args *args, u8 *rbuf<code>)</code><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm6568"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>args</code></em></span></dt><dd><p>
+     device IDENTIFY data / SCSI command of interest.
+    </p></dd><dt><span class="term"><em class="parameter"><code>actor</code></em></span></dt><dd><p>
+     Callback hook for desired SCSI command simulator
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm6581"></a><h2>Description</h2><p>
+   Takes care of the hard work of simulating a SCSI command...
+   Mapping the response buffer, calling the command's handler,
+   and handling the handler's return value.  This return value
+   indicates whether the handler wishes the SCSI command to be
+   completed successfully (0), or not (in which case cmd-&gt;result
+   and sense buffer are assumed to be set).
+</p></div><div class="refsect1"><a name="idm6584"></a><h2>LOCKING</h2><p>
+   spin_lock_irqsave(host lock)
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-ata-scsi-rbuf-put.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="libataScsiInt.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-ata-scsiop-inq-std.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">ata_scsi_rbuf_put</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ata_scsiop_inq_std</span></td></tr></table></div></body></html>

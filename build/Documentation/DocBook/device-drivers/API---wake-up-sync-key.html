@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>__wake_up_sync_key</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch01s04.html" title="Wait queues and Wake events"><link rel="prev" href="API---wake-up.html" title="__wake_up"><link rel="next" href="API-finish-wait.html" title="finish_wait"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">__wake_up_sync_key</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API---wake-up.html">Prev</a> </td><th width="60%" align="center">Wait queues and Wake events</th><td width="20%" align="right"> <a accesskey="n" href="API-finish-wait.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API---wake-up-sync-key"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>__wake_up_sync_key — 
+     wake up threads blocked on a waitqueue.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">__wake_up_sync_key </b>(</code></td><td>wait_queue_head_t * <var class="pdparam">q</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">mode</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">nr_exclusive</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">key</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4068"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>q</code></em></span></dt><dd><p>
+     the waitqueue
+    </p></dd><dt><span class="term"><em class="parameter"><code>mode</code></em></span></dt><dd><p>
+     which threads
+    </p></dd><dt><span class="term"><em class="parameter"><code>nr_exclusive</code></em></span></dt><dd><p>
+     how many wake-one or wake-many threads to wake up
+    </p></dd><dt><span class="term"><em class="parameter"><code>key</code></em></span></dt><dd><p>
+     opaque value to be passed to wakeup targets
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4091"></a><h2>Description</h2><p>
+   The sync wakeup differs that the waker knows that it will schedule
+   away soon, so while the target thread will be woken up, it will not
+   be migrated to another CPU - ie. the two threads are 'synchronized'
+   with each other. This can prevent needless bouncing between CPUs.
+   </p><p>
+
+   On UP it can prevent extra preemption.
+   </p><p>
+
+   It may be assumed that this function implies a write memory barrier before
+   changing the task state if and only if any tasks are woken up.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API---wake-up.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-finish-wait.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">__wake_up</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">finish_wait</span></td></tr></table></div></body></html>

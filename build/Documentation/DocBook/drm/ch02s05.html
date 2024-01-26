@@ -1,0 +1,601 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Mode Setting Helper Functions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drmInternals.html" title="Chapter 2. DRM Internals"><link rel="prev" href="API-drm-modeset-unlock.html" title="drm_modeset_unlock"><link rel="next" href="API-drm-helper-move-panel-connectors-to-head.html" title="drm_helper_move_panel_connectors_to_head"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Mode Setting Helper Functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-modeset-unlock.html">Prev</a> </td><th width="60%" align="center">Chapter 2. DRM Internals</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-helper-move-panel-connectors-to-head.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm8353"></a>Mode Setting Helper Functions</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="ch02s05.html#idm8369">Helper Functions</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm8405">CRTC Helper Operations</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm8436">Encoder Helper Operations</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm8453">Connector Helper Operations</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm8603">Modeset Helper Functions Reference</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm8963">Output Probing Helper Functions Reference</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm9274">fbdev Helper Functions Reference</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm9920">Display Port Helper Functions Reference</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm10514">Display Port MST Helper Functions Reference</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm11455">EDID Helper Functions Reference</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm12283">Rectangle Utilities Reference</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm13139">Flip-work Helper Reference</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm13352">HDMI Infoframes Helper Reference</a></span></dt><dt><span class="sect2"><a href="ch02s05.html#idm13779">Plane Helper Reference</a></span></dt></dl></div><p>
+      The plane, CRTC, encoder and connector functions provided by the drivers
+      implement the DRM API. They're called by the DRM core and ioctl handlers
+      to handle device state changes and configuration request. As implementing
+      those functions often requires logic not specific to drivers, mid-layer
+      helper functions are available to avoid duplicating boilerplate code.
+    </p><p>
+      The DRM core contains one mid-layer implementation. The mid-layer provides
+      implementations of several plane, CRTC, encoder and connector functions
+      (called from the top of the mid-layer) that pre-process requests and call
+      lower-level functions provided by the driver (at the bottom of the
+      mid-layer). For instance, the
+      <code class="function">drm_crtc_helper_set_config</code> function can be used to
+      fill the struct <span class="structname">drm_crtc_funcs</span>
+      <em class="structfield"><code>set_config</code></em> field. When called, it will split
+      the <code class="methodname">set_config</code> operation in smaller, simpler
+      operations and call the driver to handle them.
+    </p><p>
+      To use the mid-layer, drivers call <code class="function">drm_crtc_helper_add</code>,
+      <code class="function">drm_encoder_helper_add</code> and
+      <code class="function">drm_connector_helper_add</code> functions to install their
+      mid-layer bottom operations handlers, and fill the
+      <span class="structname">drm_crtc_funcs</span>,
+      <span class="structname">drm_encoder_funcs</span> and
+      <span class="structname">drm_connector_funcs</span> structures with pointers to
+      the mid-layer top API functions. Installing the mid-layer bottom operation
+      handlers is best done right after registering the corresponding KMS object.
+    </p><p>
+      The mid-layer is not split between CRTC, encoder and connector operations.
+      To use it, a driver must provide bottom functions for all of the three KMS
+      entities.
+    </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm8369"></a>Helper Functions</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">int drm_crtc_helper_set_config(struct drm_mode_set *set);</pre><p>
+            The <code class="function">drm_crtc_helper_set_config</code> helper function
+            is a CRTC <code class="methodname">set_config</code> implementation. It
+            first tries to locate the best encoder for each connector by calling
+            the connector <code class="methodname">best_encoder</code> helper
+            operation.
+          </p><p>
+            After locating the appropriate encoders, the helper function will
+            call the <code class="methodname">mode_fixup</code> encoder and CRTC helper
+            operations to adjust the requested mode, or reject it completely in
+            which case an error will be returned to the application. If the new
+            configuration after mode adjustment is identical to the current
+            configuration the helper function will return without performing any
+            other operation.
+          </p><p>
+            If the adjusted mode is identical to the current mode but changes to
+            the frame buffer need to be applied, the
+            <code class="function">drm_crtc_helper_set_config</code> function will call
+            the CRTC <code class="methodname">mode_set_base</code> helper operation. If
+            the adjusted mode differs from the current mode, or if the
+            <code class="methodname">mode_set_base</code> helper operation is not
+            provided, the helper function performs a full mode set sequence by
+            calling the <code class="methodname">prepare</code>,
+            <code class="methodname">mode_set</code> and
+            <code class="methodname">commit</code> CRTC and encoder helper operations,
+            in that order.
+          </p></li><li class="listitem"><pre class="synopsis">void drm_helper_connector_dpms(struct drm_connector *connector, int mode);</pre><p>
+            The <code class="function">drm_helper_connector_dpms</code> helper function
+            is a connector <code class="methodname">dpms</code> implementation that
+            tracks power state of connectors. To use the function, drivers must
+            provide <code class="methodname">dpms</code> helper operations for CRTCs
+            and encoders to apply the DPMS state to the device.
+          </p><p>
+            The mid-layer doesn't track the power state of CRTCs and encoders.
+            The <code class="methodname">dpms</code> helper operations can thus be
+            called with a mode identical to the currently active mode.
+          </p></li><li class="listitem"><pre class="synopsis">int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
+                                            uint32_t maxX, uint32_t maxY);</pre><p>
+            The <code class="function">drm_helper_probe_single_connector_modes</code> helper
+            function is a connector <code class="methodname">fill_modes</code>
+            implementation that updates the connection status for the connector
+            and then retrieves a list of modes by calling the connector
+            <code class="methodname">get_modes</code> helper operation.
+          </p><p>
+            The function filters out modes larger than
+            <em class="parameter"><code>max_width</code></em> and <em class="parameter"><code>max_height</code></em>
+            if specified. It then calls the optional connector
+            <code class="methodname">mode_valid</code> helper operation for each mode in
+            the probed list to check whether the mode is valid for the connector.
+          </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm8405"></a>CRTC Helper Operations</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><a name="drm-helper-crtc-mode-fixup"></a><pre class="synopsis">bool (*mode_fixup)(struct drm_crtc *crtc,
+                       const struct drm_display_mode *mode,
+                       struct drm_display_mode *adjusted_mode);</pre><p>
+            Let CRTCs adjust the requested mode or reject it completely. This
+            operation returns true if the mode is accepted (possibly after being
+            adjusted) or false if it is rejected.
+          </p><p>
+            The <code class="methodname">mode_fixup</code> operation should reject the
+            mode if it can't reasonably use it. The definition of "reasonable"
+            is currently fuzzy in this context. One possible behaviour would be
+            to set the adjusted mode to the panel timings when a fixed-mode
+            panel is used with hardware capable of scaling. Another behaviour
+            would be to accept any input mode and adjust it to the closest mode
+            supported by the hardware (FIXME: This needs to be clarified).
+          </p></li><li class="listitem"><pre class="synopsis">int (*mode_set_base)(struct drm_crtc *crtc, int x, int y,
+                     struct drm_framebuffer *old_fb)</pre><p>
+            Move the CRTC on the current frame buffer (stored in
+            <code class="literal">crtc-&gt;fb</code>) to position (x,y). Any of the frame
+            buffer, x position or y position may have been modified.
+          </p><p>
+            This helper operation is optional. If not provided, the
+            <code class="function">drm_crtc_helper_set_config</code> function will fall
+            back to the <code class="methodname">mode_set</code> helper operation.
+          </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+            FIXME: Why are x and y passed as arguments, as they can be accessed
+            through <code class="literal">crtc-&gt;x</code> and
+            <code class="literal">crtc-&gt;y</code>?
+          </p></div></li><li class="listitem"><pre class="synopsis">void (*prepare)(struct drm_crtc *crtc);</pre><p>
+            Prepare the CRTC for mode setting. This operation is called after
+            validating the requested mode. Drivers use it to perform
+            device-specific operations required before setting the new mode.
+          </p></li><li class="listitem"><pre class="synopsis">int (*mode_set)(struct drm_crtc *crtc, struct drm_display_mode *mode,
+                struct drm_display_mode *adjusted_mode, int x, int y,
+                struct drm_framebuffer *old_fb);</pre><p>
+            Set a new mode, position and frame buffer. Depending on the device
+            requirements, the mode can be stored internally by the driver and
+            applied in the <code class="methodname">commit</code> operation, or
+            programmed to the hardware immediately.
+          </p><p>
+            The <code class="methodname">mode_set</code> operation returns 0 on success
+	    or a negative error code if an error occurs.
+          </p></li><li class="listitem"><pre class="synopsis">void (*commit)(struct drm_crtc *crtc);</pre><p>
+            Commit a mode. This operation is called after setting the new mode.
+            Upon return the device must use the new mode and be fully
+            operational.
+          </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm8436"></a>Encoder Helper Operations</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">bool (*mode_fixup)(struct drm_encoder *encoder,
+                       const struct drm_display_mode *mode,
+                       struct drm_display_mode *adjusted_mode);</pre><p>
+            Let encoders adjust the requested mode or reject it completely. This
+            operation returns true if the mode is accepted (possibly after being
+            adjusted) or false if it is rejected. See the
+            <a class="link" href="ch02s05.html#drm-helper-crtc-mode-fixup">mode_fixup CRTC helper
+            operation</a> for an explanation of the allowed adjustments.
+          </p></li><li class="listitem"><pre class="synopsis">void (*prepare)(struct drm_encoder *encoder);</pre><p>
+            Prepare the encoder for mode setting. This operation is called after
+            validating the requested mode. Drivers use it to perform
+            device-specific operations required before setting the new mode.
+          </p></li><li class="listitem"><pre class="synopsis">void (*mode_set)(struct drm_encoder *encoder,
+                 struct drm_display_mode *mode,
+                 struct drm_display_mode *adjusted_mode);</pre><p>
+            Set a new mode. Depending on the device requirements, the mode can
+            be stored internally by the driver and applied in the
+            <code class="methodname">commit</code> operation, or programmed to the
+            hardware immediately.
+          </p></li><li class="listitem"><pre class="synopsis">void (*commit)(struct drm_encoder *encoder);</pre><p>
+            Commit a mode. This operation is called after setting the new mode.
+            Upon return the device must use the new mode and be fully
+            operational.
+          </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm8453"></a>Connector Helper Operations</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">struct drm_encoder *(*best_encoder)(struct drm_connector *connector);</pre><p>
+            Return a pointer to the best encoder for the connecter. Device that
+            map connectors to encoders 1:1 simply return the pointer to the
+            associated encoder. This operation is mandatory.
+          </p></li><li class="listitem"><pre class="synopsis">int (*get_modes)(struct drm_connector *connector);</pre><p>
+            Fill the connector's <em class="structfield"><code>probed_modes</code></em> list
+            by parsing EDID data with <code class="function">drm_add_edid_modes</code> or
+            calling <code class="function">drm_mode_probed_add</code> directly for every
+            supported mode and return the number of modes it has detected. This
+            operation is mandatory.
+          </p><p>
+            When adding modes manually the driver creates each mode with a call to
+            <code class="function">drm_mode_create</code> and must fill the following fields.
+            </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><pre class="synopsis">__u32 type;</pre><p>
+                  Mode type bitmask, a combination of
+                  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">DRM_MODE_TYPE_BUILTIN</span></dt><dd><p>not used?</p></dd><dt><span class="term">DRM_MODE_TYPE_CLOCK_C</span></dt><dd><p>not used?</p></dd><dt><span class="term">DRM_MODE_TYPE_CRTC_C</span></dt><dd><p>not used?</p></dd><dt><span class="term">
+        DRM_MODE_TYPE_PREFERRED - The preferred mode for the connector
+                      </span></dt><dd><p>not used?</p></dd><dt><span class="term">DRM_MODE_TYPE_DEFAULT</span></dt><dd><p>not used?</p></dd><dt><span class="term">DRM_MODE_TYPE_USERDEF</span></dt><dd><p>not used?</p></dd><dt><span class="term">DRM_MODE_TYPE_DRIVER</span></dt><dd><p>
+                          The mode has been created by the driver (as opposed to
+                          to user-created modes).
+                        </p></dd></dl></div><p>
+                  Drivers must set the DRM_MODE_TYPE_DRIVER bit for all modes they
+                  create, and set the DRM_MODE_TYPE_PREFERRED bit for the preferred
+                  mode.
+                </p></li><li class="listitem"><pre class="synopsis">__u32 clock;</pre><p>Pixel clock frequency in kHz unit</p></li><li class="listitem"><pre class="synopsis">__u16 hdisplay, hsync_start, hsync_end, htotal;
+    __u16 vdisplay, vsync_start, vsync_end, vtotal;</pre><p>Horizontal and vertical timing information</p><pre class="screen">
+             Active                 Front           Sync           Back
+             Region                 Porch                          Porch
+    &lt;-----------------------&gt;&lt;----------------&gt;&lt;-------------&gt;&lt;--------------&gt;
+
+      //////////////////////|
+     ////////////////////// |
+    //////////////////////  |..................               ................
+                                               _______________
+
+    &lt;----- [hv]display -----&gt;
+    &lt;------------- [hv]sync_start ------------&gt;
+    &lt;--------------------- [hv]sync_end ---------------------&gt;
+    &lt;-------------------------------- [hv]total -----------------------------&gt;
+</pre></li><li class="listitem"><pre class="synopsis">__u16 hskew;
+    __u16 vscan;</pre><p>Unknown</p></li><li class="listitem"><pre class="synopsis">__u32 flags;</pre><p>
+                  Mode flags, a combination of
+                  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">DRM_MODE_FLAG_PHSYNC</span></dt><dd><p>
+                        Horizontal sync is active high
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_NHSYNC</span></dt><dd><p>
+                        Horizontal sync is active low
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_PVSYNC</span></dt><dd><p>
+                        Vertical sync is active high
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_NVSYNC</span></dt><dd><p>
+                        Vertical sync is active low
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_INTERLACE</span></dt><dd><p>
+                        Mode is interlaced
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_DBLSCAN</span></dt><dd><p>
+                        Mode uses doublescan
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_CSYNC</span></dt><dd><p>
+                        Mode uses composite sync
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_PCSYNC</span></dt><dd><p>
+                        Composite sync is active high
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_NCSYNC</span></dt><dd><p>
+                        Composite sync is active low
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_HSKEW</span></dt><dd><p>
+                        hskew provided (not used?)
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_BCAST</span></dt><dd><p>
+                        not used?
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_PIXMUX</span></dt><dd><p>
+                        not used?
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_DBLCLK</span></dt><dd><p>
+                        not used?
+                      </p></dd><dt><span class="term">DRM_MODE_FLAG_CLKDIV2</span></dt><dd><p>
+                        ?
+                      </p></dd></dl></div><p>
+                </p><p>
+                  Note that modes marked with the INTERLACE or DBLSCAN flags will be
+                  filtered out by
+                  <code class="function">drm_helper_probe_single_connector_modes</code> if
+                  the connector's <em class="structfield"><code>interlace_allowed</code></em> or
+                  <em class="structfield"><code>doublescan_allowed</code></em> field is set to 0.
+                </p></li><li class="listitem"><pre class="synopsis">char name[DRM_DISPLAY_MODE_LEN];</pre><p>
+                  Mode name. The driver must call
+                  <code class="function">drm_mode_set_name</code> to fill the mode name from
+                  <em class="structfield"><code>hdisplay</code></em>,
+                  <em class="structfield"><code>vdisplay</code></em> and interlace flag after
+                  filling the corresponding fields.
+                </p></li></ul></div><p>
+          </p><p>
+            The <em class="structfield"><code>vrefresh</code></em> value is computed by
+            <code class="function">drm_helper_probe_single_connector_modes</code>.
+          </p><p>
+            When parsing EDID data, <code class="function">drm_add_edid_modes</code> fill the
+            connector <em class="structfield"><code>display_info</code></em>
+            <em class="structfield"><code>width_mm</code></em> and
+            <em class="structfield"><code>height_mm</code></em> fields. When creating modes
+            manually the <code class="methodname">get_modes</code> helper operation must
+            set the <em class="structfield"><code>display_info</code></em>
+            <em class="structfield"><code>width_mm</code></em> and
+            <em class="structfield"><code>height_mm</code></em> fields if they haven't been set
+            already (for instance at initialization time when a fixed-size panel is
+            attached to the connector). The mode <em class="structfield"><code>width_mm</code></em>
+            and <em class="structfield"><code>height_mm</code></em> fields are only used internally
+            during EDID parsing and should not be set when creating modes manually.
+          </p></li><li class="listitem"><pre class="synopsis">int (*mode_valid)(struct drm_connector *connector,
+		  struct drm_display_mode *mode);</pre><p>
+            Verify whether a mode is valid for the connector. Return MODE_OK for
+            supported modes and one of the enum drm_mode_status values (MODE_*)
+            for unsupported modes. This operation is optional.
+          </p><p>
+            As the mode rejection reason is currently not used beside for
+            immediately removing the unsupported mode, an implementation can
+            return MODE_BAD regardless of the exact reason why the mode is not
+            valid.
+          </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+            Note that the <code class="methodname">mode_valid</code> helper operation is
+            only called for modes detected by the device, and
+            <span class="emphasis"><em>not</em></span> for modes set by the user through the CRTC
+            <code class="methodname">set_config</code> operation.
+          </p></div></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm8603"></a>Modeset Helper Functions Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-drm-helper-move-panel-connectors-to-head.html"><span class="phrase">drm_helper_move_panel_connectors_to_head</span></a></span><span class="refpurpose"> — 
+  move panels to the front in the connector list
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-helper-encoder-in-use.html"><span class="phrase">drm_helper_encoder_in_use</span></a></span><span class="refpurpose"> — 
+     check if a given encoder is in use
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-helper-crtc-in-use.html"><span class="phrase">drm_helper_crtc_in_use</span></a></span><span class="refpurpose"> — 
+     check if a given CRTC is in a mode_config
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-helper-disable-unused-functions.html"><span class="phrase">drm_helper_disable_unused_functions</span></a></span><span class="refpurpose"> — 
+     disable unused objects
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-crtc-helper-set-mode.html"><span class="phrase">drm_crtc_helper_set_mode</span></a></span><span class="refpurpose"> — 
+     internal helper to set a mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-crtc-helper-set-config.html"><span class="phrase">drm_crtc_helper_set_config</span></a></span><span class="refpurpose"> — 
+     set a new config from userspace
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-helper-connector-dpms.html"><span class="phrase">drm_helper_connector_dpms</span></a></span><span class="refpurpose"> — 
+     connector dpms helper implementation
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-helper-mode-fill-fb-struct.html"><span class="phrase">drm_helper_mode_fill_fb_struct</span></a></span><span class="refpurpose"> — 
+     fill out framebuffer metadata
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-helper-resume-force-mode.html"><span class="phrase">drm_helper_resume_force_mode</span></a></span><span class="refpurpose"> — 
+     force-restore mode setting configuration
+ </span></dt></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm8963"></a>Output Probing Helper Functions Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-drm-helper-probe-single-connector-modes.html"><span class="phrase">drm_helper_probe_single_connector_modes</span></a></span><span class="refpurpose"> — 
+  get complete set of display modes
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-helper-probe-single-connector-modes-nomerge.html"><span class="phrase">drm_helper_probe_single_connector_modes_nomerge</span></a></span><span class="refpurpose"> — 
+     get complete set of display modes
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-kms-helper-hotplug-event.html"><span class="phrase">drm_kms_helper_hotplug_event</span></a></span><span class="refpurpose"> — 
+     fire off KMS hotplug events
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-kms-helper-poll-disable.html"><span class="phrase">drm_kms_helper_poll_disable</span></a></span><span class="refpurpose"> — 
+     disable output polling
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-kms-helper-poll-enable.html"><span class="phrase">drm_kms_helper_poll_enable</span></a></span><span class="refpurpose"> — 
+     re-enable output polling.
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-kms-helper-poll-init.html"><span class="phrase">drm_kms_helper_poll_init</span></a></span><span class="refpurpose"> — 
+     initialize and enable output polling
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-kms-helper-poll-fini.html"><span class="phrase">drm_kms_helper_poll_fini</span></a></span><span class="refpurpose"> — 
+     disable output polling and clean it up
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-helper-hpd-irq-event.html"><span class="phrase">drm_helper_hpd_irq_event</span></a></span><span class="refpurpose"> — 
+     hotplug processing
+ </span></dt></dl></div><p>
+   </p><p>
+   This library provides some helper code for output probing. It provides an
+   implementation of the core connector-&gt;fill_modes interface with
+   drm_helper_probe_single_connector_modes.
+   </p><p>
+   It also provides support for polling connectors with a work item and for
+   generic hotplug interrupt handling where the driver doesn't or cannot keep
+   track of a per-connector hpd interrupt.
+   </p><p>
+   This helper library can be used independently of the modeset helper library.
+   Drivers can also overwrite different parts e.g. use their own hotplug
+   handling code to avoid probing unrelated outputs.
+</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm9274"></a>fbdev Helper Functions Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-drm-fb-helper-single-add-all-connectors.html"><span class="phrase">drm_fb_helper_single_add_all_connectors</span></a></span><span class="refpurpose"> — 
+  add all connectors to fbdev emulation helper
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-debug-enter.html"><span class="phrase">drm_fb_helper_debug_enter</span></a></span><span class="refpurpose"> — 
+     implementation for -&gt;fb_debug_enter
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-debug-leave.html"><span class="phrase">drm_fb_helper_debug_leave</span></a></span><span class="refpurpose"> — 
+     implementation for -&gt;fb_debug_leave
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-restore-fbdev-mode-unlocked.html"><span class="phrase">drm_fb_helper_restore_fbdev_mode_unlocked</span></a></span><span class="refpurpose"> — 
+     restore fbdev configuration
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-blank.html"><span class="phrase">drm_fb_helper_blank</span></a></span><span class="refpurpose"> — 
+     implementation for -&gt;fb_blank
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-prepare.html"><span class="phrase">drm_fb_helper_prepare</span></a></span><span class="refpurpose"> — 
+     setup a drm_fb_helper structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-init.html"><span class="phrase">drm_fb_helper_init</span></a></span><span class="refpurpose"> — 
+     initialize a drm_fb_helper structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-setcmap.html"><span class="phrase">drm_fb_helper_setcmap</span></a></span><span class="refpurpose"> — 
+     implementation for -&gt;fb_setcmap
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-check-var.html"><span class="phrase">drm_fb_helper_check_var</span></a></span><span class="refpurpose"> — 
+     implementation for -&gt;fb_check_var
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-set-par.html"><span class="phrase">drm_fb_helper_set_par</span></a></span><span class="refpurpose"> — 
+     implementation for -&gt;fb_set_par
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-pan-display.html"><span class="phrase">drm_fb_helper_pan_display</span></a></span><span class="refpurpose"> — 
+     implementation for -&gt;fb_pan_display
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-fill-fix.html"><span class="phrase">drm_fb_helper_fill_fix</span></a></span><span class="refpurpose"> — 
+     initializes fixed fbdev information
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-fill-var.html"><span class="phrase">drm_fb_helper_fill_var</span></a></span><span class="refpurpose"> — 
+     initalizes variable fbdev information
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-initial-config.html"><span class="phrase">drm_fb_helper_initial_config</span></a></span><span class="refpurpose"> — 
+     setup a sane initial connector configuration
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-helper-hotplug-event.html"><span class="phrase">drm_fb_helper_hotplug_event</span></a></span><span class="refpurpose"> — 
+     respond to a hotplug notification by probing all the outputs attached to the fb
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-drm-fb-helper-funcs.html"><span class="phrase">struct drm_fb_helper_funcs</span></a></span><span class="refpurpose"> — 
+  driver callbacks for the fbdev emulation library
+ </span></dt></dl></div><p>
+   </p><p>
+   The fb helper functions are useful to provide an fbdev on top of a drm kernel
+   mode setting driver. They can be used mostly independently from the crtc
+   helper functions used by many drivers to implement the kernel mode setting
+   interfaces.
+   </p><p>
+   Initialization is done as a four-step process with <code class="function">drm_fb_helper_prepare</code>,
+   <code class="function">drm_fb_helper_init</code>, <code class="function">drm_fb_helper_single_add_all_connectors</code> and
+   <code class="function">drm_fb_helper_initial_config</code>. Drivers with fancier requirements than the
+   default behaviour can override the third step with their own code.
+   Teardown is done with <code class="function">drm_fb_helper_fini</code>.
+   </p><p>
+   At runtime drivers should restore the fbdev console by calling
+   <code class="function">drm_fb_helper_restore_fbdev_mode</code> from their -&gt;lastclose callback. They
+   should also notify the fb helper code from updates to the output
+   configuration by calling <code class="function">drm_fb_helper_hotplug_event</code>. For easier
+   integration with the output polling code in drm_crtc_helper.c the modeset
+   code provides a -&gt;output_poll_changed callback.
+   </p><p>
+   All other functions exported by the fb helper library can be used to
+   implement the fbdev driver interface by the driver.
+   </p><p>
+   It is possible, though perhaps somewhat tricky, to implement race-free
+   hotplug detection using the fbdev helpers. The <code class="function">drm_fb_helper_prepare</code>
+   helper must be called first to initialize the minimum required to make
+   hotplug detection work. Drivers also need to make sure to properly set up
+   the dev-&gt;mode_config.funcs member. After calling <code class="function">drm_kms_helper_poll_init</code>
+   it is safe to enable interrupts and start processing hotplug events. At the
+   same time, drivers should initialize all modeset objects such as CRTCs,
+   encoders and connectors. To finish up the fbdev helper initialization, the
+   <code class="function">drm_fb_helper_init</code> function is called. To probe for all attached displays
+   and set up an initial configuration using the detected hardware, drivers
+   should call <code class="function">drm_fb_helper_single_add_all_connectors</code> followed by
+   <code class="function">drm_fb_helper_initial_config</code>.
+</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm9920"></a>Display Port Helper Functions Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-i2c-algo-dp-aux-data.html"><span class="phrase">struct i2c_algo_dp_aux_data</span></a></span><span class="refpurpose"> — 
+  driver interface structure for i2c over dp aux algorithm
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-drm-dp-aux-msg.html"><span class="phrase">struct drm_dp_aux_msg</span></a></span><span class="refpurpose"> — 
+     DisplayPort AUX channel transaction
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-drm-dp-aux.html"><span class="phrase">struct drm_dp_aux</span></a></span><span class="refpurpose"> — 
+     DisplayPort AUX channel
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-dpcd-readb.html"><span class="phrase">drm_dp_dpcd_readb</span></a></span><span class="refpurpose"> — 
+     read a single byte from the DPCD
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-dpcd-writeb.html"><span class="phrase">drm_dp_dpcd_writeb</span></a></span><span class="refpurpose"> — 
+     write a single byte to the DPCD
+ </span></dt><dt><span class="refentrytitle"><a href="API-i2c-dp-aux-add-bus.html"><span class="phrase">i2c_dp_aux_add_bus</span></a></span><span class="refpurpose"> — 
+  register an i2c adapter using the aux ch helper
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-dpcd-read.html"><span class="phrase">drm_dp_dpcd_read</span></a></span><span class="refpurpose"> — 
+     read a series of bytes from the DPCD
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-dpcd-write.html"><span class="phrase">drm_dp_dpcd_write</span></a></span><span class="refpurpose"> — 
+     write a series of bytes to the DPCD
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-dpcd-read-link-status.html"><span class="phrase">drm_dp_dpcd_read_link_status</span></a></span><span class="refpurpose"> — 
+     read DPCD link status (bytes 0x202-0x207)
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-link-probe.html"><span class="phrase">drm_dp_link_probe</span></a></span><span class="refpurpose"> — 
+     probe a DisplayPort link for capabilities
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-link-power-up.html"><span class="phrase">drm_dp_link_power_up</span></a></span><span class="refpurpose"> — 
+     power up a DisplayPort link
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-link-configure.html"><span class="phrase">drm_dp_link_configure</span></a></span><span class="refpurpose"> — 
+     configure a DisplayPort link
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-aux-register.html"><span class="phrase">drm_dp_aux_register</span></a></span><span class="refpurpose"> — 
+     initialise and register aux channel
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-aux-unregister.html"><span class="phrase">drm_dp_aux_unregister</span></a></span><span class="refpurpose"> — 
+     unregister an AUX adapter
+ </span></dt></dl></div><p>
+   </p><p>
+   These functions contain some common logic and helpers at various abstraction
+   levels to deal with Display Port sink devices and related things like DP aux
+   channel transfers, EDID reading over DP aux channels, decoding certain DPCD
+   blocks, ...
+</p><p>
+   </p><p>
+   The DisplayPort AUX channel is an abstraction to allow generic, driver-
+   independent access to AUX functionality. Drivers can take advantage of
+   this by filling in the fields of the drm_dp_aux structure.
+   </p><p>
+   Transactions are described using a hardware-independent drm_dp_aux_msg
+   structure, which is passed into a driver's .<code class="function">transfer</code> implementation.
+   Both native and I2C-over-AUX transactions are supported.
+</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm10514"></a>Display Port MST Helper Functions Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-drm-dp-vcpi.html"><span class="phrase">struct drm_dp_vcpi</span></a></span><span class="refpurpose"> — 
+  Virtual Channel Payload Identifer
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-drm-dp-mst-port.html"><span class="phrase">struct drm_dp_mst_port</span></a></span><span class="refpurpose"> — 
+     MST port
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-drm-dp-mst-branch.html"><span class="phrase">struct drm_dp_mst_branch</span></a></span><span class="refpurpose"> — 
+     MST branch device.
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-drm-dp-mst-topology-mgr.html"><span class="phrase">struct drm_dp_mst_topology_mgr</span></a></span><span class="refpurpose"> — 
+     DisplayPort MST manager
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-update-payload-part1.html"><span class="phrase">drm_dp_update_payload_part1</span></a></span><span class="refpurpose"> — 
+  Execute payload update part 1
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-update-payload-part2.html"><span class="phrase">drm_dp_update_payload_part2</span></a></span><span class="refpurpose"> — 
+     Execute payload update part 2
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-topology-mgr-set-mst.html"><span class="phrase">drm_dp_mst_topology_mgr_set_mst</span></a></span><span class="refpurpose"> — 
+     Set the MST state for a topology manager
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-topology-mgr-suspend.html"><span class="phrase">drm_dp_mst_topology_mgr_suspend</span></a></span><span class="refpurpose"> — 
+     suspend the MST manager
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-topology-mgr-resume.html"><span class="phrase">drm_dp_mst_topology_mgr_resume</span></a></span><span class="refpurpose"> — 
+     resume the MST manager
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-hpd-irq.html"><span class="phrase">drm_dp_mst_hpd_irq</span></a></span><span class="refpurpose"> — 
+     MST hotplug IRQ notify
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-detect-port.html"><span class="phrase">drm_dp_mst_detect_port</span></a></span><span class="refpurpose"> — 
+     get connection status for an MST port
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-get-edid.html"><span class="phrase">drm_dp_mst_get_edid</span></a></span><span class="refpurpose"> — 
+     get EDID for an MST port
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-find-vcpi-slots.html"><span class="phrase">drm_dp_find_vcpi_slots</span></a></span><span class="refpurpose"> — 
+     find slots for this PBN value
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-allocate-vcpi.html"><span class="phrase">drm_dp_mst_allocate_vcpi</span></a></span><span class="refpurpose"> — 
+     Allocate a virtual channel
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-reset-vcpi-slots.html"><span class="phrase">drm_dp_mst_reset_vcpi_slots</span></a></span><span class="refpurpose"> — 
+     Reset number of slots to 0 for VCPI
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-deallocate-vcpi.html"><span class="phrase">drm_dp_mst_deallocate_vcpi</span></a></span><span class="refpurpose"> — 
+     deallocate a VCPI
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-check-act-status.html"><span class="phrase">drm_dp_check_act_status</span></a></span><span class="refpurpose"> — 
+     Check ACT handled status.
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-calc-pbn-mode.html"><span class="phrase">drm_dp_calc_pbn_mode</span></a></span><span class="refpurpose"> — 
+     Calculate the PBN for a mode.
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-dump-topology.html"><span class="phrase">drm_dp_mst_dump_topology</span></a></span><span class="refpurpose"> — 
+   </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-topology-mgr-init.html"><span class="phrase">drm_dp_mst_topology_mgr_init</span></a></span><span class="refpurpose"> — 
+     initialise a topology manager
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-dp-mst-topology-mgr-destroy.html"><span class="phrase">drm_dp_mst_topology_mgr_destroy</span></a></span><span class="refpurpose"> — 
+     destroy topology manager.
+ </span></dt></dl></div><p>
+   </p><p>
+   These functions contain parts of the DisplayPort 1.2a MultiStream Transport
+   protocol. The helpers contain a topology manager and bandwidth manager.
+   The helpers encapsulate the sending and received of sideband msgs.
+</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm11455"></a>EDID Helper Functions Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-drm-edid-header-is-valid.html"><span class="phrase">drm_edid_header_is_valid</span></a></span><span class="refpurpose"> — 
+  sanity check the header of the base EDID block
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-edid-block-valid.html"><span class="phrase">drm_edid_block_valid</span></a></span><span class="refpurpose"> — 
+     Sanity check the EDID block (base or extension)
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-edid-is-valid.html"><span class="phrase">drm_edid_is_valid</span></a></span><span class="refpurpose"> — 
+     sanity check EDID data
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-probe-ddc.html"><span class="phrase">drm_probe_ddc</span></a></span><span class="refpurpose"> — 
+     probe DDC presence
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-get-edid.html"><span class="phrase">drm_get_edid</span></a></span><span class="refpurpose"> — 
+     get EDID data, if available
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-edid-duplicate.html"><span class="phrase">drm_edid_duplicate</span></a></span><span class="refpurpose"> — 
+     duplicate an EDID and the extensions
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-match-cea-mode.html"><span class="phrase">drm_match_cea_mode</span></a></span><span class="refpurpose"> — 
+     look for a CEA mode matching given mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-get-cea-aspect-ratio.html"><span class="phrase">drm_get_cea_aspect_ratio</span></a></span><span class="refpurpose"> — 
+     get the picture aspect ratio corresponding to the input VIC from the CEA mode list
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-edid-to-eld.html"><span class="phrase">drm_edid_to_eld</span></a></span><span class="refpurpose"> — 
+     build ELD from EDID
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-edid-to-sad.html"><span class="phrase">drm_edid_to_sad</span></a></span><span class="refpurpose"> — 
+     extracts SADs from EDID
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-edid-to-speaker-allocation.html"><span class="phrase">drm_edid_to_speaker_allocation</span></a></span><span class="refpurpose"> — 
+     extracts Speaker Allocation Data Blocks from EDID
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-av-sync-delay.html"><span class="phrase">drm_av_sync_delay</span></a></span><span class="refpurpose"> — 
+     compute the HDMI/DP sink audio-video sync delay
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-select-eld.html"><span class="phrase">drm_select_eld</span></a></span><span class="refpurpose"> — 
+     select one ELD from multiple HDMI/DP sinks
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-detect-hdmi-monitor.html"><span class="phrase">drm_detect_hdmi_monitor</span></a></span><span class="refpurpose"> — 
+     detect whether monitor is HDMI
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-detect-monitor-audio.html"><span class="phrase">drm_detect_monitor_audio</span></a></span><span class="refpurpose"> — 
+     check monitor audio capability
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rgb-quant-range-selectable.html"><span class="phrase">drm_rgb_quant_range_selectable</span></a></span><span class="refpurpose"> — 
+     is RGB quantization range selectable?
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-add-edid-modes.html"><span class="phrase">drm_add_edid_modes</span></a></span><span class="refpurpose"> — 
+     add modes from EDID data, if available
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-add-modes-noedid.html"><span class="phrase">drm_add_modes_noedid</span></a></span><span class="refpurpose"> — 
+     add modes for the connectors without EDID
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-set-preferred-mode.html"><span class="phrase">drm_set_preferred_mode</span></a></span><span class="refpurpose"> — 
+     Sets the preferred mode of a connector
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-hdmi-avi-infoframe-from-display-mode.html"><span class="phrase">drm_hdmi_avi_infoframe_from_display_mode</span></a></span><span class="refpurpose"> — 
+     fill an HDMI AVI infoframe with data from a DRM display mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-hdmi-vendor-infoframe-from-display-mode.html"><span class="phrase">drm_hdmi_vendor_infoframe_from_display_mode</span></a></span><span class="refpurpose"> — 
+     fill an HDMI infoframe with data from a DRM display mode
+ </span></dt></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm12283"></a>Rectangle Utilities Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-drm-rect.html"><span class="phrase">struct drm_rect</span></a></span><span class="refpurpose"> — 
+  two dimensional rectangle
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-adjust-size.html"><span class="phrase">drm_rect_adjust_size</span></a></span><span class="refpurpose"> — 
+     adjust the size of the rectangle
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-translate.html"><span class="phrase">drm_rect_translate</span></a></span><span class="refpurpose"> — 
+     translate the rectangle
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-downscale.html"><span class="phrase">drm_rect_downscale</span></a></span><span class="refpurpose"> — 
+     downscale a rectangle
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-width.html"><span class="phrase">drm_rect_width</span></a></span><span class="refpurpose"> — 
+     determine the rectangle width
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-height.html"><span class="phrase">drm_rect_height</span></a></span><span class="refpurpose"> — 
+     determine the rectangle height
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-visible.html"><span class="phrase">drm_rect_visible</span></a></span><span class="refpurpose"> — 
+     determine if the the rectangle is visible
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-equals.html"><span class="phrase">drm_rect_equals</span></a></span><span class="refpurpose"> — 
+     determine if two rectangles are equal
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-intersect.html"><span class="phrase">drm_rect_intersect</span></a></span><span class="refpurpose"> — 
+  intersect two rectangles
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-clip-scaled.html"><span class="phrase">drm_rect_clip_scaled</span></a></span><span class="refpurpose"> — 
+     perform a scaled clip operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-calc-hscale.html"><span class="phrase">drm_rect_calc_hscale</span></a></span><span class="refpurpose"> — 
+     calculate the horizontal scaling factor
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-calc-vscale.html"><span class="phrase">drm_rect_calc_vscale</span></a></span><span class="refpurpose"> — 
+     calculate the vertical scaling factor
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-calc-hscale-relaxed.html"><span class="phrase">drm_rect_calc_hscale_relaxed</span></a></span><span class="refpurpose"> — 
+     calculate the horizontal scaling factor
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-calc-vscale-relaxed.html"><span class="phrase">drm_rect_calc_vscale_relaxed</span></a></span><span class="refpurpose"> — 
+     calculate the vertical scaling factor
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-debug-print.html"><span class="phrase">drm_rect_debug_print</span></a></span><span class="refpurpose"> — 
+     print the rectangle information
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-rotate.html"><span class="phrase">drm_rect_rotate</span></a></span><span class="refpurpose"> — 
+     Rotate the rectangle
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rect-rotate-inv.html"><span class="phrase">drm_rect_rotate_inv</span></a></span><span class="refpurpose"> — 
+     Inverse rotate the rectangle
+ </span></dt></dl></div><p>
+   </p><p>
+   Utility functions to help manage rectangular areas for
+   clipping, scaling, etc. calculations.
+</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm13139"></a>Flip-work Helper Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-drm-flip-work.html"><span class="phrase">struct drm_flip_work</span></a></span><span class="refpurpose"> — 
+  flip work queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-flip-work-queue.html"><span class="phrase">drm_flip_work_queue</span></a></span><span class="refpurpose"> — 
+  queue work
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-flip-work-commit.html"><span class="phrase">drm_flip_work_commit</span></a></span><span class="refpurpose"> — 
+     commit queued work
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-flip-work-init.html"><span class="phrase">drm_flip_work_init</span></a></span><span class="refpurpose"> — 
+     initialize flip-work
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-flip-work-cleanup.html"><span class="phrase">drm_flip_work_cleanup</span></a></span><span class="refpurpose"> — 
+     cleans up flip-work
+ </span></dt></dl></div><p>
+   </p><p>
+   Util to queue up work to run from work-queue context after flip/vblank.
+   Typically this can be used to defer unref of framebuffer's, cursor
+   bo's, etc until after vblank.  The APIs are all safe (and lockless)
+   for up to one producer and once consumer at a time.  The single-consumer
+   aspect is ensured by committing the queued work to a single work-queue.
+</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm13352"></a>HDMI Infoframes Helper Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-hdmi-infoframe.html"><span class="phrase">union hdmi_infoframe</span></a></span><span class="refpurpose"> — 
+  overall union of all abstract infoframe representations
+ </span></dt><dt><span class="refentrytitle"><a href="API-hdmi-avi-infoframe-init.html"><span class="phrase">hdmi_avi_infoframe_init</span></a></span><span class="refpurpose"> — 
+  initialize an HDMI AVI infoframe
+ </span></dt><dt><span class="refentrytitle"><a href="API-hdmi-avi-infoframe-pack.html"><span class="phrase">hdmi_avi_infoframe_pack</span></a></span><span class="refpurpose"> — 
+     write HDMI AVI infoframe to binary buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-hdmi-spd-infoframe-init.html"><span class="phrase">hdmi_spd_infoframe_init</span></a></span><span class="refpurpose"> — 
+     initialize an HDMI SPD infoframe
+ </span></dt><dt><span class="refentrytitle"><a href="API-hdmi-spd-infoframe-pack.html"><span class="phrase">hdmi_spd_infoframe_pack</span></a></span><span class="refpurpose"> — 
+     write HDMI SPD infoframe to binary buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-hdmi-audio-infoframe-init.html"><span class="phrase">hdmi_audio_infoframe_init</span></a></span><span class="refpurpose"> — 
+     initialize an HDMI audio infoframe
+ </span></dt><dt><span class="refentrytitle"><a href="API-hdmi-audio-infoframe-pack.html"><span class="phrase">hdmi_audio_infoframe_pack</span></a></span><span class="refpurpose"> — 
+     write HDMI audio infoframe to binary buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-hdmi-vendor-infoframe-init.html"><span class="phrase">hdmi_vendor_infoframe_init</span></a></span><span class="refpurpose"> — 
+     initialize an HDMI vendor infoframe
+ </span></dt><dt><span class="refentrytitle"><a href="API-hdmi-vendor-infoframe-pack.html"><span class="phrase">hdmi_vendor_infoframe_pack</span></a></span><span class="refpurpose"> — 
+     write a HDMI vendor infoframe to binary buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-hdmi-infoframe-pack.html"><span class="phrase">hdmi_infoframe_pack</span></a></span><span class="refpurpose"> — 
+     write a HDMI infoframe to binary buffer
+ </span></dt></dl></div><p>
+	Strictly speaking this is not a DRM helper library but generally useable
+	by any driver interfacing with HDMI outputs like v4l or alsa drivers.
+	But it nicely fits into the overall topic of mode setting helper
+	libraries and hence is also included here.
+      </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm13779"></a>Plane Helper Reference</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-drm-plane-helper-check-update.html"><span class="phrase">drm_plane_helper_check_update</span></a></span><span class="refpurpose"> — 
+  Check plane update for validity
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-primary-helper-update.html"><span class="phrase">drm_primary_helper_update</span></a></span><span class="refpurpose"> — 
+     Helper for primary plane update
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-primary-helper-disable.html"><span class="phrase">drm_primary_helper_disable</span></a></span><span class="refpurpose"> — 
+     Helper for primary plane disable
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-primary-helper-destroy.html"><span class="phrase">drm_primary_helper_destroy</span></a></span><span class="refpurpose"> — 
+     Helper for primary plane destruction
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-primary-helper-create-plane.html"><span class="phrase">drm_primary_helper_create_plane</span></a></span><span class="refpurpose"> — 
+     Create a generic primary plane
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-crtc-init.html"><span class="phrase">drm_crtc_init</span></a></span><span class="refpurpose"> — 
+     Legacy CRTC initialization function
+ </span></dt></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-modeset-unlock.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drmInternals.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-helper-move-panel-connectors-to-head.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_modeset_unlock</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_helper_move_panel_connectors_to_head</span></td></tr></table></div></body></html>

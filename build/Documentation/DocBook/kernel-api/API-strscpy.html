@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>strscpy</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch02s02.html" title="String Manipulation"><link rel="prev" href="API-strlcpy.html" title="strlcpy"><link rel="next" href="API-strcat.html" title="strcat"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">strscpy</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-strlcpy.html">Prev</a> </td><th width="60%" align="center">String Manipulation</th><td width="20%" align="right"> <a accesskey="n" href="API-strcat.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-strscpy"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>strscpy — 
+     Copy a C-string into a sized buffer
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">ssize_t <b class="fsfunc">strscpy </b>(</code></td><td>char * <var class="pdparam">dest</var>, </td></tr><tr><td> </td><td>const char * <var class="pdparam">src</var>, </td></tr><tr><td> </td><td>size_t <var class="pdparam">count</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm3030"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dest</code></em></span></dt><dd><p>
+     Where to copy the string to
+    </p></dd><dt><span class="term"><em class="parameter"><code>src</code></em></span></dt><dd><p>
+     Where to copy the string from
+    </p></dd><dt><span class="term"><em class="parameter"><code>count</code></em></span></dt><dd><p>
+     Size of destination buffer
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm3048"></a><h2>Description</h2><p>
+   Copy the string, or as much of it as fits, into the dest buffer.
+   The routine returns the number of characters copied (not including
+   the trailing NUL) or -E2BIG if the destination buffer wasn't big enough.
+   The behavior is undefined if the string buffers overlap.
+   The destination buffer is always NUL terminated, unless it's zero-sized.
+   </p><p>
+
+   Preferred to <code class="function">strlcpy</code> since the API doesn't require reading memory
+   from the src string beyond the specified <span class="quote">“<span class="quote">count</span>”</span> bytes, and since
+   the return value is easier to error-check than <code class="function">strlcpy</code>'s.
+   In addition, the implementation is robust to the string changing out
+   from underneath it, unlike the current <code class="function">strlcpy</code> implementation.
+   </p><p>
+
+   Preferred to <code class="function">strncpy</code> since it always returns a valid string, and
+   doesn't unnecessarily force the tail of the destination buffer to be
+   zeroed.  If the zeroing is desired, it's likely cleaner to use <code class="function">strscpy</code>
+   with an overflow test, then just <code class="function">memset</code> the tail of the dest buffer.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-strlcpy.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-strcat.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">strlcpy</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">strcat</span></td></tr></table></div></body></html>

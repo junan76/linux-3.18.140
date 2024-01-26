@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ll_rw_block</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="other_functions.html" title="Other Functions"><link rel="prev" href="API-block-invalidatepage.html" title="block_invalidatepage"><link rel="next" href="API-bh-uptodate-or-lock.html" title="bh_uptodate_or_lock"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">ll_rw_block</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-block-invalidatepage.html">Prev</a> </td><th width="60%" align="center">Other Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-bh-uptodate-or-lock.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-ll-rw-block"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ll_rw_block — 
+     level access to block devices (DEPRECATED)
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">ll_rw_block </b>(</code></td><td>int <var class="pdparam">rw</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">nr</var>, </td></tr><tr><td> </td><td>struct buffer_head * <var class="pdparam">bhs[]</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4444"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>rw</code></em></span></dt><dd><p>
+     whether to <code class="constant">READ</code> or <code class="constant">WRITE</code> or maybe <code class="constant">READA</code> (readahead)
+    </p></dd><dt><span class="term"><em class="parameter"><code>nr</code></em></span></dt><dd><p>
+     number of <span class="structname">struct buffer_heads</span> in the array
+    </p></dd><dt><span class="term"><em class="parameter"><code>bhs[]</code></em></span></dt><dd><p>
+     array of pointers to <span class="structname">struct buffer_head</span>
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4467"></a><h2>Description</h2><p>
+   <code class="function">ll_rw_block</code> takes an array of pointers to <span class="structname">struct buffer_heads</span>, and
+   requests an I/O operation on them, either a <code class="constant">READ</code> or a <code class="constant">WRITE</code>.  The third
+   <code class="constant">READA</code> option is described in the documentation for <code class="function">generic_make_request</code>
+   which <code class="function">ll_rw_block</code> calls.
+   </p><p>
+
+   This function drops any buffer that it cannot get a lock on (with the
+   BH_Lock state bit), any buffer that appears to be clean when doing a write
+   request, and any buffer that appears to be up-to-date when doing read
+   request.  Further it marks as clean buffers that are processed for
+   writing (the buffer cache won't assume that they are actually clean
+   until the buffer gets unlocked).
+   </p><p>
+
+   ll_rw_block sets b_end_io to simple completion handler that marks
+   the buffer up-to-date (if appropriate), unlocks the buffer and wakes
+   any waiters. 
+   </p><p>
+
+   All of the buffers must be for the same device, and must also be a
+   multiple of the current approved size for the device.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-block-invalidatepage.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="other_functions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-bh-uptodate-or-lock.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">block_invalidatepage</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">bh_uptodate_or_lock</span></td></tr></table></div></body></html>

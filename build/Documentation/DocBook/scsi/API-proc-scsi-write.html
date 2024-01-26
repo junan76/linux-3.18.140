@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>proc_scsi_write</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="mid_layer.html#scsi_proc.c" title="drivers/scsi/scsi_proc.c"><link rel="prev" href="API-scsi-remove-single-device.html" title="scsi_remove_single_device"><link rel="next" href="API-proc-scsi-open.html" title="proc_scsi_open"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">proc_scsi_write</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-scsi-remove-single-device.html">Prev</a> </td><th width="60%" align="center">drivers/scsi/scsi_proc.c</th><td width="20%" align="right"> <a accesskey="n" href="API-proc-scsi-open.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-proc-scsi-write"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>proc_scsi_write — 
+     handle writes to /proc/scsi/scsi
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">ssize_t <b class="fsfunc">proc_scsi_write </b>(</code></td><td>struct file * <var class="pdparam">file</var>, </td></tr><tr><td> </td><td>const char __user * <var class="pdparam">buf</var>, </td></tr><tr><td> </td><td>size_t <var class="pdparam">length</var>, </td></tr><tr><td> </td><td>loff_t * <var class="pdparam">ppos</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2911"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>file</code></em></span></dt><dd><p>
+     not used
+    </p></dd><dt><span class="term"><em class="parameter"><code>buf</code></em></span></dt><dd><p>
+     buffer to write
+    </p></dd><dt><span class="term"><em class="parameter"><code>length</code></em></span></dt><dd><p>
+     length of buf, at most PAGE_SIZE
+    </p></dd><dt><span class="term"><em class="parameter"><code>ppos</code></em></span></dt><dd><p>
+     not used
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2934"></a><h2>Description</h2><p>
+   this provides a legacy mechanism to add or remove devices by
+   Host, Channel, ID, and Lun.  To use,
+   <span class="quote">“<span class="quote">echo 'scsi add-single-device 0 1 2 3' &gt; /proc/scsi/scsi</span>”</span> or
+   <span class="quote">“<span class="quote">echo 'scsi remove-single-device 0 1 2 3' &gt; /proc/scsi/scsi</span>”</span> with
+   <span class="quote">“<span class="quote">0 1 2 3</span>”</span> replaced by the Host, Channel, Id, and Lun.
+</p></div><div class="refsect1"><a name="idm2940"></a><h2>Note</h2><p>
+   this seems to be aimed at parallel SCSI. Most modern busses (USB,
+   SATA, Firewire, Fibre Channel, etc) dynamically assign these values to
+   provide a unique identifier and nothing more.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-scsi-remove-single-device.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="mid_layer.html#scsi_proc.c">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-proc-scsi-open.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">scsi_remove_single_device</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">proc_scsi_open</span></td></tr></table></div></body></html>

@@ -1,0 +1,172 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Transport classes</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="mid_layer.html" title="Chapter 3. SCSI mid layer"><link rel="prev" href="API-scsi-print-status.html" title="scsi_print_status"><link rel="next" href="API-fc-get-event-number.html" title="fc_get_event_number"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Transport classes</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-scsi-print-status.html">Prev</a> </td><th width="60%" align="center">Chapter 3. SCSI mid layer</th><td width="20%" align="right"> <a accesskey="n" href="API-fc-get-event-number.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Transport_classes"></a>Transport classes</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="Transport_classes.html#Fibre_Channel_transport">Fibre Channel transport</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#iSCSI_transport">iSCSI transport class</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#SAS_transport">Serial Attached SCSI (SAS) transport class</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#SATA_transport">SATA transport class</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#SPI_transport">Parallel SCSI (SPI) transport class</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#SRP_transport">SCSI RDMA (SRP) transport class</a></span></dt></dl></div><p>
+        Transport classes are service libraries for drivers in the SCSI
+        lower layer, which expose transport attributes in sysfs.
+      </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Fibre_Channel_transport"></a>Fibre Channel transport</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-fc-get-event-number.html"><span class="phrase">fc_get_event_number</span></a></span><span class="refpurpose"> — 
+  Obtain the next sequential FC event number
+ </span></dt><dt><span class="refentrytitle"><a href="API-fc-host-post-event.html"><span class="phrase">fc_host_post_event</span></a></span><span class="refpurpose"> — 
+     called to post an even on an fc_host.
+ </span></dt><dt><span class="refentrytitle"><a href="API-fc-host-post-vendor-event.html"><span class="phrase">fc_host_post_vendor_event</span></a></span><span class="refpurpose"> — 
+     called to post a vendor unique event on an fc_host
+ </span></dt><dt><span class="refentrytitle"><a href="API-fc-remove-host.html"><span class="phrase">fc_remove_host</span></a></span><span class="refpurpose"> — 
+     called to terminate any fc_transport-related elements for a scsi host.
+ </span></dt><dt><span class="refentrytitle"><a href="API-fc-remote-port-add.html"><span class="phrase">fc_remote_port_add</span></a></span><span class="refpurpose"> — 
+     notify fc transport of the existence of a remote FC port.
+ </span></dt><dt><span class="refentrytitle"><a href="API-fc-remote-port-delete.html"><span class="phrase">fc_remote_port_delete</span></a></span><span class="refpurpose"> — 
+     notifies the fc transport that a remote port is no longer in existence.
+ </span></dt><dt><span class="refentrytitle"><a href="API-fc-remote-port-rolechg.html"><span class="phrase">fc_remote_port_rolechg</span></a></span><span class="refpurpose"> — 
+     notifies the fc transport that the roles on a remote may have changed.
+ </span></dt><dt><span class="refentrytitle"><a href="API-fc-block-scsi-eh.html"><span class="phrase">fc_block_scsi_eh</span></a></span><span class="refpurpose"> — 
+     Block SCSI eh thread for blocked fc_rport
+ </span></dt><dt><span class="refentrytitle"><a href="API-fc-vport-create.html"><span class="phrase">fc_vport_create</span></a></span><span class="refpurpose"> — 
+     Admin App or LLDD requests creation of a vport
+ </span></dt><dt><span class="refentrytitle"><a href="API-fc-vport-terminate.html"><span class="phrase">fc_vport_terminate</span></a></span><span class="refpurpose"> — 
+     Admin App or LLDD requests termination of a vport
+ </span></dt></dl></div><p>
+          The file drivers/scsi/scsi_transport_fc.c defines transport attributes
+          for Fibre Channel.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="iSCSI_transport"></a>iSCSI transport class</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-iscsi-create-flashnode-sess.html"><span class="phrase">iscsi_create_flashnode_sess</span></a></span><span class="refpurpose"> — 
+  Add flashnode session entry in sysfs
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-create-flashnode-conn.html"><span class="phrase">iscsi_create_flashnode_conn</span></a></span><span class="refpurpose"> — 
+     Add flashnode conn entry in sysfs
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-is-flashnode-conn-dev.html"><span class="phrase">iscsi_is_flashnode_conn_dev</span></a></span><span class="refpurpose"> — 
+     verify passed device is to be flashnode conn
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-find-flashnode-sess.html"><span class="phrase">iscsi_find_flashnode_sess</span></a></span><span class="refpurpose"> — 
+     finds flashnode session entry
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-find-flashnode-conn.html"><span class="phrase">iscsi_find_flashnode_conn</span></a></span><span class="refpurpose"> — 
+     finds flashnode connection entry
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-destroy-flashnode-sess.html"><span class="phrase">iscsi_destroy_flashnode_sess</span></a></span><span class="refpurpose"> — 
+     destroy flashnode session entry
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-destroy-all-flashnode.html"><span class="phrase">iscsi_destroy_all_flashnode</span></a></span><span class="refpurpose"> — 
+     destroy all flashnode session entries
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-scan-finished.html"><span class="phrase">iscsi_scan_finished</span></a></span><span class="refpurpose"> — 
+     helper to report when running scans are done
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-block-scsi-eh.html"><span class="phrase">iscsi_block_scsi_eh</span></a></span><span class="refpurpose"> — 
+     block scsi eh until session state has transistioned
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-unblock-session.html"><span class="phrase">iscsi_unblock_session</span></a></span><span class="refpurpose"> — 
+     set a session as logged in and start IO.
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-create-session.html"><span class="phrase">iscsi_create_session</span></a></span><span class="refpurpose"> — 
+     create iscsi class session
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-destroy-session.html"><span class="phrase">iscsi_destroy_session</span></a></span><span class="refpurpose"> — 
+     destroy iscsi session
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-create-conn.html"><span class="phrase">iscsi_create_conn</span></a></span><span class="refpurpose"> — 
+     create iscsi class connection
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-destroy-conn.html"><span class="phrase">iscsi_destroy_conn</span></a></span><span class="refpurpose"> — 
+     destroy iscsi class connection
+ </span></dt><dt><span class="refentrytitle"><a href="API-iscsi-session-event.html"><span class="phrase">iscsi_session_event</span></a></span><span class="refpurpose"> — 
+     send session destr. completion event
+ </span></dt></dl></div><p>
+          The file drivers/scsi/scsi_transport_iscsi.c defines transport
+          attributes for the iSCSI class, which sends SCSI packets over TCP/IP
+          connections.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="SAS_transport"></a>Serial Attached SCSI (SAS) transport class</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-sas-remove-children.html"><span class="phrase">sas_remove_children</span></a></span><span class="refpurpose"> — 
+  tear down a devices SAS data structures
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-remove-host.html"><span class="phrase">sas_remove_host</span></a></span><span class="refpurpose"> — 
+     tear down a Scsi_Host's SAS data structures
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-tlr-supported.html"><span class="phrase">sas_tlr_supported</span></a></span><span class="refpurpose"> — 
+     checking TLR bit in vpd 0x90
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-disable-tlr.html"><span class="phrase">sas_disable_tlr</span></a></span><span class="refpurpose"> — 
+     setting TLR flags
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-enable-tlr.html"><span class="phrase">sas_enable_tlr</span></a></span><span class="refpurpose"> — 
+     setting TLR flags
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-phy-alloc.html"><span class="phrase">sas_phy_alloc</span></a></span><span class="refpurpose"> — 
+     allocates and initialize a SAS PHY structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-phy-add.html"><span class="phrase">sas_phy_add</span></a></span><span class="refpurpose"> — 
+     add a SAS PHY to the device hierarchy
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-phy-free.html"><span class="phrase">sas_phy_free</span></a></span><span class="refpurpose"> — 
+     free a SAS PHY
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-phy-delete.html"><span class="phrase">sas_phy_delete</span></a></span><span class="refpurpose"> — 
+     remove SAS PHY
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-is-sas-phy.html"><span class="phrase">scsi_is_sas_phy</span></a></span><span class="refpurpose"> — 
+     check if a struct device represents a SAS PHY
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-port-add.html"><span class="phrase">sas_port_add</span></a></span><span class="refpurpose"> — 
+     add a SAS port to the device hierarchy
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-port-free.html"><span class="phrase">sas_port_free</span></a></span><span class="refpurpose"> — 
+     free a SAS PORT
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-port-delete.html"><span class="phrase">sas_port_delete</span></a></span><span class="refpurpose"> — 
+     remove SAS PORT
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-is-sas-port.html"><span class="phrase">scsi_is_sas_port</span></a></span><span class="refpurpose"> — 
+     check if a struct device represents a SAS port
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-port-get-phy.html"><span class="phrase">sas_port_get_phy</span></a></span><span class="refpurpose"> — 
+     try to take a reference on a port member
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-port-add-phy.html"><span class="phrase">sas_port_add_phy</span></a></span><span class="refpurpose"> — 
+     add another phy to a port to form a wide port
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-port-delete-phy.html"><span class="phrase">sas_port_delete_phy</span></a></span><span class="refpurpose"> — 
+     remove a phy from a port or wide port
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-end-device-alloc.html"><span class="phrase">sas_end_device_alloc</span></a></span><span class="refpurpose"> — 
+     allocate an rphy for an end device
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-expander-alloc.html"><span class="phrase">sas_expander_alloc</span></a></span><span class="refpurpose"> — 
+     allocate an rphy for an end device
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-rphy-add.html"><span class="phrase">sas_rphy_add</span></a></span><span class="refpurpose"> — 
+     add a SAS remote PHY to the device hierarchy
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-rphy-free.html"><span class="phrase">sas_rphy_free</span></a></span><span class="refpurpose"> — 
+     free a SAS remote PHY
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-rphy-delete.html"><span class="phrase">sas_rphy_delete</span></a></span><span class="refpurpose"> — 
+     remove and free SAS remote PHY
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-rphy-unlink.html"><span class="phrase">sas_rphy_unlink</span></a></span><span class="refpurpose"> — 
+     unlink SAS remote PHY
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-rphy-remove.html"><span class="phrase">sas_rphy_remove</span></a></span><span class="refpurpose"> — 
+     remove SAS remote PHY
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-is-sas-rphy.html"><span class="phrase">scsi_is_sas_rphy</span></a></span><span class="refpurpose"> — 
+     check if a struct device represents a SAS remote PHY
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-attach-transport.html"><span class="phrase">sas_attach_transport</span></a></span><span class="refpurpose"> — 
+     instantiate SAS transport template
+ </span></dt><dt><span class="refentrytitle"><a href="API-sas-release-transport.html"><span class="phrase">sas_release_transport</span></a></span><span class="refpurpose"> — 
+     release SAS transport template instance
+ </span></dt></dl></div><p>
+          The file drivers/scsi/scsi_transport_sas.c defines transport
+          attributes for Serial Attached SCSI, a variant of SATA aimed at
+          large high-end systems.
+        </p><p>
+          The SAS transport class contains common code to deal with SAS HBAs,
+          an aproximated representation of SAS topologies in the driver model,
+          and various sysfs attributes to expose these topologies and management
+          interfaces to userspace.
+        </p><p>
+          In addition to the basic SCSI core objects this transport class
+          introduces two additional intermediate objects:  The SAS PHY
+          as represented by struct sas_phy defines an "outgoing" PHY on
+          a SAS HBA or Expander, and the SAS remote PHY represented by
+          struct sas_rphy defines an "incoming" PHY on a SAS Expander or
+          end device.  Note that this is purely a software concept, the
+          underlying hardware for a PHY and a remote PHY is the exactly
+          the same.
+        </p><p>
+          There is no concept of a SAS port in this code, users can see
+          what PHYs form a wide port based on the port_identifier attribute,
+          which is the same for all PHYs in a port.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="SATA_transport"></a>SATA transport class</h3></div></div></div><p>
+          The SATA transport is handled by libata, which has its own book of
+          documentation in this directory.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="SPI_transport"></a>Parallel SCSI (SPI) transport class</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-spi-schedule-dv-device.html"><span class="phrase">spi_schedule_dv_device</span></a></span><span class="refpurpose"> — 
+  schedule domain validation to occur on the device
+ </span></dt><dt><span class="refentrytitle"><a href="API-spi-display-xfer-agreement.html"><span class="phrase">spi_display_xfer_agreement</span></a></span><span class="refpurpose"> — 
+     Print the current target transfer agreement
+ </span></dt></dl></div><p>
+          The file drivers/scsi/scsi_transport_spi.c defines transport
+          attributes for traditional (fast/wide/ultra) SCSI busses.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="SRP_transport"></a>SCSI RDMA (SRP) transport class</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-srp-tmo-valid.html"><span class="phrase">srp_tmo_valid</span></a></span><span class="refpurpose"> — 
+  check timeout combination validity
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-start-tl-fail-timers.html"><span class="phrase">srp_start_tl_fail_timers</span></a></span><span class="refpurpose"> — 
+     start the transport layer failure timers
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-reconnect-rport.html"><span class="phrase">srp_reconnect_rport</span></a></span><span class="refpurpose"> — 
+     reconnect to an SRP target port
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-rport-get.html"><span class="phrase">srp_rport_get</span></a></span><span class="refpurpose"> — 
+     increment rport reference count
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-rport-put.html"><span class="phrase">srp_rport_put</span></a></span><span class="refpurpose"> — 
+     decrement rport reference count
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-rport-add.html"><span class="phrase">srp_rport_add</span></a></span><span class="refpurpose"> — 
+     add a SRP remote port to the device hierarchy
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-rport-del.html"><span class="phrase">srp_rport_del</span></a></span><span class="refpurpose"> — 
+     remove a SRP remote port
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-remove-host.html"><span class="phrase">srp_remove_host</span></a></span><span class="refpurpose"> — 
+     tear down a Scsi_Host's SRP data structures
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-stop-rport-timers.html"><span class="phrase">srp_stop_rport_timers</span></a></span><span class="refpurpose"> — 
+     stop the transport layer recovery timers
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-attach-transport.html"><span class="phrase">srp_attach_transport</span></a></span><span class="refpurpose"> — 
+     instantiate SRP transport template
+ </span></dt><dt><span class="refentrytitle"><a href="API-srp-release-transport.html"><span class="phrase">srp_release_transport</span></a></span><span class="refpurpose"> — 
+     release SRP transport template instance
+ </span></dt></dl></div><p>
+          The file drivers/scsi/scsi_transport_srp.c defines transport
+          attributes for SCSI over Remote Direct Memory Access.
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-scsi-print-status.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="mid_layer.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-fc-get-event-number.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">scsi_print_status</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">fc_get_event_number</span></td></tr></table></div></body></html>

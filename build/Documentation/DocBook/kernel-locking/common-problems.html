@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 8. Common Problems</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="index.html" title="Unreliable Guide To Locking"><link rel="prev" href="examples-lock-per-obj.html" title="Protecting The Objects Themselves"><link rel="next" href="techs-deadlock-prevent.html" title="Preventing Deadlock"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 8. Common Problems</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="examples-lock-per-obj.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="techs-deadlock-prevent.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="common-problems"></a>Chapter 8. Common Problems</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="common-problems.html#deadlock">Deadlock: Simple and Advanced</a></span></dt><dt><span class="sect1"><a href="techs-deadlock-prevent.html">Preventing Deadlock</a></span></dt><dd><dl><dt><span class="sect2"><a href="techs-deadlock-prevent.html#techs-deadlock-overprevent">Overzealous Prevention Of Deadlocks</a></span></dt></dl></dd><dt><span class="sect1"><a href="racing-timers.html">Racing Timers: A Kernel Pastime</a></span></dt></dl></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deadlock"></a>Deadlock: Simple and Advanced</h2></div></div></div><p>
+      There is a coding bug where a piece of code tries to grab a
+      spinlock twice: it will spin forever, waiting for the lock to
+      be released (spinlocks, rwlocks and mutexes are not
+      recursive in Linux).  This is trivial to diagnose: not a
+      stay-up-five-nights-talk-to-fluffy-code-bunnies kind of
+      problem.
+    </p><p>
+      For a slightly more complex case, imagine you have a region
+      shared by a softirq and user context.  If you use a
+      <code class="function">spin_lock()</code> call to protect it, it is 
+      possible that the user context will be interrupted by the softirq
+      while it holds the lock, and the softirq will then spin
+      forever trying to get the same lock.
+    </p><p>
+      Both of these are called deadlock, and as shown above, it can
+      occur even with a single CPU (although not on UP compiles,
+      since spinlocks vanish on kernel compiles with 
+      <span class="symbol">CONFIG_SMP</span>=n. You'll still get data corruption 
+      in the second example).
+    </p><p>
+      This complete lockup is easy to diagnose: on SMP boxes the
+      watchdog timer or compiling with <span class="symbol">DEBUG_SPINLOCK</span> set
+      (<code class="filename">include/linux/spinlock.h</code>) will show this up 
+      immediately when it happens.
+    </p><p>
+      A more complex problem is the so-called 'deadly embrace',
+      involving two or more locks.  Say you have a hash table: each
+      entry in the table is a spinlock, and a chain of hashed
+      objects.  Inside a softirq handler, you sometimes want to
+      alter an object from one place in the hash to another: you
+      grab the spinlock of the old hash chain and the spinlock of
+      the new hash chain, and delete the object from the old one,
+      and insert it in the new one.
+    </p><p>
+      There are two problems here.  First, if your code ever
+      tries to move the object to the same chain, it will deadlock
+      with itself as it tries to lock it twice.  Secondly, if the
+      same softirq on another CPU is trying to move another object
+      in the reverse direction, the following could happen:
+    </p><div class="table"><a name="idm453"></a><p class="title"><b>Table 8.1. Consequences</b></p><div class="table-contents"><table class="table" summary="Consequences" border="1"><colgroup><col><col></colgroup><thead><tr><th align="left">CPU 1</th><th align="left">CPU 2</th></tr></thead><tbody><tr><td align="left">Grab lock A -&gt; OK</td><td align="left">Grab lock B -&gt; OK</td></tr><tr><td align="left">Grab lock B -&gt; spin</td><td align="left">Grab lock A -&gt; spin</td></tr></tbody></table></div></div><br class="table-break"><p>
+      The two CPUs will spin forever, waiting for the other to give up
+      their lock.  It will look, smell, and feel like a crash.
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="examples-lock-per-obj.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="techs-deadlock-prevent.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Protecting The Objects Themselves </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Preventing Deadlock</td></tr></table></div></body></html>

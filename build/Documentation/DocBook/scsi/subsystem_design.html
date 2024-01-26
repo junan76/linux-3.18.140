@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Design of the Linux SCSI subsystem</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="intro.html" title="Chapter 1. Introduction"><link rel="prev" href="intro.html" title="Chapter 1. Introduction"><link rel="next" href="upper_layer.html" title="Chapter 2. SCSI upper layer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Design of the Linux SCSI subsystem</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="intro.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Introduction</th><td width="20%" align="right"> <a accesskey="n" href="upper_layer.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsystem_design"></a>Design of the Linux SCSI subsystem</h2></div></div></div><p>
+        The SCSI subsystem uses a three layer design, with upper, mid, and low
+        layers.  Every operation involving the SCSI subsystem (such as reading
+        a sector from a disk) uses one driver at each of the 3 levels: one
+        upper layer driver, one lower layer driver, and the SCSI midlayer.
+      </p><p>
+        The SCSI upper layer provides the interface between userspace and the
+        kernel, in the form of block and char device nodes for I/O and
+        ioctl().  The SCSI lower layer contains drivers for specific hardware
+        devices.
+      </p><p>
+        In between is the SCSI mid-layer, analogous to a network routing
+        layer such as the IPv4 stack.  The SCSI mid-layer routes a packet
+        based data protocol between the upper layer's /dev nodes and the
+        corresponding devices in the lower layer.  It manages command queues,
+        provides error handling and power management functions, and responds
+        to ioctl() requests.
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="intro.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="intro.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="upper_layer.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Introduction </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. SCSI upper layer</td></tr></table></div></body></html>

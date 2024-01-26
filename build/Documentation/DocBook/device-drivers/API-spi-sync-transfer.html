@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>spi_sync_transfer</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="spi.html" title="Chapter 9. Serial Peripheral Interface (SPI)"><link rel="prev" href="API-spi-read.html" title="spi_read"><link rel="next" href="API-spi-w8r8.html" title="spi_w8r8"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">spi_sync_transfer</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-spi-read.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Serial Peripheral Interface (SPI)</th><td width="20%" align="right"> <a accesskey="n" href="API-spi-w8r8.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-spi-sync-transfer"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>spi_sync_transfer — 
+     synchronous SPI data transfer
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">spi_sync_transfer </b>(</code></td><td>struct spi_device * <var class="pdparam">spi</var>, </td></tr><tr><td> </td><td>struct spi_transfer * <var class="pdparam">xfers</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">num_xfers</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm41497"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>spi</code></em></span></dt><dd><p>
+     device with which data will be exchanged
+    </p></dd><dt><span class="term"><em class="parameter"><code>xfers</code></em></span></dt><dd><p>
+     An array of spi_transfers
+    </p></dd><dt><span class="term"><em class="parameter"><code>num_xfers</code></em></span></dt><dd><p>
+     Number of items in the xfer array
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm41515"></a><h2>Context</h2><p>
+   can sleep
+</p></div><div class="refsect1"><a name="idm41518"></a><h2>Description</h2><p>
+   Does a synchronous SPI data transfer of the given spi_transfer array.
+   </p><p>
+
+   For more specific semantics see <code class="function">spi_sync</code>.
+   </p><p>
+
+   It returns zero on success, else a negative error code.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-spi-read.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="spi.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-spi-w8r8.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">spi_read</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">spi_w8r8</span></td></tr></table></div></body></html>

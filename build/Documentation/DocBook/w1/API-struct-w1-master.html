@@ -1,0 +1,83 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct w1_master</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="W1: Dallas' 1-wire bus"><link rel="up" href="w1_internal.html#w1.h" title="drivers/w1/w1.h"><link rel="prev" href="API-enum-w1-master-flags.html" title="enum w1_master_flags"><link rel="next" href="API-struct-w1-async-cmd.html" title="struct w1_async_cmd"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct w1_master</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-enum-w1-master-flags.html">Prev</a> </td><th width="60%" align="center">drivers/w1/w1.h</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-w1-async-cmd.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-w1-master"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct w1_master — 
+     one per bus master
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct w1_master {
+  struct list_head w1_master_entry;
+  struct module * owner;
+  unsigned char name[W1_MAXNAMELEN];
+  struct mutex list_mutex;
+  struct list_head slist;
+  struct list_head async_list;
+  int max_slave_count;
+  int slave_count;
+  unsigned long attempts;
+  int slave_ttl;
+  int initialized;
+  u32 id;
+  int search_count;
+  u64 search_id;
+  atomic_t refcnt;
+  void * priv;
+  int enable_pullup;
+  int pullup_duration;
+  long flags;
+  struct task_struct * thread;
+  struct mutex mutex;
+  struct mutex bus_mutex;
+  struct device_driver * driver;
+  struct device dev;
+  struct w1_bus_master * bus_master;
+  u32 seq;
+};  </pre></div><div class="refsect1"><a name="idm253"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">w1_master_entry</span></dt><dd><p>
+   master linked list
+      </p></dd><dt><span class="term">owner</span></dt><dd><p>
+   module owner
+      </p></dd><dt><span class="term">name[W1_MAXNAMELEN]</span></dt><dd><p>
+   dynamically allocate bus name
+      </p></dd><dt><span class="term">list_mutex</span></dt><dd><p>
+   protect slist and async_list
+      </p></dd><dt><span class="term">slist</span></dt><dd><p>
+   linked list of slaves
+      </p></dd><dt><span class="term">async_list</span></dt><dd><p>
+   linked list of netlink commands to execute
+      </p></dd><dt><span class="term">max_slave_count</span></dt><dd><p>
+   maximum number of slaves to search for at a time
+      </p></dd><dt><span class="term">slave_count</span></dt><dd><p>
+   current number of slaves known
+      </p></dd><dt><span class="term">attempts</span></dt><dd><p>
+   number of searches ran
+      </p></dd><dt><span class="term">slave_ttl</span></dt><dd><p>
+   number of searches before a slave is timed out
+      </p></dd><dt><span class="term">initialized</span></dt><dd><p>
+   prevent init/removal race conditions
+      </p></dd><dt><span class="term">id</span></dt><dd><p>
+   w1 bus number
+      </p></dd><dt><span class="term">search_count</span></dt><dd><p>
+   number of automatic searches to run, -1 unlimited
+      </p></dd><dt><span class="term">search_id</span></dt><dd><p>
+   allows continuing a search
+      </p></dd><dt><span class="term">refcnt</span></dt><dd><p>
+   reference count
+      </p></dd><dt><span class="term">priv</span></dt><dd><p>
+   private data storage
+      </p></dd><dt><span class="term">enable_pullup</span></dt><dd><p>
+   allows a strong pullup
+      </p></dd><dt><span class="term">pullup_duration</span></dt><dd><p>
+   time for the next strong pullup
+      </p></dd><dt><span class="term">flags</span></dt><dd><p>
+   one of w1_master_flags
+      </p></dd><dt><span class="term">thread</span></dt><dd><p>
+   thread for bus search and netlink commands
+      </p></dd><dt><span class="term">mutex</span></dt><dd><p>
+   protect most of w1_master
+      </p></dd><dt><span class="term">bus_mutex</span></dt><dd><p>
+   pretect concurrent bus access
+      </p></dd><dt><span class="term">driver</span></dt><dd><p>
+   sysfs driver
+      </p></dd><dt><span class="term">dev</span></dt><dd><p>
+   sysfs device
+      </p></dd><dt><span class="term">bus_master</span></dt><dd><p>
+   io operations available
+      </p></dd><dt><span class="term">seq</span></dt><dd><p>
+   sequence number used for netlink broadcasts
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-enum-w1-master-flags.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="w1_internal.html#w1.h">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-w1-async-cmd.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">enum w1_master_flags</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct w1_async_cmd</span></td></tr></table></div></body></html>

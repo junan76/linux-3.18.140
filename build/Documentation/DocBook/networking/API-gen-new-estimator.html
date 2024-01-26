@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>gen_new_estimator</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s04.html" title="Generic Network Statistics"><link rel="prev" href="API-gnet-stats-finish-copy.html" title="gnet_stats_finish_copy"><link rel="next" href="API-gen-kill-estimator.html" title="gen_kill_estimator"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">gen_new_estimator</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-gnet-stats-finish-copy.html">Prev</a> </td><th width="60%" align="center">Generic Network Statistics</th><td width="20%" align="right"> <a accesskey="n" href="API-gen-kill-estimator.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-gen-new-estimator"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>gen_new_estimator — 
+  create a new rate estimator
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">gen_new_estimator </b>(</code></td><td>struct gnet_stats_basic_packed * <var class="pdparam">bstats</var>, </td></tr><tr><td> </td><td>struct gnet_stats_basic_cpu __percpu * <var class="pdparam">cpu_bstats</var>, </td></tr><tr><td> </td><td>struct gnet_stats_rate_est64 * <var class="pdparam">rate_est</var>, </td></tr><tr><td> </td><td>spinlock_t * <var class="pdparam">stats_lock</var>, </td></tr><tr><td> </td><td>struct nlattr * <var class="pdparam">opt</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm7774"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>bstats</code></em></span></dt><dd><p>
+     basic statistics
+    </p></dd><dt><span class="term"><em class="parameter"><code>cpu_bstats</code></em></span></dt><dd><p>
+     -- undescribed --
+    </p></dd><dt><span class="term"><em class="parameter"><code>rate_est</code></em></span></dt><dd><p>
+     rate estimator statistics
+    </p></dd><dt><span class="term"><em class="parameter"><code>stats_lock</code></em></span></dt><dd><p>
+     statistics lock
+    </p></dd><dt><span class="term"><em class="parameter"><code>opt</code></em></span></dt><dd><p>
+     rate estimator configuration TLV
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm7802"></a><h2>Description</h2><p>
+   Creates a new rate estimator with <span class="structname">bstats</span> as source and <span class="structname">rate_est</span>
+   as destination. A new timer with the interval specified in the
+   configuration TLV is created. Upon each interval, the latest statistics
+   will be read from <span class="structname">bstats</span> and the estimated rate will be stored in
+   <span class="structname">rate_est</span> with the statistics lock grabbed during this period.
+   </p><p>
+
+   Returns 0 on success or a negative error code.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-gnet-stats-finish-copy.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-gen-kill-estimator.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">gnet_stats_finish_copy</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">gen_kill_estimator</span></td></tr></table></div></body></html>

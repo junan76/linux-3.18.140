@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Waiting for interrupts</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Userspace I/O HOWTO"><link rel="up" href="userspace_driver.html" title="Chapter 4. Writing a driver in userspace"><link rel="prev" href="mmap_device_memory.html" title="mmap() device memory"><link rel="next" href="uio_pci_generic.html" title="Chapter 5. Generic PCI UIO driver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Waiting for interrupts</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="mmap_device_memory.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Writing a driver in userspace</th><td width="20%" align="right"> <a accesskey="n" href="uio_pci_generic.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="wait_for_interrupts"></a>Waiting for interrupts</h2></div></div></div><p>
+	After you successfully mapped your devices memory, you
+	can access it like an ordinary array. Usually, you will
+	perform some initialization. After that, your hardware
+	starts working and will generate an interrupt as soon
+	as it's finished, has some data available, or needs your
+	attention because an error occurred.
+	</p><p>
+	<code class="filename">/dev/uioX</code> is a read-only file. A
+	<code class="function">read()</code> will always block until an
+	interrupt occurs. There is only one legal value for the
+	<code class="varname">count</code> parameter of
+	<code class="function">read()</code>, and that is the size of a
+	signed 32 bit integer (4). Any other value for
+	<code class="varname">count</code> causes <code class="function">read()</code>
+	to fail. The signed 32 bit integer read is the interrupt
+	count of your device. If the value is one more than the value
+	you read the last time, everything is OK. If the difference
+	is greater than one, you missed interrupts.
+	</p><p>
+	You can also use <code class="function">select()</code> on
+	<code class="filename">/dev/uioX</code>.
+	</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="mmap_device_memory.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="userspace_driver.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="uio_pci_generic.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">mmap() device memory </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 5. Generic PCI UIO driver</td></tr></table></div></body></html>

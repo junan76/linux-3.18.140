@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Change Notification</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="control-interface.html" title="Chapter 6. Control Interface"><link rel="prev" href="control-interface-constructor.html" title="Constructor"><link rel="next" href="control-interface-tlv.html" title="Metadata"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Change Notification</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="control-interface-constructor.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Control Interface</th><td width="20%" align="right"> <a accesskey="n" href="control-interface-tlv.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="control-interface-change-notification"></a>Change Notification</h2></div></div></div><p>
+        If you need to change and update a control in the interrupt
+      routine, you can call <code class="function">snd_ctl_notify()</code>. For
+      example, 
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  snd_ctl_notify(card, SNDRV_CTL_EVENT_MASK_VALUE, id_pointer);
+
+          </pre></div><p>
+
+        This function takes the card pointer, the event-mask, and the
+      control id pointer for the notification. The event-mask
+      specifies the types of notification, for example, in the above
+      example, the change of control values is notified.
+      The id pointer is the pointer of struct <span class="structname">snd_ctl_elem_id</span>
+      to be notified.
+      You can find some examples in <code class="filename">es1938.c</code> or
+      <code class="filename">es1968.c</code> for hardware volume interrupts. 
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="control-interface-constructor.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="control-interface.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="control-interface-tlv.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Constructor </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Metadata</td></tr></table></div></body></html>

@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>part_round_stats</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="blkdev.html" title="Chapter 14. Block Devices"><link rel="prev" href="API-blk-requeue-request.html" title="blk_requeue_request"><link rel="next" href="API-blk-add-request-payload.html" title="blk_add_request_payload"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">part_round_stats</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-blk-requeue-request.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Block Devices</th><td width="20%" align="right"> <a accesskey="n" href="API-blk-add-request-payload.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-part-round-stats"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>part_round_stats — 
+     Round off the performance stats on a struct disk_stats.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">part_round_stats </b>(</code></td><td>int <var class="pdparam">cpu</var>, </td></tr><tr><td> </td><td>struct hd_struct * <var class="pdparam">part</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm25762"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>cpu</code></em></span></dt><dd><p>
+     cpu number for stats access
+    </p></dd><dt><span class="term"><em class="parameter"><code>part</code></em></span></dt><dd><p>
+     target partition
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm25775"></a><h2>Description</h2><p>
+   The average IO queue length and utilisation statistics are maintained
+   by observing the current state of the queue length and the amount of
+   time it has been in this state for.
+   </p><p>
+
+   Normally, that accounting is done on IO completion, but that can result
+   in more than a second's worth of IO being accounted for within any one
+   second, leading to &gt;100% utilisation.  To deal with that, we call this
+   function to do a round-off before returning the results when reading
+   /proc/diskstats.  This accounts immediately for all queue usage up to
+   the current jiffies and restarts the counters again.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-blk-requeue-request.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="blkdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-blk-add-request-payload.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">blk_requeue_request</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">blk_add_request_payload</span></td></tr></table></div></body></html>

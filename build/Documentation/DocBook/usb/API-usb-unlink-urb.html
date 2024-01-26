@@ -1,0 +1,81 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_unlink_urb</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbcore.html" title="Chapter 5. USB Core APIs"><link rel="prev" href="API-usb-submit-urb.html" title="usb_submit_urb"><link rel="next" href="API-usb-kill-urb.html" title="usb_kill_urb"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_unlink_urb</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-submit-urb.html">Prev</a> </td><th width="60%" align="center">Chapter 5. USB Core APIs</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-kill-urb.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-unlink-urb"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_unlink_urb — 
+     abort/cancel a transfer request for an endpoint
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">usb_unlink_urb </b>(</code></td><td>struct urb * <var class="pdparam">urb</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2251"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>urb</code></em></span></dt><dd><p>
+     pointer to urb describing a previously submitted request,
+     may be NULL
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2259"></a><h2>Description</h2><p>
+   This routine cancels an in-progress request.  URBs complete only once
+   per submission, and may be canceled only once per submission.
+   Successful cancellation means termination of <em class="parameter"><code>urb</code></em> will be expedited
+   and the completion handler will be called with a status code
+   indicating that the request has been canceled (rather than any other
+   code).
+   </p><p>
+
+   Drivers should not call this routine or related routines, such as
+   <code class="function">usb_kill_urb</code> or <code class="function">usb_unlink_anchored_urbs</code>, after their disconnect
+   method has returned.  The disconnect function should synchronize with
+   a driver's I/O routines to insure that all URB-related activity has
+   completed before it returns.
+   </p><p>
+
+   This request is asynchronous, however the HCD might call the -&gt;<code class="function">complete</code>
+   callback during unlink. Therefore when drivers call <code class="function">usb_unlink_urb</code>, they
+   must not hold any locks that may be taken by the completion function.
+   Success is indicated by returning -EINPROGRESS, at which time the URB will
+   probably not yet have been given back to the device driver. When it is
+   eventually called, the completion function will see <em class="parameter"><code>urb</code></em>-&gt;status ==
+   -ECONNRESET.
+   Failure is indicated by <code class="function">usb_unlink_urb</code> returning any other value.
+   Unlinking will fail when <em class="parameter"><code>urb</code></em> is not currently <span class="quote">“<span class="quote">linked</span>”</span> (i.e., it was
+   never submitted, or it was unlinked before, or the hardware is already
+   finished with it), even if the completion handler has not yet run.
+   </p><p>
+
+   The URB must not be deallocated while this routine is running.  In
+   particular, when a driver calls this routine, it must insure that the
+   completion handler cannot deallocate the URB.
+</p></div><div class="refsect1"><a name="idm2274"></a><h2>Return</h2><p>
+   -EINPROGRESS on success. See description for other values on
+   failure.
+</p></div><div class="refsect1"><a name="idm2277"></a><h2>Unlinking and Endpoint Queues</h2><p>
+   </p><p>
+
+   [The behaviors and guarantees described below do not apply to virtual
+   root hubs but only to endpoint queues for physical USB devices.]
+   </p><p>
+
+   Host Controller Drivers (HCDs) place all the URBs for a particular
+   endpoint in a queue.  Normally the queue advances as the controller
+   hardware processes each request.  But when an URB terminates with an
+   error its queue generally stops (see below), at least until that URB's
+   completion routine returns.  It is guaranteed that a stopped queue
+   will not restart until all its unlinked URBs have been fully retired,
+   with their completion routines run, even if that's not until some time
+   after the original completion handler returns.  The same behavior and
+   guarantee apply when an URB terminates because it was unlinked.
+   </p><p>
+
+   Bulk and interrupt endpoint queues are guaranteed to stop whenever an
+   URB terminates with any sort of error, including -ECONNRESET, -ENOENT,
+   and -EREMOTEIO.  Control endpoint queues behave the same way except
+   that they are not guaranteed to stop for -EREMOTEIO errors.  Queues
+   for isochronous endpoints are treated differently, because they must
+   advance at fixed rates.  Such queues do not stop when an URB
+   encounters an error or is unlinked.  An unlinked isochronous URB may
+   leave a gap in the stream of packets; it is undefined whether such
+   gaps can be filled in.
+   </p><p>
+
+   Note that early termination of an URB because a short packet was
+   received will generate a -EREMOTEIO error if and only if the
+   URB_SHORT_NOT_OK flag is set.  By setting this flag, USB device
+   drivers can build deep queues for large or complex bulk transfers
+   and clean them up reliably after any sort of aborted transfer by
+   unlinking all pending URBs at the first fault.
+   </p><p>
+
+   When a control URB terminates with an error other than -EREMOTEIO, it
+   is quite likely that the status stage of the transfer will not take
+   place.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-submit-urb.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-kill-urb.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_submit_urb</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_kill_urb</span></td></tr></table></div></body></html>

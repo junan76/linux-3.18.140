@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>get_options</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch03s02.html" title="Command-line Parsing"><link rel="prev" href="API-get-option.html" title="get_option"><link rel="next" href="API-memparse.html" title="memparse"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">get_options</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-get-option.html">Prev</a> </td><th width="60%" align="center">Command-line Parsing</th><td width="20%" align="right"> <a accesskey="n" href="API-memparse.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-get-options"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>get_options — 
+     Parse a string into a list of integers
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">char * <b class="fsfunc">get_options </b>(</code></td><td>const char * <var class="pdparam">str</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">nints</var>, </td></tr><tr><td> </td><td>int * <var class="pdparam">ints</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm6205"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>str</code></em></span></dt><dd><p>
+     String to be parsed
+    </p></dd><dt><span class="term"><em class="parameter"><code>nints</code></em></span></dt><dd><p>
+     size of integer array
+    </p></dd><dt><span class="term"><em class="parameter"><code>ints</code></em></span></dt><dd><p>
+     integer array
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm6223"></a><h2>Description</h2><p>
+   This function parses a string containing a comma-separated
+   list of integers, a hyphen-separated range of _positive_ integers,
+   or a combination of both.  The parse halts when the array is
+   full, or when no more numbers can be retrieved from the
+   string.
+   </p><p>
+
+   Return value is the character in the string which caused
+   the parse to end (typically a null terminator, if <em class="parameter"><code>str</code></em> is
+   completely parseable).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-get-option.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-memparse.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">get_option</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">memparse</span></td></tr></table></div></body></html>

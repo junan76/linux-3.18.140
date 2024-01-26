@@ -1,0 +1,1325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+	"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" []>
+
+<book id="sh-drivers">
+ <bookinfo>
+  <title>SuperH Interfaces Guide</title>
+  
+  <authorgroup>
+   <author>
+    <firstname>Paul</firstname>
+    <surname>Mundt</surname>
+    <affiliation>
+     <address>
+      <email>lethal@linux-sh.org</email>
+     </address>
+    </affiliation>
+   </author>
+  </authorgroup>
+
+  <copyright>
+   <year>2008-2010</year>
+   <holder>Paul Mundt</holder>
+  </copyright>
+  <copyright>
+   <year>2008-2010</year>
+   <holder>Renesas Technology Corp.</holder>
+  </copyright>
+  <copyright>
+   <year>2010</year>
+   <holder>Renesas Electronics Corp.</holder>
+  </copyright>
+
+  <legalnotice>
+   <para>
+     This documentation is free software; you can redistribute
+     it and/or modify it under the terms of the GNU General Public
+     License version 2 as published by the Free Software Foundation.
+   </para>
+      
+   <para>
+     This program is distributed in the hope that it will be
+     useful, but WITHOUT ANY WARRANTY; without even the implied
+     warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+     See the GNU General Public License for more details.
+   </para>
+      
+   <para>
+     You should have received a copy of the GNU General Public
+     License along with this program; if not, write to the Free
+     Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+     MA 02111-1307 USA
+   </para>
+      
+   <para>
+     For more details see the file COPYING in the source
+     distribution of Linux.
+   </para>
+  </legalnotice>
+ </bookinfo>
+
+<toc></toc>
+
+  <chapter id="mm">
+    <title>Memory Management</title>
+    <sect1 id="sh4">
+    <title>SH-4</title>
+      <sect2 id="sq">
+        <title>Store Queue API</title>
+<!-- arch/sh/kernel/cpu/sh4/sq.c -->
+<refentry id="API-sq-flush-range">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>sq_flush_range</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>sq_flush_range</refname>
+ <refpurpose>
+  Flush (prefetch) a specific SQ range
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>sq_flush_range </function></funcdef>
+   <paramdef>unsigned long <parameter>start</parameter></paramdef>
+   <paramdef>unsigned int <parameter>len</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>start</parameter></term>
+   <listitem>
+    <para>
+     the store queue address to start flushing from
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>len</parameter></term>
+   <listitem>
+    <para>
+     the length to flush
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Flushes the store queue cache from <parameter>start</parameter> to <parameter>start</parameter> + <parameter>len</parameter> in a
+   linear fashion.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-sq-remap">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>sq_remap</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>sq_remap</refname>
+ <refpurpose>
+     Map a physical address through the Store Queues
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>unsigned long <function>sq_remap </function></funcdef>
+   <paramdef>unsigned long <parameter>phys</parameter></paramdef>
+   <paramdef>unsigned int <parameter>size</parameter></paramdef>
+   <paramdef>const char * <parameter>name</parameter></paramdef>
+   <paramdef>pgprot_t <parameter>prot</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>phys</parameter></term>
+   <listitem>
+    <para>
+     Physical address of mapping.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>size</parameter></term>
+   <listitem>
+    <para>
+     Length of mapping.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>name</parameter></term>
+   <listitem>
+    <para>
+     User invoking mapping.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>prot</parameter></term>
+   <listitem>
+    <para>
+     Protection bits.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Remaps the physical address <parameter>phys</parameter> through the next available store queue
+   address of <parameter>size</parameter> length. <parameter>name</parameter> is logged at boot time as well as through
+   the sysfs interface.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-sq-unmap">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>sq_unmap</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>sq_unmap</refname>
+ <refpurpose>
+     Unmap a Store Queue allocation
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>sq_unmap </function></funcdef>
+   <paramdef>unsigned long <parameter>vaddr</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>vaddr</parameter></term>
+   <listitem>
+    <para>
+     Pre-allocated Store Queue mapping.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Unmaps the store queue allocation <parameter>map</parameter> that was previously created by
+   <function>sq_remap</function>. Also frees up the pte that was previously inserted into
+   the kernel page table and discards the UTLB translation.
+</para>
+</refsect1>
+</refentry>
+
+      </sect2>
+    </sect1>
+    <sect1 id="sh5">
+      <title>SH-5</title>
+      <sect2 id="tlb">
+	<title>TLB Interfaces</title>
+<!-- arch/sh/mm/tlb-sh5.c -->
+<refentry id="API-sh64-tlb-init">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>sh64_tlb_init</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>sh64_tlb_init</refname>
+ <refpurpose>
+  Perform initial setup for the DTLB and ITLB.
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>int <function>sh64_tlb_init </function></funcdef>
+   <paramdef> <parameter>void</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>void</parameter></term>
+   <listitem>
+    <para>
+     no arguments
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+</refentry>
+
+<refentry id="API-sh64-next-free-dtlb-entry">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>sh64_next_free_dtlb_entry</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>sh64_next_free_dtlb_entry</refname>
+ <refpurpose>
+     Find the next available DTLB entry
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>unsigned long long <function>sh64_next_free_dtlb_entry </function></funcdef>
+   <paramdef> <parameter>void</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>void</parameter></term>
+   <listitem>
+    <para>
+     no arguments
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+</refentry>
+
+<refentry id="API-sh64-get-wired-dtlb-entry">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>sh64_get_wired_dtlb_entry</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>sh64_get_wired_dtlb_entry</refname>
+ <refpurpose>
+     Allocate a wired (locked-in) entry in the DTLB
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>unsigned long long <function>sh64_get_wired_dtlb_entry </function></funcdef>
+   <paramdef> <parameter>void</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>void</parameter></term>
+   <listitem>
+    <para>
+     no arguments
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+</refentry>
+
+<refentry id="API-sh64-put-wired-dtlb-entry">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>sh64_put_wired_dtlb_entry</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>sh64_put_wired_dtlb_entry</refname>
+ <refpurpose>
+     Free a wired (locked-in) entry in the DTLB.
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>int <function>sh64_put_wired_dtlb_entry </function></funcdef>
+   <paramdef>unsigned long long <parameter>entry</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>entry</parameter></term>
+   <listitem>
+    <para>
+     Address of TLB slot.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Works like a stack, last one to allocate must be first one to free.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-sh64-setup-tlb-slot">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>sh64_setup_tlb_slot</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>sh64_setup_tlb_slot</refname>
+ <refpurpose>
+     Load up a translation in a wired slot.
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>sh64_setup_tlb_slot </function></funcdef>
+   <paramdef>unsigned long long <parameter>config_addr</parameter></paramdef>
+   <paramdef>unsigned long <parameter>eaddr</parameter></paramdef>
+   <paramdef>unsigned long <parameter>asid</parameter></paramdef>
+   <paramdef>unsigned long <parameter>paddr</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>config_addr</parameter></term>
+   <listitem>
+    <para>
+     Address of TLB slot.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>eaddr</parameter></term>
+   <listitem>
+    <para>
+     Virtual address.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>asid</parameter></term>
+   <listitem>
+    <para>
+     Address Space Identifier.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>paddr</parameter></term>
+   <listitem>
+    <para>
+     Physical address.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Load up a virtual&lt;-&gt;physical translation for <parameter>eaddr</parameter>&lt;-&gt;<parameter>paddr</parameter> in the
+   pre-allocated TLB slot <parameter>config_addr</parameter> (see sh64_get_wired_dtlb_entry).
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-sh64-teardown-tlb-slot">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>sh64_teardown_tlb_slot</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>sh64_teardown_tlb_slot</refname>
+ <refpurpose>
+     Teardown a translation.
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>sh64_teardown_tlb_slot </function></funcdef>
+   <paramdef>unsigned long long <parameter>config_addr</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>config_addr</parameter></term>
+   <listitem>
+    <para>
+     Address of TLB slot.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Teardown any existing mapping in the TLB slot <parameter>config_addr</parameter>.
+</para>
+</refsect1>
+</refentry>
+
+<!-- arch/sh/include/asm/tlb_64.h -->
+<refentry id="API-for-each-dtlb-entry">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>for_each_dtlb_entry</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>for_each_dtlb_entry</refname>
+ <refpurpose>
+  Iterate over free (non-wired) DTLB entries
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef> <function>for_each_dtlb_entry </function></funcdef>
+   <paramdef> <parameter>tlb</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>tlb</parameter></term>
+   <listitem>
+    <para>
+     TLB entry
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+</refentry>
+
+<refentry id="API-for-each-itlb-entry">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>for_each_itlb_entry</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>for_each_itlb_entry</refname>
+ <refpurpose>
+     Iterate over free (non-wired) ITLB entries
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef> <function>for_each_itlb_entry </function></funcdef>
+   <paramdef> <parameter>tlb</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>tlb</parameter></term>
+   <listitem>
+    <para>
+     TLB entry
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+</refentry>
+
+<refentry id="API---flush-tlb-slot">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>__flush_tlb_slot</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>__flush_tlb_slot</refname>
+ <refpurpose>
+     Flushes TLB slot <parameter>slot</parameter>.
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>__flush_tlb_slot </function></funcdef>
+   <paramdef>unsigned long long <parameter>slot</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>slot</parameter></term>
+   <listitem>
+    <para>
+     Address of TLB slot.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+</refentry>
+
+      </sect2>
+    </sect1>
+  </chapter>
+  <chapter id="mach">
+    <title>Machine Specific Interfaces</title>
+    <sect1 id="dreamcast">
+      <title>mach-dreamcast</title>
+<!-- arch/sh/boards/mach-dreamcast/rtc.c -->
+<refentry id="API-aica-rtc-gettimeofday">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>aica_rtc_gettimeofday</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>aica_rtc_gettimeofday</refname>
+ <refpurpose>
+  Get the time from the AICA RTC
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>aica_rtc_gettimeofday </function></funcdef>
+   <paramdef>struct timespec * <parameter>ts</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>ts</parameter></term>
+   <listitem>
+    <para>
+     pointer to resulting timespec
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Grabs the current RTC seconds counter and adjusts it to the Unix Epoch.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-aica-rtc-settimeofday">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>aica_rtc_settimeofday</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>aica_rtc_settimeofday</refname>
+ <refpurpose>
+     Set the AICA RTC to the current time
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>int <function>aica_rtc_settimeofday </function></funcdef>
+   <paramdef>const time_t <parameter>secs</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>secs</parameter></term>
+   <listitem>
+    <para>
+     contains the time_t to set
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Adjusts the given <parameter>tv</parameter> to the AICA Epoch and sets the RTC seconds counter.
+</para>
+</refsect1>
+</refentry>
+
+    </sect1>
+    <sect1 id="x3proto">
+      <title>mach-x3proto</title>
+<!-- arch/sh/boards/mach-x3proto/ilsel.c -->
+<refentry id="API-ilsel-enable">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>ilsel_enable</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>ilsel_enable</refname>
+ <refpurpose>
+  Enable an ILSEL set.
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>int <function>ilsel_enable </function></funcdef>
+   <paramdef>ilsel_source_t <parameter>set</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>set</parameter></term>
+   <listitem>
+    <para>
+     ILSEL source (see ilsel_source_t enum in include/asm-sh/ilsel.h).
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Enables a given non-aliased ILSEL source (&lt;= ILSEL_KEY) at the highest
+   available interrupt level. Callers should take care to order callsites
+   noting descending interrupt levels. Aliasing FPGA and external board
+   IRQs need to use <function>ilsel_enable_fixed</function>.
+   </para><para>
+
+   The return value is an IRQ number that can later be taken down with
+   <function>ilsel_disable</function>.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-ilsel-enable-fixed">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>ilsel_enable_fixed</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>ilsel_enable_fixed</refname>
+ <refpurpose>
+     Enable an ILSEL set at a fixed interrupt level
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>int <function>ilsel_enable_fixed </function></funcdef>
+   <paramdef>ilsel_source_t <parameter>set</parameter></paramdef>
+   <paramdef>unsigned int <parameter>level</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>set</parameter></term>
+   <listitem>
+    <para>
+     ILSEL source (see ilsel_source_t enum in include/asm-sh/ilsel.h).
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>level</parameter></term>
+   <listitem>
+    <para>
+     Interrupt level (1 - 15)
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Enables a given ILSEL source at a fixed interrupt level. Necessary
+   both for level reservation as well as for aliased sources that only
+   exist on special ILSEL#s.
+   </para><para>
+
+   Returns an IRQ number (as <function>ilsel_enable</function>).
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-ilsel-disable">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>ilsel_disable</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>ilsel_disable</refname>
+ <refpurpose>
+     Disable an ILSEL set
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>ilsel_disable </function></funcdef>
+   <paramdef>unsigned int <parameter>irq</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>irq</parameter></term>
+   <listitem>
+    <para>
+     Bit position for ILSEL set value (retval from enable routines)
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Disable a previously enabled ILSEL set.
+</para>
+</refsect1>
+</refentry>
+
+    </sect1>
+  </chapter>
+  <chapter id="busses">
+    <title>Busses</title>
+    <sect1 id="superhyway">
+      <title>SuperHyway</title>
+<!-- drivers/sh/superhyway/superhyway.c -->
+<refentry id="API-superhyway-add-device">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>superhyway_add_device</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>superhyway_add_device</refname>
+ <refpurpose>
+  Add a SuperHyway module
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>int <function>superhyway_add_device </function></funcdef>
+   <paramdef>unsigned long <parameter>base</parameter></paramdef>
+   <paramdef>struct superhyway_device * <parameter>sdev</parameter></paramdef>
+   <paramdef>struct superhyway_bus * <parameter>bus</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>base</parameter></term>
+   <listitem>
+    <para>
+     Physical address where module is mapped.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>sdev</parameter></term>
+   <listitem>
+    <para>
+     SuperHyway device to add, or NULL to allocate a new one.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bus</parameter></term>
+   <listitem>
+    <para>
+     Bus where SuperHyway module resides.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   This is responsible for adding a new SuperHyway module. This sets up a new
+   struct superhyway_device for the module being added if <parameter>sdev</parameter> == NULL.
+   </para><para>
+
+   Devices are initially added in the order that they are scanned (from the
+   top-down of the memory map), and are assigned an ID based on the order that
+   they are added. Any manual addition of a module will thus get the ID after
+   the devices already discovered regardless of where it resides in memory.
+   </para><para>
+
+   Further work can and should be done in <function>superhyway_scan_bus</function>, to be sure
+   that any new modules are properly discovered and subsequently registered.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-superhyway-register-driver">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>superhyway_register_driver</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>superhyway_register_driver</refname>
+ <refpurpose>
+     Register a new SuperHyway driver
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>int <function>superhyway_register_driver </function></funcdef>
+   <paramdef>struct superhyway_driver * <parameter>drv</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>drv</parameter></term>
+   <listitem>
+    <para>
+     SuperHyway driver to register.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   This registers the passed in <parameter>drv</parameter>. Any devices matching the id table will
+   automatically be populated and handed off to the driver's specified probe
+   routine.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-superhyway-unregister-driver">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>superhyway_unregister_driver</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>superhyway_unregister_driver</refname>
+ <refpurpose>
+     Unregister a SuperHyway driver
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>superhyway_unregister_driver </function></funcdef>
+   <paramdef>struct superhyway_driver * <parameter>drv</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>drv</parameter></term>
+   <listitem>
+    <para>
+     SuperHyway driver to unregister.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   This cleans up after <function>superhyway_register_driver</function>, and should be invoked in
+   the exit path of any module drivers.
+</para>
+</refsect1>
+</refentry>
+
+    </sect1>
+
+    <sect1 id="maple">
+      <title>Maple</title>
+<!-- drivers/sh/maple/maple.c -->
+<refentry id="API-maple-driver-register">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>maple_driver_register</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>maple_driver_register</refname>
+ <refpurpose>
+  register a maple driver
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>int <function>maple_driver_register </function></funcdef>
+   <paramdef>struct maple_driver * <parameter>drv</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>drv</parameter></term>
+   <listitem>
+    <para>
+     maple driver to be registered.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Registers the passed in <parameter>drv</parameter>, while updating the bus type.
+   Devices with matching function IDs will be automatically probed.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-maple-driver-unregister">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>maple_driver_unregister</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>maple_driver_unregister</refname>
+ <refpurpose>
+     unregister a maple driver.
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>maple_driver_unregister </function></funcdef>
+   <paramdef>struct maple_driver * <parameter>drv</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>drv</parameter></term>
+   <listitem>
+    <para>
+     maple driver to unregister.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Cleans up after <function>maple_driver_register</function>. To be invoked in the exit
+   path of any module drivers.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-maple-getcond-callback">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>maple_getcond_callback</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>maple_getcond_callback</refname>
+ <refpurpose>
+     setup handling MAPLE_COMMAND_GETCOND
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>maple_getcond_callback </function></funcdef>
+   <paramdef>struct maple_device * <parameter>dev</parameter></paramdef>
+   <paramdef>void (*<parameter>callback</parameter>)
+     <funcparams>struct mapleq *mq</funcparams></paramdef>
+   <paramdef>unsigned long <parameter>interval</parameter></paramdef>
+   <paramdef>unsigned long <parameter>function</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>dev</parameter></term>
+   <listitem>
+    <para>
+     device responding
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>callback</parameter></term>
+   <listitem>
+    <para>
+     handler callback
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>interval</parameter></term>
+   <listitem>
+    <para>
+     interval in jiffies between callbacks
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>function</parameter></term>
+   <listitem>
+    <para>
+     the function code for the device
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+</refentry>
+
+<refentry id="API-maple-add-packet">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>maple_add_packet</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>maple_add_packet</refname>
+ <refpurpose>
+     add a single instruction to the maple bus queue
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>int <function>maple_add_packet </function></funcdef>
+   <paramdef>struct maple_device * <parameter>mdev</parameter></paramdef>
+   <paramdef>u32 <parameter>function</parameter></paramdef>
+   <paramdef>u32 <parameter>command</parameter></paramdef>
+   <paramdef>size_t <parameter>length</parameter></paramdef>
+   <paramdef>void * <parameter>data</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>mdev</parameter></term>
+   <listitem>
+    <para>
+     maple device
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>function</parameter></term>
+   <listitem>
+    <para>
+     function on device being queried
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>command</parameter></term>
+   <listitem>
+    <para>
+     maple command to add
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>length</parameter></term>
+   <listitem>
+    <para>
+     length of command string (in 32 bit words)
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>data</parameter></term>
+   <listitem>
+    <para>
+     remainder of command string
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+</refentry>
+
+    </sect1>
+  </chapter>
+</book>

@@ -1,0 +1,193 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>More Memory Management Functions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="mm.html" title="Chapter 4. Memory Management in Linux"><link rel="prev" href="API--copy-from-user.html" title="_copy_from_user"><link rel="next" href="API-read-cache-pages.html" title="read_cache_pages"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">More Memory Management Functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API--copy-from-user.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Memory Management in Linux</th><td width="20%" align="right"> <a accesskey="n" href="API-read-cache-pages.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm8243"></a>More Memory Management Functions</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-read-cache-pages.html"><span class="phrase">read_cache_pages</span></a></span><span class="refpurpose"> — 
+  populate an address space with some pages &amp; start reads against them
+ </span></dt><dt><span class="refentrytitle"><a href="API-page-cache-sync-readahead.html"><span class="phrase">page_cache_sync_readahead</span></a></span><span class="refpurpose"> — 
+     generic file readahead
+ </span></dt><dt><span class="refentrytitle"><a href="API-page-cache-async-readahead.html"><span class="phrase">page_cache_async_readahead</span></a></span><span class="refpurpose"> — 
+     file readahead for marked pages
+ </span></dt><dt><span class="refentrytitle"><a href="API-delete-from-page-cache.html"><span class="phrase">delete_from_page_cache</span></a></span><span class="refpurpose"> — 
+  delete page from page cache
+ </span></dt><dt><span class="refentrytitle"><a href="API-filemap-flush.html"><span class="phrase">filemap_flush</span></a></span><span class="refpurpose"> — 
+     mostly a non-blocking flush
+ </span></dt><dt><span class="refentrytitle"><a href="API-filemap-fdatawait-range.html"><span class="phrase">filemap_fdatawait_range</span></a></span><span class="refpurpose"> — 
+     wait for writeback to complete
+ </span></dt><dt><span class="refentrytitle"><a href="API-filemap-fdatawait.html"><span class="phrase">filemap_fdatawait</span></a></span><span class="refpurpose"> — 
+     wait for all under-writeback pages to complete
+ </span></dt><dt><span class="refentrytitle"><a href="API-filemap-write-and-wait-range.html"><span class="phrase">filemap_write_and_wait_range</span></a></span><span class="refpurpose"> — 
+     write out &amp; wait on a file range
+ </span></dt><dt><span class="refentrytitle"><a href="API-replace-page-cache-page.html"><span class="phrase">replace_page_cache_page</span></a></span><span class="refpurpose"> — 
+     replace a pagecache page with a new one
+ </span></dt><dt><span class="refentrytitle"><a href="API-add-to-page-cache-locked.html"><span class="phrase">add_to_page_cache_locked</span></a></span><span class="refpurpose"> — 
+     add a locked page to the pagecache
+ </span></dt><dt><span class="refentrytitle"><a href="API-add-page-wait-queue.html"><span class="phrase">add_page_wait_queue</span></a></span><span class="refpurpose"> — 
+     Add an arbitrary waiter to a page's wait queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-unlock-page.html"><span class="phrase">unlock_page</span></a></span><span class="refpurpose"> — 
+     unlock a locked page
+ </span></dt><dt><span class="refentrytitle"><a href="API-end-page-writeback.html"><span class="phrase">end_page_writeback</span></a></span><span class="refpurpose"> — 
+     end writeback against a page
+ </span></dt><dt><span class="refentrytitle"><a href="API---lock-page.html"><span class="phrase">__lock_page</span></a></span><span class="refpurpose"> — 
+     get a lock on the page, assuming we need to sleep to get it
+ </span></dt><dt><span class="refentrytitle"><a href="API-page-cache-next-hole.html"><span class="phrase">page_cache_next_hole</span></a></span><span class="refpurpose"> — 
+     find the next hole (not-present entry)
+ </span></dt><dt><span class="refentrytitle"><a href="API-page-cache-prev-hole.html"><span class="phrase">page_cache_prev_hole</span></a></span><span class="refpurpose"> — 
+     find the prev hole (not-present entry)
+ </span></dt><dt><span class="refentrytitle"><a href="API-find-get-entry.html"><span class="phrase">find_get_entry</span></a></span><span class="refpurpose"> — 
+     find and get a page cache entry
+ </span></dt><dt><span class="refentrytitle"><a href="API-find-lock-entry.html"><span class="phrase">find_lock_entry</span></a></span><span class="refpurpose"> — 
+     locate, pin and lock a page cache entry
+ </span></dt><dt><span class="refentrytitle"><a href="API-pagecache-get-page.html"><span class="phrase">pagecache_get_page</span></a></span><span class="refpurpose"> — 
+     find and get a page reference
+ </span></dt><dt><span class="refentrytitle"><a href="API-find-get-pages-contig.html"><span class="phrase">find_get_pages_contig</span></a></span><span class="refpurpose"> — 
+     gang contiguous pagecache lookup
+ </span></dt><dt><span class="refentrytitle"><a href="API-find-get-pages-tag.html"><span class="phrase">find_get_pages_tag</span></a></span><span class="refpurpose"> — 
+     find and return pages that match <em class="parameter"><code>tag</code></em>
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-file-read-iter.html"><span class="phrase">generic_file_read_iter</span></a></span><span class="refpurpose"> — 
+     generic filesystem read routine
+ </span></dt><dt><span class="refentrytitle"><a href="API-filemap-fault.html"><span class="phrase">filemap_fault</span></a></span><span class="refpurpose"> — 
+     read in file data for page fault handling
+ </span></dt><dt><span class="refentrytitle"><a href="API-read-cache-page.html"><span class="phrase">read_cache_page</span></a></span><span class="refpurpose"> — 
+     read into page cache, fill it if needed
+ </span></dt><dt><span class="refentrytitle"><a href="API-read-cache-page-gfp.html"><span class="phrase">read_cache_page_gfp</span></a></span><span class="refpurpose"> — 
+     read into page cache, using specified page allocation flags.
+ </span></dt><dt><span class="refentrytitle"><a href="API---generic-file-write-iter.html"><span class="phrase">__generic_file_write_iter</span></a></span><span class="refpurpose"> — 
+     write data to a file
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-file-write-iter.html"><span class="phrase">generic_file_write_iter</span></a></span><span class="refpurpose"> — 
+     write data to a file
+ </span></dt><dt><span class="refentrytitle"><a href="API-try-to-release-page.html"><span class="phrase">try_to_release_page</span></a></span><span class="refpurpose"> — 
+     release old fs-specific metadata on a page
+ </span></dt><dt><span class="refentrytitle"><a href="API-zap-vma-ptes.html"><span class="phrase">zap_vma_ptes</span></a></span><span class="refpurpose"> — 
+  remove ptes mapping the vma
+ </span></dt><dt><span class="refentrytitle"><a href="API-vm-insert-page.html"><span class="phrase">vm_insert_page</span></a></span><span class="refpurpose"> — 
+     insert single page into user vma
+ </span></dt><dt><span class="refentrytitle"><a href="API-vm-insert-pfn.html"><span class="phrase">vm_insert_pfn</span></a></span><span class="refpurpose"> — 
+     insert single pfn into user vma
+ </span></dt><dt><span class="refentrytitle"><a href="API-remap-pfn-range.html"><span class="phrase">remap_pfn_range</span></a></span><span class="refpurpose"> — 
+     remap kernel memory to userspace
+ </span></dt><dt><span class="refentrytitle"><a href="API-vm-iomap-memory.html"><span class="phrase">vm_iomap_memory</span></a></span><span class="refpurpose"> — 
+     remap memory to userspace
+ </span></dt><dt><span class="refentrytitle"><a href="API-unmap-mapping-range.html"><span class="phrase">unmap_mapping_range</span></a></span><span class="refpurpose"> — 
+     unmap the portion of all mmaps in the specified address_space corresponding to the specified page range in the underlying file.
+ </span></dt><dt><span class="refentrytitle"><a href="API-follow-pfn.html"><span class="phrase">follow_pfn</span></a></span><span class="refpurpose"> — 
+     look up PFN at a user virtual address
+ </span></dt><dt><span class="refentrytitle"><a href="API-vm-unmap-aliases.html"><span class="phrase">vm_unmap_aliases</span></a></span><span class="refpurpose"> — 
+  unmap outstanding lazy aliases in the vmap layer
+ </span></dt><dt><span class="refentrytitle"><a href="API-vm-unmap-ram.html"><span class="phrase">vm_unmap_ram</span></a></span><span class="refpurpose"> — 
+     unmap linear kernel address space set up by vm_map_ram
+ </span></dt><dt><span class="refentrytitle"><a href="API-vm-map-ram.html"><span class="phrase">vm_map_ram</span></a></span><span class="refpurpose"> — 
+     map pages linearly into kernel virtual address (vmalloc space)
+ </span></dt><dt><span class="refentrytitle"><a href="API-unmap-kernel-range-noflush.html"><span class="phrase">unmap_kernel_range_noflush</span></a></span><span class="refpurpose"> — 
+     unmap kernel VM area
+ </span></dt><dt><span class="refentrytitle"><a href="API-unmap-kernel-range.html"><span class="phrase">unmap_kernel_range</span></a></span><span class="refpurpose"> — 
+     unmap kernel VM area and flush cache and TLB
+ </span></dt><dt><span class="refentrytitle"><a href="API-vfree.html"><span class="phrase">vfree</span></a></span><span class="refpurpose"> — 
+     release memory allocated by <code class="function">vmalloc</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-vunmap.html"><span class="phrase">vunmap</span></a></span><span class="refpurpose"> — 
+     release virtual mapping obtained by <code class="function">vmap</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-vmap.html"><span class="phrase">vmap</span></a></span><span class="refpurpose"> — 
+     map an array of pages into virtually contiguous space
+ </span></dt><dt><span class="refentrytitle"><a href="API-vmalloc.html"><span class="phrase">vmalloc</span></a></span><span class="refpurpose"> — 
+     allocate virtually contiguous memory
+ </span></dt><dt><span class="refentrytitle"><a href="API-vzalloc.html"><span class="phrase">vzalloc</span></a></span><span class="refpurpose"> — 
+     allocate virtually contiguous memory with zero fill
+ </span></dt><dt><span class="refentrytitle"><a href="API-vmalloc-user.html"><span class="phrase">vmalloc_user</span></a></span><span class="refpurpose"> — 
+     allocate zeroed virtually contiguous memory for userspace
+ </span></dt><dt><span class="refentrytitle"><a href="API-vmalloc-node.html"><span class="phrase">vmalloc_node</span></a></span><span class="refpurpose"> — 
+     allocate memory on a specific node
+ </span></dt><dt><span class="refentrytitle"><a href="API-vzalloc-node.html"><span class="phrase">vzalloc_node</span></a></span><span class="refpurpose"> — 
+     allocate memory on a specific node with zero fill
+ </span></dt><dt><span class="refentrytitle"><a href="API-vmalloc-32.html"><span class="phrase">vmalloc_32</span></a></span><span class="refpurpose"> — 
+     allocate virtually contiguous memory (32bit addressable)
+ </span></dt><dt><span class="refentrytitle"><a href="API-vmalloc-32-user.html"><span class="phrase">vmalloc_32_user</span></a></span><span class="refpurpose"> — 
+     allocate zeroed virtually contiguous 32bit memory
+ </span></dt><dt><span class="refentrytitle"><a href="API-remap-vmalloc-range-partial.html"><span class="phrase">remap_vmalloc_range_partial</span></a></span><span class="refpurpose"> — 
+     map vmalloc pages to userspace
+ </span></dt><dt><span class="refentrytitle"><a href="API-remap-vmalloc-range.html"><span class="phrase">remap_vmalloc_range</span></a></span><span class="refpurpose"> — 
+     map vmalloc pages to userspace
+ </span></dt><dt><span class="refentrytitle"><a href="API-alloc-vm-area.html"><span class="phrase">alloc_vm_area</span></a></span><span class="refpurpose"> — 
+     allocate a range of kernel address space
+ </span></dt><dt><span class="refentrytitle"><a href="API-alloc-pages-exact-nid.html"><span class="phrase">alloc_pages_exact_nid</span></a></span><span class="refpurpose"> — 
+  allocate an exact number of physically-contiguous pages on a node.
+ </span></dt><dt><span class="refentrytitle"><a href="API-nr-free-zone-pages.html"><span class="phrase">nr_free_zone_pages</span></a></span><span class="refpurpose"> — 
+     count number of pages beyond high watermark
+ </span></dt><dt><span class="refentrytitle"><a href="API-nr-free-pagecache-pages.html"><span class="phrase">nr_free_pagecache_pages</span></a></span><span class="refpurpose"> — 
+     count number of pages beyond high watermark
+ </span></dt><dt><span class="refentrytitle"><a href="API-find-next-best-node.html"><span class="phrase">find_next_best_node</span></a></span><span class="refpurpose"> — 
+     find the next node that should appear in a given node's fallback list
+ </span></dt><dt><span class="refentrytitle"><a href="API-free-bootmem-with-active-regions.html"><span class="phrase">free_bootmem_with_active_regions</span></a></span><span class="refpurpose"> — 
+     Call memblock_free_early_nid for each active range
+ </span></dt><dt><span class="refentrytitle"><a href="API-sparse-memory-present-with-active-regions.html"><span class="phrase">sparse_memory_present_with_active_regions</span></a></span><span class="refpurpose"> — 
+     Call memory_present for each active range
+ </span></dt><dt><span class="refentrytitle"><a href="API-get-pfn-range-for-nid.html"><span class="phrase">get_pfn_range_for_nid</span></a></span><span class="refpurpose"> — 
+     Return the start and end page frames for a node
+ </span></dt><dt><span class="refentrytitle"><a href="API-absent-pages-in-range.html"><span class="phrase">absent_pages_in_range</span></a></span><span class="refpurpose"> — 
+     Return number of page frames in holes within a range
+ </span></dt><dt><span class="refentrytitle"><a href="API-node-map-pfn-alignment.html"><span class="phrase">node_map_pfn_alignment</span></a></span><span class="refpurpose"> — 
+     determine the maximum internode alignment
+ </span></dt><dt><span class="refentrytitle"><a href="API-find-min-pfn-with-active-regions.html"><span class="phrase">find_min_pfn_with_active_regions</span></a></span><span class="refpurpose"> — 
+     Find the minimum PFN registered
+ </span></dt><dt><span class="refentrytitle"><a href="API-free-area-init-nodes.html"><span class="phrase">free_area_init_nodes</span></a></span><span class="refpurpose"> — 
+     Initialise all pg_data_t and zone data
+ </span></dt><dt><span class="refentrytitle"><a href="API-set-dma-reserve.html"><span class="phrase">set_dma_reserve</span></a></span><span class="refpurpose"> — 
+     set the specified number of pages reserved in the first zone
+ </span></dt><dt><span class="refentrytitle"><a href="API-setup-per-zone-wmarks.html"><span class="phrase">setup_per_zone_wmarks</span></a></span><span class="refpurpose"> — 
+     called when min_free_kbytes changes or when memory is hot-{added|removed}
+ </span></dt><dt><span class="refentrytitle"><a href="API-get-pfnblock-flags-mask.html"><span class="phrase">get_pfnblock_flags_mask</span></a></span><span class="refpurpose"> — 
+     Return the requested group of flags for the pageblock_nr_pages block of pages
+ </span></dt><dt><span class="refentrytitle"><a href="API-set-pfnblock-flags-mask.html"><span class="phrase">set_pfnblock_flags_mask</span></a></span><span class="refpurpose"> — 
+     Set the requested group of flags for a pageblock_nr_pages block of pages
+ </span></dt><dt><span class="refentrytitle"><a href="API-alloc-contig-range.html"><span class="phrase">alloc_contig_range</span></a></span><span class="refpurpose"> — 
+     - tries to allocate given range of pages
+ </span></dt><dt><span class="refentrytitle"><a href="API-mempool-destroy.html"><span class="phrase">mempool_destroy</span></a></span><span class="refpurpose"> — 
+  deallocate a memory pool
+ </span></dt><dt><span class="refentrytitle"><a href="API-mempool-create.html"><span class="phrase">mempool_create</span></a></span><span class="refpurpose"> — 
+     create a memory pool
+ </span></dt><dt><span class="refentrytitle"><a href="API-mempool-resize.html"><span class="phrase">mempool_resize</span></a></span><span class="refpurpose"> — 
+     resize an existing memory pool
+ </span></dt><dt><span class="refentrytitle"><a href="API-mempool-alloc.html"><span class="phrase">mempool_alloc</span></a></span><span class="refpurpose"> — 
+     allocate an element from a specific memory pool
+ </span></dt><dt><span class="refentrytitle"><a href="API-mempool-free.html"><span class="phrase">mempool_free</span></a></span><span class="refpurpose"> — 
+     return an element to the pool.
+ </span></dt><dt><span class="refentrytitle"><a href="API-dma-pool-create.html"><span class="phrase">dma_pool_create</span></a></span><span class="refpurpose"> — 
+  Creates a pool of consistent memory blocks, for dma.
+ </span></dt><dt><span class="refentrytitle"><a href="API-dma-pool-destroy.html"><span class="phrase">dma_pool_destroy</span></a></span><span class="refpurpose"> — 
+     destroys a pool of dma memory blocks.
+ </span></dt><dt><span class="refentrytitle"><a href="API-dma-pool-alloc.html"><span class="phrase">dma_pool_alloc</span></a></span><span class="refpurpose"> — 
+     get a block of consistent memory
+ </span></dt><dt><span class="refentrytitle"><a href="API-dma-pool-free.html"><span class="phrase">dma_pool_free</span></a></span><span class="refpurpose"> — 
+     put block back into dma pool
+ </span></dt><dt><span class="refentrytitle"><a href="API-dmam-pool-create.html"><span class="phrase">dmam_pool_create</span></a></span><span class="refpurpose"> — 
+     Managed <code class="function">dma_pool_create</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-dmam-pool-destroy.html"><span class="phrase">dmam_pool_destroy</span></a></span><span class="refpurpose"> — 
+     Managed <code class="function">dma_pool_destroy</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-balance-dirty-pages-ratelimited.html"><span class="phrase">balance_dirty_pages_ratelimited</span></a></span><span class="refpurpose"> — 
+  balance dirty memory state
+ </span></dt><dt><span class="refentrytitle"><a href="API-tag-pages-for-writeback.html"><span class="phrase">tag_pages_for_writeback</span></a></span><span class="refpurpose"> — 
+     tag pages to be written by write_cache_pages
+ </span></dt><dt><span class="refentrytitle"><a href="API-write-cache-pages.html"><span class="phrase">write_cache_pages</span></a></span><span class="refpurpose"> — 
+     walk the list of dirty pages of the given address space and write all of them.
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-writepages.html"><span class="phrase">generic_writepages</span></a></span><span class="refpurpose"> — 
+     walk the list of dirty pages of the given address space and <code class="function">writepage</code> all of them.
+ </span></dt><dt><span class="refentrytitle"><a href="API-write-one-page.html"><span class="phrase">write_one_page</span></a></span><span class="refpurpose"> — 
+     write out a single page and optionally wait on I/O
+ </span></dt><dt><span class="refentrytitle"><a href="API-wait-for-stable-page.html"><span class="phrase">wait_for_stable_page</span></a></span><span class="refpurpose"> — 
+     wait for writeback to finish, if necessary.
+ </span></dt><dt><span class="refentrytitle"><a href="API-truncate-inode-pages-range.html"><span class="phrase">truncate_inode_pages_range</span></a></span><span class="refpurpose"> — 
+  truncate range of pages specified by start &amp; end byte offsets
+ </span></dt><dt><span class="refentrytitle"><a href="API-truncate-inode-pages.html"><span class="phrase">truncate_inode_pages</span></a></span><span class="refpurpose"> — 
+     truncate *all* the pages from an offset
+ </span></dt><dt><span class="refentrytitle"><a href="API-truncate-inode-pages-final.html"><span class="phrase">truncate_inode_pages_final</span></a></span><span class="refpurpose"> — 
+     truncate *all* pages before inode dies
+ </span></dt><dt><span class="refentrytitle"><a href="API-invalidate-mapping-pages.html"><span class="phrase">invalidate_mapping_pages</span></a></span><span class="refpurpose"> — 
+     Invalidate all the unlocked pages of one inode
+ </span></dt><dt><span class="refentrytitle"><a href="API-invalidate-inode-pages2-range.html"><span class="phrase">invalidate_inode_pages2_range</span></a></span><span class="refpurpose"> — 
+     remove range of pages from an address_space
+ </span></dt><dt><span class="refentrytitle"><a href="API-invalidate-inode-pages2.html"><span class="phrase">invalidate_inode_pages2</span></a></span><span class="refpurpose"> — 
+     remove all pages from an address_space
+ </span></dt><dt><span class="refentrytitle"><a href="API-truncate-pagecache.html"><span class="phrase">truncate_pagecache</span></a></span><span class="refpurpose"> — 
+     unmap and remove pagecache that has been truncated
+ </span></dt><dt><span class="refentrytitle"><a href="API-truncate-setsize.html"><span class="phrase">truncate_setsize</span></a></span><span class="refpurpose"> — 
+     update inode and pagecache for a new file size
+ </span></dt><dt><span class="refentrytitle"><a href="API-pagecache-isize-extended.html"><span class="phrase">pagecache_isize_extended</span></a></span><span class="refpurpose"> — 
+     update pagecache after extension of i_size
+ </span></dt><dt><span class="refentrytitle"><a href="API-truncate-pagecache-range.html"><span class="phrase">truncate_pagecache_range</span></a></span><span class="refpurpose"> — 
+     unmap and remove pagecache that is hole-punched
+ </span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API--copy-from-user.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="mm.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-read-cache-pages.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">_copy_from_user</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">read_cache_pages</span></td></tr></table></div></body></html>

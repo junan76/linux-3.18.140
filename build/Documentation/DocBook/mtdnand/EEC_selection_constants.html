@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ECC selection constants</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="MTD NAND Driver Programming Interface"><link rel="up" href="defines.html" title="Chapter 8. Constants"><link rel="prev" href="defines.html" title="Chapter 8. Constants"><link rel="next" href="Hardware_control_related_constants.html" title="Hardware control related constants"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">ECC selection constants</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="defines.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Constants</th><td width="20%" align="right"> <a accesskey="n" href="Hardware_control_related_constants.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="EEC_selection_constants"></a>ECC selection constants</h2></div></div></div><p>
+	Use these constants to select the ECC algorithm.
+  	</p><pre class="programlisting">
+/* No ECC. Usage is not recommended ! */
+#define NAND_ECC_NONE		0
+/* Software ECC 3 byte ECC per 256 Byte data */
+#define NAND_ECC_SOFT		1
+/* Hardware ECC 3 byte ECC per 256 Byte data */
+#define NAND_ECC_HW3_256	2
+/* Hardware ECC 3 byte ECC per 512 Byte data */
+#define NAND_ECC_HW3_512	3
+/* Hardware ECC 6 byte ECC per 512 Byte data */
+#define NAND_ECC_HW6_512	4
+/* Hardware ECC 6 byte ECC per 512 Byte data */
+#define NAND_ECC_HW8_512	6
+	</pre><p>
+	</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="defines.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="defines.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="Hardware_control_related_constants.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 8. Constants </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Hardware control related constants</td></tr></table></div></body></html>

@@ -1,0 +1,14 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ilsel_enable</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SuperH Interfaces Guide"><link rel="up" href="x3proto.html" title="mach-x3proto"><link rel="prev" href="x3proto.html" title="mach-x3proto"><link rel="next" href="API-ilsel-enable-fixed.html" title="ilsel_enable_fixed"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">ilsel_enable</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="x3proto.html">Prev</a> </td><th width="60%" align="center">mach-x3proto</th><td width="20%" align="right"> <a accesskey="n" href="API-ilsel-enable-fixed.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-ilsel-enable"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ilsel_enable — 
+  Enable an ILSEL set.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">ilsel_enable </b>(</code></td><td>ilsel_source_t <var class="pdparam">set</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm556"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>set</code></em></span></dt><dd><p>
+     ILSEL source (see ilsel_source_t enum in include/asm-sh/ilsel.h).
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm564"></a><h2>Description</h2><p>
+   Enables a given non-aliased ILSEL source (&lt;= ILSEL_KEY) at the highest
+   available interrupt level. Callers should take care to order callsites
+   noting descending interrupt levels. Aliasing FPGA and external board
+   IRQs need to use <code class="function">ilsel_enable_fixed</code>.
+   </p><p>
+
+   The return value is an IRQ number that can later be taken down with
+   <code class="function">ilsel_disable</code>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="x3proto.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="x3proto.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-ilsel-enable-fixed.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">mach-x3proto </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ilsel_enable_fixed</span></td></tr></table></div></body></html>

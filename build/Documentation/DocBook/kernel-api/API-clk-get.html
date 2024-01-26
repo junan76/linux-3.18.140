@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>clk_get</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="clk.html" title="Chapter 17. Clock Framework"><link rel="prev" href="API-clk-unprepare.html" title="clk_unprepare"><link rel="next" href="API-devm-clk-get.html" title="devm_clk_get"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">clk_get</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-clk-unprepare.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Clock Framework</th><td width="20%" align="right"> <a accesskey="n" href="API-devm-clk-get.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-clk-get"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>clk_get — 
+     lookup and obtain a reference to a clock producer.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct clk * <b class="fsfunc">clk_get </b>(</code></td><td>struct device * <var class="pdparam">dev</var>, </td></tr><tr><td> </td><td>const char * <var class="pdparam">id</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm31815"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     device for clock <span class="quote">“<span class="quote">consumer</span>”</span>
+    </p></dd><dt><span class="term"><em class="parameter"><code>id</code></em></span></dt><dd><p>
+     clock consumer ID
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm31829"></a><h2>Description</h2><p>
+   Returns a struct clk corresponding to the clock producer, or
+   valid <code class="function">IS_ERR</code> condition containing errno.  The implementation
+   uses <em class="parameter"><code>dev</code></em> and <em class="parameter"><code>id</code></em> to determine the clock consumer, and thereby
+   the clock producer.  (IOW, <em class="parameter"><code>id</code></em> may be identical strings, but
+   clk_get may return different clock producers depending on <em class="parameter"><code>dev</code></em>.)
+   </p><p>
+
+   Drivers must assume that the clock source is not enabled.
+   </p><p>
+
+   clk_get should not be called from within interrupt context.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-clk-unprepare.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="clk.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-devm-clk-get.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">clk_unprepare</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">devm_clk_get</span></td></tr></table></div></body></html>

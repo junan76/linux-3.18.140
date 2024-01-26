@@ -1,0 +1,56 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct cfg80211_ap_settings</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The 802.11 subsystems – for kernel developers"><link rel="up" href="bk01ch02.html" title="Chapter 2. Actions and configuration"><link rel="prev" href="API-struct-cfg80211-beacon-data.html" title="struct cfg80211_beacon_data"><link rel="next" href="API-struct-station-parameters.html" title="struct station_parameters"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct cfg80211_ap_settings</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-cfg80211-beacon-data.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Actions and configuration</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-station-parameters.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-cfg80211-ap-settings"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct cfg80211_ap_settings — 
+  AP configuration
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct cfg80211_ap_settings {
+  struct cfg80211_chan_def chandef;
+  struct cfg80211_beacon_data beacon;
+  int beacon_interval;
+  int dtim_period;
+  const u8 * ssid;
+  size_t ssid_len;
+  enum nl80211_hidden_ssid hidden_ssid;
+  struct cfg80211_crypto_settings crypto;
+  bool privacy;
+  enum nl80211_auth_type auth_type;
+  enum nl80211_smps_mode smps_mode;
+  int inactivity_timeout;
+  u8 p2p_ctwindow;
+  bool p2p_opp_ps;
+  const struct cfg80211_acl_data * acl;
+};  </pre></div><div class="refsect1"><a name="idm2188"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">chandef</span></dt><dd><p>
+defines the channel to use
+      </p></dd><dt><span class="term">beacon</span></dt><dd><p>
+beacon data
+      </p></dd><dt><span class="term">beacon_interval</span></dt><dd><p>
+beacon interval
+      </p></dd><dt><span class="term">dtim_period</span></dt><dd><p>
+DTIM period
+      </p></dd><dt><span class="term">ssid</span></dt><dd><p>
+SSID to be used in the BSS (note: may be <code class="constant">NULL</code> if not provided from
+user space)
+      </p></dd><dt><span class="term">ssid_len</span></dt><dd><p>
+length of <em class="parameter"><code>ssid</code></em>
+      </p></dd><dt><span class="term">hidden_ssid</span></dt><dd><p>
+whether to hide the SSID in Beacon/Probe Response frames
+      </p></dd><dt><span class="term">crypto</span></dt><dd><p>
+crypto settings
+      </p></dd><dt><span class="term">privacy</span></dt><dd><p>
+the BSS uses privacy
+      </p></dd><dt><span class="term">auth_type</span></dt><dd><p>
+Authentication type (algorithm)
+      </p></dd><dt><span class="term">smps_mode</span></dt><dd><p>
+SMPS mode
+      </p></dd><dt><span class="term">inactivity_timeout</span></dt><dd><p>
+time in seconds to determine station's inactivity.
+      </p></dd><dt><span class="term">p2p_ctwindow</span></dt><dd><p>
+P2P CT Window
+      </p></dd><dt><span class="term">p2p_opp_ps</span></dt><dd><p>
+P2P opportunistic PS
+      </p></dd><dt><span class="term">acl</span></dt><dd><p>
+ACL configuration used by the drivers which has support for
+MAC address based access control
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm2253"></a><h2>Description</h2><p>
+   </p><p>
+
+   Used to configure an AP interface.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-cfg80211-beacon-data.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="bk01ch02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-station-parameters.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct cfg80211_beacon_data</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct station_parameters</span></td></tr></table></div></body></html>

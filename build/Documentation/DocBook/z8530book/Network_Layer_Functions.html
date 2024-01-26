@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 6. Network Layer Functions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Z8530 Programming Guide"><link rel="up" href="index.html" title="Z8530 Programming Guide"><link rel="prev" href="Configuring_And_Activating_The_Port.html" title="Chapter 5. Configuring And Activating The Port"><link rel="next" href="Porting_The_Z8530_Driver.html" title="Chapter 7. Porting The Z8530 Driver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. Network Layer Functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Configuring_And_Activating_The_Port.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="Porting_The_Z8530_Driver.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="Network_Layer_Functions"></a>Chapter 6. Network Layer Functions</h1></div></div></div><p>
+	The Z8530 layer provides functions to queue packets for
+	transmission. The driver internally buffers the frame currently
+	being transmitted and one further frame (in order to keep back
+	to back transmission running). Any further buffering is up to
+	the caller.
+  </p><p>
+	The function <code class="function">z8530_queue_xmit</code> takes a network
+	buffer in sk_buff format and queues it for transmission. The
+	caller must provide the entire packet with the exception of the
+	bitstuffing and CRC. This is normally done by the caller via
+	the generic HDLC interface layer. It returns 0 if the buffer has been
+	queued and non zero values for queue full. If the function accepts
+	the buffer it becomes property of the Z8530 layer and the caller
+	should not free it.
+  </p><p>
+	The function <code class="function">z8530_get_stats</code> returns a pointer
+	to an internally maintained per interface statistics block. This
+	provides most of the interface code needed to implement the network
+	layer get_stats callback.
+  </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Configuring_And_Activating_The_Port.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="Porting_The_Z8530_Driver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 5. Configuring And Activating The Port </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 7. Porting The Z8530 Driver</td></tr></table></div></body></html>

@@ -1,0 +1,46 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct drm_dp_mst_topology_mgr</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="ch02s05.html#idm10514" title="Display Port MST Helper Functions Reference"><link rel="prev" href="API-struct-drm-dp-mst-branch.html" title="struct drm_dp_mst_branch"><link rel="next" href="API-drm-dp-update-payload-part1.html" title="drm_dp_update_payload_part1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct drm_dp_mst_topology_mgr</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-drm-dp-mst-branch.html">Prev</a> </td><th width="60%" align="center">Display Port MST Helper Functions Reference</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-dp-update-payload-part1.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-drm-dp-mst-topology-mgr"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct drm_dp_mst_topology_mgr — 
+     DisplayPort MST manager
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct drm_dp_mst_topology_mgr {
+  struct device * dev;
+  struct drm_dp_mst_topology_cbs * cbs;
+  struct drm_dp_aux * aux;
+  int max_payloads;
+  int conn_base_id;
+  struct drm_dp_sideband_msg_rx down_rep_recv;
+  struct drm_dp_sideband_msg_rx up_req_recv;
+  struct mutex lock;
+  bool mst_state;
+  struct drm_dp_mst_branch * mst_primary;
+  u8 dpcd[DP_RECEIVER_CAP_SIZE];
+  int pbn_div;
+};  </pre></div><div class="refsect1"><a name="idm10733"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">dev</span></dt><dd><p>
+   device pointer for adding i2c devices etc.
+      </p></dd><dt><span class="term">cbs</span></dt><dd><p>
+   callbacks for connector addition and destruction.
+   <em class="parameter"><code>max_dpcd_transaction_bytes</code></em> - maximum number of bytes to read/write in one go.
+      </p></dd><dt><span class="term">aux</span></dt><dd><p>
+   aux channel for the DP connector.
+      </p></dd><dt><span class="term">max_payloads</span></dt><dd><p>
+   maximum number of payloads the GPU can generate.
+      </p></dd><dt><span class="term">conn_base_id</span></dt><dd><p>
+   DRM connector ID this mgr is connected to.
+      </p></dd><dt><span class="term">down_rep_recv</span></dt><dd><p>
+   msg receiver state for down replies.
+      </p></dd><dt><span class="term">up_req_recv</span></dt><dd><p>
+   msg receiver state for up requests.
+      </p></dd><dt><span class="term">lock</span></dt><dd><p>
+   protects mst state, primary, dpcd.
+      </p></dd><dt><span class="term">mst_state</span></dt><dd><p>
+   if this manager is enabled for an MST capable port.
+      </p></dd><dt><span class="term">mst_primary</span></dt><dd><p>
+   pointer to the primary branch device.
+      </p></dd><dt><span class="term">dpcd[DP_RECEIVER_CAP_SIZE]</span></dt><dd><p>
+   cache of DPCD for primary port.
+      </p></dd><dt><span class="term">pbn_div</span></dt><dd><p>
+   PBN to slots divisor.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm10785"></a><h2>Description</h2><p>
+   This struct represents the toplevel displayport MST topology manager.
+   There should be one instance of this for every MST capable DP connector
+   on the GPU.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-drm-dp-mst-branch.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s05.html#idm10514">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-dp-update-payload-part1.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct drm_dp_mst_branch</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_dp_update_payload_part1</span></td></tr></table></div></body></html>

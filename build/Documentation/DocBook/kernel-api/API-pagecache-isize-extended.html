@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>pagecache_isize_extended</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-truncate-setsize.html" title="truncate_setsize"><link rel="next" href="API-truncate-pagecache-range.html" title="truncate_pagecache_range"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">pagecache_isize_extended</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-truncate-setsize.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-truncate-pagecache-range.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-pagecache-isize-extended"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>pagecache_isize_extended — 
+     update pagecache after extension of i_size
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">pagecache_isize_extended </b>(</code></td><td>struct inode * <var class="pdparam">inode</var>, </td></tr><tr><td> </td><td>loff_t <var class="pdparam">from</var>, </td></tr><tr><td> </td><td>loff_t <var class="pdparam">to</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm12443"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>inode</code></em></span></dt><dd><p>
+     inode for which i_size was extended
+    </p></dd><dt><span class="term"><em class="parameter"><code>from</code></em></span></dt><dd><p>
+     original inode size
+    </p></dd><dt><span class="term"><em class="parameter"><code>to</code></em></span></dt><dd><p>
+     new inode size
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm12461"></a><h2>Description</h2><p>
+   Handle extension of inode size either caused by extending truncate or by
+   write starting after current i_size. We mark the page straddling current
+   i_size RO so that <code class="function">page_mkwrite</code> is called on the nearest write access to
+   the page.  This way filesystem can be sure that <code class="function">page_mkwrite</code> is called on
+   the page before user writes to the page via mmap after the i_size has been
+   changed.
+   </p><p>
+
+   The function must be called after i_size is updated so that page fault
+   coming after we unlock the page will already see the new i_size.
+   The function must be called while we still hold i_mutex - this not only
+   makes sure i_size is stable but also that userspace cannot observe new
+   i_size value before we are prepared to store mmap writes at new inode size.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-truncate-setsize.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-truncate-pagecache-range.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">truncate_setsize</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">truncate_pagecache_range</span></td></tr></table></div></body></html>

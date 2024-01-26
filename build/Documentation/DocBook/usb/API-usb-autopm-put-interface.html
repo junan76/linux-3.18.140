@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_autopm_put_interface</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbcore.html" title="Chapter 5. USB Core APIs"><link rel="prev" href="API-usb-disable-autosuspend.html" title="usb_disable_autosuspend"><link rel="next" href="API-usb-autopm-put-interface-async.html" title="usb_autopm_put_interface_async"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_autopm_put_interface</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-disable-autosuspend.html">Prev</a> </td><th width="60%" align="center">Chapter 5. USB Core APIs</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-autopm-put-interface-async.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-autopm-put-interface"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_autopm_put_interface — 
+     decrement a USB interface's PM-usage counter
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">usb_autopm_put_interface </b>(</code></td><td>struct usb_interface * <var class="pdparam">intf</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4102"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>intf</code></em></span></dt><dd><p>
+     the usb_interface whose counter should be decremented
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4110"></a><h2>Description</h2><p>
+   This routine should be called by an interface driver when it is
+   finished using <em class="parameter"><code>intf</code></em> and wants to allow it to autosuspend.  A typical
+   example would be a character-device driver when its device file is
+   closed.
+   </p><p>
+
+   The routine decrements <em class="parameter"><code>intf</code></em>'s usage counter.  When the counter reaches
+   0, a delayed autosuspend request for <em class="parameter"><code>intf</code></em>'s device is attempted.  The
+   attempt may fail (see <code class="function">autosuspend_check</code>).
+   </p><p>
+
+   This routine can run only in process context.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-disable-autosuspend.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-autopm-put-interface-async.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_disable_autosuspend</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_autopm_put_interface_async</span></td></tr></table></div></body></html>

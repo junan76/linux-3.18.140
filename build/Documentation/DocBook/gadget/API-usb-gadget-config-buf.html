@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_gadget_config_buf</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="utils.html" title="Optional Utilities"><link rel="prev" href="API-usb-descriptor-fillbuf.html" title="usb_descriptor_fillbuf"><link rel="next" href="API-usb-copy-descriptors.html" title="usb_copy_descriptors"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_gadget_config_buf</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-descriptor-fillbuf.html">Prev</a> </td><th width="60%" align="center">Optional Utilities</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-copy-descriptors.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-gadget-config-buf"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_gadget_config_buf — 
+     builts a complete configuration descriptor
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">usb_gadget_config_buf </b>(</code></td><td>const struct usb_config_descriptor * <var class="pdparam">config</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">buf</var>, </td></tr><tr><td> </td><td>unsigned <var class="pdparam">length</var>, </td></tr><tr><td> </td><td>const struct usb_descriptor_header ** <var class="pdparam">desc</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1813"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>config</code></em></span></dt><dd><p>
+     Header for the descriptor, including characteristics such
+     as power requirements and number of interfaces.
+    </p></dd><dt><span class="term"><em class="parameter"><code>buf</code></em></span></dt><dd><p>
+     Buffer for the resulting configuration descriptor.
+    </p></dd><dt><span class="term"><em class="parameter"><code>length</code></em></span></dt><dd><p>
+     Length of buffer.  If this is not big enough to hold the
+     entire configuration descriptor, an error code will be returned.
+    </p></dd><dt><span class="term"><em class="parameter"><code>desc</code></em></span></dt><dd><p>
+     Null-terminated vector of pointers to the descriptors (interface,
+     endpoint, etc) defining all functions in this device configuration.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1836"></a><h2>Description</h2><p>
+   This copies descriptors into the response buffer, building a descriptor
+   for that configuration.  It returns the buffer length or a negative
+   status code.  The config.wTotalLength field is set to match the length
+   of the result, but other descriptor fields (including power usage and
+   interface count) must be set by the caller.
+   </p><p>
+
+   Gadget drivers could use this when constructing a config descriptor
+   in response to USB_REQ_GET_DESCRIPTOR.  They will need to patch the
+   resulting bDescriptorType value if USB_DT_OTHER_SPEED_CONFIG is needed.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-descriptor-fillbuf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="utils.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-copy-descriptors.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_descriptor_fillbuf</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_copy_descriptors</span></td></tr></table></div></body></html>

@@ -1,0 +1,64 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Init function</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="MTD NAND Driver Programming Interface"><link rel="up" href="basicboarddriver.html" title="Chapter 4. Basic board driver"><link rel="prev" href="Device_ready_function.html" title="Device ready function"><link rel="next" href="Exit_function.html" title="Exit function"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Init function</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Device_ready_function.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Basic board driver</th><td width="20%" align="right"> <a accesskey="n" href="Exit_function.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Init_function"></a>Init function</h2></div></div></div><p>
+			The init function allocates memory and sets up all the board
+			specific parameters and function pointers. When everything
+			is set up nand_scan() is called. This function tries to
+			detect and identify then chip. If a chip is found all the
+			internal data fields are initialized accordingly.
+			The structure(s) have to be zeroed out first and then filled with the necessary
+			information about the device.
+		</p><pre class="programlisting">
+static int __init board_init (void)
+{
+	struct nand_chip *this;
+	int err = 0;
+
+	/* Allocate memory for MTD device structure and private data */
+	board_mtd = kzalloc(sizeof(struct mtd_info) + sizeof(struct nand_chip), GFP_KERNEL);
+	if (!board_mtd) {
+		printk ("Unable to allocate NAND MTD device structure.\n");
+		err = -ENOMEM;
+		goto out;
+	}
+
+	/* map physical address */
+	baseaddr = ioremap(CHIP_PHYSICAL_ADDRESS, 1024);
+	if (!baseaddr) {
+		printk("Ioremap to access NAND chip failed\n");
+		err = -EIO;
+		goto out_mtd;
+	}
+
+	/* Get pointer to private data */
+	this = (struct nand_chip *) ();
+	/* Link the private data with the MTD structure */
+	board_mtd-&gt;priv = this;
+
+	/* Set address of NAND IO lines */
+	this-&gt;IO_ADDR_R = baseaddr;
+	this-&gt;IO_ADDR_W = baseaddr;
+	/* Reference hardware control function */
+	this-&gt;hwcontrol = board_hwcontrol;
+	/* Set command delay time, see datasheet for correct value */
+	this-&gt;chip_delay = CHIP_DEPENDEND_COMMAND_DELAY;
+	/* Assign the device ready function, if available */
+	this-&gt;dev_ready = board_dev_ready;
+	this-&gt;eccmode = NAND_ECC_SOFT;
+
+	/* Scan to find existence of the device */
+	if (nand_scan (board_mtd, 1)) {
+		err = -ENXIO;
+		goto out_ior;
+	}
+	
+	add_mtd_partitions(board_mtd, partition_info, NUM_PARTITIONS);
+	goto out;
+
+out_ior:
+	iounmap(baseaddr);
+out_mtd:
+	kfree (board_mtd);
+out:
+	return err;
+}
+module_init(board_init);
+		</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Device_ready_function.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="basicboarddriver.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="Exit_function.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Device ready function </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Exit function</td></tr></table></div></body></html>

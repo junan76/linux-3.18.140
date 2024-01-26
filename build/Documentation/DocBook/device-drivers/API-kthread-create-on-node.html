@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>kthread_create_on_node</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch01s07.html" title="Internal Functions"><link rel="prev" href="API-kthread-freezable-should-stop.html" title="kthread_freezable_should_stop"><link rel="next" href="API-kthread-bind.html" title="kthread_bind"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">kthread_create_on_node</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-kthread-freezable-should-stop.html">Prev</a> </td><th width="60%" align="center">Internal Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-kthread-bind.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-kthread-create-on-node"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>kthread_create_on_node — 
+     create a kthread.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct task_struct * <b class="fsfunc">kthread_create_on_node </b>(</code></td><td>int (*<var class="pdparam">threadfn</var>)
+     <code>(</code>void *data<code>)</code>, </td></tr><tr><td> </td><td>void * <var class="pdparam">data</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">node</var>, </td></tr><tr><td> </td><td>const char <var class="pdparam">namefmt[]</var>, </td></tr><tr><td> </td><td> <var class="pdparam">...</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm7074"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>threadfn</code></em></span></dt><dd><p>
+     the function to run until signal_pending(current).
+    </p></dd><dt><span class="term"><em class="parameter"><code>data</code></em></span></dt><dd><p>
+     data ptr for <em class="parameter"><code>threadfn</code></em>.
+    </p></dd><dt><span class="term"><em class="parameter"><code>node</code></em></span></dt><dd><p>
+     memory node number.
+    </p></dd><dt><span class="term"><em class="parameter"><code>namefmt[]</code></em></span></dt><dd><p>
+     printf-style name for the thread.
+    </p></dd><dt><span class="term"><em class="parameter"><code>...</code></em></span></dt><dd><p>
+     variable arguments
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm7103"></a><h2>Description</h2><p>
+   This helper function creates and names a kernel
+   thread.  The thread will be stopped: use <code class="function">wake_up_process</code> to start
+   it.  See also <code class="function">kthread_run</code>.
+   </p><p>
+
+   If thread is going to be bound on a particular cpu, give its node
+   in <em class="parameter"><code>node</code></em>, to get NUMA affinity for kthread stack, or else give -1.
+   When woken, the thread will run @<code class="function">threadfn</code> with <em class="parameter"><code>data</code></em> as its
+   argument. @<code class="function">threadfn</code> can either call <code class="function">do_exit</code> directly if it is a
+   standalone thread for which no one will call <code class="function">kthread_stop</code>, or
+   return when '<code class="function">kthread_should_stop</code>' is true (which means
+   <code class="function">kthread_stop</code> has been called).  The return value should be zero
+   or a negative error number; it will be passed to <code class="function">kthread_stop</code>.
+   </p><p>
+
+   Returns a task_struct or ERR_PTR(-ENOMEM) or ERR_PTR(-EINTR).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-kthread-freezable-should-stop.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s07.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-kthread-bind.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">kthread_freezable_should_stop</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">kthread_bind</span></td></tr></table></div></body></html>

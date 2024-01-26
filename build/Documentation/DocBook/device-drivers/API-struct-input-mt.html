@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct input_mt</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch08s02.html" title="Multitouch Library"><link rel="prev" href="API-struct-input-mt-slot.html" title="struct input_mt_slot"><link rel="next" href="API-struct-input-mt-pos.html" title="struct input_mt_pos"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct input_mt</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-input-mt-slot.html">Prev</a> </td><th width="60%" align="center">Multitouch Library</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-input-mt-pos.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-input-mt"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct input_mt — 
+     state of tracked contacts
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct input_mt {
+  int trkid;
+  int num_slots;
+  int slot;
+  unsigned int flags;
+  unsigned int frame;
+  int * red;
+  struct input_mt_slot slots[];
+};  </pre></div><div class="refsect1"><a name="idm39636"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">trkid</span></dt><dd><p>
+   stores MT tracking ID for the next contact
+      </p></dd><dt><span class="term">num_slots</span></dt><dd><p>
+   number of MT slots the device uses
+      </p></dd><dt><span class="term">slot</span></dt><dd><p>
+   MT slot currently being transmitted
+      </p></dd><dt><span class="term">flags</span></dt><dd><p>
+   input_mt operation flags
+      </p></dd><dt><span class="term">frame</span></dt><dd><p>
+   increases every time <code class="function">input_mt_sync_frame</code> is called
+      </p></dd><dt><span class="term">red</span></dt><dd><p>
+   reduced cost matrix for in-kernel tracking
+      </p></dd><dt><span class="term">slots[]</span></dt><dd><p>
+   array of slots holding current values of tracked contacts
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-input-mt-slot.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch08s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-input-mt-pos.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct input_mt_slot</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct input_mt_pos</span></td></tr></table></div></body></html>

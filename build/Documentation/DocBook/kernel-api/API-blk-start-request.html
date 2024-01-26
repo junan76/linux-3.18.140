@@ -1,0 +1,14 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>blk_start_request</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="blkdev.html" title="Chapter 14. Block Devices"><link rel="prev" href="API-blk-peek-request.html" title="blk_peek_request"><link rel="next" href="API-blk-fetch-request.html" title="blk_fetch_request"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">blk_start_request</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-blk-peek-request.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Block Devices</th><td width="20%" align="right"> <a accesskey="n" href="API-blk-fetch-request.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-blk-start-request"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>blk_start_request — 
+     start request processing on the driver
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">blk_start_request </b>(</code></td><td>struct request * <var class="pdparam">req</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm26091"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>req</code></em></span></dt><dd><p>
+     request to dequeue
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm26099"></a><h2>Description</h2><p>
+   Dequeue <em class="parameter"><code>req</code></em> and start timeout timer on it.  This hands off the
+   request to the driver.
+   </p><p>
+
+   Block internal functions which don't want to start timer should
+   call <code class="function">blk_dequeue_request</code>.
+</p></div><div class="refsect1"><a name="idm26105"></a><h2>Context</h2><p>
+   queue_lock must be held.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-blk-peek-request.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="blkdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-blk-fetch-request.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">blk_peek_request</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">blk_fetch_request</span></td></tr></table></div></body></html>

@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 5. Using kgdb / gdb</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="up" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="prev" href="quickKDBkeyboard.html" title="Quick start for kdb using a keyboard connected console"><link rel="next" href="switchKdbKgdb.html" title="Chapter 6. kgdb and kdb interoperability"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. Using kgdb / gdb</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="quickKDBkeyboard.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="switchKdbKgdb.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="EnableKGDB"></a>Chapter 5. Using kgdb / gdb</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="EnableKGDB.html#ConnectingGDB">Connecting with gdb to a serial port</a></span></dt></dl></div><p>In order to use kgdb you must activate it by passing
+   configuration information to one of the kgdb I/O drivers.  If you
+   do not pass any configuration information kgdb will not do anything
+   at all.  Kgdb will only actively hook up to the kernel trap hooks
+   if a kgdb I/O driver is loaded and configured.  If you unconfigure
+   a kgdb I/O driver, kgdb will unregister all the kernel hook points.
+   </p><p> All kgdb I/O drivers can be reconfigured at run time, if
+   <span class="symbol">CONFIG_SYSFS</span> and <span class="symbol">CONFIG_MODULES</span>
+   are enabled, by echo'ing a new config string to
+   <code class="constant">/sys/module/&lt;driver&gt;/parameter/&lt;option&gt;</code>.
+   The driver can be unconfigured by passing an empty string.  You cannot
+   change the configuration while the debugger is attached.  Make sure
+   to detach the debugger with the <code class="constant">detach</code> command
+   prior to trying to unconfigure a kgdb I/O driver.
+   </p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ConnectingGDB"></a>Connecting with gdb to a serial port</h2></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Configure kgdboc</p><p>Boot kernel with arguments:
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="constant">kgdboc=ttyS0,115200</code></p></li></ul></div><p>OR</p><p>Configure kgdboc after the kernel booted:
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="constant">echo ttyS0 &gt; /sys/module/kgdboc/parameters/kgdboc</code></p></li></ul></div></li><li class="listitem"><p>Stop kernel execution (break into the debugger)</p><p>In order to connect to gdb via kgdboc, the kernel must
+  first be stopped.  There are several ways to stop the kernel which
+  include using kgdbwait as a boot argument, via a sysrq-g, or running
+  the kernel until it takes an exception where it waits for the
+  debugger to attach.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>When logged in as root or with a super user session you can run:</p><p><code class="constant">echo g &gt; /proc/sysrq-trigger</code></p></li><li class="listitem"><p>Example using minicom 2.2</p><p>Press: <code class="constant">Control-a</code></p><p>Press: <code class="constant">f</code></p><p>Press: <code class="constant">g</code></p></li><li class="listitem"><p>When you have telneted to a terminal server that supports sending a remote break</p><p>Press: <code class="constant">Control-]</code></p><p>Type in:<code class="constant">send break</code></p><p>Press: <code class="constant">Enter</code></p><p>Press: <code class="constant">g</code></p></li></ul></div><p>
+  </p></li><li class="listitem"><p>Connect from from gdb</p><p>
+    Example (using a directly connected port):
+    </p><pre class="programlisting">
+    % gdb ./vmlinux
+    (gdb) set remotebaud 115200
+    (gdb) target remote /dev/ttyS0
+    </pre><p>
+    Example (kgdb to a terminal server on TCP port 2012):
+    </p><pre class="programlisting">
+    % gdb ./vmlinux
+    (gdb) target remote 192.168.2.2:2012
+    </pre><p>
+    Once connected, you can debug a kernel the way you would debug an
+    application program.
+    </p><p>
+    If you are having problems connecting or something is going
+    seriously wrong while debugging, it will most often be the case
+    that you want to enable gdb to be verbose about its target
+    communications.  You do this prior to issuing the <code class="constant">target
+    remote</code> command by typing in: <code class="constant">set debug remote 1</code>
+    </p></li></ol></div><p>Remember if you continue in gdb, and need to "break in" again,
+  you need to issue an other sysrq-g.  It is easy to create a simple
+  entry point by putting a breakpoint at <code class="constant">sys_sync</code>
+  and then you can run "sync" from a shell or script to break into the
+  debugger.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="quickKDBkeyboard.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="switchKdbKgdb.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Quick start for kdb using a keyboard connected console </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 6. kgdb and kdb interoperability</td></tr></table></div></body></html>

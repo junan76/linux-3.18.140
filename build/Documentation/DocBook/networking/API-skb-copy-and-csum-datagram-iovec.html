@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>skb_copy_and_csum_datagram_iovec</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s02.html" title="Socket Buffer Functions"><link rel="prev" href="API-zerocopy-sg-from-iovec.html" title="zerocopy_sg_from_iovec"><link rel="next" href="API-datagram-poll.html" title="datagram_poll"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">skb_copy_and_csum_datagram_iovec</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-zerocopy-sg-from-iovec.html">Prev</a> </td><th width="60%" align="center">Socket Buffer Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-datagram-poll.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-skb-copy-and-csum-datagram-iovec"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>skb_copy_and_csum_datagram_iovec — 
+     Copy and checksum skb to user iovec.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">skb_copy_and_csum_datagram_iovec </b>(</code></td><td>struct sk_buff * <var class="pdparam">skb</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">hlen</var>, </td></tr><tr><td> </td><td>struct iovec * <var class="pdparam">iov</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm6896"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>skb</code></em></span></dt><dd><p>
+     skbuff
+    </p></dd><dt><span class="term"><em class="parameter"><code>hlen</code></em></span></dt><dd><p>
+     hardware length
+    </p></dd><dt><span class="term"><em class="parameter"><code>iov</code></em></span></dt><dd><p>
+     io vector
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm6914"></a><h2>Description</h2><p>
+   Caller _must_ check that skb will fit to this iovec.
+</p></div><div class="refsect1"><a name="idm6917"></a><h2>Returns</h2><p>
+   0       - success.
+   -EINVAL - checksum failure.
+   -EFAULT - fault during copy. Beware, in this case iovec
+   can be modified!
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-zerocopy-sg-from-iovec.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-datagram-poll.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">zerocopy_sg_from_iovec</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">datagram_poll</span></td></tr></table></div></body></html>

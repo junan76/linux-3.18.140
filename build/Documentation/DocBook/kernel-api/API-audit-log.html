@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>audit_log</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="audit.html" title="Chapter 12. Audit Interfaces"><link rel="prev" href="API-audit-log-end.html" title="audit_log_end"><link rel="next" href="API-audit-log-secctx.html" title="audit_log_secctx"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">audit_log</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-audit-log-end.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Audit Interfaces</th><td width="20%" align="right"> <a accesskey="n" href="API-audit-log-secctx.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-audit-log"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>audit_log — 
+     Log an audit record
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">audit_log </b>(</code></td><td>struct audit_context * <var class="pdparam">ctx</var>, </td></tr><tr><td> </td><td>gfp_t <var class="pdparam">gfp_mask</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">type</var>, </td></tr><tr><td> </td><td>const char * <var class="pdparam">fmt</var>, </td></tr><tr><td> </td><td> <var class="pdparam">...</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm23976"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>ctx</code></em></span></dt><dd><p>
+     audit context
+    </p></dd><dt><span class="term"><em class="parameter"><code>gfp_mask</code></em></span></dt><dd><p>
+     type of allocation
+    </p></dd><dt><span class="term"><em class="parameter"><code>type</code></em></span></dt><dd><p>
+     audit message type
+    </p></dd><dt><span class="term"><em class="parameter"><code>fmt</code></em></span></dt><dd><p>
+     format string to use
+     @...: variable parameters matching the format string
+    </p></dd><dt><span class="term"><em class="parameter"><code>...</code></em></span></dt><dd><p>
+     variable arguments
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm24004"></a><h2>Description</h2><p>
+   This is a convenience function that calls audit_log_start,
+   audit_log_vformat, and audit_log_end.  It may be called
+   in any context.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-audit-log-end.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="audit.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-audit-log-secctx.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">audit_log_end</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">audit_log_secctx</span></td></tr></table></div></body></html>

@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>/proc/bus/usb/BBB/DDD</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbfs.html" title="Chapter 7. The USB Filesystem (usbfs)"><link rel="prev" href="usbfs-devices.html" title="/proc/bus/usb/devices"><link rel="next" href="usbfs-lifecycle.html" title="Life Cycle of User Mode Drivers"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">/proc/bus/usb/BBB/DDD</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="usbfs-devices.html">Prev</a> </td><th width="60%" align="center">Chapter 7. The USB Filesystem (usbfs)</th><td width="20%" align="right"> <a accesskey="n" href="usbfs-lifecycle.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="usbfs-bbbddd"></a>/proc/bus/usb/BBB/DDD</h2></div></div></div><p>Use these files in one of these basic ways:
+	    </p><p><span class="emphasis"><em>They can be read,</em></span>
+	    producing first the device descriptor
+	    (18 bytes) and then the descriptors for the current configuration.
+	    See the USB 2.0 spec for details about those binary data formats.
+	    You'll need to convert most multibyte values from little endian
+	    format to your native host byte order, although a few of the
+	    fields in the device descriptor (both of the BCD-encoded fields,
+	    and the vendor and product IDs) will be byteswapped for you.
+	    Note that configuration descriptors include descriptors for
+	    interfaces, altsettings, endpoints, and maybe additional
+	    class descriptors.
+	    </p><p><span class="emphasis"><em>Perform USB operations</em></span> using 
+	    <span class="emphasis"><em>ioctl()</em></span> requests to make endpoint I/O
+	    requests (synchronously or asynchronously) or manage
+	    the device.
+	    These requests need the CAP_SYS_RAWIO capability,
+	    as well as filesystem access permissions.
+	    Only one ioctl request can be made on one of these
+	    device files at a time.
+	    This means that if you are synchronously reading an endpoint
+	    from one thread, you won't be able to write to a different
+	    endpoint from another thread until the read completes.
+	    This works for <span class="emphasis"><em>half duplex</em></span> protocols,
+	    but otherwise you'd use asynchronous i/o requests. 
+	    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="usbfs-devices.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbfs.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="usbfs-lifecycle.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">/proc/bus/usb/devices </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Life Cycle of User Mode Drivers</td></tr></table></div></body></html>

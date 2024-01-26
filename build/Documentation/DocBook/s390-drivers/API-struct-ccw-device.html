@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct ccw_device</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing s390 channel device drivers"><link rel="up" href="ccwdev.html" title="ccw devices"><link rel="prev" href="ccwdev.html" title="ccw devices"><link rel="next" href="API-struct-ccw-driver.html" title="struct ccw_driver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct ccw_device</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ccwdev.html">Prev</a> </td><th width="60%" align="center">ccw devices</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-ccw-driver.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-ccw-device"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct ccw_device — 
+  channel attached device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct ccw_device {
+  spinlock_t * ccwlock;
+  struct ccw_device_id id;
+  struct ccw_driver * drv;
+  struct device dev;
+  int online;
+  void (* handler) (struct ccw_device *, unsigned long, struct irb *);
+};  </pre></div><div class="refsect1"><a name="idm570"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">ccwlock</span></dt><dd><p>
+pointer to device lock
+      </p></dd><dt><span class="term">id</span></dt><dd><p>
+id of this device
+      </p></dd><dt><span class="term">drv</span></dt><dd><p>
+ccw driver for this device
+      </p></dd><dt><span class="term">dev</span></dt><dd><p>
+embedded device structure
+      </p></dd><dt><span class="term">online</span></dt><dd><p>
+online status of device
+      </p></dd><dt><span class="term">handler</span></dt><dd><p>
+interrupt handler
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm597"></a><h2>Description</h2><p>
+   <em class="parameter"><code>handler</code></em> is a member of the device rather than the driver since a driver
+   can have different interrupt handlers for different ccw devices
+   (multi-subchannel drivers).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ccwdev.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ccwdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-ccw-driver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">ccw devices </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct ccw_driver</span></td></tr></table></div></body></html>

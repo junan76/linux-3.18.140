@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>kfifo_alloc</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="kfifo.html#idm13515" title="kfifo interface"><link rel="prev" href="API-kfifo-peek-len.html" title="kfifo_peek_len"><link rel="next" href="API-kfifo-free.html" title="kfifo_free"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">kfifo_alloc</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-kfifo-peek-len.html">Prev</a> </td><th width="60%" align="center">kfifo interface</th><td width="20%" align="right"> <a accesskey="n" href="API-kfifo-free.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-kfifo-alloc"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>kfifo_alloc — 
+     dynamically allocates a new fifo buffer
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef"> <b class="fsfunc">kfifo_alloc </b>(</code></td><td> <var class="pdparam">fifo</var>, </td></tr><tr><td> </td><td> <var class="pdparam">size</var>, </td></tr><tr><td> </td><td> <var class="pdparam">gfp_mask</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm14061"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>fifo</code></em></span></dt><dd><p>
+     pointer to the fifo
+    </p></dd><dt><span class="term"><em class="parameter"><code>size</code></em></span></dt><dd><p>
+     the number of elements in the fifo, this must be a power of 2
+    </p></dd><dt><span class="term"><em class="parameter"><code>gfp_mask</code></em></span></dt><dd><p>
+     get_free_pages mask, passed to <code class="function">kmalloc</code>
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm14080"></a><h2>Description</h2><p>
+   This macro dynamically allocates a new fifo buffer.
+   </p><p>
+
+   The numer of elements will be rounded-up to a power of 2.
+   The fifo will be release with <code class="function">kfifo_free</code>.
+   Return 0 if no error, otherwise an error code.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-kfifo-peek-len.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="kfifo.html#idm13515">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-kfifo-free.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">kfifo_peek_len</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">kfifo_free</span></td></tr></table></div></body></html>

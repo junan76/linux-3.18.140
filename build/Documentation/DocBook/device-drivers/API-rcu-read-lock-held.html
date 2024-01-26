@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>rcu_read_lock_held</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch01s09.html" title="Kernel utility functions"><link rel="prev" href="API-rcu-barrier.html" title="rcu_barrier"><link rel="next" href="API-rcu-read-lock-bh-held.html" title="rcu_read_lock_bh_held"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">rcu_read_lock_held</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-rcu-barrier.html">Prev</a> </td><th width="60%" align="center">Kernel utility functions</th><td width="20%" align="right"> <a accesskey="n" href="API-rcu-read-lock-bh-held.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-rcu-read-lock-held"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>rcu_read_lock_held — 
+  might we be in RCU read-side critical section?
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">rcu_read_lock_held </b>(</code></td><td> <var class="pdparam">void</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9696"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>void</code></em></span></dt><dd><p>
+     no arguments
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9704"></a><h2>Description</h2><p>
+   </p><p>
+
+   If CONFIG_DEBUG_LOCK_ALLOC is selected, returns nonzero iff in an RCU
+   read-side critical section.  In absence of CONFIG_DEBUG_LOCK_ALLOC,
+   this assumes we are in an RCU read-side critical section unless it can
+   prove otherwise.  This is useful for debug checks in functions that
+   require that they be called within an RCU read-side critical section.
+   </p><p>
+
+   Checks <code class="function">debug_lockdep_rcu_enabled</code> to prevent false positives during boot
+   and while lockdep is disabled.
+   </p><p>
+
+   Note that <code class="function">rcu_read_lock</code> and the matching <code class="function">rcu_read_unlock</code> must
+   occur in the same context, for example, it is illegal to invoke
+   <code class="function">rcu_read_unlock</code> in process context if the matching <code class="function">rcu_read_lock</code>
+   was invoked from within an irq handler.
+   </p><p>
+
+   Note that <code class="function">rcu_read_lock</code> is disallowed if the CPU is either idle or
+   offline from an RCU perspective, so check for those as well.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-rcu-barrier.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s09.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-rcu-read-lock-bh-held.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">rcu_barrier</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">rcu_read_lock_bh_held</span></td></tr></table></div></body></html>

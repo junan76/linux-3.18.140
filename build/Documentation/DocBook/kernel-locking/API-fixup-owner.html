@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>fixup_owner</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="apiref-futex.html" title="Chapter 12. Futex API reference"><link rel="prev" href="API-unqueue-me.html" title="unqueue_me"><link rel="next" href="API-futex-wait-queue-me.html" title="futex_wait_queue_me"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">fixup_owner</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-unqueue-me.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Futex API reference</th><td width="20%" align="right"> <a accesskey="n" href="API-futex-wait-queue-me.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-fixup-owner"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>fixup_owner — 
+     Post lock pi_state and corner case management
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">fixup_owner </b>(</code></td><td>u32 __user * <var class="pdparam">uaddr</var>, </td></tr><tr><td> </td><td>struct futex_q * <var class="pdparam">q</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">locked</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1558"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>uaddr</code></em></span></dt><dd><p>
+     user address of the futex
+    </p></dd><dt><span class="term"><em class="parameter"><code>q</code></em></span></dt><dd><p>
+     futex_q (contains pi_state and access to the rt_mutex)
+    </p></dd><dt><span class="term"><em class="parameter"><code>locked</code></em></span></dt><dd><p>
+     if the attempt to take the rt_mutex succeeded (1) or not (0)
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1576"></a><h2>Description</h2><p>
+   After attempting to lock an rt_mutex, this function is called to cleanup
+   the pi_state owner as well as handle race conditions that may allow us to
+   acquire the lock. Must be called with the hb lock held.
+</p></div><div class="refsect1"><a name="idm1579"></a><h2>Return</h2><p>
+   1 - success, lock taken;
+   0 - success, lock not taken;
+   &lt;0 - on error (-EFAULT)
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-unqueue-me.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="apiref-futex.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-futex-wait-queue-me.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">unqueue_me</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">futex_wait_queue_me</span></td></tr></table></div></body></html>

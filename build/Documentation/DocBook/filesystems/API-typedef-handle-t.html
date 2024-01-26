@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>typedef handle_t</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="data_types.html#structures" title="Structures"><link rel="prev" href="data_types.html" title="Data Types"><link rel="next" href="API-typedef-journal-t.html" title="typedef journal_t"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">typedef handle_t</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="data_types.html">Prev</a> </td><th width="60%" align="center">Structures</th><td width="20%" align="right"> <a accesskey="n" href="API-typedef-journal-t.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-typedef-handle-t"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>typedef handle_t — 
+  The handle_t type represents a single atomic update being performed by some process.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="synopsis">typedef handle_t;</pre></div><div class="refsect1"><a name="idm10260"></a><h2>Description</h2><p>
+   </p><p>
+
+   All filesystem modifications made by the process go
+   through this handle.  Recursive operations (such as quota operations)
+   are gathered into a single update.
+   </p><p>
+
+   The buffer credits field is used to account for journaled buffers
+   being modified by the running process.  To ensure that there is
+   enough log space for all outstanding operations, we need to limit the
+   number of outstanding buffers possible at any time.  When the
+   operation completes, any buffer credits not used are credited back to
+   the transaction, so that at all times we know how many buffers the
+   outstanding updates on a transaction might possibly touch.
+   </p><p>
+
+   This is an opaque datatype.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="data_types.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="data_types.html#structures">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-typedef-journal-t.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Data Types </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">typedef journal_t</span></td></tr></table></div></body></html>

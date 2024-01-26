@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_set_device_state</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbcore.html" title="Chapter 5. USB Core APIs"><link rel="prev" href="API-usb-hub-clear-tt-buffer.html" title="usb_hub_clear_tt_buffer"><link rel="next" href="API-usb-root-hub-lost-power.html" title="usb_root_hub_lost_power"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_set_device_state</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-hub-clear-tt-buffer.html">Prev</a> </td><th width="60%" align="center">Chapter 5. USB Core APIs</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-root-hub-lost-power.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-set-device-state"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_set_device_state — 
+     change a device's current state (usbcore, hcds)
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">usb_set_device_state </b>(</code></td><td>struct usb_device * <var class="pdparam">udev</var>, </td></tr><tr><td> </td><td>enum usb_device_state <var class="pdparam">new_state</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm5252"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>udev</code></em></span></dt><dd><p>
+     pointer to device whose state should be changed
+    </p></dd><dt><span class="term"><em class="parameter"><code>new_state</code></em></span></dt><dd><p>
+     new state value to be stored
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm5265"></a><h2>Description</h2><p>
+   udev-&gt;state is _not_ fully protected by the device lock.  Although
+   most transitions are made only while holding the lock, the state can
+   can change to USB_STATE_NOTATTACHED at almost any time.  This
+   is so that devices can be marked as disconnected as soon as possible,
+   without having to wait for any semaphores to be released.  As a result,
+   all changes to any device's state must be protected by the
+   device_state_lock spinlock.
+   </p><p>
+
+   Once a device has been added to the device tree, all changes to its state
+   should be made using this routine.  The state should _not_ be set directly.
+   </p><p>
+
+   If udev-&gt;state is already USB_STATE_NOTATTACHED then no change is made.
+   Otherwise udev-&gt;state is set to new_state, and if new_state is
+   USB_STATE_NOTATTACHED then all of udev's descendants' states are also set
+   to USB_STATE_NOTATTACHED.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-hub-clear-tt-buffer.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-root-hub-lost-power.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_hub_clear_tt_buffer</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_root_hub_lost_power</span></td></tr></table></div></body></html>

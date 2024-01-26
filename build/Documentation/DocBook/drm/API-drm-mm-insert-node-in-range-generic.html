@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>drm_mm_insert_node_in_range_generic</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drm-memory-management.html#idm2693" title="DRM MM Range Allocator Function References"><link rel="prev" href="API-drm-mm-insert-node-generic.html" title="drm_mm_insert_node_generic"><link rel="next" href="API-drm-mm-remove-node.html" title="drm_mm_remove_node"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">drm_mm_insert_node_in_range_generic</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-mm-insert-node-generic.html">Prev</a> </td><th width="60%" align="center">DRM MM Range Allocator Function References</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-mm-remove-node.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-drm-mm-insert-node-in-range-generic"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>drm_mm_insert_node_in_range_generic — 
+     ranged search for space and insert <em class="parameter"><code>node</code></em>
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">drm_mm_insert_node_in_range_generic </b>(</code></td><td>struct drm_mm * <var class="pdparam">mm</var>, </td></tr><tr><td> </td><td>struct drm_mm_node * <var class="pdparam">node</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">size</var>, </td></tr><tr><td> </td><td>unsigned <var class="pdparam">alignment</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">color</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">start</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">end</var>, </td></tr><tr><td> </td><td>enum drm_mm_search_flags <var class="pdparam">sflags</var>, </td></tr><tr><td> </td><td>enum drm_mm_allocator_flags <var class="pdparam">aflags</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2855"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>mm</code></em></span></dt><dd><p>
+     drm_mm to allocate from
+    </p></dd><dt><span class="term"><em class="parameter"><code>node</code></em></span></dt><dd><p>
+     preallocate node to insert
+    </p></dd><dt><span class="term"><em class="parameter"><code>size</code></em></span></dt><dd><p>
+     size of the allocation
+    </p></dd><dt><span class="term"><em class="parameter"><code>alignment</code></em></span></dt><dd><p>
+     alignment of the allocation
+    </p></dd><dt><span class="term"><em class="parameter"><code>color</code></em></span></dt><dd><p>
+     opaque tag value to use for this node
+    </p></dd><dt><span class="term"><em class="parameter"><code>start</code></em></span></dt><dd><p>
+     start of the allowed range for this node
+    </p></dd><dt><span class="term"><em class="parameter"><code>end</code></em></span></dt><dd><p>
+     end of the allowed range for this node
+    </p></dd><dt><span class="term"><em class="parameter"><code>sflags</code></em></span></dt><dd><p>
+     flags to fine-tune the allocation search
+    </p></dd><dt><span class="term"><em class="parameter"><code>aflags</code></em></span></dt><dd><p>
+     flags to fine-tune the allocation behavior
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2903"></a><h2>Description</h2><p>
+   The preallocated node must be cleared to 0.
+</p></div><div class="refsect1"><a name="idm2906"></a><h2>Returns</h2><p>
+   0 on success, -ENOSPC if there's no suitable hole.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-mm-insert-node-generic.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drm-memory-management.html#idm2693">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-mm-remove-node.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_mm_insert_node_generic</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_mm_remove_node</span></td></tr></table></div></body></html>

@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>mod_timer_pinned</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch01s03.html" title="Delaying, scheduling, and timer routines"><link rel="prev" href="API-mod-timer.html" title="mod_timer"><link rel="next" href="API-add-timer.html" title="add_timer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">mod_timer_pinned</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-mod-timer.html">Prev</a> </td><th width="60%" align="center">Delaying, scheduling, and timer routines</th><td width="20%" align="right"> <a accesskey="n" href="API-add-timer.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-mod-timer-pinned"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>mod_timer_pinned — 
+     modify a timer's timeout
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">mod_timer_pinned </b>(</code></td><td>struct timer_list * <var class="pdparam">timer</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">expires</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2358"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>timer</code></em></span></dt><dd><p>
+     the timer to be modified
+    </p></dd><dt><span class="term"><em class="parameter"><code>expires</code></em></span></dt><dd><p>
+     new timeout in jiffies
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2371"></a><h2>Description</h2><p>
+   <code class="function">mod_timer_pinned</code> is a way to update the expire field of an
+   active timer (if the timer is inactive it will be activated)
+   and to ensure that the timer is scheduled on the current CPU.
+   </p><p>
+
+   Note that this does not prevent the timer from being migrated
+   when the current CPU goes offline.  If this is a problem for
+   you, use CPU-hotplug notifiers to handle it correctly, for
+   example, cancelling the timer when the corresponding CPU goes
+   offline.
+   </p><p>
+
+   mod_timer_pinned(timer, expires) is equivalent to:
+   </p><p>
+
+   del_timer(timer); timer-&gt;expires = expires; add_timer(timer);
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-mod-timer.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-add-timer.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">mod_timer</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">add_timer</span></td></tr></table></div></body></html>

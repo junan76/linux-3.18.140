@@ -1,0 +1,35 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>spi_async</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="spi.html" title="Chapter 9. Serial Peripheral Interface (SPI)"><link rel="prev" href="API-spi-setup.html" title="spi_setup"><link rel="next" href="API-spi-async-locked.html" title="spi_async_locked"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">spi_async</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-spi-setup.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Serial Peripheral Interface (SPI)</th><td width="20%" align="right"> <a accesskey="n" href="API-spi-async-locked.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-spi-async"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>spi_async — 
+     asynchronous SPI transfer
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">spi_async </b>(</code></td><td>struct spi_device * <var class="pdparam">spi</var>, </td></tr><tr><td> </td><td>struct spi_message * <var class="pdparam">message</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm42262"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>spi</code></em></span></dt><dd><p>
+     device with which data will be exchanged
+    </p></dd><dt><span class="term"><em class="parameter"><code>message</code></em></span></dt><dd><p>
+     describes the data transfers, including completion callback
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm42275"></a><h2>Context</h2><p>
+   any (irqs may be blocked, etc)
+</p></div><div class="refsect1"><a name="idm42278"></a><h2>Description</h2><p>
+   This call may be used in_irq and other contexts which can't sleep,
+   as well as from task contexts which can sleep.
+   </p><p>
+
+   The completion callback is invoked in a context which can't sleep.
+   Before that invocation, the value of message-&gt;status is undefined.
+   When the callback is issued, message-&gt;status holds either zero (to
+   indicate complete success) or a negative error code.  After that
+   callback returns, the driver which issued the transfer request may
+   deallocate the associated memory; it's no longer in use by any SPI
+   core or controller driver code.
+   </p><p>
+
+   Note that although all messages to a spi_device are handled in
+   FIFO order, messages may go to different devices in other orders.
+   Some device might be higher priority, or have various <span class="quote">“<span class="quote">hard</span>”</span> access
+   time requirements, for example.
+   </p><p>
+
+   On detection of any fault during the transfer, processing of
+   the entire message is aborted, and the device is deselected.
+   Until returning from the associated message completion callback,
+   no other spi_message queued to that device will be processed.
+   (This rule applies equally to all the synchronous transfer calls,
+   which are wrappers around this core asynchronous primitive.)
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-spi-setup.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="spi.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-spi-async-locked.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">spi_setup</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">spi_async_locked</span></td></tr></table></div></body></html>

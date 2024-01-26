@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>bio_add_pc_page</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="other_functions.html" title="Other Functions"><link rel="prev" href="API-bio-get-nr-vecs.html" title="bio_get_nr_vecs"><link rel="next" href="API-bio-add-page.html" title="bio_add_page"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">bio_add_pc_page</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-bio-get-nr-vecs.html">Prev</a> </td><th width="60%" align="center">Other Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-bio-add-page.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-bio-add-pc-page"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>bio_add_pc_page — 
+     attempt to add page to bio
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">bio_add_pc_page </b>(</code></td><td>struct request_queue * <var class="pdparam">q</var>, </td></tr><tr><td> </td><td>struct bio * <var class="pdparam">bio</var>, </td></tr><tr><td> </td><td>struct page * <var class="pdparam">page</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">len</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">offset</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4917"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>q</code></em></span></dt><dd><p>
+     the target queue
+    </p></dd><dt><span class="term"><em class="parameter"><code>bio</code></em></span></dt><dd><p>
+     destination bio
+    </p></dd><dt><span class="term"><em class="parameter"><code>page</code></em></span></dt><dd><p>
+     page to add
+    </p></dd><dt><span class="term"><em class="parameter"><code>len</code></em></span></dt><dd><p>
+     vec entry length
+    </p></dd><dt><span class="term"><em class="parameter"><code>offset</code></em></span></dt><dd><p>
+     vec entry offset
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4945"></a><h2>Description</h2><p>
+   Attempt to add a page to the bio_vec maplist. This can fail for a
+   number of reasons, such as the bio being full or target block device
+   limitations. The target block device must allow bio's up to PAGE_SIZE,
+   so it is always possible to add a single page to an empty bio.
+   </p><p>
+
+   This should only be used by REQ_PC bios.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-bio-get-nr-vecs.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="other_functions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-bio-add-page.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">bio_get_nr_vecs</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">bio_add_page</span></td></tr></table></div></body></html>

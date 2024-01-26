@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>skb_find_text</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s02.html" title="Socket Buffer Functions"><link rel="prev" href="API-skb-abort-seq-read.html" title="skb_abort_seq_read"><link rel="next" href="API-skb-append-datato-frags.html" title="skb_append_datato_frags"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">skb_find_text</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-skb-abort-seq-read.html">Prev</a> </td><th width="60%" align="center">Socket Buffer Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-skb-append-datato-frags.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-skb-find-text"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>skb_find_text — 
+     Find a text pattern in skb data
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">unsigned int <b class="fsfunc">skb_find_text </b>(</code></td><td>struct sk_buff * <var class="pdparam">skb</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">from</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">to</var>, </td></tr><tr><td> </td><td>struct ts_config * <var class="pdparam">config</var>, </td></tr><tr><td> </td><td>struct ts_state * <var class="pdparam">state</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm5497"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>skb</code></em></span></dt><dd><p>
+     the buffer to look in
+    </p></dd><dt><span class="term"><em class="parameter"><code>from</code></em></span></dt><dd><p>
+     search offset
+    </p></dd><dt><span class="term"><em class="parameter"><code>to</code></em></span></dt><dd><p>
+     search limit
+    </p></dd><dt><span class="term"><em class="parameter"><code>config</code></em></span></dt><dd><p>
+     textsearch configuration
+    </p></dd><dt><span class="term"><em class="parameter"><code>state</code></em></span></dt><dd><p>
+     uninitialized textsearch state variable
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm5525"></a><h2>Description</h2><p>
+   Finds a pattern in the skb data according to the specified
+   textsearch configuration. Use <code class="function">textsearch_next</code> to retrieve
+   subsequent occurrences of the pattern. Returns the offset
+   to the first occurrence or UINT_MAX if no match was found.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-skb-abort-seq-read.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-skb-append-datato-frags.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">skb_abort_seq_read</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">skb_append_datato_frags</span></td></tr></table></div></body></html>

@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ipc_init</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ipc.html#idm12515" title="IPC utilities"><link rel="prev" href="ipc.html" title="Chapter 5. Kernel IPC facilities"><link rel="next" href="API-ipc-init-ids.html" title="ipc_init_ids"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">ipc_init</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ipc.html">Prev</a> </td><th width="60%" align="center">IPC utilities</th><td width="20%" align="right"> <a accesskey="n" href="API-ipc-init-ids.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-ipc-init"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ipc_init — 
+  initialise ipc subsystem
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">ipc_init </b>(</code></td><td> <var class="pdparam">void</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm12538"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>void</code></em></span></dt><dd><p>
+     no arguments
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm12546"></a><h2>Description</h2><p>
+   </p><p>
+
+   The various sysv ipc resources (semaphores, messages and shared
+   memory) are initialised.
+   </p><p>
+
+   A callback routine is registered into the memory hotplug notifier
+</p></div><div class="refsect1"><a name="idm12551"></a><h2>chain</h2><p>
+   since msgmni scales to lowmem this callback routine will be
+   called upon successful memory add / remove to recompute msmgni.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ipc.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ipc.html#idm12515">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-ipc-init-ids.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 5. Kernel IPC facilities </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ipc_init_ids</span></td></tr></table></div></body></html>

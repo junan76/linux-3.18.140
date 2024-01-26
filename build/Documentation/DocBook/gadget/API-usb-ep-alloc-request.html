@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_ep_alloc_request</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="core.html" title="Core Objects and Methods"><link rel="prev" href="API-usb-ep-disable.html" title="usb_ep_disable"><link rel="next" href="API-usb-ep-free-request.html" title="usb_ep_free_request"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_ep_alloc_request</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-ep-disable.html">Prev</a> </td><th width="60%" align="center">Core Objects and Methods</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-ep-free-request.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-ep-alloc-request"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_ep_alloc_request — 
+     allocate a request object to use with this endpoint
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct usb_request * <b class="fsfunc">usb_ep_alloc_request </b>(</code></td><td>struct usb_ep * <var class="pdparam">ep</var>, </td></tr><tr><td> </td><td>gfp_t <var class="pdparam">gfp_flags</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm515"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>ep</code></em></span></dt><dd><p>
+     the endpoint to be used with with the request
+    </p></dd><dt><span class="term"><em class="parameter"><code>gfp_flags</code></em></span></dt><dd><p>
+     GFP_* flags to use
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm528"></a><h2>Description</h2><p>
+   Request objects must be allocated with this call, since they normally
+   need controller-specific setup and may even need endpoint-specific
+   resources such as allocation of DMA descriptors.
+   Requests may be submitted with <code class="function">usb_ep_queue</code>, and receive a single
+   completion callback.  Free requests with <code class="function">usb_ep_free_request</code>, when
+   they are no longer needed.
+   </p><p>
+
+   Returns the request, or null if one could not be allocated.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-ep-disable.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="core.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-ep-free-request.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_ep_disable</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_ep_free_request</span></td></tr></table></div></body></html>

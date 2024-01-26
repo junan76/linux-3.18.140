@@ -1,0 +1,54 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct ff_device</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="input_subsystem.html#idm37901" title="Input core"><link rel="prev" href="API-input-set-events-per-packet.html" title="input_set_events_per_packet"><link rel="next" href="API-input-event.html" title="input_event"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct ff_device</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-input-set-events-per-packet.html">Prev</a> </td><th width="60%" align="center">Input core</th><td width="20%" align="right"> <a accesskey="n" href="API-input-event.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-ff-device"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct ff_device — 
+     force-feedback part of an input device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct ff_device {
+  int (* upload) (struct input_dev *dev, struct ff_effect *effect,struct ff_effect *old);
+  int (* erase) (struct input_dev *dev, int effect_id);
+  int (* playback) (struct input_dev *dev, int effect_id, int value);
+  void (* set_gain) (struct input_dev *dev, u16 gain);
+  void (* set_autocenter) (struct input_dev *dev, u16 magnitude);
+  void (* destroy) (struct ff_device *);
+  void * private;
+  unsigned long ffbit[BITS_TO_LONGS(FF_CNT)];
+  struct mutex mutex;
+  int max_effects;
+  struct ff_effect * effects;
+  struct file * effect_owners[];
+};  </pre></div><div class="refsect1"><a name="idm38341"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">upload</span></dt><dd><p>
+   Called to upload an new effect into device
+      </p></dd><dt><span class="term">erase</span></dt><dd><p>
+   Called to erase an effect from device
+      </p></dd><dt><span class="term">playback</span></dt><dd><p>
+   Called to request device to start playing specified effect
+      </p></dd><dt><span class="term">set_gain</span></dt><dd><p>
+   Called to set specified gain
+      </p></dd><dt><span class="term">set_autocenter</span></dt><dd><p>
+   Called to auto-center device
+      </p></dd><dt><span class="term">destroy</span></dt><dd><p>
+   called by input core when parent input device is being
+   destroyed
+      </p></dd><dt><span class="term">private</span></dt><dd><p>
+   driver-specific data, will be freed automatically
+      </p></dd><dt><span class="term">ffbit[BITS_TO_LONGS(FF_CNT)]</span></dt><dd><p>
+   bitmap of force feedback capabilities truly supported by
+   device (not emulated like ones in input_dev-&gt;ffbit)
+      </p></dd><dt><span class="term">mutex</span></dt><dd><p>
+   mutex for serializing access to the device
+      </p></dd><dt><span class="term">max_effects</span></dt><dd><p>
+   maximum number of effects supported by device
+      </p></dd><dt><span class="term">effects</span></dt><dd><p>
+   pointer to an array of effects currently loaded into device
+      </p></dd><dt><span class="term">effect_owners[]</span></dt><dd><p>
+   array of effect owners; when file handle owning
+   an effect gets closed the effect is automatically erased
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm38392"></a><h2>Description</h2><p>
+   Every force-feedback device must implement <code class="function">upload</code> and <code class="function">playback</code>
+   methods; <code class="function">erase</code> is optional. <code class="function">set_gain</code> and <code class="function">set_autocenter</code> need
+   only be implemented if driver sets up FF_GAIN and FF_AUTOCENTER
+   bits.
+   </p><p>
+
+   Note that <code class="function">playback</code>, <code class="function">set_gain</code> and <code class="function">set_autocenter</code> are called with
+   dev-&gt;event_lock spinlock held and interrupts off and thus may not
+   sleep.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-input-set-events-per-packet.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="input_subsystem.html#idm37901">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-input-event.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">input_set_events_per_packet</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">input_event</span></td></tr></table></div></body></html>

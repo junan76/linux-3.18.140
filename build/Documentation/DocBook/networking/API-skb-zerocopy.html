@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>skb_zerocopy</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s02.html" title="Socket Buffer Functions"><link rel="prev" href="API-skb-store-bits.html" title="skb_store_bits"><link rel="next" href="API-skb-dequeue.html" title="skb_dequeue"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">skb_zerocopy</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-skb-store-bits.html">Prev</a> </td><th width="60%" align="center">Socket Buffer Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-skb-dequeue.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-skb-zerocopy"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>skb_zerocopy — 
+     Zero copy skb to skb
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">skb_zerocopy </b>(</code></td><td>struct sk_buff * <var class="pdparam">to</var>, </td></tr><tr><td> </td><td>struct sk_buff * <var class="pdparam">from</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">len</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">hlen</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4933"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>to</code></em></span></dt><dd><p>
+     destination buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>from</code></em></span></dt><dd><p>
+     source buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>len</code></em></span></dt><dd><p>
+     number of bytes to copy from source buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>hlen</code></em></span></dt><dd><p>
+     size of linear headroom in destination buffer
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4956"></a><h2>Description</h2><p>
+   Copies up to `len` bytes from `from` to `to` by creating references
+   to the frags in the source buffer.
+   </p><p>
+
+   The `hlen` as calculated by <code class="function">skb_zerocopy_headlen</code> specifies the
+   headroom in the `to` buffer.
+</p></div><div class="refsect1"><a name="idm4961"></a><h2>0</h2><p>
+   everything is OK
+   -ENOMEM: couldn't orphan frags of <em class="parameter"><code>from</code></em> due to lack of memory
+   -EFAULT: <code class="function">skb_copy_bits</code> found some problem with skb geometry
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-skb-store-bits.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-skb-dequeue.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">skb_store_bits</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">skb_dequeue</span></td></tr></table></div></body></html>

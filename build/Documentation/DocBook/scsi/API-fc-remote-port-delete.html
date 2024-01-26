@@ -1,0 +1,55 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>fc_remote_port_delete</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="Transport_classes.html#Fibre_Channel_transport" title="Fibre Channel transport"><link rel="prev" href="API-fc-remote-port-add.html" title="fc_remote_port_add"><link rel="next" href="API-fc-remote-port-rolechg.html" title="fc_remote_port_rolechg"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">fc_remote_port_delete</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-fc-remote-port-add.html">Prev</a> </td><th width="60%" align="center">Fibre Channel transport</th><td width="20%" align="right"> <a accesskey="n" href="API-fc-remote-port-rolechg.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-fc-remote-port-delete"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>fc_remote_port_delete — 
+     notifies the fc transport that a remote port is no longer in existence.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">fc_remote_port_delete </b>(</code></td><td>struct fc_rport * <var class="pdparam">rport</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4536"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>rport</code></em></span></dt><dd><p>
+     The remote port that no longer exists
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4544"></a><h2>Description</h2><p>
+   The LLDD calls this routine to notify the transport that a remote
+   port is no longer part of the topology. Note: Although a port
+   may no longer be part of the topology, it may persist in the remote
+   ports displayed by the fc_host. We do this under 2 conditions:
+   1) If the port was a scsi target, we delay its deletion by <span class="quote">“<span class="quote">blocking</span>”</span> it.
+   This allows the port to temporarily disappear, then reappear without
+   disrupting the SCSI device tree attached to it. During the <span class="quote">“<span class="quote">blocked</span>”</span>
+   period the port will still exist.
+   2) If the port was a scsi target and disappears for longer than we
+   expect, we'll delete the port and the tear down the SCSI device tree
+   attached to it. However, we want to semi-persist the target id assigned
+   to that port if it eventually does exist. The port structure will
+   remain (although with minimal information) so that the target id
+   bindings remails.
+   </p><p>
+
+   If the remote port is not an FCP Target, it will be fully torn down
+   and deallocated, including the fc_remote_port class device.
+   </p><p>
+
+   If the remote port is an FCP Target, the port will be placed in a
+   temporary blocked state. From the LLDD's perspective, the rport no
+   longer exists. From the SCSI midlayer's perspective, the SCSI target
+   exists, but all sdevs on it are blocked from further I/O. The following
+   is then expected.
+   </p><p>
+
+   If the remote port does not return (signaled by a LLDD call to
+   <code class="function">fc_remote_port_add</code>) within the dev_loss_tmo timeout, then the
+   scsi target is removed - killing all outstanding i/o and removing the
+   scsi devices attached ot it. The port structure will be marked Not
+   Present and be partially cleared, leaving only enough information to
+   recognize the remote port relative to the scsi target id binding if
+   it later appears.  The port will remain as long as there is a valid
+   binding (e.g. until the user changes the binding type or unloads the
+   scsi host with the binding).
+   </p><p>
+
+   If the remote port returns within the dev_loss_tmo value (and matches
+   according to the target id binding type), the port structure will be
+   reused. If it is no longer a SCSI target, the target will be torn
+   down. If it continues to be a SCSI target, then the target will be
+   unblocked (allowing i/o to be resumed), and a scan will be activated
+   to ensure that all luns are detected.
+   </p><p>
+
+   Called from normal process context only - cannot be called from interrupt.
+</p></div><div class="refsect1"><a name="idm4555"></a><h2>Notes</h2><p>
+   This routine assumes no locks are held on entry.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-fc-remote-port-add.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="Transport_classes.html#Fibre_Channel_transport">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-fc-remote-port-rolechg.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">fc_remote_port_add</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">fc_remote_port_rolechg</span></td></tr></table></div></body></html>

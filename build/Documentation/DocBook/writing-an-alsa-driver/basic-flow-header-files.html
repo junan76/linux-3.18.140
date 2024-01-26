@@ -1,0 +1,30 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Header Files</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="basic-flow.html" title="Chapter 2. Basic Flow for PCI Drivers"><link rel="prev" href="basic-flow-destructor.html" title="Destructor"><link rel="next" href="card-management.html" title="Chapter 3. Management of Cards and Components"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Header Files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="basic-flow-destructor.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Basic Flow for PCI Drivers</th><td width="20%" align="right"> <a accesskey="n" href="card-management.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="basic-flow-header-files"></a>Header Files</h2></div></div></div><p>
+        For the above example, at least the following include files
+      are necessary. 
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  #include &lt;linux/init.h&gt;
+  #include &lt;linux/pci.h&gt;
+  #include &lt;linux/slab.h&gt;
+  #include &lt;sound/core.h&gt;
+  #include &lt;sound/initval.h&gt;
+
+          </pre></div><p>
+
+	where the last one is necessary only when module options are
+      defined in the source file.  If the code is split into several
+      files, the files without module options don't need them.
+      </p><p>
+        In addition to these headers, you'll need
+      <code class="filename">&lt;linux/interrupt.h&gt;</code> for interrupt
+      handling, and <code class="filename">&lt;asm/io.h&gt;</code> for I/O
+      access. If you use the <code class="function">mdelay()</code> or
+      <code class="function">udelay()</code> functions, you'll need to include
+      <code class="filename">&lt;linux/delay.h&gt;</code> too. 
+      </p><p>
+      The ALSA interfaces like the PCM and control APIs are defined in other
+      <code class="filename">&lt;sound/xxx.h&gt;</code> header files.
+      They have to be included after
+      <code class="filename">&lt;sound/core.h&gt;</code>.
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="basic-flow-destructor.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="basic-flow.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="card-management.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Destructor </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. Management of Cards and Components</td></tr></table></div></body></html>

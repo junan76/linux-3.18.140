@@ -1,0 +1,60 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 5. Gadget Drivers</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="index.html" title="USB Gadget API for Linux"><link rel="prev" href="controllers.html" title="Chapter 4. Peripheral Controller Drivers"><link rel="next" href="otg.html" title="Chapter 6. USB On-The-GO (OTG)"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. Gadget Drivers</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="controllers.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="otg.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="gadget"></a>Chapter 5. Gadget Drivers</h1></div></div></div><p>In addition to <span class="emphasis"><em>Gadget Zero</em></span>
+(used primarily for testing and development with drivers
+for usb controller hardware), other gadget drivers exist.
+</p><p>There's an <span class="emphasis"><em>ethernet</em></span> gadget
+driver, which implements one of the most useful
+<span class="emphasis"><em>Communications Device Class</em></span> (CDC) models.  
+One of the standards for cable modem interoperability even
+specifies the use of this ethernet model as one of two
+mandatory options.
+Gadgets using this code look to a USB host as if they're
+an Ethernet adapter.
+It provides access to a network where the gadget's CPU is one host,
+which could easily be bridging, routing, or firewalling
+access to other networks.
+Since some hardware can't fully implement the CDC Ethernet
+requirements, this driver also implements a "good parts only"
+subset of CDC Ethernet.
+(That subset doesn't advertise itself as CDC Ethernet,
+to avoid creating problems.)
+</p><p>Support for Microsoft's <span class="emphasis"><em>RNDIS</em></span>
+protocol has been contributed by Pengutronix and Auerswald GmbH.
+This is like CDC Ethernet, but it runs on more slightly USB hardware
+(but less than the CDC subset).
+However, its main claim to fame is being able to connect directly to
+recent versions of Windows, using drivers that Microsoft bundles
+and supports, making it much simpler to network with Windows.
+</p><p>There is also support for user mode gadget drivers,
+using <span class="emphasis"><em>gadgetfs</em></span>.
+This provides a <span class="emphasis"><em>User Mode API</em></span> that presents
+each endpoint as a single file descriptor.  I/O is done using
+normal <span class="emphasis"><em>read()</em></span> and <span class="emphasis"><em>read()</em></span> calls.
+Familiar tools like GDB and pthreads can be used to
+develop and debug user mode drivers, so that once a robust
+controller driver is available many applications for it
+won't require new kernel mode software.
+Linux 2.6 <span class="emphasis"><em>Async I/O (AIO)</em></span>
+support is available, so that user mode software
+can stream data with only slightly more overhead
+than a kernel driver.
+</p><p>There's a USB Mass Storage class driver, which provides
+a different solution for interoperability with systems such
+as MS-Windows and MacOS.
+That <span class="emphasis"><em>Mass Storage</em></span> driver uses a
+file or block device as backing store for a drive,
+like the <code class="filename">loop</code> driver.
+The USB host uses the BBB, CB, or CBI versions of the mass
+storage class specification, using transparent SCSI commands
+to access the data from the backing store.
+</p><p>There's a "serial line" driver, useful for TTY style
+operation over USB.
+The latest version of that driver supports CDC ACM style
+operation, like a USB modem, and so on most hardware it can
+interoperate easily with MS-Windows.
+One interesting use of that driver is in boot firmware (like a BIOS),
+which can sometimes use that model with very small systems without
+real serial lines.
+</p><p>Support for other kinds of gadget is expected to
+be developed and contributed
+over time, as this driver framework evolves.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="controllers.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="otg.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. Peripheral Controller Drivers </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 6. USB On-The-GO (OTG)</td></tr></table></div></body></html>

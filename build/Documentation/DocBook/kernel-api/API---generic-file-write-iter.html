@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>__generic_file_write_iter</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-read-cache-page-gfp.html" title="read_cache_page_gfp"><link rel="next" href="API-generic-file-write-iter.html" title="generic_file_write_iter"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">__generic_file_write_iter</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-read-cache-page-gfp.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-generic-file-write-iter.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API---generic-file-write-iter"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>__generic_file_write_iter — 
+     write data to a file
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">ssize_t <b class="fsfunc">__generic_file_write_iter </b>(</code></td><td>struct kiocb * <var class="pdparam">iocb</var>, </td></tr><tr><td> </td><td>struct iov_iter * <var class="pdparam">from</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9454"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>iocb</code></em></span></dt><dd><p>
+     IO state structure (file, offset, etc.)
+    </p></dd><dt><span class="term"><em class="parameter"><code>from</code></em></span></dt><dd><p>
+     iov_iter with data to write
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9467"></a><h2>Description</h2><p>
+   This function does all the work needed for actually writing data to a
+   file. It does all basic checks, removes SUID from the file, updates
+   modification times and calls proper subroutines depending on whether we
+   do direct IO or a standard buffered write.
+   </p><p>
+
+   It expects i_mutex to be grabbed unless we work on a block device or similar
+   object which does not need locking at all.
+   </p><p>
+
+   This function does *not* take care of syncing data in case of O_SYNC write.
+   A caller has to handle it. This is mainly due to the fact that we want to
+   avoid syncing under i_mutex.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-read-cache-page-gfp.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-generic-file-write-iter.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">read_cache_page_gfp</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">generic_file_write_iter</span></td></tr></table></div></body></html>

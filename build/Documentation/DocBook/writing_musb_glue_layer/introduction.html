@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 1. Introduction</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an MUSB Glue Layer"><link rel="up" href="index.html" title="Writing an MUSB Glue Layer"><link rel="prev" href="index.html" title="Writing an MUSB Glue Layer"><link rel="next" href="linux-musb-basics.html" title="Chapter 2. Linux MUSB Basics"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. Introduction</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="linux-musb-basics.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="introduction"></a>Chapter 1. Introduction</h1></div></div></div><p>
+      The Linux MUSB subsystem is part of the larger Linux USB
+      subsystem. It provides support for embedded USB Device Controllers
+      (UDC) that do not use Universal Host Controller Interface (UHCI)
+      or Open Host Controller Interface (OHCI).
+    </p><p>
+      Instead, these embedded UDC rely on the USB On-the-Go (OTG)
+      specification which they implement at least partially. The silicon
+      reference design used in most cases is the Multipoint USB
+      Highspeed Dual-Role Controller (MUSB HDRC) found in the Mentor
+      Graphics Inventra™ design.
+    </p><p>
+      As a self-taught exercise I have written an MUSB glue layer for
+      the Ingenic JZ4740 SoC, modelled after the many MUSB glue layers
+      in the kernel source tree. This layer can be found at
+      drivers/usb/musb/jz4740.c. In this documentation I will walk
+      through the basics of the jz4740.c glue layer, explaining the
+      different pieces and what needs to be done in order to write your
+      own device glue layer.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="linux-musb-basics.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Writing an MUSB Glue Layer </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. Linux MUSB Basics</td></tr></table></div></body></html>

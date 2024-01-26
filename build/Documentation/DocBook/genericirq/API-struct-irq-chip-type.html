@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct irq_chip_type</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux generic IRQ handling"><link rel="up" href="structs.html" title="Chapter 8. Structures"><link rel="prev" href="API-struct-irq-chip-regs.html" title="struct irq_chip_regs"><link rel="next" href="API-struct-irq-chip-generic.html" title="struct irq_chip_generic"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct irq_chip_type</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-irq-chip-regs.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Structures</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-irq-chip-generic.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-irq-chip-type"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct irq_chip_type — 
+     Generic interrupt chip instance for a flow type
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct irq_chip_type {
+  struct irq_chip chip;
+  struct irq_chip_regs regs;
+  irq_flow_handler_t handler;
+  u32 type;
+  u32 mask_cache_priv;
+  u32 * mask_cache;
+};  </pre></div><div class="refsect1"><a name="idm871"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">chip</span></dt><dd><p>
+   The real interrupt chip which provides the callbacks
+      </p></dd><dt><span class="term">regs</span></dt><dd><p>
+   Register offsets for this chip
+      </p></dd><dt><span class="term">handler</span></dt><dd><p>
+   Flow handler associated with this chip
+      </p></dd><dt><span class="term">type</span></dt><dd><p>
+   Chip can handle these flow types
+      </p></dd><dt><span class="term">mask_cache_priv</span></dt><dd><p>
+   Cached mask register private to the chip type
+      </p></dd><dt><span class="term">mask_cache</span></dt><dd><p>
+   Pointer to cached mask register
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm898"></a><h2>Description</h2><p>
+   A irq_generic_chip can have several instances of irq_chip_type when
+   it requires different functions and register offsets for different
+   flow types.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-irq-chip-regs.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="structs.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-irq-chip-generic.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct irq_chip_regs</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct irq_chip_generic</span></td></tr></table></div></body></html>

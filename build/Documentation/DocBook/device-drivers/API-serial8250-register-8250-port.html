@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>serial8250_register_8250_port</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="uart16x50.html" title="Chapter 6. 16x50 UART Driver"><link rel="prev" href="API-serial8250-resume-port.html" title="serial8250_resume_port"><link rel="next" href="API-serial8250-unregister-port.html" title="serial8250_unregister_port"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">serial8250_register_8250_port</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-serial8250-resume-port.html">Prev</a> </td><th width="60%" align="center">Chapter 6. 16x50 UART Driver</th><td width="20%" align="right"> <a accesskey="n" href="API-serial8250-unregister-port.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-serial8250-register-8250-port"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>serial8250_register_8250_port — 
+     register a serial port
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">serial8250_register_8250_port </b>(</code></td><td>struct uart_8250_port * <var class="pdparam">up</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm36871"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>up</code></em></span></dt><dd><p>
+     serial port template
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm36879"></a><h2>Description</h2><p>
+   Configure the serial port specified by the request. If the
+   port exists and is in use, it is hung up and unregistered
+   first.
+   </p><p>
+
+   The port is then probed and if necessary the IRQ is autodetected
+   If this fails an error is returned.
+   </p><p>
+
+   On success the port is ready to use and the line number is returned.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-serial8250-resume-port.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="uart16x50.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-serial8250-unregister-port.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">serial8250_resume_port</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">serial8250_unregister_port</span></td></tr></table></div></body></html>

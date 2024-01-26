@@ -1,0 +1,112 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Interrupt Handler</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="pcm-interface.html" title="Chapter 5. PCM Interface"><link rel="prev" href="pcm-interface-operators.html" title="Operators"><link rel="next" href="pcm-interface-atomicity.html" title="Atomicity"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Interrupt Handler</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pcm-interface-operators.html">Prev</a> </td><th width="60%" align="center">Chapter 5. PCM Interface</th><td width="20%" align="right"> <a accesskey="n" href="pcm-interface-atomicity.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pcm-interface-interrupt-handler"></a>Interrupt Handler</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="pcm-interface-interrupt-handler.html#pcm-interface-interrupt-handler-boundary">Interrupts at the period (fragment) boundary</a></span></dt><dt><span class="section"><a href="pcm-interface-interrupt-handler.html#pcm-interface-interrupt-handler-timer">High frequency timer interrupts</a></span></dt><dt><span class="section"><a href="pcm-interface-interrupt-handler.html#pcm-interface-interrupt-handler-both">On calling <code class="function">snd_pcm_period_elapsed()</code></a></span></dt></dl></div><p>
+        The rest of pcm stuff is the PCM interrupt handler. The
+      role of PCM interrupt handler in the sound driver is to update
+      the buffer position and to tell the PCM middle layer when the
+      buffer position goes across the prescribed period size. To
+      inform this, call the <code class="function">snd_pcm_period_elapsed()</code>
+      function. 
+      </p><p>
+        There are several types of sound chips to generate the interrupts.
+      </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pcm-interface-interrupt-handler-boundary"></a>Interrupts at the period (fragment) boundary</h3></div></div></div><p>
+          This is the most frequently found type:  the hardware
+        generates an interrupt at each period boundary.
+	In this case, you can call
+        <code class="function">snd_pcm_period_elapsed()</code> at each 
+        interrupt. 
+        </p><p>
+          <code class="function">snd_pcm_period_elapsed()</code> takes the
+        substream pointer as its argument. Thus, you need to keep the
+        substream pointer accessible from the chip instance. For
+        example, define substream field in the chip record to hold the
+        current running substream pointer, and set the pointer value
+        at open callback (and reset at close callback). 
+        </p><p>
+          If you acquire a spinlock in the interrupt handler, and the
+        lock is used in other pcm callbacks, too, then you have to
+        release the lock before calling
+        <code class="function">snd_pcm_period_elapsed()</code>, because
+        <code class="function">snd_pcm_period_elapsed()</code> calls other pcm
+        callbacks inside. 
+        </p><p>
+          Typical code would be like:
+
+          </p><div class="example"><a name="idm779"></a><p class="title"><b>Example 5.3. Interrupt Handler Case #1</b></p><div class="example-contents"><pre class="programlisting">
+
+  static irqreturn_t snd_mychip_interrupt(int irq, void *dev_id)
+  {
+          struct mychip *chip = dev_id;
+          spin_lock(&amp;chip-&gt;lock);
+          ....
+          if (pcm_irq_invoked(chip)) {
+                  /* call updater, unlock before it */
+                  spin_unlock(&amp;chip-&gt;lock);
+                  snd_pcm_period_elapsed(chip-&gt;substream);
+                  spin_lock(&amp;chip-&gt;lock);
+                  /* acknowledge the interrupt if necessary */
+          }
+          ....
+          spin_unlock(&amp;chip-&gt;lock);
+          return IRQ_HANDLED;
+  }
+
+            </pre></div></div><p><br class="example-break">
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pcm-interface-interrupt-handler-timer"></a>High frequency timer interrupts</h3></div></div></div><p>
+	This happens when the hardware doesn't generate interrupts
+        at the period boundary but issues timer interrupts at a fixed
+        timer rate (e.g. es1968 or ymfpci drivers). 
+        In this case, you need to check the current hardware
+        position and accumulate the processed sample length at each
+        interrupt.  When the accumulated size exceeds the period
+        size, call 
+        <code class="function">snd_pcm_period_elapsed()</code> and reset the
+        accumulator. 
+        </p><p>
+          Typical code would be like the following.
+
+          </p><div class="example"><a name="idm787"></a><p class="title"><b>Example 5.4. Interrupt Handler Case #2</b></p><div class="example-contents"><pre class="programlisting">
+
+  static irqreturn_t snd_mychip_interrupt(int irq, void *dev_id)
+  {
+          struct mychip *chip = dev_id;
+          spin_lock(&amp;chip-&gt;lock);
+          ....
+          if (pcm_irq_invoked(chip)) {
+                  unsigned int last_ptr, size;
+                  /* get the current hardware pointer (in frames) */
+                  last_ptr = get_hw_ptr(chip);
+                  /* calculate the processed frames since the
+                   * last update
+                   */
+                  if (last_ptr &lt; chip-&gt;last_ptr)
+                          size = runtime-&gt;buffer_size + last_ptr 
+                                   - chip-&gt;last_ptr; 
+                  else
+                          size = last_ptr - chip-&gt;last_ptr;
+                  /* remember the last updated point */
+                  chip-&gt;last_ptr = last_ptr;
+                  /* accumulate the size */
+                  chip-&gt;size += size;
+                  /* over the period boundary? */
+                  if (chip-&gt;size &gt;= runtime-&gt;period_size) {
+                          /* reset the accumulator */
+                          chip-&gt;size %= runtime-&gt;period_size;
+                          /* call updater */
+                          spin_unlock(&amp;chip-&gt;lock);
+                          snd_pcm_period_elapsed(substream);
+                          spin_lock(&amp;chip-&gt;lock);
+                  }
+                  /* acknowledge the interrupt if necessary */
+          }
+          ....
+          spin_unlock(&amp;chip-&gt;lock);
+          return IRQ_HANDLED;
+  }
+
+            </pre></div></div><p><br class="example-break">
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pcm-interface-interrupt-handler-both"></a>On calling <code class="function">snd_pcm_period_elapsed()</code></h3></div></div></div><p>
+          In both cases, even if more than one period are elapsed, you
+        don't have to call
+        <code class="function">snd_pcm_period_elapsed()</code> many times. Call
+        only once. And the pcm layer will check the current hardware
+        pointer and update to the latest status. 
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pcm-interface-operators.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pcm-interface.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="pcm-interface-atomicity.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Operators </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Atomicity</td></tr></table></div></body></html>

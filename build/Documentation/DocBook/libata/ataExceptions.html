@@ -1,0 +1,223 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 7. ATA errors and exceptions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="index.html" title="libATA Developer's Guide"><link rel="prev" href="API-ata-scsi-dev-rescan.html" title="ata_scsi_dev_rescan"><link rel="next" href="exrec.html" title="EH recovery actions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 7. ATA errors and exceptions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-ata-scsi-dev-rescan.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="exrec.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="ataExceptions"></a>Chapter 7. ATA errors and exceptions</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="ataExceptions.html#excat">Exception categories</a></span></dt><dd><dl><dt><span class="sect2"><a href="ataExceptions.html#excatHSMviolation">HSM violation</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatDevErr">ATA/ATAPI device error (non-NCQ / non-CHECK CONDITION)</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatATAPIcc">ATAPI device CHECK CONDITION</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatNCQerr">ATA device error (NCQ)</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatATAbusErr">ATA bus error</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatPCIbusErr">PCI bus error</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatLateCompletion">Late completion</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatUnknown">Unknown error (timeout)</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatHoplugPM">Hotplug and power management exceptions</a></span></dt></dl></dd><dt><span class="sect1"><a href="exrec.html">EH recovery actions</a></span></dt><dd><dl><dt><span class="sect2"><a href="exrec.html#exrecClr">Clearing error condition</a></span></dt><dt><span class="sect2"><a href="exrec.html#exrecRst">Reset</a></span></dt><dt><span class="sect2"><a href="exrec.html#exrecReconf">Reconfigure transport</a></span></dt></dl></dd></dl></div><p>
+  This chapter tries to identify what error/exception conditions exist
+  for ATA/ATAPI devices and describe how they should be handled in
+  implementation-neutral way.
+  </p><p>
+  The term 'error' is used to describe conditions where either an
+  explicit error condition is reported from device or a command has
+  timed out.
+  </p><p>
+  The term 'exception' is either used to describe exceptional
+  conditions which are not errors (say, power or hotplug events), or
+  to describe both errors and non-error exceptional conditions.  Where
+  explicit distinction between error and exception is necessary, the
+  term 'non-error exception' is used.
+  </p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="excat"></a>Exception categories</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="ataExceptions.html#excatHSMviolation">HSM violation</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatDevErr">ATA/ATAPI device error (non-NCQ / non-CHECK CONDITION)</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatATAPIcc">ATAPI device CHECK CONDITION</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatNCQerr">ATA device error (NCQ)</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatATAbusErr">ATA bus error</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatPCIbusErr">PCI bus error</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatLateCompletion">Late completion</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatUnknown">Unknown error (timeout)</a></span></dt><dt><span class="sect2"><a href="ataExceptions.html#excatHoplugPM">Hotplug and power management exceptions</a></span></dt></dl></div><p>
+     Exceptions are described primarily with respect to legacy
+     taskfile + bus master IDE interface.  If a controller provides
+     other better mechanism for error reporting, mapping those into
+     categories described below shouldn't be difficult.
+     </p><p>
+     In the following sections, two recovery actions - reset and
+     reconfiguring transport - are mentioned.  These are described
+     further in <a class="xref" href="exrec.html" title="EH recovery actions">the section called “EH recovery actions”</a>.
+     </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="excatHSMviolation"></a>HSM violation</h3></div></div></div><p>
+        This error is indicated when STATUS value doesn't match HSM
+        requirement during issuing or execution any ATA/ATAPI command.
+        </p><div class="itemizedlist"><p class="title"><b>Examples</b></p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	ATA_STATUS doesn't contain !BSY &amp;&amp; DRDY &amp;&amp; !DRQ while trying
+	to issue a command.
+        </p></li><li class="listitem"><p>
+	!BSY &amp;&amp; !DRQ during PIO data transfer.
+        </p></li><li class="listitem"><p>
+	DRQ on command completion.
+        </p></li><li class="listitem"><p>
+	!BSY &amp;&amp; ERR after CDB transfer starts but before the
+        last byte of CDB is transferred.  ATA/ATAPI standard states
+        that "The device shall not terminate the PACKET command
+        with an error before the last byte of the command packet has
+        been written" in the error outputs description of PACKET
+        command and the state diagram doesn't include such
+        transitions.
+	</p></li></ul></div><p>
+	In these cases, HSM is violated and not much information
+	regarding the error can be acquired from STATUS or ERROR
+	register.  IOW, this error can be anything - driver bug,
+	faulty device, controller and/or cable.
+	</p><p>
+	As HSM is violated, reset is necessary to restore known state.
+	Reconfiguring transport for lower speed might be helpful too
+	as transmission errors sometimes cause this kind of errors.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="excatDevErr"></a>ATA/ATAPI device error (non-NCQ / non-CHECK CONDITION)</h3></div></div></div><p>
+	These are errors detected and reported by ATA/ATAPI devices
+	indicating device problems.  For this type of errors, STATUS
+	and ERROR register values are valid and describe error
+	condition.  Note that some of ATA bus errors are detected by
+	ATA/ATAPI devices and reported using the same mechanism as
+	device errors.  Those cases are described later in this
+	section.
+	</p><p>
+	For ATA commands, this type of errors are indicated by !BSY
+	&amp;&amp; ERR during command execution and on completion.
+	</p><p>For ATAPI commands,</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	!BSY &amp;&amp; ERR &amp;&amp; ABRT right after issuing PACKET
+	indicates that PACKET command is not supported and falls in
+	this category.
+	</p></li><li class="listitem"><p>
+	!BSY &amp;&amp; ERR(==CHK) &amp;&amp; !ABRT after the last
+	byte of CDB is transferred indicates CHECK CONDITION and
+	doesn't fall in this category.
+	</p></li><li class="listitem"><p>
+	!BSY &amp;&amp; ERR(==CHK) &amp;&amp; ABRT after the last byte
+        of CDB is transferred *probably* indicates CHECK CONDITION and
+        doesn't fall in this category.
+	</p></li></ul></div><p>
+	Of errors detected as above, the followings are not ATA/ATAPI
+	device errors but ATA bus errors and should be handled
+	according to <a class="xref" href="ataExceptions.html#excatATAbusErr" title="ATA bus error">the section called “ATA bus error”</a>.
+	</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">CRC error during data transfer</span></dt><dd><p>
+	   This is indicated by ICRC bit in the ERROR register and
+	   means that corruption occurred during data transfer.  Up to
+	   ATA/ATAPI-7, the standard specifies that this bit is only
+	   applicable to UDMA transfers but ATA/ATAPI-8 draft revision
+	   1f says that the bit may be applicable to multiword DMA and
+	   PIO.
+	   </p></dd><dt><span class="term">ABRT error during data transfer or on completion</span></dt><dd><p>
+	   Up to ATA/ATAPI-7, the standard specifies that ABRT could be
+	   set on ICRC errors and on cases where a device is not able
+	   to complete a command.  Combined with the fact that MWDMA
+	   and PIO transfer errors aren't allowed to use ICRC bit up to
+	   ATA/ATAPI-7, it seems to imply that ABRT bit alone could
+	   indicate transfer errors.
+	   </p><p>
+	   However, ATA/ATAPI-8 draft revision 1f removes the part
+	   that ICRC errors can turn on ABRT.  So, this is kind of
+	   gray area.  Some heuristics are needed here.
+	   </p></dd></dl></div><p>
+	ATA/ATAPI device errors can be further categorized as follows.
+	</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Media errors</span></dt><dd><p>
+	   This is indicated by UNC bit in the ERROR register.  ATA
+	   devices reports UNC error only after certain number of
+	   retries cannot recover the data, so there's nothing much
+	   else to do other than notifying upper layer.
+	   </p><p>
+	   READ and WRITE commands report CHS or LBA of the first
+	   failed sector but ATA/ATAPI standard specifies that the
+	   amount of transferred data on error completion is
+	   indeterminate, so we cannot assume that sectors preceding
+	   the failed sector have been transferred and thus cannot
+	   complete those sectors successfully as SCSI does.
+	   </p></dd><dt><span class="term">Media changed / media change requested error</span></dt><dd><p>
+	   &lt;&lt;TODO: fill here&gt;&gt;
+	   </p></dd><dt><span class="term">Address error</span></dt><dd><p>
+	   This is indicated by IDNF bit in the ERROR register.
+	   Report to upper layer.
+	   </p></dd><dt><span class="term">Other errors</span></dt><dd><p>
+	   This can be invalid command or parameter indicated by ABRT
+	   ERROR bit or some other error condition.  Note that ABRT
+	   bit can indicate a lot of things including ICRC and Address
+	   errors.  Heuristics needed.
+	   </p></dd></dl></div><p>
+	Depending on commands, not all STATUS/ERROR bits are
+	applicable.  These non-applicable bits are marked with
+	"na" in the output descriptions but up to ATA/ATAPI-7
+	no definition of "na" can be found.  However,
+	ATA/ATAPI-8 draft revision 1f describes "N/A" as
+	follows.
+	</p><div class="blockquote"><blockquote class="blockquote"><div class="variablelist"><dl class="variablelist"><dt><span class="term">3.2.3.3a N/A</span></dt><dd><p>
+	   A keyword the indicates a field has no defined value in
+	   this standard and should not be checked by the host or
+	   device. N/A fields should be cleared to zero.
+	   </p></dd></dl></div></blockquote></div><p>
+	So, it seems reasonable to assume that "na" bits are
+	cleared to zero by devices and thus need no explicit masking.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="excatATAPIcc"></a>ATAPI device CHECK CONDITION</h3></div></div></div><p>
+	ATAPI device CHECK CONDITION error is indicated by set CHK bit
+	(ERR bit) in the STATUS register after the last byte of CDB is
+	transferred for a PACKET command.  For this kind of errors,
+	sense data should be acquired to gather information regarding
+	the errors.  REQUEST SENSE packet command should be used to
+	acquire sense data.
+	</p><p>
+	Once sense data is acquired, this type of errors can be
+	handled similarly to other SCSI errors.  Note that sense data
+	may indicate ATA bus error (e.g. Sense Key 04h HARDWARE ERROR
+	&amp;&amp; ASC/ASCQ 47h/00h SCSI PARITY ERROR).  In such
+	cases, the error should be considered as an ATA bus error and
+	handled according to <a class="xref" href="ataExceptions.html#excatATAbusErr" title="ATA bus error">the section called “ATA bus error”</a>.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="excatNCQerr"></a>ATA device error (NCQ)</h3></div></div></div><p>
+	NCQ command error is indicated by cleared BSY and set ERR bit
+	during NCQ command phase (one or more NCQ commands
+	outstanding).  Although STATUS and ERROR registers will
+	contain valid values describing the error, READ LOG EXT is
+	required to clear the error condition, determine which command
+	has failed and acquire more information.
+	</p><p>
+	READ LOG EXT Log Page 10h reports which tag has failed and
+	taskfile register values describing the error.  With this
+	information the failed command can be handled as a normal ATA
+	command error as in <a class="xref" href="ataExceptions.html#excatDevErr" title="ATA/ATAPI device error (non-NCQ / non-CHECK CONDITION)">the section called “ATA/ATAPI device error (non-NCQ / non-CHECK CONDITION)”</a> and all
+	other in-flight commands must be retried.  Note that this
+	retry should not be counted - it's likely that commands
+	retried this way would have completed normally if it were not
+	for the failed command.
+	</p><p>
+	Note that ATA bus errors can be reported as ATA device NCQ
+	errors.  This should be handled as described in <a class="xref" href="ataExceptions.html#excatATAbusErr" title="ATA bus error">the section called “ATA bus error”</a>.
+	</p><p>
+	If READ LOG EXT Log Page 10h fails or reports NQ, we're
+	thoroughly screwed.  This condition should be treated
+	according to <a class="xref" href="ataExceptions.html#excatHSMviolation" title="HSM violation">the section called “HSM violation”</a>.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="excatATAbusErr"></a>ATA bus error</h3></div></div></div><p>
+	ATA bus error means that data corruption occurred during
+	transmission over ATA bus (SATA or PATA).  This type of errors
+	can be indicated by
+	</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	ICRC or ABRT error as described in <a class="xref" href="ataExceptions.html#excatDevErr" title="ATA/ATAPI device error (non-NCQ / non-CHECK CONDITION)">the section called “ATA/ATAPI device error (non-NCQ / non-CHECK CONDITION)”</a>.
+	</p></li><li class="listitem"><p>
+	Controller-specific error completion with error information
+	indicating transmission error.
+	</p></li><li class="listitem"><p>
+	On some controllers, command timeout.  In this case, there may
+	be a mechanism to determine that the timeout is due to
+	transmission error.
+	</p></li><li class="listitem"><p>
+	Unknown/random errors, timeouts and all sorts of weirdities.
+	</p></li></ul></div><p>
+	As described above, transmission errors can cause wide variety
+	of symptoms ranging from device ICRC error to random device
+	lockup, and, for many cases, there is no way to tell if an
+	error condition is due to transmission error or not;
+	therefore, it's necessary to employ some kind of heuristic
+	when dealing with errors and timeouts.  For example,
+	encountering repetitive ABRT errors for known supported
+	command is likely to indicate ATA bus error.
+	</p><p>
+	Once it's determined that ATA bus errors have possibly
+	occurred, lowering ATA bus transmission speed is one of
+	actions which may alleviate the problem.  See <a class="xref" href="exrec.html#exrecReconf" title="Reconfigure transport">the section called “Reconfigure transport”</a> for more information.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="excatPCIbusErr"></a>PCI bus error</h3></div></div></div><p>
+	Data corruption or other failures during transmission over PCI
+	(or other system bus).  For standard BMDMA, this is indicated
+	by Error bit in the BMDMA Status register.  This type of
+	errors must be logged as it indicates something is very wrong
+	with the system.  Resetting host controller is recommended.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="excatLateCompletion"></a>Late completion</h3></div></div></div><p>
+	This occurs when timeout occurs and the timeout handler finds
+	out that the timed out command has completed successfully or
+	with error.  This is usually caused by lost interrupts.  This
+	type of errors must be logged.  Resetting host controller is
+	recommended.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="excatUnknown"></a>Unknown error (timeout)</h3></div></div></div><p>
+	This is when timeout occurs and the command is still
+	processing or the host and device are in unknown state.  When
+	this occurs, HSM could be in any valid or invalid state.  To
+	bring the device to known state and make it forget about the
+	timed out command, resetting is necessary.  The timed out
+	command may be retried.
+	</p><p>
+	Timeouts can also be caused by transmission errors.  Refer to
+	<a class="xref" href="ataExceptions.html#excatATAbusErr" title="ATA bus error">the section called “ATA bus error”</a> for more details.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="excatHoplugPM"></a>Hotplug and power management exceptions</h3></div></div></div><p>
+	&lt;&lt;TODO: fill here&gt;&gt;
+	</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-ata-scsi-dev-rescan.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="exrec.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">ata_scsi_dev_rescan</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> EH recovery actions</td></tr></table></div></body></html>

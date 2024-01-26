@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>enum sock_type</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="netcore.html#idm12" title="Networking Base Types"><link rel="prev" href="netcore.html" title="Chapter 1. Linux Networking"><link rel="next" href="API-struct-socket.html" title="struct socket"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">enum sock_type</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="netcore.html">Prev</a> </td><th width="60%" align="center">Networking Base Types</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-socket.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-enum-sock-type"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>enum sock_type — 
+  Socket types
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+enum sock_type {
+  SOCK_STREAM,
+  SOCK_DGRAM,
+  SOCK_RAW,
+  SOCK_RDM,
+  SOCK_SEQPACKET,
+  SOCK_DCCP,
+  SOCK_PACKET
+};  </pre></div><div class="refsect1"><a name="idm30"></a><h2>Constants</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">SOCK_STREAM</span></dt><dd><p>
+stream (connection) socket
+      </p></dd><dt><span class="term">SOCK_DGRAM</span></dt><dd><p>
+datagram (conn.less) socket
+      </p></dd><dt><span class="term">SOCK_RAW</span></dt><dd><p>
+raw socket
+      </p></dd><dt><span class="term">SOCK_RDM</span></dt><dd><p>
+reliably-delivered message
+      </p></dd><dt><span class="term">SOCK_SEQPACKET</span></dt><dd><p>
+sequential packet socket
+      </p></dd><dt><span class="term">SOCK_DCCP</span></dt><dd><p>
+Datagram Congestion Control Protocol socket
+      </p></dd><dt><span class="term">SOCK_PACKET</span></dt><dd><p>
+linux specific way of getting packets at the dev level.
+For writing rarp and other similar things on the user level.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm61"></a><h2>Description</h2><p>
+   When adding some new socket type please
+   grep ARCH_HAS_SOCKET_TYPE include/asm-* /socket.h, at least MIPS
+   overrides this enum for binary compat reasons.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="netcore.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="netcore.html#idm12">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-socket.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Linux Networking </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct socket</span></td></tr></table></div></body></html>

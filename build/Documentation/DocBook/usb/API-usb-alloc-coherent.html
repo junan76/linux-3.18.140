@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_alloc_coherent</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbcore.html" title="Chapter 5. USB Core APIs"><link rel="prev" href="API-usb-get-current-frame-number.html" title="usb_get_current_frame_number"><link rel="next" href="API-usb-free-coherent.html" title="usb_free_coherent"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_alloc_coherent</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-get-current-frame-number.html">Prev</a> </td><th width="60%" align="center">Chapter 5. USB Core APIs</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-free-coherent.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-alloc-coherent"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_alloc_coherent — 
+     allocate dma-consistent buffer for URB_NO_xxx_DMA_MAP
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void * <b class="fsfunc">usb_alloc_coherent </b>(</code></td><td>struct usb_device * <var class="pdparam">dev</var>, </td></tr><tr><td> </td><td>size_t <var class="pdparam">size</var>, </td></tr><tr><td> </td><td>gfp_t <var class="pdparam">mem_flags</var>, </td></tr><tr><td> </td><td>dma_addr_t * <var class="pdparam">dma</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4835"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     device the buffer will be used with
+    </p></dd><dt><span class="term"><em class="parameter"><code>size</code></em></span></dt><dd><p>
+     requested buffer size
+    </p></dd><dt><span class="term"><em class="parameter"><code>mem_flags</code></em></span></dt><dd><p>
+     affect whether allocation may block
+    </p></dd><dt><span class="term"><em class="parameter"><code>dma</code></em></span></dt><dd><p>
+     used to return DMA address of buffer
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4858"></a><h2>Return</h2><p>
+   Either null (indicating no buffer could be allocated), or the
+   cpu-space pointer to a buffer that may be used to perform DMA to the
+   specified device.  Such cpu-space buffers are returned along with the DMA
+   address (through the pointer provided).
+</p></div><div class="refsect1"><a name="idm4861"></a><h2>Note</h2><p>
+   These buffers are used with URB_NO_xxx_DMA_MAP set in urb-&gt;transfer_flags
+   to avoid behaviors like using <span class="quote">“<span class="quote">DMA bounce buffers</span>”</span>, or thrashing IOMMU
+   hardware during URB completion/resubmit.  The implementation varies between
+   platforms, depending on details of how DMA will work to this device.
+   Using these buffers also eliminates cacheline sharing problems on
+   architectures where CPU caches are not DMA-coherent.  On systems without
+   bus-snooping caches, these buffers are uncached.
+   </p><p>
+
+   When the buffer is no longer used, free it with <code class="function">usb_free_coherent</code>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-get-current-frame-number.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-free-coherent.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_get_current_frame_number</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_free_coherent</span></td></tr></table></div></body></html>

@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_add_function</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="composite.html" title="Composite Device Framework"><link rel="prev" href="API-config-ep-by-speed.html" title="config_ep_by_speed"><link rel="next" href="API-usb-function-deactivate.html" title="usb_function_deactivate"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_add_function</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-config-ep-by-speed.html">Prev</a> </td><th width="60%" align="center">Composite Device Framework</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-function-deactivate.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-add-function"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_add_function — 
+     add a function to a configuration
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">usb_add_function </b>(</code></td><td>struct usb_configuration * <var class="pdparam">config</var>, </td></tr><tr><td> </td><td>struct usb_function * <var class="pdparam">function</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2447"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>config</code></em></span></dt><dd><p>
+     the configuration
+    </p></dd><dt><span class="term"><em class="parameter"><code>function</code></em></span></dt><dd><p>
+     the function being added
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2460"></a><h2>Context</h2><p>
+   single threaded during gadget setup
+</p></div><div class="refsect1"><a name="idm2463"></a><h2>Description</h2><p>
+   After initialization, each configuration must have one or more
+   functions added to it.  Adding a function involves calling its @<code class="function">bind</code>
+   method to allocate resources such as interface and string identifiers
+   and endpoints.
+   </p><p>
+
+   This function returns the value of the function's <code class="function">bind</code>, which is
+   zero for success else a negative errno value.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-config-ep-by-speed.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="composite.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-function-deactivate.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">config_ep_by_speed</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_function_deactivate</span></td></tr></table></div></body></html>

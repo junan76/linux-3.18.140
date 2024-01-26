@@ -1,0 +1,33 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_buffer_map_sg</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbcore.html" title="Chapter 5. USB Core APIs"><link rel="prev" href="API-usb-buffer-unmap.html" title="usb_buffer_unmap"><link rel="next" href="API-usb-buffer-dmasync-sg.html" title="usb_buffer_dmasync_sg"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_buffer_map_sg</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-buffer-unmap.html">Prev</a> </td><th width="60%" align="center">Chapter 5. USB Core APIs</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-buffer-dmasync-sg.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-buffer-map-sg"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_buffer_map_sg — 
+     create scatterlist DMA mapping(s) for an endpoint
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">usb_buffer_map_sg </b>(</code></td><td>const struct usb_device * <var class="pdparam">dev</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">is_in</var>, </td></tr><tr><td> </td><td>struct scatterlist * <var class="pdparam">sg</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">nents</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm5052"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     device to which the scatterlist will be mapped
+    </p></dd><dt><span class="term"><em class="parameter"><code>is_in</code></em></span></dt><dd><p>
+     mapping transfer direction
+    </p></dd><dt><span class="term"><em class="parameter"><code>sg</code></em></span></dt><dd><p>
+     the scatterlist to map
+    </p></dd><dt><span class="term"><em class="parameter"><code>nents</code></em></span></dt><dd><p>
+     the number of entries in the scatterlist
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm5075"></a><h2>Return</h2><p>
+   Either &lt; 0 (indicating no buffers could be mapped), or the
+   number of DMA mapping array entries in the scatterlist.
+</p></div><div class="refsect1"><a name="idm5078"></a><h2>Note</h2><p>
+   The caller is responsible for placing the resulting DMA addresses from
+   the scatterlist into URB transfer buffer pointers, and for setting the
+   URB_NO_TRANSFER_DMA_MAP transfer flag in each of those URBs.
+   </p><p>
+
+   Top I/O rates come from queuing URBs, instead of waiting for each one
+   to complete before starting the next I/O.   This is particularly easy
+   to do with scatterlists.  Just allocate and submit one URB for each DMA
+   mapping entry returned, stopping on the first error or when all succeed.
+   Better yet, use the usb_sg_*() calls, which do that (and more) for you.
+   </p><p>
+
+   This call would normally be used when translating scatterlist requests,
+   rather than <code class="function">usb_buffer_map</code>, since on some hardware (with IOMMUs) it
+   may be able to coalesce mappings for improved I/O efficiency.
+   </p><p>
+
+   Reverse the effect of this call with <code class="function">usb_buffer_unmap_sg</code>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-buffer-unmap.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-buffer-dmasync-sg.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_buffer_unmap</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_buffer_dmasync_sg</span></td></tr></table></div></body></html>

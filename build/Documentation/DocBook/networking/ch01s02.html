@@ -1,0 +1,323 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Socket Buffer Functions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="netcore.html" title="Chapter 1. Linux Networking"><link rel="prev" href="API-struct-socket.html" title="struct socket"><link rel="next" href="API-struct-skb-shared-hwtstamps.html" title="struct skb_shared_hwtstamps"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Socket Buffer Functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-socket.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Linux Networking</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-skb-shared-hwtstamps.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm114"></a>Socket Buffer Functions</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-skb-shared-hwtstamps.html"><span class="phrase">struct skb_shared_hwtstamps</span></a></span><span class="refpurpose"> — 
+  hardware time stamps
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-skb-mstamp.html"><span class="phrase">struct skb_mstamp</span></a></span><span class="refpurpose"> — 
+     multi resolution time stamps
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-mstamp-get.html"><span class="phrase">skb_mstamp_get</span></a></span><span class="refpurpose"> — 
+     get current timestamp
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-mstamp-us-delta.html"><span class="phrase">skb_mstamp_us_delta</span></a></span><span class="refpurpose"> — 
+     compute the difference in usec between two skb_mstamp
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-sk-buff.html"><span class="phrase">struct sk_buff</span></a></span><span class="refpurpose"> — 
+     socket buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-dst.html"><span class="phrase">skb_dst</span></a></span><span class="refpurpose"> — 
+     returns skb dst_entry
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-dst-set.html"><span class="phrase">skb_dst_set</span></a></span><span class="refpurpose"> — 
+     sets skb dst
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-dst-set-noref.html"><span class="phrase">skb_dst_set_noref</span></a></span><span class="refpurpose"> — 
+     sets skb dst, hopefully, without taking reference
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-dst-set-noref-force.html"><span class="phrase">skb_dst_set_noref_force</span></a></span><span class="refpurpose"> — 
+     sets skb dst, without taking reference
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-dst-is-noref.html"><span class="phrase">skb_dst_is_noref</span></a></span><span class="refpurpose"> — 
+     Test if skb dst isn't refcounted
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-fclone-busy.html"><span class="phrase">skb_fclone_busy</span></a></span><span class="refpurpose"> — 
+     check if fclone is busy
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-empty.html"><span class="phrase">skb_queue_empty</span></a></span><span class="refpurpose"> — 
+     check if a queue is empty
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-is-last.html"><span class="phrase">skb_queue_is_last</span></a></span><span class="refpurpose"> — 
+     check if skb is the last entry in the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-is-first.html"><span class="phrase">skb_queue_is_first</span></a></span><span class="refpurpose"> — 
+     check if skb is the first entry in the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-next.html"><span class="phrase">skb_queue_next</span></a></span><span class="refpurpose"> — 
+     return the next packet in the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-prev.html"><span class="phrase">skb_queue_prev</span></a></span><span class="refpurpose"> — 
+     return the prev packet in the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-get.html"><span class="phrase">skb_get</span></a></span><span class="refpurpose"> — 
+     reference buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-cloned.html"><span class="phrase">skb_cloned</span></a></span><span class="refpurpose"> — 
+     is the buffer a clone
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-header-cloned.html"><span class="phrase">skb_header_cloned</span></a></span><span class="refpurpose"> — 
+     is the header a clone
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-header-release.html"><span class="phrase">skb_header_release</span></a></span><span class="refpurpose"> — 
+     release reference to header
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-header-release.html"><span class="phrase">__skb_header_release</span></a></span><span class="refpurpose"> — 
+     release reference to header
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-shared.html"><span class="phrase">skb_shared</span></a></span><span class="refpurpose"> — 
+     is the buffer shared
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-share-check.html"><span class="phrase">skb_share_check</span></a></span><span class="refpurpose"> — 
+     check if buffer is shared and if so clone it
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-unshare.html"><span class="phrase">skb_unshare</span></a></span><span class="refpurpose"> — 
+     make a copy of a shared buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-peek.html"><span class="phrase">skb_peek</span></a></span><span class="refpurpose"> — 
+     peek at the head of an <span class="structname">sk_buff_head</span>
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-peek-next.html"><span class="phrase">skb_peek_next</span></a></span><span class="refpurpose"> — 
+     peek skb following the given one from a queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-peek-tail.html"><span class="phrase">skb_peek_tail</span></a></span><span class="refpurpose"> — 
+     peek at the tail of an <span class="structname">sk_buff_head</span>
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-len.html"><span class="phrase">skb_queue_len</span></a></span><span class="refpurpose"> — 
+     get queue length
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-queue-head-init.html"><span class="phrase">__skb_queue_head_init</span></a></span><span class="refpurpose"> — 
+     initialize non-spinlock portions of sk_buff_head
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-splice.html"><span class="phrase">skb_queue_splice</span></a></span><span class="refpurpose"> — 
+     join two skb lists, this is designed for stacks
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-splice-init.html"><span class="phrase">skb_queue_splice_init</span></a></span><span class="refpurpose"> — 
+     join two skb lists and reinitialise the emptied list
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-splice-tail.html"><span class="phrase">skb_queue_splice_tail</span></a></span><span class="refpurpose"> — 
+     join two skb lists, each list being a queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-splice-tail-init.html"><span class="phrase">skb_queue_splice_tail_init</span></a></span><span class="refpurpose"> — 
+     join two skb lists and reinitialise the emptied list
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-queue-after.html"><span class="phrase">__skb_queue_after</span></a></span><span class="refpurpose"> — 
+     queue a buffer at the list head
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-fill-page-desc.html"><span class="phrase">__skb_fill_page_desc</span></a></span><span class="refpurpose"> — 
+     initialise a paged fragment in an skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-fill-page-desc.html"><span class="phrase">skb_fill_page_desc</span></a></span><span class="refpurpose"> — 
+     initialise a paged fragment in an skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-headroom.html"><span class="phrase">skb_headroom</span></a></span><span class="refpurpose"> — 
+     bytes at buffer head
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-tailroom.html"><span class="phrase">skb_tailroom</span></a></span><span class="refpurpose"> — 
+     bytes at buffer end
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-availroom.html"><span class="phrase">skb_availroom</span></a></span><span class="refpurpose"> — 
+     bytes at buffer end
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-reserve.html"><span class="phrase">skb_reserve</span></a></span><span class="refpurpose"> — 
+     adjust headroom
+ </span></dt><dt><span class="refentrytitle"><a href="API-pskb-trim-unique.html"><span class="phrase">pskb_trim_unique</span></a></span><span class="refpurpose"> — 
+     remove end from a paged unique (not cloned) buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-orphan.html"><span class="phrase">skb_orphan</span></a></span><span class="refpurpose"> — 
+     orphan a buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-orphan-frags.html"><span class="phrase">skb_orphan_frags</span></a></span><span class="refpurpose"> — 
+     orphan the frags contained in a buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-netdev-alloc-skb.html"><span class="phrase">netdev_alloc_skb</span></a></span><span class="refpurpose"> — 
+     allocate an skbuff for rx on a specific device
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-alloc-pages.html"><span class="phrase">__skb_alloc_pages</span></a></span><span class="refpurpose"> — 
+     allocate pages for ps-rx on a skb and preserve pfmemalloc data
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-alloc-page.html"><span class="phrase">__skb_alloc_page</span></a></span><span class="refpurpose"> — 
+     allocate a page for ps-rx for a given skb and preserve pfmemalloc data
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-propagate-pfmemalloc.html"><span class="phrase">skb_propagate_pfmemalloc</span></a></span><span class="refpurpose"> — 
+     Propagate pfmemalloc if skb is allocated after RX page
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-frag-page.html"><span class="phrase">skb_frag_page</span></a></span><span class="refpurpose"> — 
+     retrieve the page referred to by a paged fragment
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-frag-ref.html"><span class="phrase">__skb_frag_ref</span></a></span><span class="refpurpose"> — 
+     take an addition reference on a paged fragment.
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-frag-ref.html"><span class="phrase">skb_frag_ref</span></a></span><span class="refpurpose"> — 
+     take an addition reference on a paged fragment of an skb.
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-frag-unref.html"><span class="phrase">__skb_frag_unref</span></a></span><span class="refpurpose"> — 
+     release a reference on a paged fragment.
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-frag-unref.html"><span class="phrase">skb_frag_unref</span></a></span><span class="refpurpose"> — 
+     release a reference on a paged fragment of an skb.
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-frag-address.html"><span class="phrase">skb_frag_address</span></a></span><span class="refpurpose"> — 
+     gets the address of the data contained in a paged fragment
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-frag-address-safe.html"><span class="phrase">skb_frag_address_safe</span></a></span><span class="refpurpose"> — 
+     gets the address of the data contained in a paged fragment
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-frag-set-page.html"><span class="phrase">__skb_frag_set_page</span></a></span><span class="refpurpose"> — 
+     sets the page contained in a paged fragment
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-frag-set-page.html"><span class="phrase">skb_frag_set_page</span></a></span><span class="refpurpose"> — 
+     sets the page contained in a paged fragment of an skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-frag-dma-map.html"><span class="phrase">skb_frag_dma_map</span></a></span><span class="refpurpose"> — 
+     maps a paged fragment via the DMA API
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-clone-writable.html"><span class="phrase">skb_clone_writable</span></a></span><span class="refpurpose"> — 
+     is the header of a clone writable
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-cow.html"><span class="phrase">skb_cow</span></a></span><span class="refpurpose"> — 
+     copy header of skb when it is required
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-cow-head.html"><span class="phrase">skb_cow_head</span></a></span><span class="refpurpose"> — 
+     skb_cow but only making the head writable
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-padto.html"><span class="phrase">skb_padto</span></a></span><span class="refpurpose"> — 
+     pad an skbuff up to a minimal size
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-linearize.html"><span class="phrase">skb_linearize</span></a></span><span class="refpurpose"> — 
+     convert paged skb to linear one
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-has-shared-frag.html"><span class="phrase">skb_has_shared_frag</span></a></span><span class="refpurpose"> — 
+     can any frag be overwritten
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-linearize-cow.html"><span class="phrase">skb_linearize_cow</span></a></span><span class="refpurpose"> — 
+     make sure skb is linear and writable
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-postpull-rcsum.html"><span class="phrase">skb_postpull_rcsum</span></a></span><span class="refpurpose"> — 
+     update checksum for received skb after pull
+ </span></dt><dt><span class="refentrytitle"><a href="API-pskb-trim-rcsum.html"><span class="phrase">pskb_trim_rcsum</span></a></span><span class="refpurpose"> — 
+     trim received skb and update checksum
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-needs-linearize.html"><span class="phrase">skb_needs_linearize</span></a></span><span class="refpurpose"> — 
+     check if we need to linearize a given skb depending on the given device features.
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-get-timestamp.html"><span class="phrase">skb_get_timestamp</span></a></span><span class="refpurpose"> — 
+     get timestamp from a skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-tx-timestamp.html"><span class="phrase">skb_tx_timestamp</span></a></span><span class="refpurpose"> — 
+     Driver hook for transmit timestamping
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-checksum-complete.html"><span class="phrase">skb_checksum_complete</span></a></span><span class="refpurpose"> — 
+     Calculate checksum of an entire packet
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-checksum-none-assert.html"><span class="phrase">skb_checksum_none_assert</span></a></span><span class="refpurpose"> — 
+     make sure skb ip_summed is CHECKSUM_NONE
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-head-is-locked.html"><span class="phrase">skb_head_is_locked</span></a></span><span class="refpurpose"> — 
+     Determine if the skb-&gt;head is locked down
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-gso-network-seglen.html"><span class="phrase">skb_gso_network_seglen</span></a></span><span class="refpurpose"> — 
+     Return length of individual segments of a gso packet
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-sock-common.html"><span class="phrase">struct sock_common</span></a></span><span class="refpurpose"> — 
+  minimal network layer representation of sockets
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-sock.html"><span class="phrase">struct sock</span></a></span><span class="refpurpose"> — 
+     network layer representation of sockets
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-nulls-for-each-entry-offset.html"><span class="phrase">sk_nulls_for_each_entry_offset</span></a></span><span class="refpurpose"> — 
+     iterate over a list at a given struct offset
+ </span></dt><dt><span class="refentrytitle"><a href="API-unlock-sock-fast.html"><span class="phrase">unlock_sock_fast</span></a></span><span class="refpurpose"> — 
+     complement of lock_sock_fast
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-wmem-alloc-get.html"><span class="phrase">sk_wmem_alloc_get</span></a></span><span class="refpurpose"> — 
+     returns write allocations
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-rmem-alloc-get.html"><span class="phrase">sk_rmem_alloc_get</span></a></span><span class="refpurpose"> — 
+     returns read allocations
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-has-allocations.html"><span class="phrase">sk_has_allocations</span></a></span><span class="refpurpose"> — 
+     check if allocations are outstanding
+ </span></dt><dt><span class="refentrytitle"><a href="API-wq-has-sleeper.html"><span class="phrase">wq_has_sleeper</span></a></span><span class="refpurpose"> — 
+     check if there are any waiting processes
+ </span></dt><dt><span class="refentrytitle"><a href="API-sock-poll-wait.html"><span class="phrase">sock_poll_wait</span></a></span><span class="refpurpose"> — 
+     place memory barrier behind the poll_wait call.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-page-frag.html"><span class="phrase">sk_page_frag</span></a></span><span class="refpurpose"> — 
+     return an appropriate page_frag
+ </span></dt><dt><span class="refentrytitle"><a href="API-sock-tx-timestamp.html"><span class="phrase">sock_tx_timestamp</span></a></span><span class="refpurpose"> — 
+     checks whether the outgoing packet is to be time stamped
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-eat-skb.html"><span class="phrase">sk_eat_skb</span></a></span><span class="refpurpose"> — 
+     Release a skb if it is no longer needed
+ </span></dt><dt><span class="refentrytitle"><a href="API-sockfd-lookup.html"><span class="phrase">sockfd_lookup</span></a></span><span class="refpurpose"> — 
+  Go from a file number to its socket slot
+ </span></dt><dt><span class="refentrytitle"><a href="API-sock-release.html"><span class="phrase">sock_release</span></a></span><span class="refpurpose"> — 
+     close a socket
+ </span></dt><dt><span class="refentrytitle"><a href="API-kernel-recvmsg.html"><span class="phrase">kernel_recvmsg</span></a></span><span class="refpurpose"> — 
+     Receive a message from a socket (kernel space)
+ </span></dt><dt><span class="refentrytitle"><a href="API-sock-register.html"><span class="phrase">sock_register</span></a></span><span class="refpurpose"> — 
+     add a socket protocol handler
+ </span></dt><dt><span class="refentrytitle"><a href="API-sock-unregister.html"><span class="phrase">sock_unregister</span></a></span><span class="refpurpose"> — 
+     remove a protocol handler
+ </span></dt><dt><span class="refentrytitle"><a href="API---alloc-skb.html"><span class="phrase">__alloc_skb</span></a></span><span class="refpurpose"> — 
+  allocate a network buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-netdev-alloc-frag.html"><span class="phrase">netdev_alloc_frag</span></a></span><span class="refpurpose"> — 
+     allocate a page fragment
+ </span></dt><dt><span class="refentrytitle"><a href="API---netdev-alloc-skb.html"><span class="phrase">__netdev_alloc_skb</span></a></span><span class="refpurpose"> — 
+     allocate an skbuff for rx on a specific device
+ </span></dt><dt><span class="refentrytitle"><a href="API---kfree-skb.html"><span class="phrase">__kfree_skb</span></a></span><span class="refpurpose"> — 
+     private function
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfree-skb.html"><span class="phrase">kfree_skb</span></a></span><span class="refpurpose"> — 
+     free an sk_buff
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-tx-error.html"><span class="phrase">skb_tx_error</span></a></span><span class="refpurpose"> — 
+     report an sk_buff xmit error
+ </span></dt><dt><span class="refentrytitle"><a href="API-consume-skb.html"><span class="phrase">consume_skb</span></a></span><span class="refpurpose"> — 
+     free an skbuff
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-morph.html"><span class="phrase">skb_morph</span></a></span><span class="refpurpose"> — 
+     morph one skb into another
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-copy-ubufs.html"><span class="phrase">skb_copy_ubufs</span></a></span><span class="refpurpose"> — 
+     copy userspace skb frags buffers to kernel
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-clone.html"><span class="phrase">skb_clone</span></a></span><span class="refpurpose"> — 
+     duplicate an sk_buff
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-copy.html"><span class="phrase">skb_copy</span></a></span><span class="refpurpose"> — 
+     create private copy of an sk_buff
+ </span></dt><dt><span class="refentrytitle"><a href="API---pskb-copy-fclone.html"><span class="phrase">__pskb_copy_fclone</span></a></span><span class="refpurpose"> — 
+     create copy of an sk_buff with private head.
+ </span></dt><dt><span class="refentrytitle"><a href="API-pskb-expand-head.html"><span class="phrase">pskb_expand_head</span></a></span><span class="refpurpose"> — 
+     reallocate header of <span class="structname">sk_buff</span>
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-copy-expand.html"><span class="phrase">skb_copy_expand</span></a></span><span class="refpurpose"> — 
+     copy and expand sk_buff
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-pad.html"><span class="phrase">skb_pad</span></a></span><span class="refpurpose"> — 
+     zero pad the tail of an skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-pskb-put.html"><span class="phrase">pskb_put</span></a></span><span class="refpurpose"> — 
+     add data to the tail of a potentially fragmented buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-put.html"><span class="phrase">skb_put</span></a></span><span class="refpurpose"> — 
+     add data to a buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-push.html"><span class="phrase">skb_push</span></a></span><span class="refpurpose"> — 
+     add data to the start of a buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-pull.html"><span class="phrase">skb_pull</span></a></span><span class="refpurpose"> — 
+     remove data from the start of a buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-trim.html"><span class="phrase">skb_trim</span></a></span><span class="refpurpose"> — 
+     remove end from a buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API---pskb-pull-tail.html"><span class="phrase">__pskb_pull_tail</span></a></span><span class="refpurpose"> — 
+     advance tail of skb header
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-copy-bits.html"><span class="phrase">skb_copy_bits</span></a></span><span class="refpurpose"> — 
+     copy bits from skb to kernel buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-store-bits.html"><span class="phrase">skb_store_bits</span></a></span><span class="refpurpose"> — 
+     store bits from kernel buffer to skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-zerocopy.html"><span class="phrase">skb_zerocopy</span></a></span><span class="refpurpose"> — 
+     Zero copy skb to skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-dequeue.html"><span class="phrase">skb_dequeue</span></a></span><span class="refpurpose"> — 
+     remove from the head of the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-dequeue-tail.html"><span class="phrase">skb_dequeue_tail</span></a></span><span class="refpurpose"> — 
+     remove from the tail of the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-purge.html"><span class="phrase">skb_queue_purge</span></a></span><span class="refpurpose"> — 
+     empty a list
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-head.html"><span class="phrase">skb_queue_head</span></a></span><span class="refpurpose"> — 
+     queue a buffer at the list head
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-queue-tail.html"><span class="phrase">skb_queue_tail</span></a></span><span class="refpurpose"> — 
+     queue a buffer at the list tail
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-unlink.html"><span class="phrase">skb_unlink</span></a></span><span class="refpurpose"> — 
+     remove a buffer from a list
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-append.html"><span class="phrase">skb_append</span></a></span><span class="refpurpose"> — 
+     append a buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-insert.html"><span class="phrase">skb_insert</span></a></span><span class="refpurpose"> — 
+     insert a buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-split.html"><span class="phrase">skb_split</span></a></span><span class="refpurpose"> — 
+     Split fragmented skb to two parts at length len.
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-prepare-seq-read.html"><span class="phrase">skb_prepare_seq_read</span></a></span><span class="refpurpose"> — 
+     Prepare a sequential read of skb data
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-seq-read.html"><span class="phrase">skb_seq_read</span></a></span><span class="refpurpose"> — 
+     Sequentially read skb data
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-abort-seq-read.html"><span class="phrase">skb_abort_seq_read</span></a></span><span class="refpurpose"> — 
+     Abort a sequential read of skb data
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-find-text.html"><span class="phrase">skb_find_text</span></a></span><span class="refpurpose"> — 
+     Find a text pattern in skb data
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-append-datato-frags.html"><span class="phrase">skb_append_datato_frags</span></a></span><span class="refpurpose"> — 
+     append the user data to a skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-pull-rcsum.html"><span class="phrase">skb_pull_rcsum</span></a></span><span class="refpurpose"> — 
+     pull skb and update receive checksum
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-segment.html"><span class="phrase">skb_segment</span></a></span><span class="refpurpose"> — 
+     Perform protocol segmentation on skb.
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-to-sgvec.html"><span class="phrase">skb_to_sgvec</span></a></span><span class="refpurpose"> — 
+     Fill a scatter-gather list from a socket buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-cow-data.html"><span class="phrase">skb_cow_data</span></a></span><span class="refpurpose"> — 
+     Check that a socket buffer's data buffers are writable
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-clone-sk.html"><span class="phrase">skb_clone_sk</span></a></span><span class="refpurpose"> — 
+     create clone of skb, and take reference to socket
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-partial-csum-set.html"><span class="phrase">skb_partial_csum_set</span></a></span><span class="refpurpose"> — 
+     set up and verify partial csum values for packet
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-checksum-setup.html"><span class="phrase">skb_checksum_setup</span></a></span><span class="refpurpose"> — 
+     set up partial checksum offset
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-try-coalesce.html"><span class="phrase">skb_try_coalesce</span></a></span><span class="refpurpose"> — 
+     try to merge skb to prior one
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-scrub-packet.html"><span class="phrase">skb_scrub_packet</span></a></span><span class="refpurpose"> — 
+     scrub an skb
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-gso-transport-seglen.html"><span class="phrase">skb_gso_transport_seglen</span></a></span><span class="refpurpose"> — 
+     Return length of individual segments of a gso packet
+ </span></dt><dt><span class="refentrytitle"><a href="API-alloc-skb-with-frags.html"><span class="phrase">alloc_skb_with_frags</span></a></span><span class="refpurpose"> — 
+     allocate skb with page frags
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-ns-capable.html"><span class="phrase">sk_ns_capable</span></a></span><span class="refpurpose"> — 
+  General socket capability test
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-capable.html"><span class="phrase">sk_capable</span></a></span><span class="refpurpose"> — 
+     Socket global capability test
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-net-capable.html"><span class="phrase">sk_net_capable</span></a></span><span class="refpurpose"> — 
+     Network namespace socket capability test
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-set-memalloc.html"><span class="phrase">sk_set_memalloc</span></a></span><span class="refpurpose"> — 
+     sets <code class="constant">SOCK_MEMALLOC</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-alloc.html"><span class="phrase">sk_alloc</span></a></span><span class="refpurpose"> — 
+     All socket objects are allocated here
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-clone-lock.html"><span class="phrase">sk_clone_lock</span></a></span><span class="refpurpose"> — 
+     clone a socket, and lock its clone
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-page-frag-refill.html"><span class="phrase">skb_page_frag_refill</span></a></span><span class="refpurpose"> — 
+     check that a page_frag contains enough room
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-wait-data.html"><span class="phrase">sk_wait_data</span></a></span><span class="refpurpose"> — 
+     wait for data to arrive at sk_receive_queue
+ </span></dt><dt><span class="refentrytitle"><a href="API---sk-mem-schedule.html"><span class="phrase">__sk_mem_schedule</span></a></span><span class="refpurpose"> — 
+     increase sk_forward_alloc and memory_allocated
+ </span></dt><dt><span class="refentrytitle"><a href="API---sk-mem-reclaim.html"><span class="phrase">__sk_mem_reclaim</span></a></span><span class="refpurpose"> — 
+     reclaim memory_allocated
+ </span></dt><dt><span class="refentrytitle"><a href="API-lock-sock-fast.html"><span class="phrase">lock_sock_fast</span></a></span><span class="refpurpose"> — 
+     fast version of lock_sock
+ </span></dt><dt><span class="refentrytitle"><a href="API---skb-recv-datagram.html"><span class="phrase">__skb_recv_datagram</span></a></span><span class="refpurpose"> — 
+  Receive a datagram skbuff
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-kill-datagram.html"><span class="phrase">skb_kill_datagram</span></a></span><span class="refpurpose"> — 
+     Free a datagram skbuff forcibly
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-copy-datagram-iovec.html"><span class="phrase">skb_copy_datagram_iovec</span></a></span><span class="refpurpose"> — 
+     Copy a datagram to an iovec.
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-copy-datagram-const-iovec.html"><span class="phrase">skb_copy_datagram_const_iovec</span></a></span><span class="refpurpose"> — 
+     Copy a datagram to an iovec.
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-copy-datagram-from-iovec.html"><span class="phrase">skb_copy_datagram_from_iovec</span></a></span><span class="refpurpose"> — 
+     Copy a datagram from an iovec.
+ </span></dt><dt><span class="refentrytitle"><a href="API-zerocopy-sg-from-iovec.html"><span class="phrase">zerocopy_sg_from_iovec</span></a></span><span class="refpurpose"> — 
+     Build a zerocopy datagram from an iovec
+ </span></dt><dt><span class="refentrytitle"><a href="API-skb-copy-and-csum-datagram-iovec.html"><span class="phrase">skb_copy_and_csum_datagram_iovec</span></a></span><span class="refpurpose"> — 
+     Copy and checksum skb to user iovec.
+ </span></dt><dt><span class="refentrytitle"><a href="API-datagram-poll.html"><span class="phrase">datagram_poll</span></a></span><span class="refpurpose"> — 
+     generic datagram poll
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-stream-write-space.html"><span class="phrase">sk_stream_write_space</span></a></span><span class="refpurpose"> — 
+  stream socket write_space callback.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-stream-wait-connect.html"><span class="phrase">sk_stream_wait_connect</span></a></span><span class="refpurpose"> — 
+     Wait for a socket to get into the connected state
+ </span></dt><dt><span class="refentrytitle"><a href="API-sk-stream-wait-memory.html"><span class="phrase">sk_stream_wait_memory</span></a></span><span class="refpurpose"> — 
+     Wait for more memory for a socket
+ </span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-socket.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="netcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-skb-shared-hwtstamps.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct socket</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct skb_shared_hwtstamps</span></td></tr></table></div></body></html>

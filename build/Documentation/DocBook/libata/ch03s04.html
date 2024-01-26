@@ -1,0 +1,50 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>How commands are completed</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="libataEH.html" title="Chapter 3. Error handling"><link rel="prev" href="ch03s03.html" title="How commands are processed"><link rel="next" href="ch03s05.html" title="ata_scsi_error()"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">How commands are completed</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Error handling</th><td width="20%" align="right"> <a accesskey="n" href="ch03s05.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm171"></a>How commands are completed</h2></div></div></div><p>
+	Once issued, all qc's are either completed with
+	ata_qc_complete() or time out.  For commands which are handled
+	by interrupts, ata_host_intr() invokes ata_qc_complete(), and,
+	for PIO tasks, pio_task invokes ata_qc_complete().  In error
+	cases, packet_task may also complete commands.
+	</p><p>
+	ata_qc_complete() does the following.
+	</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+	DMA memory is unmapped.
+	</p></li><li class="listitem"><p>
+	ATA_QCFLAG_ACTIVE is cleared from qc-&gt;flags.
+	</p></li><li class="listitem"><p>
+	qc-&gt;complete_fn() callback is invoked.  If the return value of
+	the callback is not zero.  Completion is short circuited and
+	ata_qc_complete() returns.
+	</p></li><li class="listitem"><p>
+	__ata_qc_complete() is called, which does
+	   </p><div class="orderedlist"><ol class="orderedlist" type="a"><li class="listitem"><p>
+	   qc-&gt;flags is cleared to zero.
+	   </p></li><li class="listitem"><p>
+	   ap-&gt;active_tag and qc-&gt;tag are poisoned.
+	   </p></li><li class="listitem"><p>
+	   qc-&gt;waiting is cleared &amp; completed (in that order).
+	   </p></li><li class="listitem"><p>
+	   qc is deallocated by clearing appropriate bit in ap-&gt;qactive.
+	   </p></li></ol></div><p>
+	</p></li></ol></div><p>
+	So, it basically notifies upper layer and deallocates qc.  One
+	exception is short-circuit path in #3 which is used by
+	atapi_qc_complete().
+	</p><p>
+	For all non-ATAPI commands, whether it fails or not, almost
+	the same code path is taken and very little error handling
+	takes place.  A qc is completed with success status if it
+	succeeded, with failed status otherwise.
+	</p><p>
+	However, failed ATAPI commands require more handling as
+	REQUEST SENSE is needed to acquire sense data.  If an ATAPI
+	command fails, ata_qc_complete() is invoked with error status,
+	which in turn invokes atapi_qc_complete() via
+	qc-&gt;complete_fn() callback.
+	</p><p>
+	This makes atapi_qc_complete() set scmd-&gt;result to
+	SAM_STAT_CHECK_CONDITION, complete the scmd and return 1.  As
+	the sense data is empty but scmd-&gt;result is CHECK CONDITION,
+	SCSI midlayer will invoke EH for the scmd, and returning 1
+	makes ata_qc_complete() to return without deallocating the qc.
+	This leads us to ata_scsi_error() with partially completed qc.
+	</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="libataEH.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">How commands are processed </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> ata_scsi_error()</td></tr></table></div></body></html>

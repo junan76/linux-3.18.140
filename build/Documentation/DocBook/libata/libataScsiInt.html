@@ -1,0 +1,123 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 6. libata SCSI translation/emulation</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="index.html" title="libATA Developer's Guide"><link rel="prev" href="API-ata-port-detach.html" title="ata_port_detach"><link rel="next" href="API-ata-std-bios-param.html" title="ata_std_bios_param"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. libata SCSI translation/emulation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-ata-port-detach.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-ata-std-bios-param.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="libataScsiInt"></a>Chapter 6. libata SCSI translation/emulation</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="refentrytitle"><a href="API-ata-std-bios-param.html"><span class="phrase">ata_std_bios_param</span></a></span><span class="refpurpose"> — 
+  generic bios head/sector/cylinder calculator used by sd.
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-unlock-native-capacity.html"><span class="phrase">ata_scsi_unlock_native_capacity</span></a></span><span class="refpurpose"> — 
+     unlock native capacity
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-slave-config.html"><span class="phrase">ata_scsi_slave_config</span></a></span><span class="refpurpose"> — 
+     Set SCSI device attributes
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-slave-destroy.html"><span class="phrase">ata_scsi_slave_destroy</span></a></span><span class="refpurpose"> — 
+     SCSI device is about to be destroyed
+ </span></dt><dt><span class="refentrytitle"><a href="API---ata-change-queue-depth.html"><span class="phrase">__ata_change_queue_depth</span></a></span><span class="refpurpose"> — 
+     helper for ata_scsi_change_queue_depth
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-change-queue-depth.html"><span class="phrase">ata_scsi_change_queue_depth</span></a></span><span class="refpurpose"> — 
+     SCSI callback for queue depth config
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-queuecmd.html"><span class="phrase">ata_scsi_queuecmd</span></a></span><span class="refpurpose"> — 
+     Issue SCSI cdb to libata-managed device
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-simulate.html"><span class="phrase">ata_scsi_simulate</span></a></span><span class="refpurpose"> — 
+     simulate SCSI command on ATA device
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-sas-port-alloc.html"><span class="phrase">ata_sas_port_alloc</span></a></span><span class="refpurpose"> — 
+     Allocate port for a SAS attached SATA device
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-sas-port-start.html"><span class="phrase">ata_sas_port_start</span></a></span><span class="refpurpose"> — 
+     Set port up for dma.
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-sas-port-stop.html"><span class="phrase">ata_sas_port_stop</span></a></span><span class="refpurpose"> — 
+     Undo <code class="function">ata_sas_port_start</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-sas-async-probe.html"><span class="phrase">ata_sas_async_probe</span></a></span><span class="refpurpose"> — 
+     simply schedule probing and return
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-sas-port-init.html"><span class="phrase">ata_sas_port_init</span></a></span><span class="refpurpose"> — 
+     Initialize a SATA device
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-sas-port-destroy.html"><span class="phrase">ata_sas_port_destroy</span></a></span><span class="refpurpose"> — 
+     Destroy a SATA port allocated by ata_sas_port_alloc
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-sas-slave-configure.html"><span class="phrase">ata_sas_slave_configure</span></a></span><span class="refpurpose"> — 
+     Default slave_config routine for libata devices
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-sas-queuecmd.html"><span class="phrase">ata_sas_queuecmd</span></a></span><span class="refpurpose"> — 
+     Issue SCSI cdb to libata-managed device
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-get-identity.html"><span class="phrase">ata_get_identity</span></a></span><span class="refpurpose"> — 
+  Handler for HDIO_GET_IDENTITY ioctl
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-cmd-ioctl.html"><span class="phrase">ata_cmd_ioctl</span></a></span><span class="refpurpose"> — 
+     Handler for HDIO_DRIVE_CMD ioctl
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-task-ioctl.html"><span class="phrase">ata_task_ioctl</span></a></span><span class="refpurpose"> — 
+     Handler for HDIO_DRIVE_TASK ioctl
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-qc-new.html"><span class="phrase">ata_scsi_qc_new</span></a></span><span class="refpurpose"> — 
+     acquire new ata_queued_cmd reference
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-dump-status.html"><span class="phrase">ata_dump_status</span></a></span><span class="refpurpose"> — 
+     user friendly display of error info
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-to-sense-error.html"><span class="phrase">ata_to_sense_error</span></a></span><span class="refpurpose"> — 
+     convert ATA error to SCSI error
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-gen-ata-sense.html"><span class="phrase">ata_gen_ata_sense</span></a></span><span class="refpurpose"> — 
+     generate a SCSI fixed sense block
+ </span></dt><dt><span class="refentrytitle"><a href="API-atapi-drain-needed.html"><span class="phrase">atapi_drain_needed</span></a></span><span class="refpurpose"> — 
+     Check whether data transfer may overflow
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-start-stop-xlat.html"><span class="phrase">ata_scsi_start_stop_xlat</span></a></span><span class="refpurpose"> — 
+     Translate SCSI START STOP UNIT command
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-flush-xlat.html"><span class="phrase">ata_scsi_flush_xlat</span></a></span><span class="refpurpose"> — 
+     Translate SCSI SYNCHRONIZE CACHE command
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-6-lba-len.html"><span class="phrase">scsi_6_lba_len</span></a></span><span class="refpurpose"> — 
+     Get LBA and transfer length
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-10-lba-len.html"><span class="phrase">scsi_10_lba_len</span></a></span><span class="refpurpose"> — 
+     Get LBA and transfer length
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-16-lba-len.html"><span class="phrase">scsi_16_lba_len</span></a></span><span class="refpurpose"> — 
+     Get LBA and transfer length
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-verify-xlat.html"><span class="phrase">ata_scsi_verify_xlat</span></a></span><span class="refpurpose"> — 
+     Translate SCSI VERIFY command into an ATA one
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-rw-xlat.html"><span class="phrase">ata_scsi_rw_xlat</span></a></span><span class="refpurpose"> — 
+     Translate SCSI r/w command into an ATA one
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-translate.html"><span class="phrase">ata_scsi_translate</span></a></span><span class="refpurpose"> — 
+     Translate then issue SCSI command to ATA device
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-rbuf-get.html"><span class="phrase">ata_scsi_rbuf_get</span></a></span><span class="refpurpose"> — 
+     Map response buffer.
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-rbuf-put.html"><span class="phrase">ata_scsi_rbuf_put</span></a></span><span class="refpurpose"> — 
+     Unmap response buffer.
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-rbuf-fill.html"><span class="phrase">ata_scsi_rbuf_fill</span></a></span><span class="refpurpose"> — 
+     wrapper for SCSI command simulators
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsiop-inq-std.html"><span class="phrase">ata_scsiop_inq_std</span></a></span><span class="refpurpose"> — 
+     Simulate INQUIRY command
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsiop-inq-00.html"><span class="phrase">ata_scsiop_inq_00</span></a></span><span class="refpurpose"> — 
+     Simulate INQUIRY VPD page 0, list of pages
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsiop-inq-80.html"><span class="phrase">ata_scsiop_inq_80</span></a></span><span class="refpurpose"> — 
+     Simulate INQUIRY VPD page 80, device serial number
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsiop-inq-83.html"><span class="phrase">ata_scsiop_inq_83</span></a></span><span class="refpurpose"> — 
+     Simulate INQUIRY VPD page 83, device identity
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsiop-inq-89.html"><span class="phrase">ata_scsiop_inq_89</span></a></span><span class="refpurpose"> — 
+     Simulate INQUIRY VPD page 89, ATA info
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsiop-noop.html"><span class="phrase">ata_scsiop_noop</span></a></span><span class="refpurpose"> — 
+     Command handler that simply returns success.
+ </span></dt><dt><span class="refentrytitle"><a href="API-modecpy.html"><span class="phrase">modecpy</span></a></span><span class="refpurpose"> — 
+     Prepare response for MODE SENSE
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-msense-caching.html"><span class="phrase">ata_msense_caching</span></a></span><span class="refpurpose"> — 
+     Simulate MODE SENSE caching info page
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-msense-ctl-mode.html"><span class="phrase">ata_msense_ctl_mode</span></a></span><span class="refpurpose"> — 
+     Simulate MODE SENSE control mode page
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-msense-rw-recovery.html"><span class="phrase">ata_msense_rw_recovery</span></a></span><span class="refpurpose"> — 
+     Simulate MODE SENSE r/w error recovery page
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsiop-mode-sense.html"><span class="phrase">ata_scsiop_mode_sense</span></a></span><span class="refpurpose"> — 
+     Simulate MODE SENSE 6, 10 commands
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsiop-read-cap.html"><span class="phrase">ata_scsiop_read_cap</span></a></span><span class="refpurpose"> — 
+     Simulate READ CAPACITY[ 16] commands
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsiop-report-luns.html"><span class="phrase">ata_scsiop_report_luns</span></a></span><span class="refpurpose"> — 
+     Simulate REPORT LUNS command
+ </span></dt><dt><span class="refentrytitle"><a href="API-atapi-xlat.html"><span class="phrase">atapi_xlat</span></a></span><span class="refpurpose"> — 
+     Initialize PACKET taskfile
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-find-dev.html"><span class="phrase">ata_scsi_find_dev</span></a></span><span class="refpurpose"> — 
+     lookup ata_device from scsi_cmnd
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-pass-thru.html"><span class="phrase">ata_scsi_pass_thru</span></a></span><span class="refpurpose"> — 
+     convert ATA pass-thru CDB to taskfile
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-mselect-caching.html"><span class="phrase">ata_mselect_caching</span></a></span><span class="refpurpose"> — 
+     Simulate MODE SELECT for caching info page
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-mode-select-xlat.html"><span class="phrase">ata_scsi_mode_select_xlat</span></a></span><span class="refpurpose"> — 
+     Simulate MODE SELECT 6, 10 commands
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-get-xlat-func.html"><span class="phrase">ata_get_xlat_func</span></a></span><span class="refpurpose"> — 
+     check if SCSI to ATA translation is possible
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-dump-cdb.html"><span class="phrase">ata_scsi_dump_cdb</span></a></span><span class="refpurpose"> — 
+     dump SCSI command contents to dmesg
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-offline-dev.html"><span class="phrase">ata_scsi_offline_dev</span></a></span><span class="refpurpose"> — 
+     offline attached SCSI device
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-remove-dev.html"><span class="phrase">ata_scsi_remove_dev</span></a></span><span class="refpurpose"> — 
+     remove attached SCSI device
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-media-change-notify.html"><span class="phrase">ata_scsi_media_change_notify</span></a></span><span class="refpurpose"> — 
+     send media change event
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-hotplug.html"><span class="phrase">ata_scsi_hotplug</span></a></span><span class="refpurpose"> — 
+     SCSI part of hotplug
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-user-scan.html"><span class="phrase">ata_scsi_user_scan</span></a></span><span class="refpurpose"> — 
+     indication for user-initiated bus scan
+ </span></dt><dt><span class="refentrytitle"><a href="API-ata-scsi-dev-rescan.html"><span class="phrase">ata_scsi_dev_rescan</span></a></span><span class="refpurpose"> — 
+     initiate <code class="function">scsi_rescan_device</code>
+ </span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-ata-port-detach.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-ata-std-bios-param.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">ata_port_detach</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ata_std_bios_param</span></td></tr></table></div></body></html>

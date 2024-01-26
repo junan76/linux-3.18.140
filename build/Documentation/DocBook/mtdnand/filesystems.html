@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 6. Filesystem support</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="MTD NAND Driver Programming Interface"><link rel="up" href="index.html" title="MTD NAND Driver Programming Interface"><link rel="prev" href="Spare_area_autoplacement_default.html" title="Spare area autoplacement default schemes"><link rel="next" href="tools.html" title="Chapter 7. Tools"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. Filesystem support</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Spare_area_autoplacement_default.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="tools.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="filesystems"></a>Chapter 6. Filesystem support</h1></div></div></div><p>
+		The NAND driver provides all necessary functions for a
+		filesystem via the MTD interface.
+	</p><p>
+		Filesystems must be aware of the NAND peculiarities and
+		restrictions. One major restrictions of NAND Flash is, that you cannot 
+		write as often as you want to a page. The consecutive writes to a page, 
+		before erasing it again, are restricted to 1-3 writes, depending on the 
+		manufacturers specifications. This applies similar to the spare area. 
+	</p><p>
+		Therefore NAND aware filesystems must either write in page size chunks
+		or hold a writebuffer to collect smaller writes until they sum up to 
+		pagesize. Available NAND aware filesystems: JFFS2, YAFFS. 		
+	</p><p>
+		The spare area usage to store filesystem data is controlled by
+		the spare area placement functionality which is described in one
+		of the earlier chapters.
+	</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Spare_area_autoplacement_default.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="tools.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Spare area autoplacement default schemes </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 7. Tools</td></tr></table></div></body></html>

@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_ep_clear_halt</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="core.html" title="Core Objects and Methods"><link rel="prev" href="API-usb-ep-set-halt.html" title="usb_ep_set_halt"><link rel="next" href="API-usb-ep-set-wedge.html" title="usb_ep_set_wedge"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_ep_clear_halt</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-ep-set-halt.html">Prev</a> </td><th width="60%" align="center">Core Objects and Methods</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-ep-set-wedge.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-ep-clear-halt"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_ep_clear_halt — 
+     clears endpoint halt, and resets toggle
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">usb_ep_clear_halt </b>(</code></td><td>struct usb_ep * <var class="pdparam">ep</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm729"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>ep</code></em></span></dt><dd><p>
+     the bulk or interrupt endpoint being reset
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm737"></a><h2>Description</h2><p>
+   Use this when responding to the standard usb <span class="quote">“<span class="quote">set interface</span>”</span> request,
+   for endpoints that aren't reconfigured, after clearing any other state
+   in the endpoint's i/o queue.
+   </p><p>
+
+   Returns zero, or a negative error code.  On success, this call clears
+   the underlying hardware state reflecting endpoint halt and data toggle.
+   Note that some hardware can't support this request (like pxa2xx_udc),
+   and accordingly can't correctly implement interface altsettings.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-ep-set-halt.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="core.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-ep-set-wedge.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_ep_set_halt</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_ep_set_wedge</span></td></tr></table></div></body></html>

@@ -1,0 +1,39 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 4. Block IO</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel Tracepoint API"><link rel="up" href="index.html" title="The Linux Kernel Tracepoint API"><link rel="prev" href="API-trace-signal-deliver.html" title="trace_signal_deliver"><link rel="next" href="API-trace-block-touch-buffer.html" title="trace_block_touch_buffer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Block IO</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-trace-signal-deliver.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-trace-block-touch-buffer.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="block"></a>Chapter 4. Block IO</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="refentrytitle"><a href="API-trace-block-touch-buffer.html"><span class="phrase">trace_block_touch_buffer</span></a></span><span class="refpurpose"> — 
+  mark a buffer accessed
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-dirty-buffer.html"><span class="phrase">trace_block_dirty_buffer</span></a></span><span class="refpurpose"> — 
+     mark a buffer dirty
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-rq-abort.html"><span class="phrase">trace_block_rq_abort</span></a></span><span class="refpurpose"> — 
+     abort block operation request
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-rq-requeue.html"><span class="phrase">trace_block_rq_requeue</span></a></span><span class="refpurpose"> — 
+     place block IO request back on a queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-rq-complete.html"><span class="phrase">trace_block_rq_complete</span></a></span><span class="refpurpose"> — 
+     block IO operation completed by device driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-rq-insert.html"><span class="phrase">trace_block_rq_insert</span></a></span><span class="refpurpose"> — 
+     insert block operation request into queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-rq-issue.html"><span class="phrase">trace_block_rq_issue</span></a></span><span class="refpurpose"> — 
+     issue pending block IO request operation to device driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-bio-bounce.html"><span class="phrase">trace_block_bio_bounce</span></a></span><span class="refpurpose"> — 
+     used bounce buffer when processing block operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-bio-complete.html"><span class="phrase">trace_block_bio_complete</span></a></span><span class="refpurpose"> — 
+     completed all work on the block operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-bio-backmerge.html"><span class="phrase">trace_block_bio_backmerge</span></a></span><span class="refpurpose"> — 
+     merging block operation to the end of an existing operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-bio-frontmerge.html"><span class="phrase">trace_block_bio_frontmerge</span></a></span><span class="refpurpose"> — 
+     merging block operation to the beginning of an existing operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-bio-queue.html"><span class="phrase">trace_block_bio_queue</span></a></span><span class="refpurpose"> — 
+     putting new block IO operation in queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-getrq.html"><span class="phrase">trace_block_getrq</span></a></span><span class="refpurpose"> — 
+     get a free request entry in queue for block IO operations
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-sleeprq.html"><span class="phrase">trace_block_sleeprq</span></a></span><span class="refpurpose"> — 
+     waiting to get a free request entry in queue for block IO operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-plug.html"><span class="phrase">trace_block_plug</span></a></span><span class="refpurpose"> — 
+     keep operations requests in request queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-unplug.html"><span class="phrase">trace_block_unplug</span></a></span><span class="refpurpose"> — 
+     release of operations requests in request queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-split.html"><span class="phrase">trace_block_split</span></a></span><span class="refpurpose"> — 
+     split a single bio struct into two bio structs
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-bio-remap.html"><span class="phrase">trace_block_bio_remap</span></a></span><span class="refpurpose"> — 
+     map request for a logical device to the raw device
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-block-rq-remap.html"><span class="phrase">trace_block_rq_remap</span></a></span><span class="refpurpose"> — 
+     map request for a block operation request
+ </span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-trace-signal-deliver.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-trace-block-touch-buffer.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">trace_signal_deliver</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">trace_block_touch_buffer</span></td></tr></table></div></body></html>

@@ -1,0 +1,58 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct w1_bus_master</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="W1: Dallas' 1-wire bus"><link rel="up" href="w1_internal.html#w1.h" title="drivers/w1/w1.h"><link rel="prev" href="API-struct-w1-slave.html" title="struct w1_slave"><link rel="next" href="API-enum-w1-master-flags.html" title="enum w1_master_flags"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct w1_bus_master</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-w1-slave.html">Prev</a> </td><th width="60%" align="center">drivers/w1/w1.h</th><td width="20%" align="right"> <a accesskey="n" href="API-enum-w1-master-flags.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-w1-bus-master"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct w1_bus_master — 
+     operations available on a bus master
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct w1_bus_master {
+  void * data;
+  u8 (* read_bit) (void *);
+  void (* write_bit) (void *, u8);
+  u8 (* touch_bit) (void *, u8);
+  u8 (* read_byte) (void *);
+  void (* write_byte) (void *, u8);
+  u8 (* read_block) (void *, u8 *, int);
+  void (* write_block) (void *, const u8 *, int);
+  u8 (* triplet) (void *, u8);
+  u8 (* reset_bus) (void *);
+  u8 (* set_pullup) (void *, int);
+  void (* search) (void *, struct w1_master *,u8, w1_slave_found_callback);
+};  </pre></div><div class="refsect1"><a name="idm147"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">data</span></dt><dd><p>
+   the first parameter in all the functions below
+      </p></dd><dt><span class="term">read_bit</span></dt><dd><p>
+   Sample the line level <em class="parameter"><code>return</code></em> the level read (0 or 1)
+      </p></dd><dt><span class="term">write_bit</span></dt><dd><p>
+   Sets the line level
+      </p></dd><dt><span class="term">touch_bit</span></dt><dd><p>
+   the lowest-level function for devices that really support the
+   1-wire protocol.
+   touch_bit(0) = write-0 cycle
+   touch_bit(1) = write-1 / read cycle
+   <em class="parameter"><code>return</code></em> the bit read (0 or 1)
+      </p></dd><dt><span class="term">read_byte</span></dt><dd><p>
+   Reads a bytes. Same as 8 touch_bit(1) calls.
+   <em class="parameter"><code>return</code></em> the byte read
+      </p></dd><dt><span class="term">write_byte</span></dt><dd><p>
+   Writes a byte. Same as 8 touch_bit(x) calls.
+      </p></dd><dt><span class="term">read_block</span></dt><dd><p>
+   Same as a series of <code class="function">read_byte</code> calls
+   <em class="parameter"><code>return</code></em> the number of bytes read
+      </p></dd><dt><span class="term">write_block</span></dt><dd><p>
+   Same as a series of <code class="function">write_byte</code> calls
+      </p></dd><dt><span class="term">triplet</span></dt><dd><p>
+   Combines two reads and a smart write for ROM searches
+   <em class="parameter"><code>return</code></em> bit0=Id bit1=comp_id bit2=dir_taken
+      </p></dd><dt><span class="term">reset_bus</span></dt><dd><p>
+   long write-0 with a read for the presence pulse detection
+   <em class="parameter"><code>return</code></em> -1=Error, 0=Device present, 1=No device present
+      </p></dd><dt><span class="term">set_pullup</span></dt><dd><p>
+   Put out a strong pull-up pulse of the specified duration.
+   <em class="parameter"><code>return</code></em> -1=Error, 0=completed
+      </p></dd><dt><span class="term">search</span></dt><dd><p>
+   Really nice hardware can handles the different types of ROM search
+   w1_master* is passed to the slave found callback.
+   u8 is search_type, W1_SEARCH or W1_ALARM_SEARCH
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm207"></a><h2>Note</h2><p>
+   read_bit and write_bit are very low level functions and should only
+   be used with hardware that doesn't really support 1-wire operations,
+   like a parallel/serial port.
+   Either define read_bit and write_bit OR define, at minimum, touch_bit and
+   reset_bus.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-w1-slave.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="w1_internal.html#w1.h">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-enum-w1-master-flags.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct w1_slave</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">enum w1_master_flags</span></td></tr></table></div></body></html>

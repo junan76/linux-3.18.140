@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>proc_flush_task</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="proc_filesystem_interface.html" title="proc filesystem interface"><link rel="prev" href="proc_filesystem_interface.html" title="proc filesystem interface"><link rel="next" href="fs_events.html" title="Chapter 3. Events based on file descriptors"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">proc_flush_task</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="proc_filesystem_interface.html">Prev</a> </td><th width="60%" align="center">proc filesystem interface</th><td width="20%" align="right"> <a accesskey="n" href="fs_events.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-proc-flush-task"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>proc_flush_task — 
+  Remove dcache entries for <em class="parameter"><code>task</code></em> from the /proc dcache.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">proc_flush_task </b>(</code></td><td>struct task_struct * <var class="pdparam">task</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm8143"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>task</code></em></span></dt><dd><p>
+     task that should be flushed.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm8151"></a><h2>Description</h2><p>
+   When flushing dentries from proc, one needs to flush them from global
+   proc (proc_mnt) and from all the namespaces' procs this task was seen
+   in. This call is supposed to do all of this job.
+   </p><p>
+
+   Looks in the dcache for
+   /proc/<em class="parameter"><code>pid</code></em>
+   /proc/<em class="parameter"><code>tgid</code></em>/task/<em class="parameter"><code>pid</code></em>
+   if either directory is present flushes it and all of it'ts children
+   from the dcache.
+   </p><p>
+
+   It is safe and reasonable to cache /proc entries for a task until
+   that task exits.  After that they just clog up the dcache with
+   useless entries, possibly causing useful dcache entries to be
+   flushed instead.  This routine is proved to flush those useless
+   dcache entries at process exit time.
+</p></div><div class="refsect1"><a name="idm8159"></a><h2>NOTE</h2><p>
+   This routine is just an optimization so it does not guarantee
+   that no dcache entries will exist at process exit time it
+   just makes it very unlikely that any will persist.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="proc_filesystem_interface.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="proc_filesystem_interface.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="fs_events.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">proc filesystem interface </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. Events based on file descriptors</td></tr></table></div></body></html>

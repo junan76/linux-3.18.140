@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>__mark_inode_dirty</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="other_functions.html" title="Other Functions"><link rel="prev" href="API-writeback-in-progress.html" title="writeback_in_progress"><link rel="next" href="API-writeback-inodes-sb-nr.html" title="writeback_inodes_sb_nr"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">__mark_inode_dirty</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-writeback-in-progress.html">Prev</a> </td><th width="60%" align="center">Other Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-writeback-inodes-sb-nr.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API---mark-inode-dirty"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>__mark_inode_dirty — 
+     internal function
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">__mark_inode_dirty </b>(</code></td><td>struct inode * <var class="pdparam">inode</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">flags</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm6671"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>inode</code></em></span></dt><dd><p>
+     inode to mark
+    </p></dd><dt><span class="term"><em class="parameter"><code>flags</code></em></span></dt><dd><p>
+     what kind of dirty (i.e. I_DIRTY_SYNC)
+     Mark an inode as dirty. Callers should use mark_inode_dirty or
+     mark_inode_dirty_sync.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm6684"></a><h2>Description</h2><p>
+   Put the inode on the super block's dirty list.
+   </p><p>
+
+   CAREFUL! We mark it dirty unconditionally, but move it onto the
+   dirty list only if it is hashed or if it refers to a blockdev.
+   If it was not hashed, it will never be added to the dirty list
+   even if it is later hashed, as it will have been marked dirty already.
+   </p><p>
+
+   In short, make sure you hash any inodes _before_ you start marking
+   them dirty.
+   </p><p>
+
+   Note that for blockdevs, inode-&gt;dirtied_when represents the dirtying time of
+   the block-special inode (/dev/hda1) itself.  And the -&gt;dirtied_when field of
+   the kernel-internal blockdev inode represents the dirtying time of the
+   blockdev's pages.  This is why for I_DIRTY_PAGES we always use
+   page-&gt;mapping-&gt;host, so the page-dirtying time is recorded in the internal
+   blockdev inode.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-writeback-in-progress.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="other_functions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-writeback-inodes-sb-nr.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">writeback_in_progress</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">writeback_inodes_sb_nr</span></td></tr></table></div></body></html>

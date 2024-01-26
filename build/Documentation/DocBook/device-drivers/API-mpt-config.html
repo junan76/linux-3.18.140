@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>mpt_config</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="message_devices.html#idm20108" title="Fusion message devices"><link rel="prev" href="API-mpt-findImVolumes.html" title="mpt_findImVolumes"><link rel="next" href="API-mpt-print-ioc-summary.html" title="mpt_print_ioc_summary"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">mpt_config</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-mpt-findImVolumes.html">Prev</a> </td><th width="60%" align="center">Fusion message devices</th><td width="20%" align="right"> <a accesskey="n" href="API-mpt-print-ioc-summary.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-mpt-config"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>mpt_config — 
+     Generic function to issue config message
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">mpt_config </b>(</code></td><td>MPT_ADAPTER * <var class="pdparam">ioc</var>, </td></tr><tr><td> </td><td>CONFIGPARMS * <var class="pdparam">pCfg</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm21159"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>ioc</code></em></span></dt><dd><p>
+     Pointer to an adapter structure
+    </p></dd><dt><span class="term"><em class="parameter"><code>pCfg</code></em></span></dt><dd><p>
+     Pointer to a configuration structure. Struct contains
+     action, page address, direction, physical address
+     and pointer to a configuration page header
+     Page header is updated.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm21172"></a><h2>Description</h2><p>
+   Returns 0 for success
+   -EPERM if not allowed due to ISR context
+   -EAGAIN if no msg frames currently available
+   -EFAULT for non-successful reply or no reply (timeout)
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-mpt-findImVolumes.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="message_devices.html#idm20108">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-mpt-print-ioc-summary.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">mpt_findImVolumes</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">mpt_print_ioc_summary</span></td></tr></table></div></body></html>

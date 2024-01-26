@@ -1,0 +1,62 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 2. USB Host-Side API Model</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="index.html" title="The Linux-USB Host Side API"><link rel="prev" href="intro.html" title="Chapter 1. Introduction to USB on Linux"><link rel="next" href="types.html" title="Chapter 3. USB-Standard Types"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. USB Host-Side API Model</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="intro.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="types.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="host"></a>Chapter 2. USB Host-Side API Model</h1></div></div></div><p>Host-side drivers for USB devices talk to the "usbcore" APIs.
+    There are two.  One is intended for
+    <span class="emphasis"><em>general-purpose</em></span> drivers (exposed through
+    driver frameworks), and the other is for drivers that are
+    <span class="emphasis"><em>part of the core</em></span>.
+    Such core drivers include the <span class="emphasis"><em>hub</em></span> driver
+    (which manages trees of USB devices) and several different kinds
+    of <span class="emphasis"><em>host controller drivers</em></span>,
+    which control individual busses.
+    </p><p>The device model seen by USB drivers is relatively complex.
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>USB supports four kinds of data transfers
+	(control, bulk, interrupt, and isochronous).  Two of them (control
+	and bulk) use bandwidth as it's available,
+	while the other two (interrupt and isochronous)
+	are scheduled to provide guaranteed bandwidth.
+	</p></li><li class="listitem"><p>The device description model includes one or more
+	"configurations" per device, only one of which is active at a time.
+	Devices that are capable of high-speed operation must also support
+	full-speed configurations, along with a way to ask about the
+	"other speed" configurations which might be used.
+	</p></li><li class="listitem"><p>Configurations have one or more "interfaces", each
+	of which may have "alternate settings".  Interfaces may be
+	standardized by USB "Class" specifications, or may be specific to
+	a vendor or device.</p><p>USB device drivers actually bind to interfaces, not devices.
+	Think of them as "interface drivers", though you
+	may not see many devices where the distinction is important.
+	<span class="emphasis"><em>Most USB devices are simple, with only one configuration,
+	one interface, and one alternate setting.</em></span>
+	</p></li><li class="listitem"><p>Interfaces have one or more "endpoints", each of
+	which supports one type and direction of data transfer such as
+	"bulk out" or "interrupt in".  The entire configuration may have
+	up to sixteen endpoints in each direction, allocated as needed
+	among all the interfaces.
+	</p></li><li class="listitem"><p>Data transfer on USB is packetized; each endpoint
+	has a maximum packet size.
+	Drivers must often be aware of conventions such as flagging the end
+	of bulk transfers using "short" (including zero length) packets.
+	</p></li><li class="listitem"><p>The Linux USB API supports synchronous calls for
+	control and bulk messages.
+	It also supports asynchronous calls for all kinds of data transfer,
+	using request structures called "URBs" (USB Request Blocks).
+	</p></li></ul></div><p>Accordingly, the USB Core API exposed to device drivers
+    covers quite a lot of territory.  You'll probably need to consult
+    the USB 2.0 specification, available online from www.usb.org at
+    no cost, as well as class or device specifications.
+    </p><p>The only host-side drivers that actually touch hardware
+    (reading/writing registers, handling IRQs, and so on) are the HCDs.
+    In theory, all HCDs provide the same functionality through the same
+    API.  In practice, that's becoming more true on the 2.5 kernels,
+    but there are still differences that crop up especially with
+    fault handling.  Different controllers don't necessarily report
+    the same aspects of failures, and recovery from faults (including
+    software-induced ones like unlinking an URB) isn't yet fully
+    consistent.
+    Device driver authors should make a point of doing disconnect
+    testing (while the device is active) with each different host
+    controller driver, to make sure drivers don't have bugs of
+    their own as well as to make sure they aren't relying on some
+    HCD-specific behavior.
+    (You will need external USB 1.1 and/or
+    USB 2.0 hubs to perform all those tests.)
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="intro.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="types.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Introduction to USB on Linux </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. USB-Standard Types</td></tr></table></div></body></html>

@@ -1,0 +1,70 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct i2c_driver</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="i2c.html" title="Chapter 10. I2C and SMBus Subsystem"><link rel="prev" href="i2c.html" title="Chapter 10. I2C and SMBus Subsystem"><link rel="next" href="API-struct-i2c-client.html" title="struct i2c_client"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct i2c_driver</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="i2c.html">Prev</a> </td><th width="60%" align="center">Chapter 10. I<sup>2</sup>C and SMBus Subsystem</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-i2c-client.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-i2c-driver"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct i2c_driver — 
+  represent an I2C device driver
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct i2c_driver {
+  unsigned int class;
+  int (* attach_adapter) (struct i2c_adapter *);
+  int (* probe) (struct i2c_client *, const struct i2c_device_id *);
+  int (* remove) (struct i2c_client *);
+  void (* shutdown) (struct i2c_client *);
+  int (* suspend) (struct i2c_client *, pm_message_t mesg);
+  int (* resume) (struct i2c_client *);
+  void (* alert) (struct i2c_client *, unsigned int data);
+  int (* command) (struct i2c_client *client, unsigned int cmd, void *arg);
+  struct device_driver driver;
+  const struct i2c_device_id * id_table;
+  int (* detect) (struct i2c_client *, struct i2c_board_info *);
+  const unsigned short * address_list;
+  struct list_head clients;
+};  </pre></div><div class="refsect1"><a name="idm42584"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">class</span></dt><dd><p>
+What kind of i2c device we instantiate (for detect)
+      </p></dd><dt><span class="term">attach_adapter</span></dt><dd><p>
+Callback for bus addition (deprecated)
+      </p></dd><dt><span class="term">probe</span></dt><dd><p>
+Callback for device binding
+      </p></dd><dt><span class="term">remove</span></dt><dd><p>
+Callback for device unbinding
+      </p></dd><dt><span class="term">shutdown</span></dt><dd><p>
+Callback for device shutdown
+      </p></dd><dt><span class="term">suspend</span></dt><dd><p>
+Callback for device suspend
+      </p></dd><dt><span class="term">resume</span></dt><dd><p>
+Callback for device resume
+      </p></dd><dt><span class="term">alert</span></dt><dd><p>
+Alert callback, for example for the SMBus alert protocol
+      </p></dd><dt><span class="term">command</span></dt><dd><p>
+Callback for bus-wide signaling (optional)
+      </p></dd><dt><span class="term">driver</span></dt><dd><p>
+Device driver model driver
+      </p></dd><dt><span class="term">id_table</span></dt><dd><p>
+List of I2C devices supported by this driver
+      </p></dd><dt><span class="term">detect</span></dt><dd><p>
+Callback for device detection
+      </p></dd><dt><span class="term">address_list</span></dt><dd><p>
+The I2C addresses to probe (for detect)
+      </p></dd><dt><span class="term">clients</span></dt><dd><p>
+List of detected clients we created (for i2c-core use only)
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm42643"></a><h2>Description</h2><p>
+   The driver.owner field should be set to the module owner of this driver.
+   The driver.name field should be set to the name of this driver.
+   </p><p>
+
+   For automatic device detection, both <em class="parameter"><code>detect</code></em> and <em class="parameter"><code>address_list</code></em> must
+   be defined. <em class="parameter"><code>class</code></em> should also be set, otherwise only devices forced
+   with module parameters will be created. The detect function must
+   fill at least the name field of the i2c_board_info structure it is
+   handed upon successful detection, and possibly also the flags field.
+   </p><p>
+
+   If <em class="parameter"><code>detect</code></em> is missing, the driver will still work fine for enumerated
+   devices. Detected devices simply won't be supported. This is expected
+   for the many I2C/SMBus devices which can't be detected reliably, and
+   the ones which can always be enumerated in practice.
+   </p><p>
+
+   The i2c_client structure which is handed to the <em class="parameter"><code>detect</code></em> callback is
+   not a real i2c_client. It is initialized just enough so that you can
+   call i2c_smbus_read_byte_data and friends on it. Don't do anything
+   else with it. In particular, calling dev_dbg and friends on it is
+   not allowed.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="i2c.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="i2c.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-i2c-client.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 10. I<sup>2</sup>C and SMBus Subsystem </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct i2c_client</span></td></tr></table></div></body></html>

@@ -1,0 +1,129 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct ieee80211_hw</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The 802.11 subsystems – for kernel developers"><link rel="up" href="basics.html" title="Chapter 1. Basic hardware handling"><link rel="prev" href="basics.html" title="Chapter 1. Basic hardware handling"><link rel="next" href="API-enum-ieee80211-hw-flags.html" title="enum ieee80211_hw_flags"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct ieee80211_hw</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="basics.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Basic hardware handling</th><td width="20%" align="right"> <a accesskey="n" href="API-enum-ieee80211-hw-flags.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-ieee80211-hw"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct ieee80211_hw — 
+  hardware information and state
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct ieee80211_hw {
+  struct ieee80211_conf conf;
+  struct wiphy * wiphy;
+  const char * rate_control_algorithm;
+  void * priv;
+  u32 flags;
+  unsigned int extra_tx_headroom;
+  unsigned int extra_beacon_tailroom;
+  int vif_data_size;
+  int sta_data_size;
+  int chanctx_data_size;
+  u16 queues;
+  u16 max_listen_interval;
+  s8 max_signal;
+  u8 max_rates;
+  u8 max_report_rates;
+  u8 max_rate_tries;
+  u8 max_rx_aggregation_subframes;
+  u8 max_tx_aggregation_subframes;
+  u8 offchannel_tx_hw_queue;
+  u8 radiotap_mcs_details;
+  u16 radiotap_vht_details;
+  netdev_features_t netdev_features;
+  u8 uapsd_queues;
+  u8 uapsd_max_sp_len;
+  u8 n_cipher_schemes;
+  const struct ieee80211_cipher_scheme * cipher_schemes;
+};  </pre></div><div class="refsect1"><a name="idm6105"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">conf</span></dt><dd><p>
+<span class="structname">struct ieee80211_conf</span>, device configuration, don't use.
+      </p></dd><dt><span class="term">wiphy</span></dt><dd><p>
+This points to the <span class="structname">struct wiphy</span> allocated for this
+802.11 PHY. You must fill in the <em class="parameter"><code>perm_addr</code></em> and <em class="parameter"><code>dev</code></em>
+members of this structure using <code class="function">SET_IEEE80211_DEV</code>
+and <code class="function">SET_IEEE80211_PERM_ADDR</code>. Additionally, all supported
+bands (with channels, bitrates) are registered here.
+      </p></dd><dt><span class="term">rate_control_algorithm</span></dt><dd><p>
+rate control algorithm for this hardware.
+If unset (NULL), the default algorithm will be used. Must be
+set before calling <code class="function">ieee80211_register_hw</code>.
+      </p></dd><dt><span class="term">priv</span></dt><dd><p>
+pointer to private area that was allocated for driver use
+along with this structure.
+      </p></dd><dt><span class="term">flags</span></dt><dd><p>
+hardware flags, see <span class="structname">enum</span> ieee80211_hw_flags.
+      </p></dd><dt><span class="term">extra_tx_headroom</span></dt><dd><p>
+headroom to reserve in each transmit skb
+for use by the driver (e.g. for transmit headers.)
+      </p></dd><dt><span class="term">extra_beacon_tailroom</span></dt><dd><p>
+tailroom to reserve in each beacon tx skb.
+Can be used by drivers to add extra IEs.
+      </p></dd><dt><span class="term">vif_data_size</span></dt><dd><p>
+size (in bytes) of the drv_priv data area
+within <span class="structname">struct ieee80211_vif</span>.
+      </p></dd><dt><span class="term">sta_data_size</span></dt><dd><p>
+size (in bytes) of the drv_priv data area
+within <span class="structname">struct ieee80211_sta</span>.
+      </p></dd><dt><span class="term">chanctx_data_size</span></dt><dd><p>
+size (in bytes) of the drv_priv data area
+within <span class="structname">struct ieee80211_chanctx_conf</span>.
+      </p></dd><dt><span class="term">queues</span></dt><dd><p>
+number of available hardware transmit queues for
+data packets. WMM/QoS requires at least four, these
+queues need to have configurable access parameters.
+      </p></dd><dt><span class="term">max_listen_interval</span></dt><dd><p>
+max listen interval in units of beacon interval
+that HW supports
+      </p></dd><dt><span class="term">max_signal</span></dt><dd><p>
+Maximum value for signal (rssi) in RX information, used
+only when <em class="parameter"><code>IEEE80211_HW_SIGNAL_UNSPEC</code></em> or <em class="parameter"><code>IEEE80211_HW_SIGNAL_DB</code></em>
+      </p></dd><dt><span class="term">max_rates</span></dt><dd><p>
+maximum number of alternate rate retry stages the hw
+can handle.
+      </p></dd><dt><span class="term">max_report_rates</span></dt><dd><p>
+maximum number of alternate rate retry stages
+the hw can report back.
+      </p></dd><dt><span class="term">max_rate_tries</span></dt><dd><p>
+maximum number of tries for each stage
+      </p></dd><dt><span class="term">max_rx_aggregation_subframes</span></dt><dd><p>
+maximum buffer size (number of
+sub-frames) to be used for A-MPDU block ack receiver
+aggregation.
+This is only relevant if the device has restrictions on the
+number of subframes, if it relies on mac80211 to do reordering
+it shouldn't be set.
+      </p></dd><dt><span class="term">max_tx_aggregation_subframes</span></dt><dd><p>
+maximum number of subframes in an
+aggregate an HT driver will transmit, used by the peer as a
+hint to size its reorder buffer.
+      </p></dd><dt><span class="term">offchannel_tx_hw_queue</span></dt><dd><p>
+HW queue ID to use for offchannel TX
+(if <code class="constant">IEEE80211_HW_QUEUE_CONTROL</code> is set)
+      </p></dd><dt><span class="term">radiotap_mcs_details</span></dt><dd><p>
+lists which MCS information can the HW
+reports, by default it is set to _MCS, _GI and _BW but doesn't
+include _FMT. Use <code class="constant">IEEE80211_RADIOTAP_MCS_HAVE_</code>* values, only
+adding _BW is supported today.
+      </p></dd><dt><span class="term">radiotap_vht_details</span></dt><dd><p>
+lists which VHT MCS information the HW reports,
+the default is _GI | _BANDWIDTH.
+Use the <code class="constant">IEEE80211_RADIOTAP_VHT_KNOWN_</code>* values.
+      </p></dd><dt><span class="term">netdev_features</span></dt><dd><p>
+netdev features to be set in each netdev created
+from this HW. Note only HW checksum features are currently
+compatible with mac80211. Other feature bits will be rejected.
+      </p></dd><dt><span class="term">uapsd_queues</span></dt><dd><p>
+This bitmap is included in (re)association frame to indicate
+for each access category if it is uAPSD trigger-enabled and delivery-
+enabled. Use IEEE80211_WMM_IE_STA_QOSINFO_AC_* to set this bitmap.
+Each bit corresponds to different AC. Value '1' in specific bit means
+that corresponding AC is both trigger- and delivery-enabled. '0' means
+neither enabled.
+      </p></dd><dt><span class="term">uapsd_max_sp_len</span></dt><dd><p>
+maximum number of total buffered frames the WMM AP may
+deliver to a WMM STA during any Service Period triggered by the WMM STA.
+Use IEEE80211_WMM_IE_STA_QOSINFO_SP_* for correct values.
+      </p></dd><dt><span class="term">n_cipher_schemes</span></dt><dd><p>
+a size of an array of cipher schemes definitions.
+      </p></dd><dt><span class="term">cipher_schemes</span></dt><dd><p>
+a pointer to an array of cipher scheme definitions
+supported by HW.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm6228"></a><h2>Description</h2><p>
+   </p><p>
+
+   This structure contains the configuration and hardware
+   information for an 802.11 PHY.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="basics.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="basics.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-enum-ieee80211-hw-flags.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Basic hardware handling </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">enum ieee80211_hw_flags</span></td></tr></table></div></body></html>

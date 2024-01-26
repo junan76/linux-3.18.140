@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct i2c_algo_dp_aux_data</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="ch02s05.html#idm9920" title="Display Port Helper Functions Reference"><link rel="prev" href="API-struct-drm-fb-helper-funcs.html" title="struct drm_fb_helper_funcs"><link rel="next" href="API-struct-drm-dp-aux-msg.html" title="struct drm_dp_aux_msg"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct i2c_algo_dp_aux_data</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-drm-fb-helper-funcs.html">Prev</a> </td><th width="60%" align="center">Display Port Helper Functions Reference</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-drm-dp-aux-msg.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-i2c-algo-dp-aux-data"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct i2c_algo_dp_aux_data — 
+  driver interface structure for i2c over dp aux algorithm
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct i2c_algo_dp_aux_data {
+  bool running;
+  u16 address;
+  int (* aux_ch) (struct i2c_adapter *adapter,int mode, uint8_t write_byte,uint8_t *read_byte);
+};  </pre></div><div class="refsect1"><a name="idm9944"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">running</span></dt><dd><p>
+set by the algo indicating whether an i2c is ongoing or whether
+the i2c bus is quiescent
+      </p></dd><dt><span class="term">address</span></dt><dd><p>
+i2c target address for the currently ongoing transfer
+      </p></dd><dt><span class="term">aux_ch</span></dt><dd><p>
+driver callback to transfer a single byte of the i2c payload
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-drm-fb-helper-funcs.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s05.html#idm9920">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-drm-dp-aux-msg.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct drm_fb_helper_funcs</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct drm_dp_aux_msg</span></td></tr></table></div></body></html>

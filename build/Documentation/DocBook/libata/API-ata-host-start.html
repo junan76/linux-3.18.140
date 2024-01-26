@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ata_host_start</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="libataExt.html" title="Chapter 4. libata Library"><link rel="prev" href="API-ata-slave-link-init.html" title="ata_slave_link_init"><link rel="next" href="API-ata-host-init.html" title="ata_host_init"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">ata_host_start</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-ata-slave-link-init.html">Prev</a> </td><th width="60%" align="center">Chapter 4. libata Library</th><td width="20%" align="right"> <a accesskey="n" href="API-ata-host-init.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-ata-host-start"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ata_host_start — 
+     start and freeze ports of an ATA host
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">ata_host_start </b>(</code></td><td>struct ata_host * <var class="pdparam">host</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2530"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>host</code></em></span></dt><dd><p>
+     ATA host to start ports for
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2538"></a><h2>Description</h2><p>
+   Start and then freeze ports of <em class="parameter"><code>host</code></em>.  Started status is
+   recorded in host-&gt;flags, so this function can be called
+   multiple times.  Ports are guaranteed to get started only
+   once.  If host-&gt;ops isn't initialized yet, its set to the
+   first non-dummy port ops.
+</p></div><div class="refsect1"><a name="idm2542"></a><h2>LOCKING</h2><p>
+   Inherited from calling layer (may sleep).
+</p></div><div class="refsect1"><a name="idm2545"></a><h2>RETURNS</h2><p>
+   0 if all ports are started successfully, -errno otherwise.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-ata-slave-link-init.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="libataExt.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-ata-host-init.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">ata_slave_link_init</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ata_host_init</span></td></tr></table></div></body></html>

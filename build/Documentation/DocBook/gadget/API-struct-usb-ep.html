@@ -1,0 +1,53 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct usb_ep</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="core.html" title="Core Objects and Methods"><link rel="prev" href="API-struct-usb-request.html" title="struct usb_request"><link rel="next" href="API-usb-ep-set-maxpacket-limit.html" title="usb_ep_set_maxpacket_limit"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct usb_ep</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-usb-request.html">Prev</a> </td><th width="60%" align="center">Core Objects and Methods</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-ep-set-maxpacket-limit.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-usb-ep"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct usb_ep — 
+     device side representation of USB endpoint
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct usb_ep {
+  void * driver_data;
+  const char * name;
+  const struct usb_ep_ops * ops;
+  struct list_head ep_list;
+  unsigned maxpacket:16;
+  unsigned maxpacket_limit:16;
+  unsigned max_streams:16;
+  unsigned mult:2;
+  unsigned maxburst:5;
+  u8 address;
+  const struct usb_endpoint_descriptor * desc;
+  const struct usb_ss_ep_comp_descriptor * comp_desc;
+};  </pre></div><div class="refsect1"><a name="idm321"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">driver_data</span></dt><dd><p>
+   for use by the gadget driver.
+      </p></dd><dt><span class="term">name</span></dt><dd><p>
+   identifier for the endpoint, such as <span class="quote">“<span class="quote">ep-a</span>”</span> or <span class="quote">“<span class="quote">ep9in-bulk</span>”</span>
+      </p></dd><dt><span class="term">ops</span></dt><dd><p>
+   Function pointers used to access hardware-specific operations.
+      </p></dd><dt><span class="term">ep_list</span></dt><dd><p>
+   the gadget's ep_list holds all of its endpoints
+      </p></dd><dt><span class="term">maxpacket</span></dt><dd><p>
+   The maximum packet size used on this endpoint.  The initial
+   value can sometimes be reduced (hardware allowing), according to
+   the endpoint descriptor used to configure the endpoint.
+      </p></dd><dt><span class="term">maxpacket_limit</span></dt><dd><p>
+   The maximum packet size value which can be handled by this
+   endpoint. It's set once by UDC driver when endpoint is initialized, and
+   should not be changed. Should not be confused with maxpacket.
+      </p></dd><dt><span class="term">max_streams</span></dt><dd><p>
+   The maximum number of streams supported
+   by this EP (0 - 16, actual number is 2^n)
+      </p></dd><dt><span class="term">mult</span></dt><dd><p>
+   multiplier, 'mult' value for SS Isoc EPs
+      </p></dd><dt><span class="term">maxburst</span></dt><dd><p>
+   the maximum number of bursts supported by this EP (for usb3)
+      </p></dd><dt><span class="term">address</span></dt><dd><p>
+   used to identify the endpoint when finding descriptor that
+   matches connection speed
+      </p></dd><dt><span class="term">desc</span></dt><dd><p>
+   endpoint descriptor.  This pointer is set before the endpoint is
+   enabled and remains valid until the endpoint is disabled.
+      </p></dd><dt><span class="term">comp_desc</span></dt><dd><p>
+   In case of SuperSpeed support, this is the endpoint companion
+   descriptor that is used to configure the endpoint
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm374"></a><h2>Description</h2><p>
+   the bus controller driver lists all the general purpose endpoints in
+   gadget-&gt;ep_list.  the control endpoint (gadget-&gt;ep0) is not in that list,
+   and is accessed only in response to a driver <code class="function">setup</code> callback.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-usb-request.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="core.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-ep-set-maxpacket-limit.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct usb_request</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_ep_set_maxpacket_limit</span></td></tr></table></div></body></html>

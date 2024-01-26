@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>i2o_msg_post_wait_mem</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch04s02.html" title="I2O message devices"><link rel="prev" href="API-i2o-config-exit.html" title="i2o_config_exit"><link rel="next" href="API-i2o-exec-lct-get.html" title="i2o_exec_lct_get"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">i2o_msg_post_wait_mem</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-i2o-config-exit.html">Prev</a> </td><th width="60%" align="center">I2O message devices</th><td width="20%" align="right"> <a accesskey="n" href="API-i2o-exec-lct-get.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-i2o-msg-post-wait-mem"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>i2o_msg_post_wait_mem — 
+  Post and wait a message with DMA buffers
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">i2o_msg_post_wait_mem </b>(</code></td><td>struct i2o_controller * <var class="pdparam">c</var>, </td></tr><tr><td> </td><td>struct i2o_message * <var class="pdparam">msg</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">timeout</var>, </td></tr><tr><td> </td><td>struct i2o_dma * <var class="pdparam">dma</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm26440"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>c</code></em></span></dt><dd><p>
+     controller
+    </p></dd><dt><span class="term"><em class="parameter"><code>msg</code></em></span></dt><dd><p>
+     message to post
+    </p></dd><dt><span class="term"><em class="parameter"><code>timeout</code></em></span></dt><dd><p>
+     time in seconds to wait
+    </p></dd><dt><span class="term"><em class="parameter"><code>dma</code></em></span></dt><dd><p>
+     i2o_dma struct of the DMA buffer to free on failure
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm26463"></a><h2>Description</h2><p>
+   This API allows an OSM to post a message and then be told whether or
+   not the system received a successful reply. If the message times out
+   then the value '-ETIMEDOUT' is returned. This is a special case. In
+   this situation the message may (should) complete at an indefinite time
+   in the future. When it completes it will use the memory buffer
+   attached to the request. If -ETIMEDOUT is returned then the memory
+   buffer must not be freed. Instead the event completion will free them
+   for you. In all other cases the buffer are your problem.
+   </p><p>
+
+   Returns 0 on success, negative error code on timeout or positive error
+   code from reply.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-i2o-config-exit.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-i2o-exec-lct-get.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">i2o_config_exit</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">i2o_exec_lct_get</span></td></tr></table></div></body></html>

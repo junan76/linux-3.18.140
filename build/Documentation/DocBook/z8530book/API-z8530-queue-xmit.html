@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>z8530_queue_xmit</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Z8530 Programming Guide"><link rel="up" href="pubfunctions.html" title="Chapter 9. Public Functions Provided"><link rel="prev" href="API-z8530-null-rx.html" title="z8530_null_rx"><link rel="next" href="intfunctions.html" title="Chapter 10. Internal Functions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">z8530_queue_xmit</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-z8530-null-rx.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Public Functions Provided</th><td width="20%" align="right"> <a accesskey="n" href="intfunctions.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-z8530-queue-xmit"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>z8530_queue_xmit — 
+     Queue a packet
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">netdev_tx_t <b class="fsfunc">z8530_queue_xmit </b>(</code></td><td>struct z8530_channel * <var class="pdparam">c</var>, </td></tr><tr><td> </td><td>struct sk_buff * <var class="pdparam">skb</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm587"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>c</code></em></span></dt><dd><p>
+     The channel to use
+    </p></dd><dt><span class="term"><em class="parameter"><code>skb</code></em></span></dt><dd><p>
+     The packet to kick down the channel
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm600"></a><h2>Description</h2><p>
+   Queue a packet for transmission. Because we have rather
+   hard to hit interrupt latencies for the Z85230 per packet 
+   even in DMA mode we do the flip to DMA buffer if needed here
+   not in the IRQ.
+   </p><p>
+
+   Called from the network code. The lock is not held at this 
+   point.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-z8530-null-rx.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pubfunctions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="intfunctions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">z8530_null_rx</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 10. Internal Functions</td></tr></table></div></body></html>

@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>xdr_buf_subsegment</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s05.html" title="SUN RPC subsystem"><link rel="prev" href="API-xdr-enter-page.html" title="xdr_enter_page"><link rel="next" href="API-xdr-buf-trim.html" title="xdr_buf_trim"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">xdr_buf_subsegment</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-xdr-enter-page.html">Prev</a> </td><th width="60%" align="center">SUN RPC subsystem</th><td width="20%" align="right"> <a accesskey="n" href="API-xdr-buf-trim.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-xdr-buf-subsegment"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdr_buf_subsegment — 
+     set subbuf to a portion of buf
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">xdr_buf_subsegment </b>(</code></td><td>struct xdr_buf * <var class="pdparam">buf</var>, </td></tr><tr><td> </td><td>struct xdr_buf * <var class="pdparam">subbuf</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">base</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">len</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm8708"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>buf</code></em></span></dt><dd><p>
+     an xdr buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>subbuf</code></em></span></dt><dd><p>
+     the result buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>base</code></em></span></dt><dd><p>
+     beginning of range in bytes
+    </p></dd><dt><span class="term"><em class="parameter"><code>len</code></em></span></dt><dd><p>
+     length of range in bytes
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm8731"></a><h2>Description</h2><p>
+   sets <em class="parameter"><code>subbuf</code></em> to an xdr buffer representing the portion of <em class="parameter"><code>buf</code></em> of
+   length <em class="parameter"><code>len</code></em> starting at offset <em class="parameter"><code>base</code></em>.
+   </p><p>
+
+   <em class="parameter"><code>buf</code></em> and <em class="parameter"><code>subbuf</code></em> may be pointers to the same struct xdr_buf.
+   </p><p>
+
+   Returns -1 if base of length are out of bounds.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-xdr-enter-page.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s05.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-xdr-buf-trim.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">xdr_enter_page</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">xdr_buf_trim</span></td></tr></table></div></body></html>

@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ilookup5_nowait</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="inode_handling.html" title="Inode Handling"><link rel="prev" href="API-iunique.html" title="iunique"><link rel="next" href="API-ilookup5.html" title="ilookup5"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">ilookup5_nowait</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-iunique.html">Prev</a> </td><th width="60%" align="center">Inode Handling</th><td width="20%" align="right"> <a accesskey="n" href="API-ilookup5.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-ilookup5-nowait"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ilookup5_nowait — 
+     search for an inode in the inode cache
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct inode * <b class="fsfunc">ilookup5_nowait </b>(</code></td><td>struct super_block * <var class="pdparam">sb</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">hashval</var>, </td></tr><tr><td> </td><td>int (*<var class="pdparam">test</var>)
+     <code>(</code>struct inode *, void *<code>)</code>, </td></tr><tr><td> </td><td>void * <var class="pdparam">data</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1977"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>sb</code></em></span></dt><dd><p>
+     super block of file system to search
+    </p></dd><dt><span class="term"><em class="parameter"><code>hashval</code></em></span></dt><dd><p>
+     hash value (usually inode number) to search for
+    </p></dd><dt><span class="term"><em class="parameter"><code>test</code></em></span></dt><dd><p>
+     callback used for comparisons between inodes
+    </p></dd><dt><span class="term"><em class="parameter"><code>data</code></em></span></dt><dd><p>
+     opaque data pointer to pass to <em class="parameter"><code>test</code></em>
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2001"></a><h2>Description</h2><p>
+   Search for the inode specified by <em class="parameter"><code>hashval</code></em> and <em class="parameter"><code>data</code></em> in the inode cache.
+   If the inode is in the cache, the inode is returned with an incremented
+   reference count.
+</p></div><div class="refsect1"><a name="idm2006"></a><h2>Note</h2><p>
+   I_NEW is not waited upon so you have to be very careful what you do
+   with the returned inode.  You probably should be using <code class="function">ilookup5</code> instead.
+</p></div><div class="refsect1"><a name="idm2010"></a><h2>Note2</h2><p>
+   <em class="parameter"><code>test</code></em> is called with the inode_hash_lock held, so can't sleep.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-iunique.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="inode_handling.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-ilookup5.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">iunique</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ilookup5</span></td></tr></table></div></body></html>

@@ -1,0 +1,52 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct spi_message</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="spi.html" title="Chapter 9. Serial Peripheral Interface (SPI)"><link rel="prev" href="API-struct-spi-transfer.html" title="struct spi_transfer"><link rel="next" href="API-spi-message-init-with-transfers.html" title="spi_message_init_with_transfers"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct spi_message</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-spi-transfer.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Serial Peripheral Interface (SPI)</th><td width="20%" align="right"> <a accesskey="n" href="API-spi-message-init-with-transfers.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-spi-message"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct spi_message — 
+     one multi-segment SPI transaction
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct spi_message {
+  struct list_head transfers;
+  struct spi_device * spi;
+  unsigned is_dma_mapped:1;
+  void (* complete) (void *context);
+  void * context;
+  unsigned frame_length;
+  unsigned actual_length;
+  int status;
+  struct list_head queue;
+  void * state;
+};  </pre></div><div class="refsect1"><a name="idm41278"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">transfers</span></dt><dd><p>
+   list of transfer segments in this transaction
+      </p></dd><dt><span class="term">spi</span></dt><dd><p>
+   SPI device to which the transaction is queued
+      </p></dd><dt><span class="term">is_dma_mapped</span></dt><dd><p>
+   if true, the caller provided both dma and cpu virtual
+   addresses for each transfer buffer
+      </p></dd><dt><span class="term">complete</span></dt><dd><p>
+   called to report transaction completions
+      </p></dd><dt><span class="term">context</span></dt><dd><p>
+   the argument to <code class="function">complete</code> when it's called
+      </p></dd><dt><span class="term">frame_length</span></dt><dd><p>
+   the total number of bytes in the message
+      </p></dd><dt><span class="term">actual_length</span></dt><dd><p>
+   the total number of bytes that were transferred in all
+   successful segments
+      </p></dd><dt><span class="term">status</span></dt><dd><p>
+   zero for success, else negative errno
+      </p></dd><dt><span class="term">queue</span></dt><dd><p>
+   for use by whichever driver currently owns the message
+      </p></dd><dt><span class="term">state</span></dt><dd><p>
+   for use by whichever driver currently owns the message
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm41322"></a><h2>Description</h2><p>
+   A <em class="parameter"><code>spi_message</code></em> is used to execute an atomic sequence of data transfers,
+   each represented by a struct spi_transfer.  The sequence is <span class="quote">“<span class="quote">atomic</span>”</span>
+   in the sense that no other spi_message may use that SPI bus until that
+   sequence completes.  On some systems, many such sequences can execute as
+   as single programmed DMA transfer.  On all systems, these messages are
+   queued, and might complete after transactions to other devices.  Messages
+   sent to a given spi_device are alway executed in FIFO order.
+   </p><p>
+
+   The code that submits an spi_message (and its spi_transfers)
+   to the lower layers is responsible for managing its memory.
+   Zero-initialize every field you don't set up explicitly, to
+   insulate against future API updates.  After you submit a message
+   and its transfers, ignore them until its completion callback.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-spi-transfer.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="spi.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-spi-message-init-with-transfers.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct spi_transfer</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">spi_message_init_with_transfers</span></td></tr></table></div></body></html>

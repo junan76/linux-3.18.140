@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>generic_make_request</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="blkdev.html" title="Chapter 14. Block Devices"><link rel="prev" href="API-blk-add-request-payload.html" title="blk_add_request_payload"><link rel="next" href="API-submit-bio.html" title="submit_bio"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">generic_make_request</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-blk-add-request-payload.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Block Devices</th><td width="20%" align="right"> <a accesskey="n" href="API-submit-bio.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-generic-make-request"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>generic_make_request — 
+     hand a buffer to its device driver for I/O
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">generic_make_request </b>(</code></td><td>struct bio * <var class="pdparam">bio</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm25847"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>bio</code></em></span></dt><dd><p>
+     The bio describing the location in memory and on the device.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm25855"></a><h2>Description</h2><p>
+   <code class="function">generic_make_request</code> is used to make I/O requests of block
+   devices. It is passed a <span class="structname">struct bio</span>, which describes the I/O that needs
+   to be done.
+   </p><p>
+
+   <code class="function">generic_make_request</code> does not return any status.  The
+   success/failure status of the request, along with notification of
+   completion, is delivered asynchronously through the bio-&gt;bi_end_io
+   function described (one day) else where.
+   </p><p>
+
+   The caller of generic_make_request must make sure that bi_io_vec
+   are set to describe the memory buffer, and that bi_dev and bi_sector are
+   set to describe the device address, and the
+   bi_end_io and optionally bi_private are set to describe how
+   completion notification should be signaled.
+   </p><p>
+
+   generic_make_request and the drivers it calls may use bi_next if this
+   bio happens to be merged with someone else, and may resubmit the bio to
+   a lower device by calling into generic_make_request recursively, which
+   means the bio should NOT be touched after the call to -&gt;make_request_fn.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-blk-add-request-payload.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="blkdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-submit-bio.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">blk_add_request_payload</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">submit_bio</span></td></tr></table></div></body></html>

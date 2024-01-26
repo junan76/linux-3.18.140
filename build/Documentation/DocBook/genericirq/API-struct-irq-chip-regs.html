@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct irq_chip_regs</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux generic IRQ handling"><link rel="up" href="structs.html" title="Chapter 8. Structures"><link rel="prev" href="API-struct-irq-chip.html" title="struct irq_chip"><link rel="next" href="API-struct-irq-chip-type.html" title="struct irq_chip_type"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct irq_chip_regs</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-irq-chip.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Structures</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-irq-chip-type.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-irq-chip-regs"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct irq_chip_regs — 
+     register offsets for struct irq_gci
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct irq_chip_regs {
+  unsigned long enable;
+  unsigned long disable;
+  unsigned long mask;
+  unsigned long ack;
+  unsigned long eoi;
+  unsigned long type;
+  unsigned long polarity;
+};  </pre></div><div class="refsect1"><a name="idm824"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">enable</span></dt><dd><p>
+   Enable register offset to reg_base
+      </p></dd><dt><span class="term">disable</span></dt><dd><p>
+   Disable register offset to reg_base
+      </p></dd><dt><span class="term">mask</span></dt><dd><p>
+   Mask register offset to reg_base
+      </p></dd><dt><span class="term">ack</span></dt><dd><p>
+   Ack register offset to reg_base
+      </p></dd><dt><span class="term">eoi</span></dt><dd><p>
+   Eoi register offset to reg_base
+      </p></dd><dt><span class="term">type</span></dt><dd><p>
+   Type configuration register offset to reg_base
+      </p></dd><dt><span class="term">polarity</span></dt><dd><p>
+   Polarity configuration register offset to reg_base
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-irq-chip.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="structs.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-irq-chip-type.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct irq_chip</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct irq_chip_type</span></td></tr></table></div></body></html>

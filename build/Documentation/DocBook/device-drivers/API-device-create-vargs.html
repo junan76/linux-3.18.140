@@ -1,0 +1,33 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>device_create_vargs</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch02s02.html" title="Device Drivers Base"><link rel="prev" href="API-root-device-unregister.html" title="root_device_unregister"><link rel="next" href="API-device-create.html" title="device_create"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">device_create_vargs</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-root-device-unregister.html">Prev</a> </td><th width="60%" align="center">Device Drivers Base</th><td width="20%" align="right"> <a accesskey="n" href="API-device-create.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-device-create-vargs"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>device_create_vargs — 
+     creates a device and registers it with sysfs
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct device * <b class="fsfunc">device_create_vargs </b>(</code></td><td>struct class * <var class="pdparam">class</var>, </td></tr><tr><td> </td><td>struct device * <var class="pdparam">parent</var>, </td></tr><tr><td> </td><td>dev_t <var class="pdparam">devt</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">drvdata</var>, </td></tr><tr><td> </td><td>const char * <var class="pdparam">fmt</var>, </td></tr><tr><td> </td><td>va_list <var class="pdparam">args</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm12687"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>class</code></em></span></dt><dd><p>
+     pointer to the struct class that this device should be registered to
+    </p></dd><dt><span class="term"><em class="parameter"><code>parent</code></em></span></dt><dd><p>
+     pointer to the parent struct device of this new device, if any
+    </p></dd><dt><span class="term"><em class="parameter"><code>devt</code></em></span></dt><dd><p>
+     the dev_t for the char device to be added
+    </p></dd><dt><span class="term"><em class="parameter"><code>drvdata</code></em></span></dt><dd><p>
+     the data to be added to the device for callbacks
+    </p></dd><dt><span class="term"><em class="parameter"><code>fmt</code></em></span></dt><dd><p>
+     string for the device's name
+    </p></dd><dt><span class="term"><em class="parameter"><code>args</code></em></span></dt><dd><p>
+     va_list for the device's name
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm12720"></a><h2>Description</h2><p>
+   This function can be used by char device classes.  A struct device
+   will be created in sysfs, registered to the specified class.
+   </p><p>
+
+   A <span class="quote">“<span class="quote">dev</span>”</span> file will be created, showing the dev_t for the device, if
+   the dev_t is not 0,0.
+   If a pointer to a parent struct device is passed in, the newly created
+   struct device will be a child of that device in sysfs.
+   The pointer to the struct device will be returned from the call.
+   Any further sysfs files that might be required can be created using this
+   pointer.
+   </p><p>
+
+   Returns <span class="structname">struct device</span> pointer on success, or <code class="function">ERR_PTR</code> on error.
+</p></div><div class="refsect1"><a name="idm12728"></a><h2>Note</h2><p>
+   the struct class passed to this function must have previously
+   been created with a call to <code class="function">class_create</code>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-root-device-unregister.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-device-create.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">root_device_unregister</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">device_create</span></td></tr></table></div></body></html>

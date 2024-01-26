@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct pipe_buffer</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="pipes.html" title="Chapter 8. pipes API"><link rel="prev" href="pipes.html" title="Chapter 8. pipes API"><link rel="next" href="API-struct-pipe-inode-info.html" title="struct pipe_inode_info"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct pipe_buffer</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pipes.html">Prev</a> </td><th width="60%" align="center">Chapter 8. pipes API</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-pipe-inode-info.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-pipe-buffer"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct pipe_buffer — 
+  a linux kernel pipe buffer
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct pipe_buffer {
+  struct page * page;
+  unsigned int offset;
+  unsigned int len;
+  const struct pipe_buf_operations * ops;
+  unsigned int flags;
+  unsigned long private;
+};  </pre></div><div class="refsect1"><a name="idm12493"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">page</span></dt><dd><p>
+the page containing the data for the pipe buffer
+      </p></dd><dt><span class="term">offset</span></dt><dd><p>
+offset of data inside the <em class="parameter"><code>page</code></em>
+      </p></dd><dt><span class="term">len</span></dt><dd><p>
+length of data inside the <em class="parameter"><code>page</code></em>
+      </p></dd><dt><span class="term">ops</span></dt><dd><p>
+operations associated with this buffer. See <em class="parameter"><code>pipe_buf_operations</code></em>.
+      </p></dd><dt><span class="term">flags</span></dt><dd><p>
+pipe buffer flags. See above.
+      </p></dd><dt><span class="term">private</span></dt><dd><p>
+private data owned by the ops.
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pipes.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pipes.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-pipe-inode-info.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 8. pipes API </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct pipe_inode_info</span></td></tr></table></div></body></html>

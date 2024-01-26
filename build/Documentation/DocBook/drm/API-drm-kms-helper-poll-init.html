@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>drm_kms_helper_poll_init</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="ch02s05.html#idm8963" title="Output Probing Helper Functions Reference"><link rel="prev" href="API-drm-kms-helper-poll-enable.html" title="drm_kms_helper_poll_enable"><link rel="next" href="API-drm-kms-helper-poll-fini.html" title="drm_kms_helper_poll_fini"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">drm_kms_helper_poll_init</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-kms-helper-poll-enable.html">Prev</a> </td><th width="60%" align="center">Output Probing Helper Functions Reference</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-kms-helper-poll-fini.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-drm-kms-helper-poll-init"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>drm_kms_helper_poll_init — 
+     initialize and enable output polling
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">drm_kms_helper_poll_init </b>(</code></td><td>struct drm_device * <var class="pdparam">dev</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9193"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     drm_device
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9201"></a><h2>Description</h2><p>
+   This function intializes and then also enables output polling support for
+   <em class="parameter"><code>dev</code></em>. Drivers which do not have reliable hotplug support in hardware can use
+   this helper infrastructure to regularly poll such connectors for changes in
+   their connection state.
+   </p><p>
+
+   Drivers can control which connectors are polled by setting the
+   DRM_CONNECTOR_POLL_CONNECT and DRM_CONNECTOR_POLL_DISCONNECT flags. On
+   connectors where probing live outputs can result in visual distortion drivers
+   should not set the DRM_CONNECTOR_POLL_DISCONNECT flag to avoid this.
+   Connectors which have no flag or only DRM_CONNECTOR_POLL_HPD set are
+   completely ignored by the polling logic.
+   </p><p>
+
+   Note that a connector can be both polled and probed from the hotplug handler,
+   in case the hotplug interrupt is known to be unreliable.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-kms-helper-poll-enable.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s05.html#idm8963">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-kms-helper-poll-fini.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_kms_helper_poll_enable</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_kms_helper_poll_fini</span></td></tr></table></div></body></html>

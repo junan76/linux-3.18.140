@@ -1,0 +1,99 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 8. Kernel Debugger Internals</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="up" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="prev" href="KGDBTestSuite.html" title="Chapter 7. kgdb Test Suite"><link rel="next" href="API-kgdb-skipexception.html" title="kgdb_skipexception"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 8. Kernel Debugger Internals</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="KGDBTestSuite.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-kgdb-skipexception.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="CommonBackEndReq"></a>Chapter 8. Kernel Debugger Internals</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="CommonBackEndReq.html#kgdbArchitecture">Architecture Specifics</a></span></dt><dt><span class="sect1"><a href="kgdbocDesign.html">kgdboc internals</a></span></dt><dd><dl><dt><span class="sect2"><a href="kgdbocDesign.html#idm1069">kgdboc and uarts</a></span></dt><dt><span class="sect2"><a href="kgdbocDesign.html#kgdbocKbd">kgdboc and keyboards</a></span></dt><dt><span class="sect2"><a href="kgdbocDesign.html#kgdbocKms">kgdboc and kms</a></span></dt></dl></dd></dl></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="kgdbArchitecture"></a>Architecture Specifics</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-kgdb-skipexception.html"><span class="phrase">kgdb_skipexception</span></a></span><span class="refpurpose"> — 
+  (optional) exit kgdb_handle_exception early
+ </span></dt><dt><span class="refentrytitle"><a href="API-kgdb-breakpoint.html"><span class="phrase">kgdb_breakpoint</span></a></span><span class="refpurpose"> — 
+     compiled in breakpoint
+ </span></dt><dt><span class="refentrytitle"><a href="API-kgdb-arch-init.html"><span class="phrase">kgdb_arch_init</span></a></span><span class="refpurpose"> — 
+     Perform any architecture specific initalization.
+ </span></dt><dt><span class="refentrytitle"><a href="API-kgdb-arch-exit.html"><span class="phrase">kgdb_arch_exit</span></a></span><span class="refpurpose"> — 
+     Perform any architecture specific uninitalization.
+ </span></dt><dt><span class="refentrytitle"><a href="API-pt-regs-to-gdb-regs.html"><span class="phrase">pt_regs_to_gdb_regs</span></a></span><span class="refpurpose"> — 
+     Convert ptrace regs to GDB regs
+ </span></dt><dt><span class="refentrytitle"><a href="API-sleeping-thread-to-gdb-regs.html"><span class="phrase">sleeping_thread_to_gdb_regs</span></a></span><span class="refpurpose"> — 
+     Convert ptrace regs to GDB regs
+ </span></dt><dt><span class="refentrytitle"><a href="API-gdb-regs-to-pt-regs.html"><span class="phrase">gdb_regs_to_pt_regs</span></a></span><span class="refpurpose"> — 
+     Convert GDB regs to ptrace regs.
+ </span></dt><dt><span class="refentrytitle"><a href="API-kgdb-arch-handle-exception.html"><span class="phrase">kgdb_arch_handle_exception</span></a></span><span class="refpurpose"> — 
+     Handle architecture specific GDB packets.
+ </span></dt><dt><span class="refentrytitle"><a href="API-kgdb-roundup-cpus.html"><span class="phrase">kgdb_roundup_cpus</span></a></span><span class="refpurpose"> — 
+     Get other CPUs into a holding pattern
+ </span></dt><dt><span class="refentrytitle"><a href="API-kgdb-arch-set-pc.html"><span class="phrase">kgdb_arch_set_pc</span></a></span><span class="refpurpose"> — 
+     Generic call back to the program counter
+ </span></dt><dt><span class="refentrytitle"><a href="API-kgdb-arch-late.html"><span class="phrase">kgdb_arch_late</span></a></span><span class="refpurpose"> — 
+     Perform any architecture specific initalization.
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-kgdb-arch.html"><span class="phrase">struct kgdb_arch</span></a></span><span class="refpurpose"> — 
+     Describe architecture specific values.
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-kgdb-io.html"><span class="phrase">struct kgdb_io</span></a></span><span class="refpurpose"> — 
+     Describe the interface for an I/O driver to talk with KGDB.
+ </span></dt></dl></div><p>
+      The kernel debugger is organized into a number of components:
+      </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>The debug core</p><p>
+      The debug core is found in kernel/debugger/debug_core.c.  It contains:
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A generic OS exception handler which includes
+      sync'ing the processors into a stopped state on an multi-CPU
+      system.</p></li><li class="listitem"><p>The API to talk to the kgdb I/O drivers</p></li><li class="listitem"><p>The API to make calls to the arch-specific kgdb implementation</p></li><li class="listitem"><p>The logic to perform safe memory reads and writes to memory while using the debugger</p></li><li class="listitem"><p>A full implementation for software breakpoints unless overridden by the arch</p></li><li class="listitem"><p>The API to invoke either the kdb or kgdb frontend to the debug core.</p></li><li class="listitem"><p>The structures and callback API for atomic kernel mode setting.</p><p>NOTE: kgdboc is where the kms callbacks are invoked.</p></li></ul></div><p>
+      </p></li><li class="listitem"><p>kgdb arch-specific implementation</p><p>
+      This implementation is generally found in arch/*/kernel/kgdb.c.
+      As an example, arch/x86/kernel/kgdb.c contains the specifics to
+      implement HW breakpoint as well as the initialization to
+      dynamically register and unregister for the trap handlers on
+      this architecture.  The arch-specific portion implements:
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>contains an arch-specific trap catcher which
+      invokes kgdb_handle_exception() to start kgdb about doing its
+      work</p></li><li class="listitem"><p>translation to and from gdb specific packet format to pt_regs</p></li><li class="listitem"><p>Registration and unregistration of architecture specific trap hooks</p></li><li class="listitem"><p>Any special exception handling and cleanup</p></li><li class="listitem"><p>NMI exception handling and cleanup</p></li><li class="listitem"><p>(optional)HW breakpoints</p></li></ul></div><p>
+      </p></li><li class="listitem"><p>gdbstub frontend (aka kgdb)</p><p>The gdbstub is located in kernel/debug/gdbstub.c. It contains:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>All the logic to implement the gdb serial protocol</p></li></ul></div></li><li class="listitem"><p>kdb frontend</p><p>The kdb debugger shell is broken down into a number of
+      components.  The kdb core is located in kernel/debug/kdb.  There
+      are a number of helper functions in some of the other kernel
+      components to make it possible for kdb to examine and report
+      information about the kernel without taking locks that could
+      cause a kernel deadlock.  The kdb core contains implements the following functionality.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A simple shell</p></li><li class="listitem"><p>The kdb core command set</p></li><li class="listitem"><p>A registration API to register additional kdb shell commands.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>A good example of a self-contained kdb module
+        is the "ftdump" command for dumping the ftrace buffer.  See:
+        kernel/trace/trace_kdb.c</p></li><li class="listitem"><p>For an example of how to dynamically register
+        a new kdb command you can build the kdb_hello.ko kernel module
+        from samples/kdb/kdb_hello.c.  To build this example you can
+        set CONFIG_SAMPLES=y and CONFIG_SAMPLE_KDB=m in your kernel
+        config.  Later run "modprobe kdb_hello" and the next time you
+        enter the kdb shell, you can run the "hello"
+        command.</p></li></ul></div></li><li class="listitem"><p>The implementation for kdb_printf() which
+        emits messages directly to I/O drivers, bypassing the kernel
+        log.</p></li><li class="listitem"><p>SW / HW breakpoint management for the kdb shell</p></li></ul></div></li><li class="listitem"><p>kgdb I/O driver</p><p>
+      Each kgdb I/O driver has to provide an implementation for the following:
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>configuration via built-in or module</p></li><li class="listitem"><p>dynamic configuration and kgdb hook registration calls</p></li><li class="listitem"><p>read and write character interface</p></li><li class="listitem"><p>A cleanup handler for unconfiguring from the kgdb core</p></li><li class="listitem"><p>(optional) Early debug methodology</p></li></ul></div><p>
+      Any given kgdb I/O driver has to operate very closely with the
+      hardware and must do it in such a way that does not enable
+      interrupts or change other parts of the system context without
+      completely restoring them. The kgdb core will repeatedly "poll"
+      a kgdb I/O driver for characters when it needs input.  The I/O
+      driver is expected to return immediately if there is no data
+      available.  Doing so allows for the future possibility to touch
+      watch dog hardware in such a way as to have a target system not
+      reset when these are enabled.
+      </p></li></ol></div><p>
+      </p><p>
+      If you are intent on adding kgdb architecture specific support
+      for a new architecture, the architecture should define
+      <code class="constant">HAVE_ARCH_KGDB</code> in the architecture specific
+      Kconfig file.  This will enable kgdb for the architecture, and
+      at that point you must create an architecture specific kgdb
+      implementation.
+      </p><p>
+      There are a few flags which must be set on every architecture in
+      their &lt;asm/kgdb.h&gt; file.  These are:
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	  NUMREGBYTES: The size in bytes of all of the registers, so
+	  that we can ensure they will all fit into a packet.
+	  </p><p>
+	  BUFMAX: The size in bytes of the buffer GDB will read into.
+	  This must be larger than NUMREGBYTES.
+	  </p><p>
+	  CACHE_FLUSH_IS_SAFE: Set to 1 if it is always safe to call
+	  flush_cache_range or flush_icache_range.  On some architectures,
+	  these functions may not be safe to call on SMP since we keep other
+	  CPUs in a holding pattern.
+	  </p></li></ul></div><p>
+      </p><p>
+      There are also the following functions for the common backend,
+      found in kernel/kgdb.c, that must be supplied by the
+      architecture-specific backend unless marked as (optional), in
+      which case a default function maybe used if the architecture
+      does not need to provide a specific implementation.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="KGDBTestSuite.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-kgdb-skipexception.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 7. kgdb Test Suite </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">kgdb_skipexception</span></td></tr></table></div></body></html>

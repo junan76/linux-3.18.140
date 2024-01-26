@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>devm_input_allocate_device</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="input_subsystem.html#idm37901" title="Input core"><link rel="prev" href="API-input-allocate-device.html" title="input_allocate_device"><link rel="next" href="API-input-free-device.html" title="input_free_device"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">devm_input_allocate_device</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-input-allocate-device.html">Prev</a> </td><th width="60%" align="center">Input core</th><td width="20%" align="right"> <a accesskey="n" href="API-input-free-device.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-devm-input-allocate-device"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>devm_input_allocate_device — 
+     allocate managed input device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct input_dev * <b class="fsfunc">devm_input_allocate_device </b>(</code></td><td>struct device * <var class="pdparam">dev</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm38892"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     device owning the input device being created
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm38900"></a><h2>Description</h2><p>
+   Returns prepared struct input_dev or <code class="constant">NULL</code>.
+   </p><p>
+
+   Managed input devices do not need to be explicitly unregistered or
+   freed as it will be done automatically when owner device unbinds from
+   its driver (or binding fails). Once managed input device is allocated,
+   it is ready to be set up and registered in the same fashion as regular
+   input device. There are no special devm_input_device_[un]<code class="function">register</code>
+   variants, regular ones work with both managed and unmanaged devices,
+   should you need them. In most cases however, managed input device need
+   not be explicitly unregistered or freed.
+</p></div><div class="refsect1"><a name="idm38906"></a><h2>NOTE</h2><p>
+   the owner device is set up as parent of input device and users
+   should not override it.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-input-allocate-device.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="input_subsystem.html#idm37901">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-input-free-device.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">input_allocate_device</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">input_free_device</span></td></tr></table></div></body></html>

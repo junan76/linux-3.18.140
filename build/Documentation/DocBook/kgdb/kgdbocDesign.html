@@ -1,0 +1,66 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>kgdboc internals</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="up" href="CommonBackEndReq.html" title="Chapter 8. Kernel Debugger Internals"><link rel="prev" href="API-struct-kgdb-io.html" title="struct kgdb_io"><link rel="next" href="credits.html" title="Chapter 9. Credits"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">kgdboc internals</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-kgdb-io.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Kernel Debugger Internals</th><td width="20%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="kgdbocDesign"></a>kgdboc internals</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="kgdbocDesign.html#idm1069">kgdboc and uarts</a></span></dt><dt><span class="sect2"><a href="kgdbocDesign.html#kgdbocKbd">kgdboc and keyboards</a></span></dt><dt><span class="sect2"><a href="kgdbocDesign.html#kgdbocKms">kgdboc and kms</a></span></dt></dl></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm1069"></a>kgdboc and uarts</h3></div></div></div><p>
+  The kgdboc driver is actually a very thin driver that relies on the
+  underlying low level to the hardware driver having "polling hooks"
+  which the to which the tty driver is attached.  In the initial
+  implementation of kgdboc it the serial_core was changed to expose a
+  low level UART hook for doing polled mode reading and writing of a
+  single character while in an atomic context.  When kgdb makes an I/O
+  request to the debugger, kgdboc invokes a callback in the serial
+  core which in turn uses the callback in the UART driver.</p><p>
+  When using kgdboc with a UART, the UART driver must implement two callbacks in the <code class="constant">struct uart_ops</code>. Example from drivers/8250.c:</p><pre class="programlisting">
+#ifdef CONFIG_CONSOLE_POLL
+	.poll_get_char = serial8250_get_poll_char,
+	.poll_put_char = serial8250_put_poll_char,
+#endif
+  </pre><p>
+  Any implementation specifics around creating a polling driver use the
+  <code class="constant">#ifdef CONFIG_CONSOLE_POLL</code>, as shown above.
+  Keep in mind that polling hooks have to be implemented in such a way
+  that they can be called from an atomic context and have to restore
+  the state of the UART chip on return such that the system can return
+  to normal when the debugger detaches.  You need to be very careful
+  with any kind of lock you consider, because failing here is most likely
+  going to mean pressing the reset button.
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="kgdbocKbd"></a>kgdboc and keyboards</h3></div></div></div><p>The kgdboc driver contains logic to configure communications
+  with an attached keyboard.  The keyboard infrastructure is only
+  compiled into the kernel when CONFIG_KDB_KEYBOARD=y is set in the
+  kernel configuration.</p><p>The core polled keyboard driver driver for PS/2 type keyboards
+  is in drivers/char/kdb_keyboard.c.  This driver is hooked into the
+  debug core when kgdboc populates the callback in the array
+  called <code class="constant">kdb_poll_funcs[]</code>.  The
+  kdb_get_kbd_char() is the top-level function which polls hardware
+  for single character input.
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="kgdbocKms"></a>kgdboc and kms</h3></div></div></div><p>The kgdboc driver contains logic to request the graphics
+  display to switch to a text context when you are using
+  "kgdboc=kms,kbd", provided that you have a video driver which has a
+  frame buffer console and atomic kernel mode setting support.</p><p>
+  Every time the kernel
+  debugger is entered it calls kgdboc_pre_exp_handler() which in turn
+  calls con_debug_enter() in the virtual console layer.  On resuming kernel
+  execution, the kernel debugger calls kgdboc_post_exp_handler() which
+  in turn calls con_debug_leave().</p><p>Any video driver that wants to be compatible with the kernel
+  debugger and the atomic kms callbacks must implement the
+  mode_set_base_atomic, fb_debug_enter and fb_debug_leave operations.
+  For the fb_debug_enter and fb_debug_leave the option exists to use
+  the generic drm fb helper functions or implement something custom for
+  the hardware.  The following example shows the initialization of the
+  .mode_set_base_atomic operation in
+  drivers/gpu/drm/i915/intel_display.c:
+  </p><div class="informalexample"><pre class="programlisting">
+static const struct drm_crtc_helper_funcs intel_helper_funcs = {
+[...]
+        .mode_set_base_atomic = intel_pipe_set_base_atomic,
+[...]
+};
+  </pre></div><p>
+  </p><p>Here is an example of how the i915 driver initializes the fb_debug_enter and fb_debug_leave functions to use the generic drm helpers in
+  drivers/gpu/drm/i915/intel_fb.c:
+  </p><div class="informalexample"><pre class="programlisting">
+static struct fb_ops intelfb_ops = {
+[...]
+       .fb_debug_enter = drm_fb_helper_debug_enter,
+       .fb_debug_leave = drm_fb_helper_debug_leave,
+[...]
+};
+  </pre></div><p>
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-kgdb-io.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="CommonBackEndReq.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct kgdb_io</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 9. Credits</td></tr></table></div></body></html>

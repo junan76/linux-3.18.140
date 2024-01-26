@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 4. Attaching Network Interfaces</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Z8530 Programming Guide"><link rel="up" href="index.html" title="Z8530 Programming Guide"><link rel="prev" href="Using_the_Z85230_driver.html" title="Chapter 3. Using the Z85230 driver"><link rel="next" href="Configuring_And_Activating_The_Port.html" title="Chapter 5. Configuring And Activating The Port"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Attaching Network Interfaces</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Using_the_Z85230_driver.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="Configuring_And_Activating_The_Port.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="Attaching_Network_Interfaces"></a>Chapter 4. Attaching Network Interfaces</h1></div></div></div><p>
+	If you wish to use the network interface facilities of the driver,
+	then you need to attach a network device to each channel that is
+	present and in use. In addition to use the generic HDLC
+	you need to follow some additional plumbing rules. They may seem 
+	complex but a look at the example hostess_sv11 driver should
+	reassure you.
+  </p><p>
+	The network device used for each channel should be pointed to by
+	the netdevice field of each channel. The hdlc-&gt; priv field of the
+	network device points to your private data - you will need to be
+	able to find your private data from this.
+  </p><p>
+	The way most drivers approach this particular problem is to
+	create a structure holding the Z8530 device definition and
+	put that into the private field of the network device. The
+	network device fields of the channels then point back to the
+	network devices.
+  </p><p>
+	If you wish to use the generic HDLC then you need to register
+	the HDLC device.
+  </p><p>
+	Before you register your network device you will also need to
+	provide suitable handlers for most of the network device callbacks. 
+	See the network device documentation for more details on this.
+  </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Using_the_Z85230_driver.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="Configuring_And_Activating_The_Port.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. Using the Z85230 driver </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 5. Configuring And Activating The Port</td></tr></table></div></body></html>

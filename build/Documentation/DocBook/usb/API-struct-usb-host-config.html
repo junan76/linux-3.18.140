@@ -1,0 +1,57 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct usb_host_config</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="hostside.html" title="Chapter 4. Host-Side Data Types and Macros"><link rel="prev" href="API-struct-usb-interface-cache.html" title="struct usb_interface_cache"><link rel="next" href="API-struct-usb-device.html" title="struct usb_device"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct usb_host_config</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-usb-interface-cache.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Host-Side Data Types and Macros</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-usb-device.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-usb-host-config"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct usb_host_config — 
+     representation of a device's configuration
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct usb_host_config {
+  struct usb_config_descriptor desc;
+  char * string;
+  struct usb_interface_assoc_descriptor * intf_assoc[USB_MAXIADS];
+  struct usb_interface * interface[USB_MAXINTERFACES];
+  struct usb_interface_cache * intf_cache[USB_MAXINTERFACES];
+  unsigned char * extra;
+  int extralen;
+};  </pre></div><div class="refsect1"><a name="idm315"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">desc</span></dt><dd><p>
+   the device's configuration descriptor.
+      </p></dd><dt><span class="term">string</span></dt><dd><p>
+   pointer to the cached version of the iConfiguration string, if
+   present for this configuration.
+      </p></dd><dt><span class="term">intf_assoc[USB_MAXIADS]</span></dt><dd><p>
+   list of any interface association descriptors in this config
+      </p></dd><dt><span class="term">interface[USB_MAXINTERFACES]</span></dt><dd><p>
+   array of pointers to usb_interface structures, one for each
+   interface in the configuration.  The number of interfaces is stored
+   in desc.bNumInterfaces.  These pointers are valid only while the
+   the configuration is active.
+      </p></dd><dt><span class="term">intf_cache[USB_MAXINTERFACES]</span></dt><dd><p>
+   array of pointers to usb_interface_cache structures, one
+   for each interface in the configuration.  These structures exist
+   for the entire life of the device.
+      </p></dd><dt><span class="term">extra</span></dt><dd><p>
+   pointer to buffer containing all extra descriptors associated
+   with this configuration (those preceding the first interface
+   descriptor).
+      </p></dd><dt><span class="term">extralen</span></dt><dd><p>
+   length of the extra descriptors buffer.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm346"></a><h2>Description</h2><p>
+   USB devices may have multiple configurations, but only one can be active
+   at any time.  Each encapsulates a different operational environment;
+   for example, a dual-speed device would have separate configurations for
+   full-speed and high-speed operation.  The number of configurations
+   available is stored in the device descriptor as bNumConfigurations.
+   </p><p>
+
+   A configuration can contain multiple interfaces.  Each corresponds to
+   a different function of the USB device, and all are available whenever
+   the configuration is active.  The USB standard says that interfaces
+   are supposed to be numbered from 0 to desc.bNumInterfaces-1, but a lot
+   of devices get this wrong.  In addition, the interface array is not
+   guaranteed to be sorted in numerical order.  Use <code class="function">usb_ifnum_to_if</code> to
+   look up an interface entry based on its number.
+   </p><p>
+
+   Device drivers should not attempt to activate configurations.  The choice
+   of which configuration to install is a policy decision based on such
+   considerations as available power, functionality provided, and the user's
+   desires (expressed through userspace tools).  However, drivers can call
+   <code class="function">usb_reset_configuration</code> to reinitialize the current configuration and
+   all its interfaces.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-usb-interface-cache.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="hostside.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-usb-device.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct usb_interface_cache</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct usb_device</span></td></tr></table></div></body></html>

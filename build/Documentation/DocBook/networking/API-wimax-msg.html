@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>wimax_msg</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s06.html" title="WiMAX"><link rel="prev" href="API-wimax-msg-send.html" title="wimax_msg_send"><link rel="next" href="API-wimax-reset.html" title="wimax_reset"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">wimax_msg</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-wimax-msg-send.html">Prev</a> </td><th width="60%" align="center">WiMAX</th><td width="20%" align="right"> <a accesskey="n" href="API-wimax-reset.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-wimax-msg"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>wimax_msg — 
+     Send a message to user space
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">wimax_msg </b>(</code></td><td>struct wimax_dev * <var class="pdparam">wimax_dev</var>, </td></tr><tr><td> </td><td>const char * <var class="pdparam">pipe_name</var>, </td></tr><tr><td> </td><td>const void * <var class="pdparam">buf</var>, </td></tr><tr><td> </td><td>size_t <var class="pdparam">size</var>, </td></tr><tr><td> </td><td>gfp_t <var class="pdparam">gfp_flags</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm11191"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>wimax_dev</code></em></span></dt><dd><p>
+     WiMAX device descriptor (properly referenced)
+    </p></dd><dt><span class="term"><em class="parameter"><code>pipe_name</code></em></span></dt><dd><p>
+     "named pipe" the message will be sent to
+    </p></dd><dt><span class="term"><em class="parameter"><code>buf</code></em></span></dt><dd><p>
+     pointer to the message to send.
+    </p></dd><dt><span class="term"><em class="parameter"><code>size</code></em></span></dt><dd><p>
+     size of the buffer pointed to by <em class="parameter"><code>buf</code></em> (in bytes).
+    </p></dd><dt><span class="term"><em class="parameter"><code>gfp_flags</code></em></span></dt><dd><p>
+     flags for memory allocation.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm11220"></a><h2>Returns</h2><p>
+   <code class="constant">0</code> if ok, negative errno code on error.
+</p></div><div class="refsect1"><a name="idm11224"></a><h2>Description</h2><p>
+   </p><p>
+
+   Sends a free-form message to user space on the device <em class="parameter"><code>wimax_dev</code></em>.
+</p></div><div class="refsect1"><a name="idm11229"></a><h2>NOTES</h2><p>
+   </p><p>
+
+   Once the <em class="parameter"><code>skb</code></em> is given to this function, who will own it and will
+   release it when done (unless it returns error).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-wimax-msg-send.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s06.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-wimax-reset.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">wimax_msg_send</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">wimax_reset</span></td></tr></table></div></body></html>

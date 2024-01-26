@@ -1,0 +1,39 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>synchronize_sched_expedited</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch01s09.html" title="Kernel utility functions"><link rel="prev" href="API-cond-synchronize-rcu.html" title="cond_synchronize_rcu"><link rel="next" href="API-rcu-barrier-bh.html" title="rcu_barrier_bh"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">synchronize_sched_expedited</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-cond-synchronize-rcu.html">Prev</a> </td><th width="60%" align="center">Kernel utility functions</th><td width="20%" align="right"> <a accesskey="n" href="API-rcu-barrier-bh.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-synchronize-sched-expedited"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>synchronize_sched_expedited — 
+     Brute-force RCU-sched grace period
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">synchronize_sched_expedited </b>(</code></td><td> <var class="pdparam">void</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9484"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>void</code></em></span></dt><dd><p>
+     no arguments
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9492"></a><h2>Description</h2><p>
+   </p><p>
+
+   Wait for an RCU-sched grace period to elapse, but use a <span class="quote">“<span class="quote">big hammer</span>”</span>
+   approach to force the grace period to end quickly.  This consumes
+   significant time on all CPUs and is unfriendly to real-time workloads,
+   so is thus not recommended for any sort of common-case code.  In fact,
+   if you are using <code class="function">synchronize_sched_expedited</code> in a loop, please
+   restructure your code to batch your updates, and then use a single
+   <code class="function">synchronize_sched</code> instead.
+   </p><p>
+
+   This implementation can be thought of as an application of ticket
+   locking to RCU, with sync_sched_expedited_started and
+   sync_sched_expedited_done taking on the roles of the halves
+   of the ticket-lock word.  Each task atomically increments
+   sync_sched_expedited_started upon entry, snapshotting the old value,
+   then attempts to stop all the CPUs.  If this succeeds, then each
+   CPU will have executed a context switch, resulting in an RCU-sched
+   grace period.  We are then done, so we use <code class="function">atomic_cmpxchg</code> to
+   update sync_sched_expedited_done to match our snapshot -- but
+   only if someone else has not already advanced past our snapshot.
+   </p><p>
+
+   On the other hand, if <code class="function">try_stop_cpus</code> fails, we check the value
+   of sync_sched_expedited_done.  If it has advanced past our
+   initial snapshot, then someone else must have forced a grace period
+   some time after we took our snapshot.  In this case, our work is
+   done for us, and we can simply return.  Otherwise, we try again,
+   but keep our initial snapshot for purposes of checking for someone
+   doing our work for us.
+   </p><p>
+
+   If we fail too many times in a row, we fall back to <code class="function">synchronize_sched</code>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-cond-synchronize-rcu.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s09.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-rcu-barrier-bh.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">cond_synchronize_rcu</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">rcu_barrier_bh</span></td></tr></table></div></body></html>

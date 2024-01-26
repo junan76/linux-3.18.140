@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>wimax_dev_add</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s06.html" title="WiMAX"><link rel="prev" href="API-wimax-dev-init.html" title="wimax_dev_init"><link rel="next" href="API-wimax-dev-rm.html" title="wimax_dev_rm"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">wimax_dev_add</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-wimax-dev-init.html">Prev</a> </td><th width="60%" align="center">WiMAX</th><td width="20%" align="right"> <a accesskey="n" href="API-wimax-dev-rm.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-wimax-dev-add"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>wimax_dev_add — 
+     Register a new WiMAX device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">wimax_dev_add </b>(</code></td><td>struct wimax_dev * <var class="pdparam">wimax_dev</var>, </td></tr><tr><td> </td><td>struct net_device * <var class="pdparam">net_dev</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm11554"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>wimax_dev</code></em></span></dt><dd><p>
+     WiMAX device descriptor (as embedded in your <em class="parameter"><code>net_dev</code></em>'s
+     priv data). You must have called <code class="function">wimax_dev_init</code> on it before.
+    </p></dd><dt><span class="term"><em class="parameter"><code>net_dev</code></em></span></dt><dd><p>
+     net device the <em class="parameter"><code>wimax_dev</code></em> is associated with. The
+     function expects <code class="function">SET_NETDEV_DEV</code> and <code class="function">register_netdev</code> were
+     already called on it.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm11572"></a><h2>Description</h2><p>
+   Registers the new WiMAX device, sets up the user-kernel control
+   interface (generic netlink) and common WiMAX infrastructure.
+   </p><p>
+
+   Note that the parts that will allow interaction with user space are
+   setup at the very end, when the rest is in place, as once that
+   happens, the driver might get user space control requests via
+   netlink or from debugfs that might translate into calls into
+   wimax_dev-&gt;op_*().
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-wimax-dev-init.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s06.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-wimax-dev-rm.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">wimax_dev_init</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">wimax_dev_rm</span></td></tr></table></div></body></html>

@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>blk_pm_runtime_init</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="blkdev.html" title="Chapter 14. Block Devices"><link rel="prev" href="API-blk-start-plug.html" title="blk_start_plug"><link rel="next" href="API-blk-pre-runtime-suspend.html" title="blk_pre_runtime_suspend"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">blk_pm_runtime_init</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-blk-start-plug.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Block Devices</th><td width="20%" align="right"> <a accesskey="n" href="API-blk-pre-runtime-suspend.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-blk-pm-runtime-init"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>blk_pm_runtime_init — 
+     Block layer runtime PM initialization routine
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">blk_pm_runtime_init </b>(</code></td><td>struct request_queue * <var class="pdparam">q</var>, </td></tr><tr><td> </td><td>struct device * <var class="pdparam">dev</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm26858"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>q</code></em></span></dt><dd><p>
+     the queue of the device
+    </p></dd><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     the device the queue belongs to
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm26871"></a><h2>Description</h2><p>
+   Initialize runtime-PM-related fields for <em class="parameter"><code>q</code></em> and start auto suspend for
+   <em class="parameter"><code>dev</code></em>. Drivers that want to take advantage of request-based runtime PM
+   should call this function after <em class="parameter"><code>dev</code></em> has been initialized, and its
+   request queue <em class="parameter"><code>q</code></em> has been allocated, and runtime PM for it can not happen
+   yet(either due to disabled/forbidden or its usage_count &gt; 0). In most
+   cases, driver should call this function before any I/O has taken place.
+   </p><p>
+
+   This function takes care of setting up using auto suspend for the device,
+   the autosuspend delay is set to -1 to make runtime suspend impossible
+   until an updated value is either set by user or by driver. Drivers do
+   not need to touch other autosuspend settings.
+   </p><p>
+
+   The block layer runtime PM is request based, so only works for drivers
+   that use request as their IO unit instead of those directly use bio's.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-blk-start-plug.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="blkdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-blk-pre-runtime-suspend.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">blk_start_plug</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">blk_pre_runtime_suspend</span></td></tr></table></div></body></html>

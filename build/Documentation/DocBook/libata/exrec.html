@@ -1,0 +1,119 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>EH recovery actions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="ataExceptions.html" title="Chapter 7. ATA errors and exceptions"><link rel="prev" href="ataExceptions.html" title="Chapter 7. ATA errors and exceptions"><link rel="next" href="PiixInt.html" title="Chapter 8. ata_piix Internals"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">EH recovery actions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ataExceptions.html">Prev</a> </td><th width="60%" align="center">Chapter 7. ATA errors and exceptions</th><td width="20%" align="right"> <a accesskey="n" href="PiixInt.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="exrec"></a>EH recovery actions</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="exrec.html#exrecClr">Clearing error condition</a></span></dt><dt><span class="sect2"><a href="exrec.html#exrecRst">Reset</a></span></dt><dt><span class="sect2"><a href="exrec.html#exrecReconf">Reconfigure transport</a></span></dt></dl></div><p>
+     This section discusses several important recovery actions.
+     </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="exrecClr"></a>Clearing error condition</h3></div></div></div><p>
+	Many controllers require its error registers to be cleared by
+	error handler.  Different controllers may have different
+	requirements.
+	</p><p>
+	For SATA, it's strongly recommended to clear at least SError
+	register during error handling.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="exrecRst"></a>Reset</h3></div></div></div><p>
+	During EH, resetting is necessary in the following cases.
+	</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	HSM is in unknown or invalid state
+	</p></li><li class="listitem"><p>
+	HBA is in unknown or invalid state
+	</p></li><li class="listitem"><p>
+	EH needs to make HBA/device forget about in-flight commands
+	</p></li><li class="listitem"><p>
+	HBA/device behaves weirdly
+	</p></li></ul></div><p>
+	Resetting during EH might be a good idea regardless of error
+	condition to improve EH robustness.  Whether to reset both or
+	either one of HBA and device depends on situation but the
+	following scheme is recommended.
+	</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	When it's known that HBA is in ready state but ATA/ATAPI
+	device is in unknown state, reset only device.
+	</p></li><li class="listitem"><p>
+	If HBA is in unknown state, reset both HBA and device.
+	</p></li></ul></div><p>
+	HBA resetting is implementation specific.  For a controller
+	complying to taskfile/BMDMA PCI IDE, stopping active DMA
+	transaction may be sufficient iff BMDMA state is the only HBA
+	context.  But even mostly taskfile/BMDMA PCI IDE complying
+	controllers may have implementation specific requirements and
+	mechanism to reset themselves.  This must be addressed by
+	specific drivers.
+	</p><p>
+	OTOH, ATA/ATAPI standard describes in detail ways to reset
+	ATA/ATAPI devices.
+	</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">PATA hardware reset</span></dt><dd><p>
+	   This is hardware initiated device reset signalled with
+	   asserted PATA RESET- signal.  There is no standard way to
+	   initiate hardware reset from software although some
+	   hardware provides registers that allow driver to directly
+	   tweak the RESET- signal.
+	   </p></dd><dt><span class="term">Software reset</span></dt><dd><p>
+	   This is achieved by turning CONTROL SRST bit on for at
+	   least 5us.  Both PATA and SATA support it but, in case of
+	   SATA, this may require controller-specific support as the
+	   second Register FIS to clear SRST should be transmitted
+	   while BSY bit is still set.  Note that on PATA, this resets
+	   both master and slave devices on a channel.
+	   </p></dd><dt><span class="term">EXECUTE DEVICE DIAGNOSTIC command</span></dt><dd><p>
+	   Although ATA/ATAPI standard doesn't describe exactly, EDD
+	   implies some level of resetting, possibly similar level
+	   with software reset.  Host-side EDD protocol can be handled
+	   with normal command processing and most SATA controllers
+	   should be able to handle EDD's just like other commands.
+	   As in software reset, EDD affects both devices on a PATA
+	   bus.
+	   </p><p>
+	   Although EDD does reset devices, this doesn't suit error
+	   handling as EDD cannot be issued while BSY is set and it's
+	   unclear how it will act when device is in unknown/weird
+	   state.
+	   </p></dd><dt><span class="term">ATAPI DEVICE RESET command</span></dt><dd><p>
+	   This is very similar to software reset except that reset
+	   can be restricted to the selected device without affecting
+	   the other device sharing the cable.
+	   </p></dd><dt><span class="term">SATA phy reset</span></dt><dd><p>
+	   This is the preferred way of resetting a SATA device.  In
+	   effect, it's identical to PATA hardware reset.  Note that
+	   this can be done with the standard SCR Control register.
+	   As such, it's usually easier to implement than software
+	   reset.
+	   </p></dd></dl></div><p>
+	One more thing to consider when resetting devices is that
+	resetting clears certain configuration parameters and they
+	need to be set to their previous or newly adjusted values
+	after reset.
+	</p><p>
+	Parameters affected are.
+	</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	CHS set up with INITIALIZE DEVICE PARAMETERS (seldom used)
+	</p></li><li class="listitem"><p>
+	Parameters set with SET FEATURES including transfer mode setting
+	</p></li><li class="listitem"><p>
+	Block count set with SET MULTIPLE MODE
+	</p></li><li class="listitem"><p>
+	Other parameters (SET MAX, MEDIA LOCK...)
+	</p></li></ul></div><p>
+	ATA/ATAPI standard specifies that some parameters must be
+	maintained across hardware or software reset, but doesn't
+	strictly specify all of them.  Always reconfiguring needed
+	parameters after reset is required for robustness.  Note that
+	this also applies when resuming from deep sleep (power-off).
+	</p><p>
+	Also, ATA/ATAPI standard requires that IDENTIFY DEVICE /
+	IDENTIFY PACKET DEVICE is issued after any configuration
+	parameter is updated or a hardware reset and the result used
+	for further operation.  OS driver is required to implement
+	revalidation mechanism to support this.
+	</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="exrecReconf"></a>Reconfigure transport</h3></div></div></div><p>
+	For both PATA and SATA, a lot of corners are cut for cheap
+	connectors, cables or controllers and it's quite common to see
+	high transmission error rate.  This can be mitigated by
+	lowering transmission speed.
+	</p><p>
+	The following is a possible scheme Jeff Garzik suggested.
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+	If more than $N (3?) transmission errors happen in 15 minutes,
+	</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	if SATA, decrease SATA PHY speed.  if speed cannot be decreased,
+	</p></li><li class="listitem"><p>
+	decrease UDMA xfer speed.  if at UDMA0, switch to PIO4,
+	</p></li><li class="listitem"><p>
+	decrease PIO xfer speed.  if at PIO3, complain, but continue
+	</p></li></ul></div></blockquote></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ataExceptions.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ataExceptions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="PiixInt.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 7. ATA errors and exceptions </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 8. ata_piix Internals</td></tr></table></div></body></html>

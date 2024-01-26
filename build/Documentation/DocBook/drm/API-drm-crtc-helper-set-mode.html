@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>drm_crtc_helper_set_mode</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="ch02s05.html#idm8603" title="Modeset Helper Functions Reference"><link rel="prev" href="API-drm-helper-disable-unused-functions.html" title="drm_helper_disable_unused_functions"><link rel="next" href="API-drm-crtc-helper-set-config.html" title="drm_crtc_helper_set_config"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">drm_crtc_helper_set_mode</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-helper-disable-unused-functions.html">Prev</a> </td><th width="60%" align="center">Modeset Helper Functions Reference</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-crtc-helper-set-config.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-drm-crtc-helper-set-mode"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>drm_crtc_helper_set_mode — 
+     internal helper to set a mode
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">bool <b class="fsfunc">drm_crtc_helper_set_mode </b>(</code></td><td>struct drm_crtc * <var class="pdparam">crtc</var>, </td></tr><tr><td> </td><td>struct drm_display_mode * <var class="pdparam">mode</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">x</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">y</var>, </td></tr><tr><td> </td><td>struct drm_framebuffer * <var class="pdparam">old_fb</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm8773"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>crtc</code></em></span></dt><dd><p>
+     CRTC to program
+    </p></dd><dt><span class="term"><em class="parameter"><code>mode</code></em></span></dt><dd><p>
+     mode to use
+    </p></dd><dt><span class="term"><em class="parameter"><code>x</code></em></span></dt><dd><p>
+     horizontal offset into the surface
+    </p></dd><dt><span class="term"><em class="parameter"><code>y</code></em></span></dt><dd><p>
+     vertical offset into the surface
+    </p></dd><dt><span class="term"><em class="parameter"><code>old_fb</code></em></span></dt><dd><p>
+     old framebuffer, for cleanup
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm8801"></a><h2>Description</h2><p>
+   Try to set <em class="parameter"><code>mode</code></em> on <em class="parameter"><code>crtc</code></em>.  Give <em class="parameter"><code>crtc</code></em> and its associated connectors a chance
+   to fixup or reject the mode prior to trying to set it. This is an internal
+   helper that drivers could e.g. use to update properties that require the
+   entire output pipe to be disabled and re-enabled in a new configuration. For
+   example for changing whether audio is enabled on a hdmi link or for changing
+   panel fitter or dither attributes. It is also called by the
+   <code class="function">drm_crtc_helper_set_config</code> helper function to drive the mode setting
+   sequence.
+</p></div><div class="refsect1"><a name="idm8808"></a><h2>Returns</h2><p>
+   True if the mode was set successfully, false otherwise.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-helper-disable-unused-functions.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s05.html#idm8603">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-crtc-helper-set-config.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_helper_disable_unused_functions</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_crtc_helper_set_config</span></td></tr></table></div></body></html>

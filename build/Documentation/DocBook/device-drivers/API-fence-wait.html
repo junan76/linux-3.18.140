@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>fence_wait</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch02s03.html" title="Device Drivers DMA Management"><link rel="prev" href="API-fence-later.html" title="fence_later"><link rel="next" href="API-to-seqno-fence.html" title="to_seqno_fence"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">fence_wait</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-fence-later.html">Prev</a> </td><th width="60%" align="center">Device Drivers DMA Management</th><td width="20%" align="right"> <a accesskey="n" href="API-to-seqno-fence.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-fence-wait"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>fence_wait — 
+     sleep until the fence gets signaled
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">signed long <b class="fsfunc">fence_wait </b>(</code></td><td>struct fence * <var class="pdparam">fence</var>, </td></tr><tr><td> </td><td>bool <var class="pdparam">intr</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm17350"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>fence</code></em></span></dt><dd><p>
+     [in]	the fence to wait on
+    </p></dd><dt><span class="term"><em class="parameter"><code>intr</code></em></span></dt><dd><p>
+     [in]	if true, do an interruptible wait
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm17363"></a><h2>Description</h2><p>
+   This function will return -ERESTARTSYS if interrupted by a signal,
+   or 0 if the fence was signaled. Other error values may be
+   returned on custom implementations.
+   </p><p>
+
+   Performs a synchronous wait on this fence. It is assumed the caller
+   directly or indirectly holds a reference to the fence, otherwise the
+   fence might be freed before return, resulting in undefined behavior.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-fence-later.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-to-seqno-fence.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">fence_later</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">to_seqno_fence</span></td></tr></table></div></body></html>

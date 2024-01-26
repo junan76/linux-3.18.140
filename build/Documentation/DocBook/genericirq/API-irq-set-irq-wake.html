@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>irq_set_irq_wake</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux generic IRQ handling"><link rel="up" href="pubfunctions.html" title="Chapter 9. Public Functions Provided"><link rel="prev" href="API-enable-irq.html" title="enable_irq"><link rel="next" href="API-irq-wake-thread.html" title="irq_wake_thread"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">irq_set_irq_wake</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-enable-irq.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Public Functions Provided</th><td width="20%" align="right"> <a accesskey="n" href="API-irq-wake-thread.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-irq-set-irq-wake"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>irq_set_irq_wake — 
+     control irq power management wakeup
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">irq_set_irq_wake </b>(</code></td><td>unsigned int <var class="pdparam">irq</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">on</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1445"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>irq</code></em></span></dt><dd><p>
+     interrupt to control
+    </p></dd><dt><span class="term"><em class="parameter"><code>on</code></em></span></dt><dd><p>
+     enable/disable power management wakeup
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1458"></a><h2>Description</h2><p>
+   Enable/disable power management wakeup mode, which is
+   disabled by default.  Enables and disables must match,
+   just as they match for non-wakeup mode support.
+   </p><p>
+
+   Wakeup mode lets this IRQ wake the system from sleep
+   states like <span class="quote">“<span class="quote">suspend to RAM</span>”</span>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-enable-irq.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pubfunctions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-irq-wake-thread.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">enable_irq</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">irq_wake_thread</span></td></tr></table></div></body></html>

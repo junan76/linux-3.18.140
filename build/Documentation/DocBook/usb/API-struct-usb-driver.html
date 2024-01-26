@@ -1,0 +1,100 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct usb_driver</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="hostside.html" title="Chapter 4. Host-Side Data Types and Macros"><link rel="prev" href="API-struct-usbdrv-wrap.html" title="struct usbdrv_wrap"><link rel="next" href="API-struct-usb-device-driver.html" title="struct usb_device_driver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct usb_driver</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-usbdrv-wrap.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Host-Side Data Types and Macros</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-usb-device-driver.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-usb-driver"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct usb_driver — 
+     identifies USB interface driver to usbcore
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct usb_driver {
+  const char * name;
+  int (* probe) (struct usb_interface *intf,const struct usb_device_id *id);
+  void (* disconnect) (struct usb_interface *intf);
+  int (* unlocked_ioctl) (struct usb_interface *intf, unsigned int code,void *buf);
+  int (* suspend) (struct usb_interface *intf, pm_message_t message);
+  int (* resume) (struct usb_interface *intf);
+  int (* reset_resume) (struct usb_interface *intf);
+  int (* pre_reset) (struct usb_interface *intf);
+  int (* post_reset) (struct usb_interface *intf);
+  const struct usb_device_id * id_table;
+  struct usb_dynids dynids;
+  struct usbdrv_wrap drvwrap;
+  unsigned int no_dynamic_id:1;
+  unsigned int supports_autosuspend:1;
+  unsigned int disable_hub_initiated_lpm:1;
+  unsigned int soft_unbind:1;
+};  </pre></div><div class="refsect1"><a name="idm1209"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">name</span></dt><dd><p>
+   The driver name should be unique among USB drivers,
+   and should normally be the same as the module name.
+      </p></dd><dt><span class="term">probe</span></dt><dd><p>
+   Called to see if the driver is willing to manage a particular
+   interface on a device.  If it is, probe returns zero and uses
+   <code class="function">usb_set_intfdata</code> to associate driver-specific data with the
+   interface.  It may also use <code class="function">usb_set_interface</code> to specify the
+   appropriate altsetting.  If unwilling to manage the interface,
+   return -ENODEV, if genuine IO errors occurred, an appropriate
+   negative errno value.
+      </p></dd><dt><span class="term">disconnect</span></dt><dd><p>
+   Called when the interface is no longer accessible, usually
+   because its device has been (or is being) disconnected or the
+   driver module is being unloaded.
+      </p></dd><dt><span class="term">unlocked_ioctl</span></dt><dd><p>
+   Used for drivers that want to talk to userspace through
+   the <span class="quote">“<span class="quote">usbfs</span>”</span> filesystem.  This lets devices provide ways to
+   expose information to user space regardless of where they
+   do (or don't) show up otherwise in the filesystem.
+      </p></dd><dt><span class="term">suspend</span></dt><dd><p>
+   Called when the device is going to be suspended by the
+   system either from system sleep or runtime suspend context. The
+   return value will be ignored in system sleep context, so do NOT
+   try to continue using the device if suspend fails in this case.
+   Instead, let the resume or reset-resume routine recover from
+   the failure.
+      </p></dd><dt><span class="term">resume</span></dt><dd><p>
+   Called when the device is being resumed by the system.
+      </p></dd><dt><span class="term">reset_resume</span></dt><dd><p>
+   Called when the suspended device has been reset instead
+   of being resumed.
+      </p></dd><dt><span class="term">pre_reset</span></dt><dd><p>
+   Called by <code class="function">usb_reset_device</code> when the device is about to be
+   reset.  This routine must not return until the driver has no active
+   URBs for the device, and no more URBs may be submitted until the
+   post_reset method is called.
+      </p></dd><dt><span class="term">post_reset</span></dt><dd><p>
+   Called by <code class="function">usb_reset_device</code> after the device
+   has been reset
+      </p></dd><dt><span class="term">id_table</span></dt><dd><p>
+   USB drivers use ID table to support hotplugging.
+   Export this with MODULE_DEVICE_TABLE(usb,...).  This must be set
+   or your driver's probe function will never get called.
+      </p></dd><dt><span class="term">dynids</span></dt><dd><p>
+   used internally to hold the list of dynamically added device
+   ids for this driver.
+      </p></dd><dt><span class="term">drvwrap</span></dt><dd><p>
+   Driver-model core structure wrapper.
+      </p></dd><dt><span class="term">no_dynamic_id</span></dt><dd><p>
+   if set to 1, the USB core will not allow dynamic ids to be
+   added to this driver by preventing the sysfs file from being created.
+      </p></dd><dt><span class="term">supports_autosuspend</span></dt><dd><p>
+   if set to 0, the USB core will not allow autosuspend
+   for interfaces bound to this driver.
+      </p></dd><dt><span class="term">disable_hub_initiated_lpm</span></dt><dd><p>
+   if set to 1, the USB core will not allow hubs
+   to initiate lower power link state transitions when an idle timeout
+   occurs.  Device-initiated USB 3.0 link PM will still be allowed.
+      </p></dd><dt><span class="term">soft_unbind</span></dt><dd><p>
+   if set to 1, the USB core will not kill URBs and disable
+   endpoints before calling the driver's disconnect method.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm1281"></a><h2>Description</h2><p>
+   USB interface drivers must provide a name, <code class="function">probe</code> and <code class="function">disconnect</code>
+   methods, and an id_table.  Other driver fields are optional.
+   </p><p>
+
+   The id_table is used in hotplugging.  It holds a set of descriptors,
+   and specialized data may be associated with each entry.  That table
+   is used by both user and kernel mode hotplugging support.
+   </p><p>
+
+   The <code class="function">probe</code> and <code class="function">disconnect</code> methods are called in a context where
+   they can sleep, but they should avoid abusing the privilege.  Most
+   work to connect to a device should be done when the device is opened,
+   and undone at the last close.  The disconnect code needs to address
+   concurrency issues with respect to <code class="function">open</code> and <code class="function">close</code> methods, as
+   well as forcing all pending I/O requests to complete (by unlinking
+   them as necessary, and blocking until the unlinks complete).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-usbdrv-wrap.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="hostside.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-usb-device-driver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct usbdrv_wrap</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct usb_device_driver</span></td></tr></table></div></body></html>

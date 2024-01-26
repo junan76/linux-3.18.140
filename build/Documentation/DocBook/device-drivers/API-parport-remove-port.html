@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>parport_remove_port</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="parportdev.html" title="Chapter 3. Parallel Port Devices"><link rel="prev" href="API-parport-announce-port.html" title="parport_announce_port"><link rel="next" href="API-parport-register-device.html" title="parport_register_device"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">parport_remove_port</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-parport-announce-port.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Parallel Port Devices</th><td width="20%" align="right"> <a accesskey="n" href="API-parport-register-device.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-parport-remove-port"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>parport_remove_port — 
+     deregister a parallel port
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">parport_remove_port </b>(</code></td><td>struct parport * <var class="pdparam">port</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm19702"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>port</code></em></span></dt><dd><p>
+     parallel port to deregister
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm19710"></a><h2>Description</h2><p>
+   When a parallel port driver is forcibly unloaded, or a
+   parallel port becomes inaccessible, the port driver must call
+   this function in order to deal with device drivers that still
+   want to use it.
+   </p><p>
+
+   The parport structure associated with the port has its
+   operations structure replaced with one containing 'null'
+   operations that return errors or just don't do anything.
+   </p><p>
+
+   Any drivers that have registered themselves using
+   <code class="function">parport_register_driver</code> are notified that the port is no
+   longer accessible by having their <code class="function">detach</code> routines called
+   with <em class="parameter"><code>port</code></em> as the parameter.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-parport-announce-port.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="parportdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-parport-register-device.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">parport_announce_port</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">parport_register_device</span></td></tr></table></div></body></html>

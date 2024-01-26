@@ -1,0 +1,38 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct w1_slave</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="W1: Dallas' 1-wire bus"><link rel="up" href="w1_internal.html#w1.h" title="drivers/w1/w1.h"><link rel="prev" href="API-struct-w1-reg-num.html" title="struct w1_reg_num"><link rel="next" href="API-struct-w1-bus-master.html" title="struct w1_bus_master"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct w1_slave</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-w1-reg-num.html">Prev</a> </td><th width="60%" align="center">drivers/w1/w1.h</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-w1-bus-master.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-w1-slave"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct w1_slave — 
+     holds a single slave device on the bus
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct w1_slave {
+  struct module * owner;
+  unsigned char name[W1_MAXNAMELEN];
+  struct list_head w1_slave_entry;
+  struct w1_reg_num reg_num;
+  atomic_t refcnt;
+  int ttl;
+  unsigned long flags;
+  struct w1_master * master;
+  struct w1_family * family;
+  void * family_data;
+  struct device dev;
+};  </pre></div><div class="refsect1"><a name="idm83"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">owner</span></dt><dd><p>
+   Points to the one wire <span class="quote">“<span class="quote">wire</span>”</span> kernel module.
+      </p></dd><dt><span class="term">name[W1_MAXNAMELEN]</span></dt><dd><p>
+   Device id is ascii.
+      </p></dd><dt><span class="term">w1_slave_entry</span></dt><dd><p>
+   data for the linked list
+      </p></dd><dt><span class="term">reg_num</span></dt><dd><p>
+   the slave id in binary
+      </p></dd><dt><span class="term">refcnt</span></dt><dd><p>
+   reference count, delete when 0
+      </p></dd><dt><span class="term">ttl</span></dt><dd><p>
+   decrement per search this slave isn't found, deatch at 0
+      </p></dd><dt><span class="term">flags</span></dt><dd><p>
+   bit flags for W1_SLAVE_ACTIVE W1_SLAVE_DETACH
+      </p></dd><dt><span class="term">master</span></dt><dd><p>
+   bus which this slave is on
+      </p></dd><dt><span class="term">family</span></dt><dd><p>
+   module for device family type
+      </p></dd><dt><span class="term">family_data</span></dt><dd><p>
+   pointer for use by the family module
+      </p></dd><dt><span class="term">dev</span></dt><dd><p>
+   kernel device identifier
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-w1-reg-num.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="w1_internal.html#w1.h">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-w1-bus-master.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct w1_reg_num</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct w1_bus_master</span></td></tr></table></div></body></html>

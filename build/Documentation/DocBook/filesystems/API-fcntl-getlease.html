@@ -1,0 +1,30 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>fcntl_getlease</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="file_locks.html" title="File Locks"><link rel="prev" href="API-locks-mandatory-locked.html" title="locks_mandatory_locked"><link rel="next" href="API-check-conflicting-open.html" title="check_conflicting_open"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">fcntl_getlease</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-locks-mandatory-locked.html">Prev</a> </td><th width="60%" align="center">File Locks</th><td width="20%" align="right"> <a accesskey="n" href="API-check-conflicting-open.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-fcntl-getlease"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>fcntl_getlease — 
+     Enquire what lease is currently active
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">fcntl_getlease </b>(</code></td><td>struct file * <var class="pdparam">filp</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm3466"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>filp</code></em></span></dt><dd><p>
+     the file
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm3474"></a><h2>Description</h2><p>
+   The value returned by this function will be one of
+   (if no lease break is pending):
+   </p><p>
+
+   <code class="constant">F_RDLCK</code> to indicate a shared lease is held.
+   </p><p>
+
+   <code class="constant">F_WRLCK</code> to indicate an exclusive lease is held.
+   </p><p>
+
+   <code class="constant">F_UNLCK</code> to indicate no lease is held.
+   </p><p>
+
+   (if a lease break is pending):
+   </p><p>
+
+   <code class="constant">F_RDLCK</code> to indicate an exclusive lease needs to be
+   changed to a shared lease (or removed).
+   </p><p>
+
+   <code class="constant">F_UNLCK</code> to indicate the lease needs to be removed.
+</p></div><div class="refsect1"><a name="idm3488"></a><h2>XXX</h2><p>
+   sfr &amp; willy disagree over whether F_INPROGRESS
+   should be returned to userspace.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-locks-mandatory-locked.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="file_locks.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-check-conflicting-open.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">locks_mandatory_locked</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">check_conflicting_open</span></td></tr></table></div></body></html>

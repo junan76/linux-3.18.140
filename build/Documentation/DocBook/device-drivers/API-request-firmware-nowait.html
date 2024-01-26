@@ -1,0 +1,33 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>request_firmware_nowait</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch02s02.html" title="Device Drivers Base"><link rel="prev" href="API-release-firmware.html" title="release_firmware"><link rel="next" href="API-transport-class-register.html" title="transport_class_register"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">request_firmware_nowait</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-release-firmware.html">Prev</a> </td><th width="60%" align="center">Device Drivers Base</th><td width="20%" align="right"> <a accesskey="n" href="API-transport-class-register.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-request-firmware-nowait"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>request_firmware_nowait — 
+     asynchronous version of request_firmware
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">request_firmware_nowait </b>(</code></td><td>struct module * <var class="pdparam">module</var>, </td></tr><tr><td> </td><td>bool <var class="pdparam">uevent</var>, </td></tr><tr><td> </td><td>const char * <var class="pdparam">name</var>, </td></tr><tr><td> </td><td>struct device * <var class="pdparam">device</var>, </td></tr><tr><td> </td><td>gfp_t <var class="pdparam">gfp</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">context</var>, </td></tr><tr><td> </td><td>void (*<var class="pdparam">cont</var>)
+     <code>(</code>const struct firmware *fw, void *context<code>)</code><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm13830"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>module</code></em></span></dt><dd><p>
+     module requesting the firmware
+    </p></dd><dt><span class="term"><em class="parameter"><code>uevent</code></em></span></dt><dd><p>
+     sends uevent to copy the firmware image if this flag
+     is non-zero else the firmware copy must be done manually.
+    </p></dd><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>
+     name of firmware file
+    </p></dd><dt><span class="term"><em class="parameter"><code>device</code></em></span></dt><dd><p>
+     device for which firmware is being loaded
+    </p></dd><dt><span class="term"><em class="parameter"><code>gfp</code></em></span></dt><dd><p>
+     allocation flags
+    </p></dd><dt><span class="term"><em class="parameter"><code>context</code></em></span></dt><dd><p>
+     will be passed over to <em class="parameter"><code>cont</code></em>, and
+     <em class="parameter"><code>fw</code></em> may be <code class="constant">NULL</code> if firmware request fails.
+    </p></dd><dt><span class="term"><em class="parameter"><code>cont</code></em></span></dt><dd><p>
+     function will be called asynchronously when the firmware
+     request is over.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm13871"></a><h2>Description</h2><p>
+   Caller must hold the reference count of <em class="parameter"><code>device</code></em>.
+   </p><p>
+
+   Asynchronous variant of <code class="function">request_firmware</code> for user contexts:
+   - sleep for as small periods as possible since it may
+   increase kernel boot time of built-in device drivers
+   requesting firmware in their -&gt;<code class="function">probe</code> methods, if
+   <em class="parameter"><code>gfp</code></em> is GFP_KERNEL.
+   </p><p>
+
+   - can't sleep at all if <em class="parameter"><code>gfp</code></em> is GFP_ATOMIC.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-release-firmware.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-transport-class-register.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">release_firmware</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">transport_class_register</span></td></tr></table></div></body></html>

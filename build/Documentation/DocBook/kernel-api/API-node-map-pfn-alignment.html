@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>node_map_pfn_alignment</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-absent-pages-in-range.html" title="absent_pages_in_range"><link rel="next" href="API-find-min-pfn-with-active-regions.html" title="find_min_pfn_with_active_regions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">node_map_pfn_alignment</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-absent-pages-in-range.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-find-min-pfn-with-active-regions.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-node-map-pfn-alignment"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>node_map_pfn_alignment — 
+     determine the maximum internode alignment
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">unsigned long <b class="fsfunc">node_map_pfn_alignment </b>(</code></td><td> <var class="pdparam">void</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm10997"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>void</code></em></span></dt><dd><p>
+     no arguments
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm11005"></a><h2>Description</h2><p>
+   </p><p>
+
+   This function should be called after node map is populated and sorted.
+   It calculates the maximum power of two alignment which can distinguish
+   all the nodes.
+   </p><p>
+
+   For example, if all nodes are 1GiB and aligned to 1GiB, the return value
+   would indicate 1GiB alignment with (1 &lt;&lt; (30 - PAGE_SHIFT)).  If the
+   nodes are shifted by 256MiB, 256MiB.  Note that if only the last node is
+   shifted, 1GiB is enough and this function will indicate so.
+   </p><p>
+
+   This is used to test whether pfn -&gt; nid mapping of the chosen memory
+   model has fine enough granularity to avoid incorrect mapping for the
+   populated node map.
+   </p><p>
+
+   Returns the determined alignment in pfn's.  0 if there is no alignment
+   requirement (single node).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-absent-pages-in-range.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-find-min-pfn-with-active-regions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">absent_pages_in_range</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">find_min_pfn_with_active_regions</span></td></tr></table></div></body></html>

@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Preface</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="index.html" title="Writing an ALSA Driver"><link rel="prev" href="index.html" title="Writing an ALSA Driver"><link rel="next" href="file-tree.html" title="Chapter 1. File Tree Structure"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Preface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="file-tree.html">Next</a></td></tr></table><hr></div><div class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>
+      This document describes how to write an
+      <a class="ulink" href="http://www.alsa-project.org/" target="_top"><em class="citetitle">
+      ALSA (Advanced Linux Sound Architecture)</em></a>
+      driver. The document focuses mainly on PCI soundcards.
+      In the case of other device types, the API might
+      be different, too. However, at least the ALSA kernel API is
+      consistent, and therefore it would be still a bit help for
+      writing them.
+    </p><p>
+    This document targets people who already have enough
+    C language skills and have basic linux kernel programming
+    knowledge.  This document doesn't explain the general
+    topic of linux kernel coding and doesn't cover low-level
+    driver implementation details. It only describes
+    the standard way to write a PCI sound driver on ALSA.
+    </p><p>
+      If you are already familiar with the older ALSA ver.0.5.x API, you
+    can check the drivers such as <code class="filename">sound/pci/es1938.c</code> or
+    <code class="filename">sound/pci/maestro3.c</code> which have also almost the same
+    code-base in the ALSA 0.5.x tree, so you can compare the differences.
+    </p><p>
+      This document is still a draft version. Any feedback and
+    corrections, please!!
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="file-tree.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Writing an ALSA Driver </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 1. File Tree Structure</td></tr></table></div></body></html>

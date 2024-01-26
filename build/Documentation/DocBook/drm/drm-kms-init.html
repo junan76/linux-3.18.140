@@ -1,0 +1,587 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>KMS Initialization and Cleanup</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drmInternals.html" title="Chapter 2. DRM Internals"><link rel="prev" href="API-drm-mode-create-from-cmdline-mode.html" title="drm_mode_create_from_cmdline_mode"><link rel="next" href="API-drm-get-connector-status-name.html" title="drm_get_connector_status_name"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">KMS Initialization and Cleanup</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-mode-create-from-cmdline-mode.html">Prev</a> </td><th width="60%" align="center">Chapter 2. DRM Internals</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-get-connector-status-name.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="drm-kms-init"></a>KMS Initialization and Cleanup</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="drm-kms-init.html#idm4934">CRTCs (struct <span class="structname">drm_crtc</span>)</a></span></dt><dt><span class="sect2"><a href="drm-kms-init.html#idm5000">Planes (struct <span class="structname">drm_plane</span>)</a></span></dt><dt><span class="sect2"><a href="drm-kms-init.html#idm5041">Encoders (struct <span class="structname">drm_encoder</span>)</a></span></dt><dt><span class="sect2"><a href="drm-kms-init.html#idm5074">Connectors (struct <span class="structname">drm_connector</span>)</a></span></dt><dt><span class="sect2"><a href="drm-kms-init.html#idm5200">Cleanup</a></span></dt><dt><span class="sect2"><a href="drm-kms-init.html#idm5213">Output discovery and initialization example</a></span></dt><dt><span class="sect2"><a href="drm-kms-init.html#idm5217">KMS API Functions</a></span></dt><dt><span class="sect2"><a href="drm-kms-init.html#idm7707">KMS Locking</a></span></dt></dl></div><p>
+      A KMS device is abstracted and exposed as a set of planes, CRTCs, encoders
+      and connectors. KMS drivers must thus create and initialize all those
+      objects at load time after initializing mode setting.
+    </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm4934"></a>CRTCs (struct <span class="structname">drm_crtc</span>)</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect3"><a href="drm-kms-init.html#idm4938">CRTC Initialization</a></span></dt><dt><span class="sect3"><a href="drm-kms-init.html#drm-kms-crtcops">CRTC Operations</a></span></dt></dl></div><p>
+        A CRTC is an abstraction representing a part of the chip that contains a
+	pointer to a scanout buffer. Therefore, the number of CRTCs available
+	determines how many independent scanout buffers can be active at any
+	given time. The CRTC structure contains several fields to support this:
+	a pointer to some video memory (abstracted as a frame buffer object), a
+	display mode, and an (x, y) offset into the video memory to support
+	panning or configurations where one piece of video memory spans multiple
+	CRTCs.
+      </p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idm4938"></a>CRTC Initialization</h4></div></div></div><p>
+          A KMS device must create and register at least one struct
+          <span class="structname">drm_crtc</span> instance. The instance is allocated
+          and zeroed by the driver, possibly as part of a larger structure, and
+          registered with a call to <code class="function">drm_crtc_init</code> with a
+          pointer to CRTC functions.
+        </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="drm-kms-crtcops"></a>CRTC Operations</h4></div></div></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="idm4945"></a>Set Configuration</h5></div></div></div><pre class="synopsis">int (*set_config)(struct drm_mode_set *set);</pre><p>
+            Apply a new CRTC configuration to the device. The configuration
+            specifies a CRTC, a frame buffer to scan out from, a (x,y) position in
+            the frame buffer, a display mode and an array of connectors to drive
+            with the CRTC if possible.
+          </p><p>
+            If the frame buffer specified in the configuration is NULL, the driver
+            must detach all encoders connected to the CRTC and all connectors
+            attached to those encoders and disable them.
+          </p><p>
+            This operation is called with the mode config lock held.
+          </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+	    Note that the drm core has no notion of restoring the mode setting
+	    state after resume, since all resume handling is in the full
+	    responsibility of the driver. The common mode setting helper library
+	    though provides a helper which can be used for this:
+	    <code class="function">drm_helper_resume_force_mode</code>.
+          </p></div></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="idm4954"></a>Page Flipping</h5></div></div></div><pre class="synopsis">int (*page_flip)(struct drm_crtc *crtc, struct drm_framebuffer *fb,
+                   struct drm_pending_vblank_event *event);</pre><p>
+            Schedule a page flip to the given frame buffer for the CRTC. This
+            operation is called with the mode config mutex held.
+          </p><p>
+            Page flipping is a synchronization mechanism that replaces the frame
+            buffer being scanned out by the CRTC with a new frame buffer during
+            vertical blanking, avoiding tearing. When an application requests a page
+            flip the DRM core verifies that the new frame buffer is large enough to
+            be scanned out by  the CRTC in the currently configured mode and then
+            calls the CRTC <code class="methodname">page_flip</code> operation with a
+            pointer to the new frame buffer.
+          </p><p>
+            The <code class="methodname">page_flip</code> operation schedules a page flip.
+            Once any pending rendering targeting the new frame buffer has
+            completed, the CRTC will be reprogrammed to display that frame buffer
+            after the next vertical refresh. The operation must return immediately
+            without waiting for rendering or page flip to complete and must block
+            any new rendering to the frame buffer until the page flip completes.
+          </p><p>
+            If a page flip can be successfully scheduled the driver must set the
+            <code class="code">drm_crtc-&lt;fb</code> field to the new framebuffer pointed to
+            by <code class="code">fb</code>. This is important so that the reference counting
+            on framebuffers stays balanced.
+          </p><p>
+            If a page flip is already pending, the
+            <code class="methodname">page_flip</code> operation must return
+            -<span class="errorname">EBUSY</span>.
+          </p><p>
+            To synchronize page flip to vertical blanking the driver will likely
+            need to enable vertical blanking interrupts. It should call
+            <code class="function">drm_vblank_get</code> for that purpose, and call
+            <code class="function">drm_vblank_put</code> after the page flip completes.
+          </p><p>
+            If the application has requested to be notified when page flip completes
+            the <code class="methodname">page_flip</code> operation will be called with a
+            non-NULL <em class="parameter"><code>event</code></em> argument pointing to a
+            <span class="structname">drm_pending_vblank_event</span> instance. Upon page
+            flip completion the driver must call <code class="methodname">drm_send_vblank_event</code>
+            to fill in the event and send to wake up any waiting processes.
+            This can be performed with
+            </p><pre class="programlisting">
+            spin_lock_irqsave(&amp;dev-&gt;event_lock, flags);
+            ...
+            drm_send_vblank_event(dev, pipe, event);
+            spin_unlock_irqrestore(&amp;dev-&gt;event_lock, flags);
+            </pre><p>
+          </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+            FIXME: Could drivers that don't need to wait for rendering to complete
+            just add the event to <code class="literal">dev-&gt;vblank_event_list</code> and
+            let the DRM core handle everything, as for "normal" vertical blanking
+            events?
+          </p></div><p>
+            While waiting for the page flip to complete, the
+            <code class="literal">event-&gt;base.link</code> list head can be used freely by
+            the driver to store the pending event in a driver-specific list.
+          </p><p>
+            If the file handle is closed before the event is signaled, drivers must
+            take care to destroy the event in their
+            <code class="methodname">preclose</code> operation (and, if needed, call
+            <code class="function">drm_vblank_put</code>).
+          </p></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="idm4985"></a>Miscellaneous</h5></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">void (*set_property)(struct drm_crtc *crtc,
+                     struct drm_property *property, uint64_t value);</pre><p>
+                Set the value of the given CRTC property to
+                <em class="parameter"><code>value</code></em>. See <a class="xref" href="drm-kms-properties.html" title="KMS Properties">the section called “KMS Properties”</a>
+                for more information about properties.
+              </p></li><li class="listitem"><pre class="synopsis">void (*gamma_set)(struct drm_crtc *crtc, u16 *r, u16 *g, u16 *b,
+                        uint32_t start, uint32_t size);</pre><p>
+                Apply a gamma table to the device. The operation is optional.
+              </p></li><li class="listitem"><pre class="synopsis">void (*destroy)(struct drm_crtc *crtc);</pre><p>
+                Destroy the CRTC when not needed anymore. See
+                <a class="xref" href="drm-kms-init.html" title="KMS Initialization and Cleanup">the section called “KMS Initialization and Cleanup”</a>.
+              </p></li></ul></div></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm5000"></a>Planes (struct <span class="structname">drm_plane</span>)</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect3"><a href="drm-kms-init.html#idm5010">Plane Initialization</a></span></dt><dt><span class="sect3"><a href="drm-kms-init.html#idm5017">Plane Operations</a></span></dt></dl></div><p>
+        A plane represents an image source that can be blended with or overlayed
+	on top of a CRTC during the scanout process. Planes are associated with
+	a frame buffer to crop a portion of the image memory (source) and
+	optionally scale it to a destination size. The result is then blended
+	with or overlayed on top of a CRTC.
+      </p><p>
+      The DRM core recognizes three types of planes:
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+        DRM_PLANE_TYPE_PRIMARY represents a "main" plane for a CRTC.  Primary
+        planes are the planes operated upon by by CRTC modesetting and flipping
+        operations described in <a class="xref" href="drm-kms-init.html#drm-kms-crtcops" title="CRTC Operations">the section called “CRTC Operations”</a>.
+        </li><li class="listitem">
+        DRM_PLANE_TYPE_CURSOR represents a "cursor" plane for a CRTC.  Cursor
+        planes are the planes operated upon by the DRM_IOCTL_MODE_CURSOR and
+        DRM_IOCTL_MODE_CURSOR2 ioctls.
+        </li><li class="listitem">
+        DRM_PLANE_TYPE_OVERLAY represents all non-primary, non-cursor planes.
+        Some drivers refer to these types of planes as "sprites" internally.
+        </li></ul></div><p>
+      For compatibility with legacy userspace, only overlay planes are made
+      available to userspace by default.  Userspace clients may set the
+      DRM_CLIENT_CAP_UNIVERSAL_PLANES client capability bit to indicate that
+      they wish to receive a universal plane list containing all plane types.
+      </p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idm5010"></a>Plane Initialization</h4></div></div></div><p>
+          To create a plane, a KMS drivers allocates and
+          zeroes an instances of struct <span class="structname">drm_plane</span>
+          (possibly as part of a larger structure) and registers it with a call
+          to <code class="function">drm_universal_plane_init</code>. The function takes a bitmask
+          of the CRTCs that can be associated with the plane, a pointer to the
+          plane functions, a list of format supported formats, and the type of
+          plane (primary, cursor, or overlay) being initialized.
+        </p><p>
+          Cursor and overlay planes are optional.  All drivers should provide
+          one primary plane per CRTC (although this requirement may change in
+          the future); drivers that do not wish to provide special handling for
+          primary planes may make use of the helper functions described in
+          <a class="xref" href="ch02s05.html#drm-kms-planehelpers">the section called “Plane Helper Reference”</a> to create and register a
+          primary plane with standard capabilities.
+        </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idm5017"></a>Plane Operations</h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">int (*update_plane)(struct drm_plane *plane, struct drm_crtc *crtc,
+                        struct drm_framebuffer *fb, int crtc_x, int crtc_y,
+                        unsigned int crtc_w, unsigned int crtc_h,
+                        uint32_t src_x, uint32_t src_y,
+                        uint32_t src_w, uint32_t src_h);</pre><p>
+              Enable and configure the plane to use the given CRTC and frame buffer.
+            </p><p>
+              The source rectangle in frame buffer memory coordinates is given by
+              the <em class="parameter"><code>src_x</code></em>, <em class="parameter"><code>src_y</code></em>,
+              <em class="parameter"><code>src_w</code></em> and <em class="parameter"><code>src_h</code></em>
+              parameters (as 16.16 fixed point values). Devices that don't support
+              subpixel plane coordinates can ignore the fractional part.
+            </p><p>
+              The destination rectangle in CRTC coordinates is given by the
+              <em class="parameter"><code>crtc_x</code></em>, <em class="parameter"><code>crtc_y</code></em>,
+              <em class="parameter"><code>crtc_w</code></em> and <em class="parameter"><code>crtc_h</code></em>
+              parameters (as integer values). Devices scale the source rectangle to
+              the destination rectangle. If scaling is not supported, and the source
+              rectangle size doesn't match the destination rectangle size, the
+              driver must return a -<span class="errorname">EINVAL</span> error.
+            </p></li><li class="listitem"><pre class="synopsis">int (*disable_plane)(struct drm_plane *plane);</pre><p>
+              Disable the plane. The DRM core calls this method in response to a
+              DRM_IOCTL_MODE_SETPLANE ioctl call with the frame buffer ID set to 0.
+              Disabled planes must not be processed by the CRTC.
+            </p></li><li class="listitem"><pre class="synopsis">void (*destroy)(struct drm_plane *plane);</pre><p>
+              Destroy the plane when not needed anymore. See
+              <a class="xref" href="drm-kms-init.html" title="KMS Initialization and Cleanup">the section called “KMS Initialization and Cleanup”</a>.
+            </p></li></ul></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm5041"></a>Encoders (struct <span class="structname">drm_encoder</span>)</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect3"><a href="drm-kms-init.html#idm5045">Encoder Initialization</a></span></dt><dt><span class="sect3"><a href="drm-kms-init.html#idm5062">Encoder Operations</a></span></dt></dl></div><p>
+        An encoder takes pixel data from a CRTC and converts it to a format
+	suitable for any attached connectors. On some devices, it may be
+	possible to have a CRTC send data to more than one encoder. In that
+	case, both encoders would receive data from the same scanout buffer,
+	resulting in a "cloned" display configuration across the connectors
+	attached to each encoder.
+      </p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idm5045"></a>Encoder Initialization</h4></div></div></div><p>
+          As for CRTCs, a KMS driver must create, initialize and register at
+          least one struct <span class="structname">drm_encoder</span> instance. The
+          instance is allocated and zeroed by the driver, possibly as part of a
+          larger structure.
+        </p><p>
+          Drivers must initialize the struct <span class="structname">drm_encoder</span>
+          <em class="structfield"><code>possible_crtcs</code></em> and
+          <em class="structfield"><code>possible_clones</code></em> fields before registering the
+          encoder. Both fields are bitmasks of respectively the CRTCs that the
+          encoder can be connected to, and sibling encoders candidate for cloning.
+        </p><p>
+          After being initialized, the encoder must be registered with a call to
+          <code class="function">drm_encoder_init</code>. The function takes a pointer to
+          the encoder functions and an encoder type. Supported types are
+          </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+              DRM_MODE_ENCODER_DAC for VGA and analog on DVI-I/DVI-A
+              </li><li class="listitem">
+              DRM_MODE_ENCODER_TMDS for DVI, HDMI and (embedded) DisplayPort
+            </li><li class="listitem">
+              DRM_MODE_ENCODER_LVDS for display panels
+            </li><li class="listitem">
+              DRM_MODE_ENCODER_TVDAC for TV output (Composite, S-Video, Component,
+              SCART)
+            </li><li class="listitem">
+              DRM_MODE_ENCODER_VIRTUAL for virtual machine displays
+            </li></ul></div><p>
+        </p><p>
+          Encoders must be attached to a CRTC to be used. DRM drivers leave
+          encoders unattached at initialization time. Applications (or the fbdev
+          compatibility layer when implemented) are responsible for attaching the
+          encoders they want to use to a CRTC.
+        </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idm5062"></a>Encoder Operations</h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">void (*destroy)(struct drm_encoder *encoder);</pre><p>
+              Called to destroy the encoder when not needed anymore. See
+              <a class="xref" href="drm-kms-init.html" title="KMS Initialization and Cleanup">the section called “KMS Initialization and Cleanup”</a>.
+            </p></li><li class="listitem"><pre class="synopsis">void (*set_property)(struct drm_plane *plane,
+                     struct drm_property *property, uint64_t value);</pre><p>
+              Set the value of the given plane property to
+              <em class="parameter"><code>value</code></em>. See <a class="xref" href="drm-kms-properties.html" title="KMS Properties">the section called “KMS Properties”</a>
+              for more information about properties.
+            </p></li></ul></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm5074"></a>Connectors (struct <span class="structname">drm_connector</span>)</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect3"><a href="drm-kms-init.html#idm5078">Connector Initialization</a></span></dt><dt><span class="sect3"><a href="drm-kms-init.html#idm5147">Connector Operations</a></span></dt></dl></div><p>
+        A connector is the final destination for pixel data on a device, and
+	usually connects directly to an external display device like a monitor
+	or laptop panel. A connector can only be attached to one encoder at a
+	time. The connector is also the structure where information about the
+	attached display is kept, so it contains fields for display data, EDID
+	data, DPMS &amp; connection status, and information about modes
+	supported on the attached displays.
+      </p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idm5078"></a>Connector Initialization</h4></div></div></div><p>
+          Finally a KMS driver must create, initialize, register and attach at
+          least one struct <span class="structname">drm_connector</span> instance. The
+          instance is created as other KMS objects and initialized by setting the
+          following fields.
+        </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="structfield"><code>interlace_allowed</code></em></span></dt><dd><p>
+              Whether the connector can handle interlaced modes.
+            </p></dd><dt><span class="term"><em class="structfield"><code>doublescan_allowed</code></em></span></dt><dd><p>
+              Whether the connector can handle doublescan.
+            </p></dd><dt><span class="term"><em class="structfield"><code>display_info
+            </code></em></span></dt><dd><p>
+              Display information is filled from EDID information when a display
+              is detected. For non hot-pluggable displays such as flat panels in
+              embedded systems, the driver should initialize the
+              <em class="structfield"><code>display_info</code></em>.<em class="structfield"><code>width_mm</code></em>
+              and
+              <em class="structfield"><code>display_info</code></em>.<em class="structfield"><code>height_mm</code></em>
+              fields with the physical size of the display.
+            </p></dd><dt><span class="term"><a name="drm-kms-connector-polled"></a><em class="structfield"><code>polled</code></em></span></dt><dd><p>
+              Connector polling mode, a combination of
+              </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">DRM_CONNECTOR_POLL_HPD</span></dt><dd><p>
+                    The connector generates hotplug events and doesn't need to be
+                    periodically polled. The CONNECT and DISCONNECT flags must not
+                    be set together with the HPD flag.
+                  </p></dd><dt><span class="term">DRM_CONNECTOR_POLL_CONNECT</span></dt><dd><p>
+                    Periodically poll the connector for connection.
+                  </p></dd><dt><span class="term">DRM_CONNECTOR_POLL_DISCONNECT</span></dt><dd><p>
+                    Periodically poll the connector for disconnection.
+                  </p></dd></dl></div><p>
+              Set to 0 for connectors that don't support connection status
+              discovery.
+            </p></dd></dl></div><p>
+          The connector is then registered with a call to
+          <code class="function">drm_connector_init</code> with a pointer to the connector
+          functions and a connector type, and exposed through sysfs with a call to
+          <code class="function">drm_connector_register</code>.
+        </p><p>
+          Supported connector types are
+          </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">DRM_MODE_CONNECTOR_VGA</li><li class="listitem">DRM_MODE_CONNECTOR_DVII</li><li class="listitem">DRM_MODE_CONNECTOR_DVID</li><li class="listitem">DRM_MODE_CONNECTOR_DVIA</li><li class="listitem">DRM_MODE_CONNECTOR_Composite</li><li class="listitem">DRM_MODE_CONNECTOR_SVIDEO</li><li class="listitem">DRM_MODE_CONNECTOR_LVDS</li><li class="listitem">DRM_MODE_CONNECTOR_Component</li><li class="listitem">DRM_MODE_CONNECTOR_9PinDIN</li><li class="listitem">DRM_MODE_CONNECTOR_DisplayPort</li><li class="listitem">DRM_MODE_CONNECTOR_HDMIA</li><li class="listitem">DRM_MODE_CONNECTOR_HDMIB</li><li class="listitem">DRM_MODE_CONNECTOR_TV</li><li class="listitem">DRM_MODE_CONNECTOR_eDP</li><li class="listitem">DRM_MODE_CONNECTOR_VIRTUAL</li></ul></div><p>
+        </p><p>
+          Connectors must be attached to an encoder to be used. For devices that
+          map connectors to encoders 1:1, the connector should be attached at
+          initialization time with a call to
+          <code class="function">drm_mode_connector_attach_encoder</code>. The driver must
+          also set the <span class="structname">drm_connector</span>
+          <em class="structfield"><code>encoder</code></em> field to point to the attached
+          encoder.
+        </p><p>
+          Finally, drivers must initialize the connectors state change detection
+          with a call to <code class="function">drm_kms_helper_poll_init</code>. If at
+          least one connector is pollable but can't generate hotplug interrupts
+          (indicated by the DRM_CONNECTOR_POLL_CONNECT and
+          DRM_CONNECTOR_POLL_DISCONNECT connector flags), a delayed work will
+          automatically be queued to periodically poll for changes. Connectors
+          that can generate hotplug interrupts must be marked with the
+          DRM_CONNECTOR_POLL_HPD flag instead, and their interrupt handler must
+          call <code class="function">drm_helper_hpd_irq_event</code>. The function will
+          queue a delayed work to check the state of all connectors, but no
+          periodic polling will be done.
+        </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idm5147"></a>Connector Operations</h4></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+          Unless otherwise state, all operations are mandatory.
+        </p></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="idm5151"></a>DPMS</h5></div></div></div><pre class="synopsis">void (*dpms)(struct drm_connector *connector, int mode);</pre><p>
+            The DPMS operation sets the power state of a connector. The mode
+            argument is one of
+            </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>DRM_MODE_DPMS_ON</p></li><li class="listitem"><p>DRM_MODE_DPMS_STANDBY</p></li><li class="listitem"><p>DRM_MODE_DPMS_SUSPEND</p></li><li class="listitem"><p>DRM_MODE_DPMS_OFF</p></li></ul></div><p>
+          </p><p>
+            In all but DPMS_ON mode the encoder to which the connector is attached
+            should put the display in low-power mode by driving its signals
+            appropriately. If more than one connector is attached to the encoder
+            care should be taken not to change the power state of other displays as
+            a side effect. Low-power mode should be propagated to the encoders and
+            CRTCs when all related connectors are put in low-power mode.
+          </p></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="idm5165"></a>Modes</h5></div></div></div><pre class="synopsis">int (*fill_modes)(struct drm_connector *connector, uint32_t max_width,
+                      uint32_t max_height);</pre><p>
+            Fill the mode list with all supported modes for the connector. If the
+            <em class="parameter"><code>max_width</code></em> and <em class="parameter"><code>max_height</code></em>
+            arguments are non-zero, the implementation must ignore all modes wider
+            than <em class="parameter"><code>max_width</code></em> or higher than
+            <em class="parameter"><code>max_height</code></em>.
+          </p><p>
+            The connector must also fill in this operation its
+            <em class="structfield"><code>display_info</code></em>
+            <em class="structfield"><code>width_mm</code></em> and
+            <em class="structfield"><code>height_mm</code></em> fields with the connected display
+            physical size in millimeters. The fields should be set to 0 if the value
+            isn't known or is not applicable (for instance for projector devices).
+          </p></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="idm5177"></a>Connection Status</h5></div></div></div><p>
+            The connection status is updated through polling or hotplug events when
+            supported (see <a class="xref" href="drm-kms-init.html#drm-kms-connector-polled"><em class="structfield"><code>polled</code></em></a>). The status
+            value is reported to userspace through ioctls and must not be used
+            inside the driver, as it only gets initialized by a call to
+            <code class="function">drm_mode_getconnector</code> from userspace.
+          </p><pre class="synopsis">enum drm_connector_status (*detect)(struct drm_connector *connector,
+                                        bool force);</pre><p>
+            Check to see if anything is attached to the connector. The
+            <em class="parameter"><code>force</code></em> parameter is set to false whilst polling or
+            to true when checking the connector due to user request.
+            <em class="parameter"><code>force</code></em> can be used by the driver to avoid
+            expensive, destructive operations during automated probing.
+          </p><p>
+            Return connector_status_connected if something is connected to the
+            connector, connector_status_disconnected if nothing is connected and
+            connector_status_unknown if the connection state isn't known.
+          </p><p>
+            Drivers should only return connector_status_connected if the connection
+            status has really been probed as connected. Connectors that can't detect
+            the connection status, or failed connection status probes, should return
+            connector_status_unknown.
+          </p></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="idm5188"></a>Miscellaneous</h5></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><pre class="synopsis">void (*set_property)(struct drm_connector *connector,
+                     struct drm_property *property, uint64_t value);</pre><p>
+                Set the value of the given connector property to
+                <em class="parameter"><code>value</code></em>. See <a class="xref" href="drm-kms-properties.html" title="KMS Properties">the section called “KMS Properties”</a>
+                for more information about properties.
+              </p></li><li class="listitem"><pre class="synopsis">void (*destroy)(struct drm_connector *connector);</pre><p>
+                Destroy the connector when not needed anymore. See
+                <a class="xref" href="drm-kms-init.html" title="KMS Initialization and Cleanup">the section called “KMS Initialization and Cleanup”</a>.
+              </p></li></ul></div></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm5200"></a>Cleanup</h3></div></div></div><p>
+        The DRM core manages its objects' lifetime. When an object is not needed
+	anymore the core calls its destroy function, which must clean up and
+	free every resource allocated for the object. Every
+	<code class="function">drm_*_init</code> call must be matched with a
+	corresponding <code class="function">drm_*_cleanup</code> call to cleanup CRTCs
+	(<code class="function">drm_crtc_cleanup</code>), planes
+	(<code class="function">drm_plane_cleanup</code>), encoders
+	(<code class="function">drm_encoder_cleanup</code>) and connectors
+	(<code class="function">drm_connector_cleanup</code>). Furthermore, connectors
+	that have been added to sysfs must be removed by a call to
+	<code class="function">drm_connector_unregister</code> before calling
+	<code class="function">drm_connector_cleanup</code>.
+      </p><p>
+        Connectors state change detection must be cleanup up with a call to
+	<code class="function">drm_kms_helper_poll_fini</code>.
+      </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm5213"></a>Output discovery and initialization example</h3></div></div></div><pre class="programlisting">
+void intel_crt_init(struct drm_device *dev)
+{
+	struct drm_connector *connector;
+	struct intel_output *intel_output;
+
+	intel_output = kzalloc(sizeof(struct intel_output), GFP_KERNEL);
+	if (!intel_output)
+		return;
+
+	connector = &amp;intel_output-&gt;base;
+	drm_connector_init(dev, &amp;intel_output-&gt;base,
+			   &amp;intel_crt_connector_funcs, DRM_MODE_CONNECTOR_VGA);
+
+	drm_encoder_init(dev, &amp;intel_output-&gt;enc, &amp;intel_crt_enc_funcs,
+			 DRM_MODE_ENCODER_DAC);
+
+	drm_mode_connector_attach_encoder(&amp;intel_output-&gt;base,
+					  &amp;intel_output-&gt;enc);
+
+	/* Set up the DDC bus. */
+	intel_output-&gt;ddc_bus = intel_i2c_create(dev, GPIOA, "CRTDDC_A");
+	if (!intel_output-&gt;ddc_bus) {
+		dev_printk(KERN_ERR, &amp;dev-&gt;pdev-&gt;dev, "DDC bus registration "
+			   "failed.\n");
+		return;
+	}
+
+	intel_output-&gt;type = INTEL_OUTPUT_ANALOG;
+	connector-&gt;interlace_allowed = 0;
+	connector-&gt;doublescan_allowed = 0;
+
+	drm_encoder_helper_add(&amp;intel_output-&gt;enc, &amp;intel_crt_helper_funcs);
+	drm_connector_helper_add(connector, &amp;intel_crt_connector_helper_funcs);
+
+	drm_connector_register(connector);
+}</pre><p>
+        In the example above (taken from the i915 driver), a CRTC, connector and
+        encoder combination is created. A device-specific i2c bus is also
+        created for fetching EDID data and performing monitor detection. Once
+        the process is complete, the new connector is registered with sysfs to
+        make its properties available to applications.
+      </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm5217"></a>KMS API Functions</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-drm-get-connector-status-name.html"><span class="phrase">drm_get_connector_status_name</span></a></span><span class="refpurpose"> — 
+  return a string for connector status
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-get-subpixel-order-name.html"><span class="phrase">drm_get_subpixel_order_name</span></a></span><span class="refpurpose"> — 
+     return a string for a given subpixel enum
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-get-format-name.html"><span class="phrase">drm_get_format_name</span></a></span><span class="refpurpose"> — 
+     return a string for drm fourcc format
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-object-find.html"><span class="phrase">drm_mode_object_find</span></a></span><span class="refpurpose"> — 
+     look up a drm object with static lifetime
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-framebuffer-init.html"><span class="phrase">drm_framebuffer_init</span></a></span><span class="refpurpose"> — 
+     initialize a framebuffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-framebuffer-lookup.html"><span class="phrase">drm_framebuffer_lookup</span></a></span><span class="refpurpose"> — 
+     look up a drm framebuffer and grab a reference
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-framebuffer-unreference.html"><span class="phrase">drm_framebuffer_unreference</span></a></span><span class="refpurpose"> — 
+     unref a framebuffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-framebuffer-reference.html"><span class="phrase">drm_framebuffer_reference</span></a></span><span class="refpurpose"> — 
+     incr the fb refcnt
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-framebuffer-unregister-private.html"><span class="phrase">drm_framebuffer_unregister_private</span></a></span><span class="refpurpose"> — 
+     unregister a private fb from the lookup idr
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-framebuffer-cleanup.html"><span class="phrase">drm_framebuffer_cleanup</span></a></span><span class="refpurpose"> — 
+     remove a framebuffer object
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-framebuffer-remove.html"><span class="phrase">drm_framebuffer_remove</span></a></span><span class="refpurpose"> — 
+     remove and unreference a framebuffer object
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-crtc-init-with-planes.html"><span class="phrase">drm_crtc_init_with_planes</span></a></span><span class="refpurpose"> — 
+     Initialise a new CRTC object with specified primary and cursor planes.
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-crtc-cleanup.html"><span class="phrase">drm_crtc_cleanup</span></a></span><span class="refpurpose"> — 
+     Clean up the core crtc usage
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-crtc-index.html"><span class="phrase">drm_crtc_index</span></a></span><span class="refpurpose"> — 
+     find the index of a registered CRTC
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-connector-init.html"><span class="phrase">drm_connector_init</span></a></span><span class="refpurpose"> — 
+     Init a preallocated connector
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-connector-cleanup.html"><span class="phrase">drm_connector_cleanup</span></a></span><span class="refpurpose"> — 
+     cleans up an initialised connector
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-connector-index.html"><span class="phrase">drm_connector_index</span></a></span><span class="refpurpose"> — 
+     find the index of a registered connector
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-connector-register.html"><span class="phrase">drm_connector_register</span></a></span><span class="refpurpose"> — 
+     register a connector
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-connector-unregister.html"><span class="phrase">drm_connector_unregister</span></a></span><span class="refpurpose"> — 
+     unregister a connector
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-connector-unplug-all.html"><span class="phrase">drm_connector_unplug_all</span></a></span><span class="refpurpose"> — 
+     unregister connector userspace interfaces
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-bridge-init.html"><span class="phrase">drm_bridge_init</span></a></span><span class="refpurpose"> — 
+     initialize a drm transcoder/bridge
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-bridge-cleanup.html"><span class="phrase">drm_bridge_cleanup</span></a></span><span class="refpurpose"> — 
+     cleans up an initialised bridge
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-encoder-init.html"><span class="phrase">drm_encoder_init</span></a></span><span class="refpurpose"> — 
+     Init a preallocated encoder
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-encoder-cleanup.html"><span class="phrase">drm_encoder_cleanup</span></a></span><span class="refpurpose"> — 
+     cleans up an initialised encoder
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-universal-plane-init.html"><span class="phrase">drm_universal_plane_init</span></a></span><span class="refpurpose"> — 
+     Initialize a new universal plane object
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-plane-init.html"><span class="phrase">drm_plane_init</span></a></span><span class="refpurpose"> — 
+     Initialize a legacy plane
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-plane-cleanup.html"><span class="phrase">drm_plane_cleanup</span></a></span><span class="refpurpose"> — 
+     Clean up the core plane usage
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-plane-index.html"><span class="phrase">drm_plane_index</span></a></span><span class="refpurpose"> — 
+     find the index of a registered plane
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-plane-force-disable.html"><span class="phrase">drm_plane_force_disable</span></a></span><span class="refpurpose"> — 
+     Forcibly disable a plane
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-create-dvi-i-properties.html"><span class="phrase">drm_mode_create_dvi_i_properties</span></a></span><span class="refpurpose"> — 
+     create DVI-I specific connector properties
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-create-tv-properties.html"><span class="phrase">drm_mode_create_tv_properties</span></a></span><span class="refpurpose"> — 
+     create TV specific connector properties
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-create-scaling-mode-property.html"><span class="phrase">drm_mode_create_scaling_mode_property</span></a></span><span class="refpurpose"> — 
+     create scaling mode property
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-create-aspect-ratio-property.html"><span class="phrase">drm_mode_create_aspect_ratio_property</span></a></span><span class="refpurpose"> — 
+     create aspect ratio property
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-create-dirty-info-property.html"><span class="phrase">drm_mode_create_dirty_info_property</span></a></span><span class="refpurpose"> — 
+     create dirty property
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-set-config-internal.html"><span class="phrase">drm_mode_set_config_internal</span></a></span><span class="refpurpose"> — 
+     helper to call -&gt;set_config
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-crtc-check-viewport.html"><span class="phrase">drm_crtc_check_viewport</span></a></span><span class="refpurpose"> — 
+     Checks that a framebuffer is big enough for the CRTC viewport
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-legacy-fb-format.html"><span class="phrase">drm_mode_legacy_fb_format</span></a></span><span class="refpurpose"> — 
+     compute drm fourcc code from legacy description
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-property-create.html"><span class="phrase">drm_property_create</span></a></span><span class="refpurpose"> — 
+     create a new property type
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-property-create-enum.html"><span class="phrase">drm_property_create_enum</span></a></span><span class="refpurpose"> — 
+     create a new enumeration property type
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-property-create-bitmask.html"><span class="phrase">drm_property_create_bitmask</span></a></span><span class="refpurpose"> — 
+     create a new bitmask property type
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-property-create-range.html"><span class="phrase">drm_property_create_range</span></a></span><span class="refpurpose"> — 
+     create a new ranged property type
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-property-add-enum.html"><span class="phrase">drm_property_add_enum</span></a></span><span class="refpurpose"> — 
+     add a possible value to an enumeration property
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-property-destroy.html"><span class="phrase">drm_property_destroy</span></a></span><span class="refpurpose"> — 
+     destroy a drm property
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-object-attach-property.html"><span class="phrase">drm_object_attach_property</span></a></span><span class="refpurpose"> — 
+     attach a property to a modeset object
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-object-property-set-value.html"><span class="phrase">drm_object_property_set_value</span></a></span><span class="refpurpose"> — 
+     set the value of a property
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-object-property-get-value.html"><span class="phrase">drm_object_property_get_value</span></a></span><span class="refpurpose"> — 
+     retrieve the value of a property
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-connector-update-edid-property.html"><span class="phrase">drm_mode_connector_update_edid_property</span></a></span><span class="refpurpose"> — 
+     update the edid property of a connector
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-plane-set-obj-prop.html"><span class="phrase">drm_mode_plane_set_obj_prop</span></a></span><span class="refpurpose"> — 
+     set the value of a property
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-connector-attach-encoder.html"><span class="phrase">drm_mode_connector_attach_encoder</span></a></span><span class="refpurpose"> — 
+     attach a connector to an encoder
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-crtc-set-gamma-size.html"><span class="phrase">drm_mode_crtc_set_gamma_size</span></a></span><span class="refpurpose"> — 
+     set the gamma table size
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-config-reset.html"><span class="phrase">drm_mode_config_reset</span></a></span><span class="refpurpose"> — 
+     call -&gt;reset callbacks
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-fb-get-bpp-depth.html"><span class="phrase">drm_fb_get_bpp_depth</span></a></span><span class="refpurpose"> — 
+     get the bpp/depth values for format
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-format-num-planes.html"><span class="phrase">drm_format_num_planes</span></a></span><span class="refpurpose"> — 
+     get the number of planes for format
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-format-plane-cpp.html"><span class="phrase">drm_format_plane_cpp</span></a></span><span class="refpurpose"> — 
+     determine the bytes per pixel value
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-format-horz-chroma-subsampling.html"><span class="phrase">drm_format_horz_chroma_subsampling</span></a></span><span class="refpurpose"> — 
+     get the horizontal chroma subsampling factor
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-format-vert-chroma-subsampling.html"><span class="phrase">drm_format_vert_chroma_subsampling</span></a></span><span class="refpurpose"> — 
+     get the vertical chroma subsampling factor
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-rotation-simplify.html"><span class="phrase">drm_rotation_simplify</span></a></span><span class="refpurpose"> — 
+     Try to simplify the rotation
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-config-init.html"><span class="phrase">drm_mode_config_init</span></a></span><span class="refpurpose"> — 
+     initialize DRM mode_configuration structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-mode-config-cleanup.html"><span class="phrase">drm_mode_config_cleanup</span></a></span><span class="refpurpose"> — 
+     free up DRM mode_config info
+ </span></dt></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm7707"></a>KMS Locking</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-drm-modeset-acquire-ctx.html"><span class="phrase">struct drm_modeset_acquire_ctx</span></a></span><span class="refpurpose"> — 
+  locking context (see ww_acquire_ctx)
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-lock-init.html"><span class="phrase">drm_modeset_lock_init</span></a></span><span class="refpurpose"> — 
+     initialize lock
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-lock-fini.html"><span class="phrase">drm_modeset_lock_fini</span></a></span><span class="refpurpose"> — 
+     cleanup lock
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-is-locked.html"><span class="phrase">drm_modeset_is_locked</span></a></span><span class="refpurpose"> — 
+     equivalent to <code class="function">mutex_is_locked</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API---drm-modeset-lock-all.html"><span class="phrase">__drm_modeset_lock_all</span></a></span><span class="refpurpose"> — 
+  internal helper to grab all modeset locks
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-lock-all.html"><span class="phrase">drm_modeset_lock_all</span></a></span><span class="refpurpose"> — 
+     take all modeset locks
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-unlock-all.html"><span class="phrase">drm_modeset_unlock_all</span></a></span><span class="refpurpose"> — 
+     drop all modeset locks
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-lock-crtc.html"><span class="phrase">drm_modeset_lock_crtc</span></a></span><span class="refpurpose"> — 
+     lock crtc with hidden acquire ctx
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-legacy-acquire-ctx.html"><span class="phrase">drm_modeset_legacy_acquire_ctx</span></a></span><span class="refpurpose"> — 
+     find acquire ctx for legacy ioctls
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-unlock-crtc.html"><span class="phrase">drm_modeset_unlock_crtc</span></a></span><span class="refpurpose"> — 
+     drop crtc lock
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-warn-on-modeset-not-all-locked.html"><span class="phrase">drm_warn_on_modeset_not_all_locked</span></a></span><span class="refpurpose"> — 
+     check that all modeset locks are locked
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-acquire-init.html"><span class="phrase">drm_modeset_acquire_init</span></a></span><span class="refpurpose"> — 
+     initialize acquire context
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-acquire-fini.html"><span class="phrase">drm_modeset_acquire_fini</span></a></span><span class="refpurpose"> — 
+     cleanup acquire context
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-drop-locks.html"><span class="phrase">drm_modeset_drop_locks</span></a></span><span class="refpurpose"> — 
+     drop all locks
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-backoff.html"><span class="phrase">drm_modeset_backoff</span></a></span><span class="refpurpose"> — 
+     deadlock avoidance backoff
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-backoff-interruptible.html"><span class="phrase">drm_modeset_backoff_interruptible</span></a></span><span class="refpurpose"> — 
+     deadlock avoidance backoff
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-lock.html"><span class="phrase">drm_modeset_lock</span></a></span><span class="refpurpose"> — 
+     take modeset lock
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-lock-interruptible.html"><span class="phrase">drm_modeset_lock_interruptible</span></a></span><span class="refpurpose"> — 
+     take modeset lock
+ </span></dt><dt><span class="refentrytitle"><a href="API-drm-modeset-unlock.html"><span class="phrase">drm_modeset_unlock</span></a></span><span class="refpurpose"> — 
+     drop modeset lock
+ </span></dt></dl></div><p>
+   </p><p>
+   As KMS moves toward more fine grained locking, and atomic ioctl where
+   userspace can indirectly control locking order, it becomes necessary
+   to use ww_mutex and acquire-contexts to avoid deadlocks.  But because
+   the locking is more distributed around the driver code, we want a bit
+   of extra utility/tracking out of our acquire-ctx.  This is provided
+   by drm_modeset_lock / drm_modeset_acquire_ctx.
+   </p><p>
+   For basic principles of ww_mutex, see: Documentation/locking/ww-mutex-design.txt
+   </p><p>
+   The basic usage pattern is to:
+   </p><p>
+   drm_modeset_acquire_init(<span class="structname">ctx</span>)
+   retry:
+   foreach (lock in random_ordered_set_of_locks) {
+   ret = drm_modeset_lock(lock, <span class="structname">ctx</span>)
+   if (ret == -EDEADLK) {
+   drm_modeset_backoff(<span class="structname">ctx</span>);
+   goto retry;
+   }
+   }
+   </p><p>
+   ... do stuff ...
+   </p><p>
+   drm_modeset_drop_locks(<span class="structname">ctx</span>);
+   drm_modeset_acquire_fini(<span class="structname">ctx</span>);
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-mode-create-from-cmdline-mode.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drmInternals.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-get-connector-status-name.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_mode_create_from_cmdline_mode</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_get_connector_status_name</span></td></tr></table></div></body></html>

@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>intel_execlists_submission</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="ch04s02.html#idm16360" title="Logical Rings, Logical Ring Contexts and Execlists"><link rel="prev" href="API-intel-execlists-handle-ctx-events.html" title="intel_execlists_handle_ctx_events"><link rel="next" href="API-intel-logical-ring-advance-and-submit.html" title="intel_logical_ring_advance_and_submit"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">intel_execlists_submission</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-intel-execlists-handle-ctx-events.html">Prev</a> </td><th width="60%" align="center">Logical Rings, Logical Ring Contexts and Execlists</th><td width="20%" align="right"> <a accesskey="n" href="API-intel-logical-ring-advance-and-submit.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-intel-execlists-submission"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>intel_execlists_submission — 
+     submit a batchbuffer for execution, Execlists style
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">intel_execlists_submission </b>(</code></td><td>struct drm_device * <var class="pdparam">dev</var>, </td></tr><tr><td> </td><td>struct drm_file * <var class="pdparam">file</var>, </td></tr><tr><td> </td><td>struct intel_engine_cs * <var class="pdparam">ring</var>, </td></tr><tr><td> </td><td>struct intel_context * <var class="pdparam">ctx</var>, </td></tr><tr><td> </td><td>struct drm_i915_gem_execbuffer2 * <var class="pdparam">args</var>, </td></tr><tr><td> </td><td>struct list_head * <var class="pdparam">vmas</var>, </td></tr><tr><td> </td><td>struct drm_i915_gem_object * <var class="pdparam">batch_obj</var>, </td></tr><tr><td> </td><td>u64 <var class="pdparam">exec_start</var>, </td></tr><tr><td> </td><td>u32 <var class="pdparam">flags</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm16536"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     DRM device.
+    </p></dd><dt><span class="term"><em class="parameter"><code>file</code></em></span></dt><dd><p>
+     DRM file.
+    </p></dd><dt><span class="term"><em class="parameter"><code>ring</code></em></span></dt><dd><p>
+     Engine Command Streamer to submit to.
+    </p></dd><dt><span class="term"><em class="parameter"><code>ctx</code></em></span></dt><dd><p>
+     Context to employ for this submission.
+    </p></dd><dt><span class="term"><em class="parameter"><code>args</code></em></span></dt><dd><p>
+     execbuffer call arguments.
+    </p></dd><dt><span class="term"><em class="parameter"><code>vmas</code></em></span></dt><dd><p>
+     list of vmas.
+    </p></dd><dt><span class="term"><em class="parameter"><code>batch_obj</code></em></span></dt><dd><p>
+     the batchbuffer to submit.
+    </p></dd><dt><span class="term"><em class="parameter"><code>exec_start</code></em></span></dt><dd><p>
+     batchbuffer start virtual address pointer.
+    </p></dd><dt><span class="term"><em class="parameter"><code>flags</code></em></span></dt><dd><p>
+     translated execbuffer call flags.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm16584"></a><h2>Description</h2><p>
+   This is the evil twin version of i915_gem_ringbuffer_submission. It abstracts
+   away the submission details of the execbuffer ioctl call.
+</p></div><div class="refsect1"><a name="idm16587"></a><h2>Return</h2><p>
+   non-zero if the submission fails.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-intel-execlists-handle-ctx-events.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s02.html#idm16360">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-intel-logical-ring-advance-and-submit.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">intel_execlists_handle_ctx_events</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">intel_logical_ring_advance_and_submit</span></td></tr></table></div></body></html>

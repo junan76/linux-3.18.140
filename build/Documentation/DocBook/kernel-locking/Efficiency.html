@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 9. Locking Speed</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="index.html" title="Unreliable Guide To Locking"><link rel="prev" href="racing-timers.html" title="Racing Timers: A Kernel Pastime"><link rel="next" href="efficiency-read-copy-update.html" title="Avoiding Locks: Read Copy Update"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 9. Locking Speed</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="racing-timers.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="efficiency-read-copy-update.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="Efficiency"></a>Chapter 9. Locking Speed</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="Efficiency.html#efficiency-rwlocks">Read/Write Lock Variants</a></span></dt><dt><span class="sect1"><a href="efficiency-read-copy-update.html">Avoiding Locks: Read Copy Update</a></span></dt><dt><span class="sect1"><a href="per-cpu.html">Per-CPU Data</a></span></dt><dt><span class="sect1"><a href="mostly-hardirq.html">Data Which Mostly Used By An IRQ Handler</a></span></dt></dl></div><p>
+There are three main things to worry about when considering speed of
+some code which does locking.  First is concurrency: how many things
+are going to be waiting while someone else is holding a lock.  Second
+is the time taken to actually acquire and release an uncontended lock.
+Third is using fewer, or smarter locks.  I'm assuming that the lock is
+used fairly often: otherwise, you wouldn't be concerned about
+efficiency.
+</p><p>
+Concurrency depends on how long the lock is usually held: you should
+hold the lock for as long as needed, but no longer.  In the cache
+example, we always create the object without the lock held, and then
+grab the lock only when we are ready to insert it in the list.
+</p><p>
+Acquisition times depend on how much damage the lock operations do to
+the pipeline (pipeline stalls) and how likely it is that this CPU was
+the last one to grab the lock (ie. is the lock cache-hot for this
+CPU): on a machine with more CPUs, this likelihood drops fast.
+Consider a 700MHz Intel Pentium III: an instruction takes about 0.7ns,
+an atomic increment takes about 58ns, a lock which is cache-hot on
+this CPU takes 160ns, and a cacheline transfer from another CPU takes
+an additional 170 to 360ns.  (These figures from Paul McKenney's
+<a class="ulink" href="http://www.linuxjournal.com/article.php?sid=6993" target="_top"> Linux
+Journal RCU article</a>).
+</p><p>
+These two aims conflict: holding a lock for a short time might be done
+by splitting locks into parts (such as in our final per-object-lock
+example), but this increases the number of lock acquisitions, and the
+results are often slower than having a single lock.  This is another
+reason to advocate locking simplicity.
+</p><p>
+The third concern is addressed below: there are some methods to reduce
+the amount of locking which needs to be done.
+</p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="efficiency-rwlocks"></a>Read/Write Lock Variants</h2></div></div></div><p>
+      Both spinlocks and mutexes have read/write variants:
+      <span class="type">rwlock_t</span> and <span class="structname">struct rw_semaphore</span>.
+      These divide users into two classes: the readers and the writers.  If
+      you are only reading the data, you can get a read lock, but to write to
+      the data you need the write lock.  Many people can hold a read lock,
+      but a writer must be sole holder.
+    </p><p>
+      If your code divides neatly along reader/writer lines (as our
+      cache code does), and the lock is held by readers for
+      significant lengths of time, using these locks can help.  They
+      are slightly slower than the normal locks though, so in practice
+      <span class="type">rwlock_t</span> is not usually worthwhile.
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="racing-timers.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="efficiency-read-copy-update.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Racing Timers: A Kernel Pastime </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Avoiding Locks: Read Copy Update</td></tr></table></div></body></html>

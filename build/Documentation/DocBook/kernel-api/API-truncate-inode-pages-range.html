@@ -1,0 +1,30 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>truncate_inode_pages_range</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-wait-for-stable-page.html" title="wait_for_stable_page"><link rel="next" href="API-truncate-inode-pages.html" title="truncate_inode_pages"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">truncate_inode_pages_range</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-wait-for-stable-page.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-truncate-inode-pages.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-truncate-inode-pages-range"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>truncate_inode_pages_range — 
+  truncate range of pages specified by start &amp; end byte offsets
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">truncate_inode_pages_range </b>(</code></td><td>struct address_space * <var class="pdparam">mapping</var>, </td></tr><tr><td> </td><td>loff_t <var class="pdparam">lstart</var>, </td></tr><tr><td> </td><td>loff_t <var class="pdparam">lend</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm12108"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>mapping</code></em></span></dt><dd><p>
+     mapping to truncate
+    </p></dd><dt><span class="term"><em class="parameter"><code>lstart</code></em></span></dt><dd><p>
+     offset from which to truncate
+    </p></dd><dt><span class="term"><em class="parameter"><code>lend</code></em></span></dt><dd><p>
+     offset to which to truncate (inclusive)
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm12126"></a><h2>Description</h2><p>
+   Truncate the page cache, removing the pages that are between
+   specified offsets (and zeroing out partial pages
+   if lstart or lend + 1 is not page aligned).
+   </p><p>
+
+   Truncate takes two passes - the first pass is nonblocking.  It will not
+   block on page locks and it will not block on writeback.  The second pass
+   will wait.  This is to prevent as much IO as possible in the affected region.
+   The first pass will remove most pages, so the search cost of the second pass
+   is low.
+   </p><p>
+
+   We pass down the cache-hot hint to the page freeing code.  Even if the
+   mapping is large, it is probably the case that the final pages are the most
+   recently touched, and freeing happens in ascending file offset order.
+   </p><p>
+
+   Note that since -&gt;<code class="function">invalidatepage</code> accepts range to invalidate
+   truncate_inode_pages_range is able to handle cases where lend + 1 is not
+   page aligned properly.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-wait-for-stable-page.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-truncate-inode-pages.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">wait_for_stable_page</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">truncate_inode_pages</span></td></tr></table></div></body></html>

@@ -1,0 +1,175 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct wimax_dev</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s06.html" title="WiMAX"><link rel="prev" href="API-wimax-dev-rm.html" title="wimax_dev_rm"><link rel="next" href="API-enum-wimax-st.html" title="enum wimax_st"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct wimax_dev</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-wimax-dev-rm.html">Prev</a> </td><th width="60%" align="center">WiMAX</th><td width="20%" align="right"> <a accesskey="n" href="API-enum-wimax-st.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-wimax-dev"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct wimax_dev — 
+  Generic WiMAX device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct wimax_dev {
+  struct net_device * net_dev;
+  struct list_head id_table_node;
+  struct mutex mutex;
+  struct mutex mutex_reset;
+  enum wimax_st state;
+  int (* op_msg_from_user) (struct wimax_dev *wimax_dev,const char *,const void *, size_t,const struct genl_info *info);
+  int (* op_rfkill_sw_toggle) (struct wimax_dev *wimax_dev,enum wimax_rf_state);
+  int (* op_reset) (struct wimax_dev *wimax_dev);
+  struct rfkill * rfkill;
+  unsigned int rf_hw;
+  unsigned int rf_sw;
+  char name[32];
+  struct dentry * debugfs_dentry;
+};  </pre></div><div class="refsect1"><a name="idm11631"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">net_dev</span></dt><dd><p>
+[fill] Pointer to the <span class="structname">struct net_device</span> this WiMAX
+device implements.
+      </p></dd><dt><span class="term">id_table_node</span></dt><dd><p>
+[private] link to the list of wimax devices kept by
+id-table.c. Protected by it's own spinlock.
+      </p></dd><dt><span class="term">mutex</span></dt><dd><p>
+[private] Serializes all concurrent access and execution of
+operations.
+      </p></dd><dt><span class="term">mutex_reset</span></dt><dd><p>
+[private] Serializes reset operations. Needs to be a
+different mutex because as part of the reset operation, the
+driver has to call back into the stack to do things such as
+state change, that require wimax_dev-&gt;mutex.
+      </p></dd><dt><span class="term">state</span></dt><dd><p>
+[private] Current state of the WiMAX device.
+      </p></dd><dt><span class="term">op_msg_from_user</span></dt><dd><p>
+[fill] Driver-specific operation to
+handle a raw message from user space to the driver. The
+driver can send messages to user space using with
+<code class="function">wimax_msg_to_user</code>.
+      </p></dd><dt><span class="term">op_rfkill_sw_toggle</span></dt><dd><p>
+[fill] Driver-specific operation to act on
+userspace (or any other agent) requesting the WiMAX device to
+change the RF Kill software switch (WIMAX_RF_ON or
+WIMAX_RF_OFF).
+If such hardware support is not present, it is assumed the
+radio cannot be switched off and it is always on (and the stack
+will error out when trying to switch it off). In such case,
+this function pointer can be left as NULL.
+      </p></dd><dt><span class="term">op_reset</span></dt><dd><p>
+[fill] Driver specific operation to reset the
+device.
+This operation should always attempt first a warm reset that
+does not disconnect the device from the bus and return 0.
+If that fails, it should resort to some sort of cold or bus
+reset (even if it implies a bus disconnection and device
+disappearance). In that case, -ENODEV should be returned to
+indicate the device is gone.
+This operation has to be synchronous, and return only when the
+reset is complete. In case of having had to resort to bus/cold
+reset implying a device disconnection, the call is allowed to
+return immediately.
+      </p></dd><dt><span class="term">rfkill</span></dt><dd><p>
+[private] integration into the RF-Kill infrastructure.
+      </p></dd><dt><span class="term">rf_hw</span></dt><dd><p>
+[private] State of the hardware radio switch (OFF/ON)
+      </p></dd><dt><span class="term">rf_sw</span></dt><dd><p>
+[private] State of the software radio switch (OFF/ON)
+      </p></dd><dt><span class="term">name[32]</span></dt><dd><p>
+[fill] A way to identify this device. We need to register a
+name with many subsystems (rfkill, workqueue creation, etc).
+We can't use the network device name as that
+might change and in some instances we don't know it yet (until
+we don't call <code class="function">register_netdev</code>). So we generate an unique one
+using the driver name and device bus id, place it here and use
+it across the board. Recommended naming:
+DRIVERNAME-BUSNAME:BUSID (dev-&gt;bus-&gt;name, dev-&gt;bus_id).
+      </p></dd><dt><span class="term">debugfs_dentry</span></dt><dd><p>
+[private] Used to hook up a debugfs entry. This
+shows up in the debugfs root as wimax\:DEVICENAME.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm11689"></a><h2>NOTE</h2><p>
+   wimax_dev-&gt;mutex is NOT locked when this op is being
+   called; however, wimax_dev-&gt;mutex_reset IS locked to ensure
+   serialization of calls to <code class="function">wimax_reset</code>.
+   See <code class="function">wimax_reset</code>'s documentation.
+</p></div><div class="refsect1"><a name="idm11694"></a><h2>Description</h2><p>
+   This structure defines a common interface to access all WiMAX
+   devices from different vendors and provides a common API as well as
+   a free-form device-specific messaging channel.
+</p></div><div class="refsect1"><a name="idm11697"></a><h2>Usage</h2><p>
+   1. Embed a <span class="structname">struct wimax_dev</span> at *the beginning* the network
+   device structure so that <code class="function">netdev_priv</code> points to it.
+   </p><p>
+
+   2. <code class="function">memset</code> it to zero
+   </p><p>
+
+   3. Initialize with <code class="function">wimax_dev_init</code>. This will leave the WiMAX
+   device in the <code class="constant">__WIMAX_ST_NULL</code> state.
+   </p><p>
+
+   4. Fill all the fields marked with [fill]; once called
+   <code class="function">wimax_dev_add</code>, those fields CANNOT be modified.
+   </p><p>
+
+   5. Call <code class="function">wimax_dev_add</code> *after* registering the network
+   device. This will leave the WiMAX device in the <code class="constant">WIMAX_ST_DOWN</code>
+   state.
+   Protect the driver's net_device-&gt;<code class="function">open</code> against succeeding if
+   the wimax device state is lower than <code class="constant">WIMAX_ST_DOWN</code>.
+   </p><p>
+
+   6. Select when the device is going to be turned on/initialized;
+   for example, it could be initialized on 'ifconfig up' (when the
+   netdev op '<code class="function">open</code>' is called on the driver).
+   </p><p>
+
+   When the device is initialized (at `ifconfig up` time, or right
+   after calling <code class="function">wimax_dev_add</code> from <code class="function">_probe</code>, make sure the
+   following steps are taken
+   </p><p>
+
+   a. Move the device to <code class="constant">WIMAX_ST_UNINITIALIZED</code>. This is needed so
+   some API calls that shouldn't work until the device is ready
+   can be blocked.
+   </p><p>
+
+   b. Initialize the device. Make sure to turn the SW radio switch
+   off and move the device to state <code class="constant">WIMAX_ST_RADIO_OFF</code> when
+   done. When just initialized, a device should be left in RADIO
+   OFF state until user space devices to turn it on.
+   </p><p>
+
+   c. Query the device for the state of the hardware rfkill switch
+   and call <code class="function">wimax_rfkill_report_hw</code> and <code class="function">wimax_rfkill_report_sw</code>
+   as needed. See below.
+   </p><p>
+
+   <code class="function">wimax_dev_rm</code> undoes before unregistering the network device. Once
+   <code class="function">wimax_dev_add</code> is called, the driver can get called on the
+   wimax_dev-&gt;op_* function pointers
+</p></div><div class="refsect1"><a name="idm11729"></a><h2>CONCURRENCY</h2><p>
+   </p><p>
+
+   The stack provides a mutex for each device that will disallow API
+   calls happening concurrently; thus, op calls into the driver
+   through the wimax_dev-&gt;op*() function pointers will always be
+   serialized and *never* concurrent.
+   </p><p>
+
+   For locking, take wimax_dev-&gt;mutex is taken; (most) operations in
+   the API have to check for <code class="function">wimax_dev_is_ready</code> to return 0 before
+   continuing (this is done internally).
+</p></div><div class="refsect1"><a name="idm11735"></a><h2>REFERENCE COUNTING</h2><p>
+   </p><p>
+
+   The WiMAX device is reference counted by the associated network
+   device. The only operation that can be used to reference the device
+   is <code class="function">wimax_dev_get_by_genl_info</code>, and the reference it acquires has
+   to be released with dev_put(wimax_dev-&gt;net_dev).
+</p></div><div class="refsect1"><a name="idm11740"></a><h2>RFKILL</h2><p>
+   </p><p>
+
+   At startup, both HW and SW radio switchess are assumed to be off.
+   </p><p>
+
+   At initialization time [after calling <code class="function">wimax_dev_add</code>], have the
+   driver query the device for the status of the software and hardware
+   RF kill switches and call <code class="function">wimax_report_rfkill_hw</code> and
+   <code class="function">wimax_rfkill_report_sw</code> to indicate their state. If any is
+   missing, just call it to indicate it is ON (radio always on).
+   </p><p>
+
+   Whenever the driver detects a change in the state of the RF kill
+   switches, it should call <code class="function">wimax_report_rfkill_hw</code> or
+   <code class="function">wimax_report_rfkill_sw</code> to report it to the stack.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-wimax-dev-rm.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s06.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-enum-wimax-st.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">wimax_dev_rm</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">enum wimax_st</span></td></tr></table></div></body></html>

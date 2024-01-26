@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>call_usermodehelper</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="modload.html#idm15840" title="Module Loading"><link rel="prev" href="API-call-usermodehelper-exec.html" title="call_usermodehelper_exec"><link rel="next" href="ch08s02.html" title="Inter Module support"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">call_usermodehelper</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-call-usermodehelper-exec.html">Prev</a> </td><th width="60%" align="center">Module Loading</th><td width="20%" align="right"> <a accesskey="n" href="ch08s02.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-call-usermodehelper"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>call_usermodehelper — 
+     prepare and start a usermode application
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">call_usermodehelper </b>(</code></td><td>char * <var class="pdparam">path</var>, </td></tr><tr><td> </td><td>char ** <var class="pdparam">argv</var>, </td></tr><tr><td> </td><td>char ** <var class="pdparam">envp</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">wait</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm16034"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>path</code></em></span></dt><dd><p>
+     path to usermode executable
+    </p></dd><dt><span class="term"><em class="parameter"><code>argv</code></em></span></dt><dd><p>
+     arg vector for process
+    </p></dd><dt><span class="term"><em class="parameter"><code>envp</code></em></span></dt><dd><p>
+     environment for process
+    </p></dd><dt><span class="term"><em class="parameter"><code>wait</code></em></span></dt><dd><p>
+     wait for the application to finish and return status.
+     when UMH_NO_WAIT don't wait at all, but you get no useful error back
+     when the program couldn't be exec'ed. This makes it safe to call
+     from interrupt context.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm16057"></a><h2>Description</h2><p>
+   This function is the equivalent to use <code class="function">call_usermodehelper_setup</code> and
+   <code class="function">call_usermodehelper_exec</code>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-call-usermodehelper-exec.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="modload.html#idm15840">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch08s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">call_usermodehelper_exec</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Inter Module support</td></tr></table></div></body></html>

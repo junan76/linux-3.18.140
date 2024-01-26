@@ -1,0 +1,45 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 11. Putting Your Stuff in the Kernel</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Hacking The Linux Kernel"><link rel="up" href="index.html" title="Unreliable Guide To Hacking The Linux Kernel"><link rel="prev" href="conventions-ifdef.html" title="#if"><link rel="next" href="cantrips.html" title="Chapter 12. Kernel Cantrips"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 11. Putting Your Stuff in the Kernel</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="conventions-ifdef.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="cantrips.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="submitting"></a>Chapter 11. Putting Your Stuff in the Kernel</h1></div></div></div><p>
+   In order to get your stuff into shape for official inclusion, or
+   even to make a neat patch, there's administrative work to be
+   done:
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Figure out whose pond you've been pissing in.  Look at the top of
+     the source files, inside the <code class="filename">MAINTAINERS</code>
+     file, and last of all in the <code class="filename">CREDITS</code> file.
+     You should coordinate with this person to make sure you're not
+     duplicating effort, or trying something that's already been
+     rejected.
+    </p><p>
+     Make sure you put your name and EMail address at the top of
+     any files you create or mangle significantly.  This is the
+     first place people will look when they find a bug, or when
+     <span class="emphasis"><em>they</em></span> want to make a change.
+    </p></li><li class="listitem"><p>
+     Usually you want a configuration option for your kernel hack.
+     Edit <code class="filename">Kconfig</code> in the appropriate directory.
+     The Config language is simple to use by cut and paste, and there's
+     complete documentation in
+     <code class="filename">Documentation/kbuild/kconfig-language.txt</code>.
+    </p><p>
+     In your description of the option, make sure you address both the
+     expert user and the user who knows nothing about your feature.  Mention
+     incompatibilities and issues here.  <span class="emphasis"><em> Definitely
+     </em></span> end your description with <span class="quote">“<span class="quote"> if in doubt, say N
+     </span>”</span> (or, occasionally, `Y'); this is for people who have no
+     idea what you are talking about.
+    </p></li><li class="listitem"><p>
+     Edit the <code class="filename">Makefile</code>: the CONFIG variables are
+     exported here so you can usually just add a "obj-$(CONFIG_xxx) +=
+     xxx.o" line.  The syntax is documented in
+     <code class="filename">Documentation/kbuild/makefiles.txt</code>.
+    </p></li><li class="listitem"><p>
+     Put yourself in <code class="filename">CREDITS</code> if you've done
+     something noteworthy, usually beyond a single file (your name
+     should be at the top of the source files anyway).
+     <code class="filename">MAINTAINERS</code> means you want to be consulted
+     when changes are made to a subsystem, and hear about bugs; it
+     implies a more-than-passing commitment to some part of the code.
+    </p></li><li class="listitem"><p>
+     Finally, don't forget to read <code class="filename">Documentation/SubmittingPatches</code>
+     and possibly <code class="filename">Documentation/SubmittingDrivers</code>.
+    </p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="conventions-ifdef.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="cantrips.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">#if </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 12. Kernel Cantrips</td></tr></table></div></body></html>

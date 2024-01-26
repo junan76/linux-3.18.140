@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>vm_map_ram</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-vm-unmap-ram.html" title="vm_unmap_ram"><link rel="next" href="API-unmap-kernel-range-noflush.html" title="unmap_kernel_range_noflush"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">vm_map_ram</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-vm-unmap-ram.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-unmap-kernel-range-noflush.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-vm-map-ram"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>vm_map_ram — 
+     map pages linearly into kernel virtual address (vmalloc space)
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void * <b class="fsfunc">vm_map_ram </b>(</code></td><td>struct page ** <var class="pdparam">pages</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">count</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">node</var>, </td></tr><tr><td> </td><td>pgprot_t <var class="pdparam">prot</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm10009"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>pages</code></em></span></dt><dd><p>
+     an array of pointers to the pages to be mapped
+    </p></dd><dt><span class="term"><em class="parameter"><code>count</code></em></span></dt><dd><p>
+     number of pages
+    </p></dd><dt><span class="term"><em class="parameter"><code>node</code></em></span></dt><dd><p>
+     prefer to allocate data structures on this node
+    </p></dd><dt><span class="term"><em class="parameter"><code>prot</code></em></span></dt><dd><p>
+     memory protection to use. PAGE_KERNEL for regular RAM
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm10032"></a><h2>Description</h2><p>
+   If you use this function for less than VMAP_MAX_ALLOC pages, it could be
+   faster than vmap so it's good.  But if you mix long-life and short-life
+   objects with <code class="function">vm_map_ram</code>, it could consume lots of address space through
+   fragmentation (especially on a 32bit machine).  You could see failures in
+   the end.  Please use this function for short-lived objects.
+</p></div><div class="refsect1"><a name="idm10036"></a><h2>Returns</h2><p>
+   a pointer to the address that has been mapped, or <code class="constant">NULL</code> on failure
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-vm-unmap-ram.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-unmap-kernel-range-noflush.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">vm_unmap_ram</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">unmap_kernel_range_noflush</span></td></tr></table></div></body></html>

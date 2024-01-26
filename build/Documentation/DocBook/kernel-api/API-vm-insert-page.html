@@ -1,0 +1,34 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>vm_insert_page</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-zap-vma-ptes.html" title="zap_vma_ptes"><link rel="next" href="API-vm-insert-pfn.html" title="vm_insert_pfn"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">vm_insert_page</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-zap-vma-ptes.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-vm-insert-pfn.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-vm-insert-page"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>vm_insert_page — 
+     insert single page into user vma
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">vm_insert_page </b>(</code></td><td>struct vm_area_struct * <var class="pdparam">vma</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">addr</var>, </td></tr><tr><td> </td><td>struct page * <var class="pdparam">page</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9627"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>vma</code></em></span></dt><dd><p>
+     user vma to map to
+    </p></dd><dt><span class="term"><em class="parameter"><code>addr</code></em></span></dt><dd><p>
+     target user address of this page
+    </p></dd><dt><span class="term"><em class="parameter"><code>page</code></em></span></dt><dd><p>
+     source kernel page
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9645"></a><h2>Description</h2><p>
+   This allows drivers to insert individual pages they've allocated
+   into a user vma.
+   </p><p>
+
+   The page has to be a nice clean _individual_ kernel allocation.
+   If you allocate a compound page, you need to have marked it as
+   such (__GFP_COMP), or manually just split the page up yourself
+   (see <code class="function">split_page</code>).
+   </p><p>
+
+   NOTE! Traditionally this was done with <span class="quote">“<span class="quote"><code class="function">remap_pfn_range</code></span>”</span> which
+   took an arbitrary page protection parameter. This doesn't allow
+   that. Your vma protection will have to be set up correctly, which
+   means that if you want a shared writable mapping, you'd better
+   ask for a shared writable mapping!
+   </p><p>
+
+   The page does not need to be reserved.
+   </p><p>
+
+   Usually this function is called from f_op-&gt;<code class="function">mmap</code> handler
+   under mm-&gt;mmap_sem write-lock, so it can change vma-&gt;vm_flags.
+   Caller must set VM_MIXEDMAP on vma if it wants to call this
+   function from other places, for example from page-fault handler.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-zap-vma-ptes.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-vm-insert-pfn.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">zap_vma_ptes</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">vm_insert_pfn</span></td></tr></table></div></body></html>

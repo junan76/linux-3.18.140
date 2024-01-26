@@ -1,0 +1,209 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Resource Allocation</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="pci-resource.html" title="Chapter 4. PCI Resource Management"><link rel="prev" href="pci-resource-some-haftas.html" title="Some Hafta's"><link rel="next" href="pci-resource-entries.html" title="PCI Entries"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Resource Allocation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pci-resource-some-haftas.html">Prev</a> </td><th width="60%" align="center">Chapter 4. PCI Resource Management</th><td width="20%" align="right"> <a accesskey="n" href="pci-resource-entries.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pci-resource-resource-allocation"></a>Resource Allocation</h2></div></div></div><p>
+        The allocation of I/O ports and irqs is done via standard kernel
+      functions. Unlike ALSA ver.0.5.x., there are no helpers for
+      that. And these resources must be released in the destructor
+      function (see below). Also, on ALSA 0.9.x, you don't need to
+      allocate (pseudo-)DMA for PCI like in ALSA 0.5.x.
+      </p><p>
+        Now assume that the PCI device has an I/O port with 8 bytes
+        and an interrupt. Then struct <span class="structname">mychip</span> will have the
+        following fields:
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  struct mychip {
+          struct snd_card *card;
+
+          unsigned long port;
+          int irq;
+  };
+
+          </pre></div><p>
+      </p><p>
+        For an I/O port (and also a memory region), you need to have
+      the resource pointer for the standard resource management. For
+      an irq, you have to keep only the irq number (integer). But you
+      need to initialize this number as -1 before actual allocation,
+      since irq 0 is valid. The port address and its resource pointer
+      can be initialized as null by
+      <code class="function">kzalloc()</code> automatically, so you
+      don't have to take care of resetting them. 
+      </p><p>
+        The allocation of an I/O port is done like this:
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  err = pci_request_regions(pci, "My Chip");
+  if (err &lt; 0) { 
+          kfree(chip);
+          pci_disable_device(pci);
+          return err;
+  }
+  chip-&gt;port = pci_resource_start(pci, 0);
+
+          </pre></div><p>
+      </p><p>
+        
+        It will reserve the I/O port region of 8 bytes of the given
+      PCI device. The returned value, chip-&gt;res_port, is allocated
+      via <code class="function">kmalloc()</code> by
+      <code class="function">request_region()</code>. The pointer must be
+      released via <code class="function">kfree()</code>, but there is a
+      problem with this. This issue will be explained later.
+      </p><p>
+        The allocation of an interrupt source is done like this:
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  if (request_irq(pci-&gt;irq, snd_mychip_interrupt,
+                  IRQF_SHARED, KBUILD_MODNAME, chip)) {
+          printk(KERN_ERR "cannot grab irq %d\n", pci-&gt;irq);
+          snd_mychip_free(chip);
+          return -EBUSY;
+  }
+  chip-&gt;irq = pci-&gt;irq;
+
+          </pre></div><p>
+
+        where <code class="function">snd_mychip_interrupt()</code> is the
+      interrupt handler defined <a class="link" href="pcm-interface-interrupt-handler.html" title="Interrupt Handler"><em class="citetitle">later</em></a>.
+      Note that chip-&gt;irq should be defined
+      only when <code class="function">request_irq()</code> succeeded.
+      </p><p>
+      On the PCI bus, interrupts can be shared. Thus,
+      <code class="constant">IRQF_SHARED</code> is used as the interrupt flag of
+      <code class="function">request_irq()</code>. 
+      </p><p>
+        The last argument of <code class="function">request_irq()</code> is the
+      data pointer passed to the interrupt handler. Usually, the
+      chip-specific record is used for that, but you can use what you
+      like, too. 
+      </p><p>
+        I won't give details about the interrupt handler at this
+        point, but at least its appearance can be explained now. The
+        interrupt handler looks usually like the following: 
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  static irqreturn_t snd_mychip_interrupt(int irq, void *dev_id)
+  {
+          struct mychip *chip = dev_id;
+          ....
+          return IRQ_HANDLED;
+  }
+
+          </pre></div><p>
+      </p><p>
+        Now let's write the corresponding destructor for the resources
+      above. The role of destructor is simple: disable the hardware
+      (if already activated) and release the resources. So far, we
+      have no hardware part, so the disabling code is not written here. 
+      </p><p>
+        To release the resources, the <span class="quote">“<span class="quote">check-and-release</span>”</span>
+        method is a safer way. For the interrupt, do like this: 
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  if (chip-&gt;irq &gt;= 0)
+          free_irq(chip-&gt;irq, chip);
+
+          </pre></div><p>
+
+        Since the irq number can start from 0, you should initialize
+        chip-&gt;irq with a negative value (e.g. -1), so that you can
+        check the validity of the irq number as above.
+      </p><p>
+        When you requested I/O ports or memory regions via
+	<code class="function">pci_request_region()</code> or
+	<code class="function">pci_request_regions()</code> like in this example,
+	release the resource(s) using the corresponding function,
+	<code class="function">pci_release_region()</code> or
+	<code class="function">pci_release_regions()</code>.
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  pci_release_regions(chip-&gt;pci);
+
+          </pre></div><p>
+      </p><p>
+	When you requested manually via <code class="function">request_region()</code>
+	or <code class="function">request_mem_region</code>, you can release it via
+	<code class="function">release_resource()</code>.  Suppose that you keep
+	the resource pointer returned from <code class="function">request_region()</code>
+	in chip-&gt;res_port, the release procedure looks like:
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  release_and_free_resource(chip-&gt;res_port);
+
+          </pre></div><p>
+      </p><p>
+      Don't forget to call <code class="function">pci_disable_device()</code>
+      before the end.
+      </p><p>
+        And finally, release the chip-specific record.
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  kfree(chip);
+
+          </pre></div><p>
+      </p><p>
+      We didn't implement the hardware disabling part in the above.
+      If you need to do this, please note that the destructor may be
+      called even before the initialization of the chip is completed.
+      It would be better to have a flag to skip hardware disabling
+      if the hardware was not initialized yet.
+      </p><p>
+      When the chip-data is assigned to the card using
+      <code class="function">snd_device_new()</code> with
+      <code class="constant">SNDRV_DEV_LOWLELVEL</code> , its destructor is 
+      called at the last.  That is, it is assured that all other
+      components like PCMs and controls have already been released.
+      You don't have to stop PCMs, etc. explicitly, but just
+      call low-level hardware stopping.
+      </p><p>
+        The management of a memory-mapped region is almost as same as
+        the management of an I/O port. You'll need three fields like
+        the following: 
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  struct mychip {
+          ....
+          unsigned long iobase_phys;
+          void __iomem *iobase_virt;
+  };
+
+          </pre></div><p>
+
+        and the allocation would be like below:
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  if ((err = pci_request_regions(pci, "My Chip")) &lt; 0) {
+          kfree(chip);
+          return err;
+  }
+  chip-&gt;iobase_phys = pci_resource_start(pci, 0);
+  chip-&gt;iobase_virt = ioremap_nocache(chip-&gt;iobase_phys,
+                                      pci_resource_len(pci, 0));
+
+          </pre></div><p>
+        
+        and the corresponding destructor would be:
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  static int snd_mychip_free(struct mychip *chip)
+  {
+          ....
+          if (chip-&gt;iobase_virt)
+                  iounmap(chip-&gt;iobase_virt);
+          ....
+          pci_release_regions(chip-&gt;pci);
+          ....
+  }
+
+          </pre></div><p>
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pci-resource-some-haftas.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pci-resource.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="pci-resource-entries.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Some Hafta's </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> PCI Entries</td></tr></table></div></body></html>

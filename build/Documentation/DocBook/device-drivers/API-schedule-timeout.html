@@ -1,0 +1,33 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>schedule_timeout</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch01s03.html" title="Delaying, scheduling, and timer routines"><link rel="prev" href="API-del-timer-sync.html" title="del_timer_sync"><link rel="next" href="API-msleep.html" title="msleep"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">schedule_timeout</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-del-timer-sync.html">Prev</a> </td><th width="60%" align="center">Delaying, scheduling, and timer routines</th><td width="20%" align="right"> <a accesskey="n" href="API-msleep.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-schedule-timeout"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>schedule_timeout — 
+     sleep until timeout
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">signed long __sched <b class="fsfunc">schedule_timeout </b>(</code></td><td>signed long <var class="pdparam">timeout</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2585"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>timeout</code></em></span></dt><dd><p>
+     timeout value in jiffies
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2593"></a><h2>Description</h2><p>
+   Make the current task sleep until <em class="parameter"><code>timeout</code></em> jiffies have
+   elapsed. The routine will return immediately unless
+   the current task state has been set (see <code class="function">set_current_state</code>).
+   </p><p>
+
+   You can set the task state as follows -
+   </p><p>
+
+   <code class="constant">TASK_UNINTERRUPTIBLE</code> - at least <em class="parameter"><code>timeout</code></em> jiffies are guaranteed to
+   pass before the routine returns. The routine will return 0
+   </p><p>
+
+   <code class="constant">TASK_INTERRUPTIBLE</code> - the routine may return early if a signal is
+   delivered to the current task. In this case the remaining time
+   in jiffies will be returned, or 0 if the timer expired in time
+   </p><p>
+
+   The current task state is guaranteed to be TASK_RUNNING when this
+   routine returns.
+   </p><p>
+
+   Specifying a <em class="parameter"><code>timeout</code></em> value of <code class="constant">MAX_SCHEDULE_TIMEOUT</code> will schedule
+   the CPU away without a bound on the timeout. In this case the return
+   value will be <code class="constant">MAX_SCHEDULE_TIMEOUT</code>.
+   </p><p>
+
+   In all cases the return value is guaranteed to be non-negative.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-del-timer-sync.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-msleep.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">del_timer_sync</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">msleep</span></td></tr></table></div></body></html>

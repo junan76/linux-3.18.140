@@ -1,0 +1,38 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>enum w1_commands</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="W1: Dallas' 1-wire bus"><link rel="up" href="w1_internal.html#w1_netlink.h" title="drivers/w1/w1_netlink.h"><link rel="prev" href="API-struct-w1-netlink-msg.html" title="struct w1_netlink_msg"><link rel="next" href="API-struct-w1-netlink-cmd.html" title="struct w1_netlink_cmd"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">enum w1_commands</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-w1-netlink-msg.html">Prev</a> </td><th width="60%" align="center">drivers/w1/w1_netlink.h</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-w1-netlink-cmd.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-enum-w1-commands"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>enum w1_commands — 
+     commands available for master or slave operations
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+enum w1_commands {
+  W1_CMD_READ,
+  W1_CMD_WRITE,
+  W1_CMD_SEARCH,
+  W1_CMD_ALARM_SEARCH,
+  W1_CMD_TOUCH,
+  W1_CMD_RESET,
+  W1_CMD_SLAVE_ADD,
+  W1_CMD_SLAVE_REMOVE,
+  W1_CMD_LIST_SLAVES,
+  W1_CMD_MAX
+};  </pre></div><div class="refsect1"><a name="idm798"></a><h2>Constants</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">W1_CMD_READ</span></dt><dd><p>
+   read len bytes
+      </p></dd><dt><span class="term">W1_CMD_WRITE</span></dt><dd><p>
+   write len bytes
+      </p></dd><dt><span class="term">W1_CMD_SEARCH</span></dt><dd><p>
+   initiate a standard search, returns only the slave
+   devices found during that search
+      </p></dd><dt><span class="term">W1_CMD_ALARM_SEARCH</span></dt><dd><p>
+   search for devices that are currently alarming
+      </p></dd><dt><span class="term">W1_CMD_TOUCH</span></dt><dd><p>
+   Touches a series of bytes.
+      </p></dd><dt><span class="term">W1_CMD_RESET</span></dt><dd><p>
+   sends a bus reset on the given master
+      </p></dd><dt><span class="term">W1_CMD_SLAVE_ADD</span></dt><dd><p>
+   adds a slave to the given master,
+   8 byte slave id at data[0]
+      </p></dd><dt><span class="term">W1_CMD_SLAVE_REMOVE</span></dt><dd><p>
+   removes a slave to the given master,
+   8 byte slave id at data[0]
+      </p></dd><dt><span class="term">W1_CMD_LIST_SLAVES</span></dt><dd><p>
+   list of slaves registered on this master
+      </p></dd><dt><span class="term">W1_CMD_MAX</span></dt><dd><p>
+   number of available commands
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-w1-netlink-msg.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="w1_internal.html#w1_netlink.h">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-w1-netlink-cmd.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct w1_netlink_msg</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct w1_netlink_cmd</span></td></tr></table></div></body></html>

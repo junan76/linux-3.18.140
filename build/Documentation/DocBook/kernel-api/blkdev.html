@@ -1,0 +1,271 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 14. Block Devices</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="index.html" title="The Linux Kernel API"><link rel="prev" href="API-acct-process.html" title="acct_process"><link rel="next" href="API-blk-get-backing-dev-info.html" title="blk_get_backing_dev_info"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 14. Block Devices</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-acct-process.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-blk-get-backing-dev-info.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="blkdev"></a>Chapter 14. Block Devices</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="refentrytitle"><a href="API-blk-get-backing-dev-info.html"><span class="phrase">blk_get_backing_dev_info</span></a></span><span class="refpurpose"> — 
+  get the address of a queue's backing_dev_info
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-delay-queue.html"><span class="phrase">blk_delay_queue</span></a></span><span class="refpurpose"> — 
+     restart queueing after defined interval
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-start-queue.html"><span class="phrase">blk_start_queue</span></a></span><span class="refpurpose"> — 
+     restart a previously stopped queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-stop-queue.html"><span class="phrase">blk_stop_queue</span></a></span><span class="refpurpose"> — 
+     stop a queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-sync-queue.html"><span class="phrase">blk_sync_queue</span></a></span><span class="refpurpose"> — 
+     cancel any pending callbacks on a queue
+ </span></dt><dt><span class="refentrytitle"><a href="API---blk-run-queue.html"><span class="phrase">__blk_run_queue</span></a></span><span class="refpurpose"> — 
+     run a single device queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-run-queue-async.html"><span class="phrase">blk_run_queue_async</span></a></span><span class="refpurpose"> — 
+     run a single device queue in workqueue context
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-run-queue.html"><span class="phrase">blk_run_queue</span></a></span><span class="refpurpose"> — 
+     run a single device queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-bypass-start.html"><span class="phrase">blk_queue_bypass_start</span></a></span><span class="refpurpose"> — 
+     enter queue bypass mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-bypass-end.html"><span class="phrase">blk_queue_bypass_end</span></a></span><span class="refpurpose"> — 
+     leave queue bypass mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-cleanup-queue.html"><span class="phrase">blk_cleanup_queue</span></a></span><span class="refpurpose"> — 
+     shutdown a request queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-init-queue.html"><span class="phrase">blk_init_queue</span></a></span><span class="refpurpose"> — 
+     prepare a request queue for use with a block device
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-make-request.html"><span class="phrase">blk_make_request</span></a></span><span class="refpurpose"> — 
+     given a bio, allocate a corresponding struct request.
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-set-block-pc.html"><span class="phrase">blk_rq_set_block_pc</span></a></span><span class="refpurpose"> — 
+     initialize a request to type BLOCK_PC
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-requeue-request.html"><span class="phrase">blk_requeue_request</span></a></span><span class="refpurpose"> — 
+     put a request back on queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-part-round-stats.html"><span class="phrase">part_round_stats</span></a></span><span class="refpurpose"> — 
+     Round off the performance stats on a struct disk_stats.
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-add-request-payload.html"><span class="phrase">blk_add_request_payload</span></a></span><span class="refpurpose"> — 
+     add a payload to a request
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-make-request.html"><span class="phrase">generic_make_request</span></a></span><span class="refpurpose"> — 
+     hand a buffer to its device driver for I/O
+ </span></dt><dt><span class="refentrytitle"><a href="API-submit-bio.html"><span class="phrase">submit_bio</span></a></span><span class="refpurpose"> — 
+     submit a bio to the block device layer for I/O
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-check-limits.html"><span class="phrase">blk_rq_check_limits</span></a></span><span class="refpurpose"> — 
+     Helper function to check a request for the queue limit
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-insert-cloned-request.html"><span class="phrase">blk_insert_cloned_request</span></a></span><span class="refpurpose"> — 
+     Helper for stacking drivers to submit a request
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-err-bytes.html"><span class="phrase">blk_rq_err_bytes</span></a></span><span class="refpurpose"> — 
+     determine number of bytes till the next failure boundary
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-peek-request.html"><span class="phrase">blk_peek_request</span></a></span><span class="refpurpose"> — 
+     peek at the top of a request queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-start-request.html"><span class="phrase">blk_start_request</span></a></span><span class="refpurpose"> — 
+     start request processing on the driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-fetch-request.html"><span class="phrase">blk_fetch_request</span></a></span><span class="refpurpose"> — 
+     fetch a request from a request queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-update-request.html"><span class="phrase">blk_update_request</span></a></span><span class="refpurpose"> — 
+     Special helper function for request stacking drivers
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-unprep-request.html"><span class="phrase">blk_unprep_request</span></a></span><span class="refpurpose"> — 
+     unprepare a request
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-end-request.html"><span class="phrase">blk_end_request</span></a></span><span class="refpurpose"> — 
+     Helper function for drivers to complete the request.
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-end-request-all.html"><span class="phrase">blk_end_request_all</span></a></span><span class="refpurpose"> — 
+     Helper function for drives to finish the request.
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-end-request-cur.html"><span class="phrase">blk_end_request_cur</span></a></span><span class="refpurpose"> — 
+     Helper function to finish the current request chunk.
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-end-request-err.html"><span class="phrase">blk_end_request_err</span></a></span><span class="refpurpose"> — 
+     Finish a request till the next failure boundary.
+ </span></dt><dt><span class="refentrytitle"><a href="API---blk-end-request.html"><span class="phrase">__blk_end_request</span></a></span><span class="refpurpose"> — 
+     Helper function for drivers to complete the request.
+ </span></dt><dt><span class="refentrytitle"><a href="API---blk-end-request-all.html"><span class="phrase">__blk_end_request_all</span></a></span><span class="refpurpose"> — 
+     Helper function for drives to finish the request.
+ </span></dt><dt><span class="refentrytitle"><a href="API---blk-end-request-cur.html"><span class="phrase">__blk_end_request_cur</span></a></span><span class="refpurpose"> — 
+     Helper function to finish the current request chunk.
+ </span></dt><dt><span class="refentrytitle"><a href="API---blk-end-request-err.html"><span class="phrase">__blk_end_request_err</span></a></span><span class="refpurpose"> — 
+     Finish a request till the next failure boundary.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rq-flush-dcache-pages.html"><span class="phrase">rq_flush_dcache_pages</span></a></span><span class="refpurpose"> — 
+     Helper function to flush all pages in a request
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-lld-busy.html"><span class="phrase">blk_lld_busy</span></a></span><span class="refpurpose"> — 
+     Check if underlying low-level drivers of a device are busy
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-unprep-clone.html"><span class="phrase">blk_rq_unprep_clone</span></a></span><span class="refpurpose"> — 
+     Helper function to free all bios in a cloned request
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-prep-clone.html"><span class="phrase">blk_rq_prep_clone</span></a></span><span class="refpurpose"> — 
+     Helper function to setup clone request
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-start-plug.html"><span class="phrase">blk_start_plug</span></a></span><span class="refpurpose"> — 
+     initialize blk_plug and track it inside the task_struct
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-pm-runtime-init.html"><span class="phrase">blk_pm_runtime_init</span></a></span><span class="refpurpose"> — 
+     Block layer runtime PM initialization routine
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-pre-runtime-suspend.html"><span class="phrase">blk_pre_runtime_suspend</span></a></span><span class="refpurpose"> — 
+     Pre runtime suspend check
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-post-runtime-suspend.html"><span class="phrase">blk_post_runtime_suspend</span></a></span><span class="refpurpose"> — 
+     Post runtime suspend processing
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-pre-runtime-resume.html"><span class="phrase">blk_pre_runtime_resume</span></a></span><span class="refpurpose"> — 
+     Pre runtime resume processing
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-post-runtime-resume.html"><span class="phrase">blk_post_runtime_resume</span></a></span><span class="refpurpose"> — 
+     Post runtime resume processing
+ </span></dt><dt><span class="refentrytitle"><a href="API---blk-run-queue-uncond.html"><span class="phrase">__blk_run_queue_uncond</span></a></span><span class="refpurpose"> — 
+  run a queue whether or not it has been stopped
+ </span></dt><dt><span class="refentrytitle"><a href="API---blk-drain-queue.html"><span class="phrase">__blk_drain_queue</span></a></span><span class="refpurpose"> — 
+     drain requests from request_queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-rq-ioc.html"><span class="phrase">rq_ioc</span></a></span><span class="refpurpose"> — 
+     determine io_context for request allocation
+ </span></dt><dt><span class="refentrytitle"><a href="API---get-request.html"><span class="phrase">__get_request</span></a></span><span class="refpurpose"> — 
+     get a free request
+ </span></dt><dt><span class="refentrytitle"><a href="API-get-request.html"><span class="phrase">get_request</span></a></span><span class="refpurpose"> — 
+     get a free request
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-attempt-plug-merge.html"><span class="phrase">blk_attempt_plug_merge</span></a></span><span class="refpurpose"> — 
+     try to merge with <code class="constant">current</code>'s plugged list
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-end-bidi-request.html"><span class="phrase">blk_end_bidi_request</span></a></span><span class="refpurpose"> — 
+     Complete a bidi request
+ </span></dt><dt><span class="refentrytitle"><a href="API---blk-end-bidi-request.html"><span class="phrase">__blk_end_bidi_request</span></a></span><span class="refpurpose"> — 
+     Complete a bidi request with queue lock held
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-map-user.html"><span class="phrase">blk_rq_map_user</span></a></span><span class="refpurpose"> — 
+  map user data to a request, for REQ_TYPE_BLOCK_PC usage
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-map-user-iov.html"><span class="phrase">blk_rq_map_user_iov</span></a></span><span class="refpurpose"> — 
+     map user data to a request, for REQ_TYPE_BLOCK_PC usage
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-unmap-user.html"><span class="phrase">blk_rq_unmap_user</span></a></span><span class="refpurpose"> — 
+     unmap a request with user data
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-map-kern.html"><span class="phrase">blk_rq_map_kern</span></a></span><span class="refpurpose"> — 
+     map kernel data to a request, for REQ_TYPE_BLOCK_PC usage
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-release-queue.html"><span class="phrase">blk_release_queue</span></a></span><span class="refpurpose"> — 
+  release a <span class="structname">struct request_queue</span> when it is no longer needed
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-prep-rq.html"><span class="phrase">blk_queue_prep_rq</span></a></span><span class="refpurpose"> — 
+  set a prepare_request function for queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-unprep-rq.html"><span class="phrase">blk_queue_unprep_rq</span></a></span><span class="refpurpose"> — 
+     set an unprepare_request function for queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-merge-bvec.html"><span class="phrase">blk_queue_merge_bvec</span></a></span><span class="refpurpose"> — 
+     set a merge_bvec function for queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-set-default-limits.html"><span class="phrase">blk_set_default_limits</span></a></span><span class="refpurpose"> — 
+     reset limits to default values
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-set-stacking-limits.html"><span class="phrase">blk_set_stacking_limits</span></a></span><span class="refpurpose"> — 
+     set default limits for stacking devices
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-make-request.html"><span class="phrase">blk_queue_make_request</span></a></span><span class="refpurpose"> — 
+     define an alternate make_request function for a device
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-bounce-limit.html"><span class="phrase">blk_queue_bounce_limit</span></a></span><span class="refpurpose"> — 
+     set bounce buffer limit for queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-limits-max-hw-sectors.html"><span class="phrase">blk_limits_max_hw_sectors</span></a></span><span class="refpurpose"> — 
+     set hard and soft limit of max sectors for request
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-max-hw-sectors.html"><span class="phrase">blk_queue_max_hw_sectors</span></a></span><span class="refpurpose"> — 
+     set max sectors for a request for this queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-chunk-sectors.html"><span class="phrase">blk_queue_chunk_sectors</span></a></span><span class="refpurpose"> — 
+     set size of the chunk for this queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-max-discard-sectors.html"><span class="phrase">blk_queue_max_discard_sectors</span></a></span><span class="refpurpose"> — 
+     set max sectors for a single discard
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-max-write-same-sectors.html"><span class="phrase">blk_queue_max_write_same_sectors</span></a></span><span class="refpurpose"> — 
+     set max sectors for a single write same
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-max-segments.html"><span class="phrase">blk_queue_max_segments</span></a></span><span class="refpurpose"> — 
+     set max hw segments for a request for this queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-max-segment-size.html"><span class="phrase">blk_queue_max_segment_size</span></a></span><span class="refpurpose"> — 
+     set max segment size for blk_rq_map_sg
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-logical-block-size.html"><span class="phrase">blk_queue_logical_block_size</span></a></span><span class="refpurpose"> — 
+     set logical block size for the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-physical-block-size.html"><span class="phrase">blk_queue_physical_block_size</span></a></span><span class="refpurpose"> — 
+     set physical block size for the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-alignment-offset.html"><span class="phrase">blk_queue_alignment_offset</span></a></span><span class="refpurpose"> — 
+     set physical block alignment offset
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-limits-io-min.html"><span class="phrase">blk_limits_io_min</span></a></span><span class="refpurpose"> — 
+     set minimum request size for a device
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-io-min.html"><span class="phrase">blk_queue_io_min</span></a></span><span class="refpurpose"> — 
+     set minimum request size for the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-limits-io-opt.html"><span class="phrase">blk_limits_io_opt</span></a></span><span class="refpurpose"> — 
+     set optimal request size for a device
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-io-opt.html"><span class="phrase">blk_queue_io_opt</span></a></span><span class="refpurpose"> — 
+     set optimal request size for the queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-stack-limits.html"><span class="phrase">blk_queue_stack_limits</span></a></span><span class="refpurpose"> — 
+     inherit underlying queue limits for stacked drivers
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-stack-limits.html"><span class="phrase">blk_stack_limits</span></a></span><span class="refpurpose"> — 
+     adjust queue_limits for stacked devices
+ </span></dt><dt><span class="refentrytitle"><a href="API-bdev-stack-limits.html"><span class="phrase">bdev_stack_limits</span></a></span><span class="refpurpose"> — 
+     adjust queue limits for stacked drivers
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-stack-limits.html"><span class="phrase">disk_stack_limits</span></a></span><span class="refpurpose"> — 
+     adjust queue limits for stacked drivers
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-dma-pad.html"><span class="phrase">blk_queue_dma_pad</span></a></span><span class="refpurpose"> — 
+     set pad mask
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-update-dma-pad.html"><span class="phrase">blk_queue_update_dma_pad</span></a></span><span class="refpurpose"> — 
+     update pad mask
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-dma-drain.html"><span class="phrase">blk_queue_dma_drain</span></a></span><span class="refpurpose"> — 
+     Set up a drain buffer for excess dma.
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-segment-boundary.html"><span class="phrase">blk_queue_segment_boundary</span></a></span><span class="refpurpose"> — 
+     set boundary rules for segment merging
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-dma-alignment.html"><span class="phrase">blk_queue_dma_alignment</span></a></span><span class="refpurpose"> — 
+     set dma length and memory alignment
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-update-dma-alignment.html"><span class="phrase">blk_queue_update_dma_alignment</span></a></span><span class="refpurpose"> — 
+     update dma length and memory alignment
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-flush.html"><span class="phrase">blk_queue_flush</span></a></span><span class="refpurpose"> — 
+     configure queue's cache flush capability
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-execute-rq-nowait.html"><span class="phrase">blk_execute_rq_nowait</span></a></span><span class="refpurpose"> — 
+  insert a request into queue for execution
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-execute-rq.html"><span class="phrase">blk_execute_rq</span></a></span><span class="refpurpose"> — 
+     insert a request into queue for execution
+ </span></dt><dt><span class="refentrytitle"><a href="API-blkdev-issue-flush.html"><span class="phrase">blkdev_issue_flush</span></a></span><span class="refpurpose"> — 
+  queue a flush
+ </span></dt><dt><span class="refentrytitle"><a href="API-blkdev-issue-discard.html"><span class="phrase">blkdev_issue_discard</span></a></span><span class="refpurpose"> — 
+  queue a discard
+ </span></dt><dt><span class="refentrytitle"><a href="API-blkdev-issue-write-same.html"><span class="phrase">blkdev_issue_write_same</span></a></span><span class="refpurpose"> — 
+     queue a write same operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-blkdev-issue-zeroout.html"><span class="phrase">blkdev_issue_zeroout</span></a></span><span class="refpurpose"> — 
+     zero-fill a block range
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-find-tag.html"><span class="phrase">blk_queue_find_tag</span></a></span><span class="refpurpose"> — 
+  find a request by its tag and queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-free-tags.html"><span class="phrase">blk_free_tags</span></a></span><span class="refpurpose"> — 
+     release a given set of tag maintenance info
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-free-tags.html"><span class="phrase">blk_queue_free_tags</span></a></span><span class="refpurpose"> — 
+     release tag maintenance info
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-init-tags.html"><span class="phrase">blk_init_tags</span></a></span><span class="refpurpose"> — 
+     initialize the tag info for an external tag map
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-init-tags.html"><span class="phrase">blk_queue_init_tags</span></a></span><span class="refpurpose"> — 
+     initialize the queue tag info
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-resize-tags.html"><span class="phrase">blk_queue_resize_tags</span></a></span><span class="refpurpose"> — 
+     change the queueing depth
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-end-tag.html"><span class="phrase">blk_queue_end_tag</span></a></span><span class="refpurpose"> — 
+     end tag operations for a request
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-start-tag.html"><span class="phrase">blk_queue_start_tag</span></a></span><span class="refpurpose"> — 
+     find a free tag and assign it
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-queue-invalidate-tags.html"><span class="phrase">blk_queue_invalidate_tags</span></a></span><span class="refpurpose"> — 
+     invalidate all pending tags
+ </span></dt><dt><span class="refentrytitle"><a href="API---blk-queue-free-tags.html"><span class="phrase">__blk_queue_free_tags</span></a></span><span class="refpurpose"> — 
+  release tag maintenance info
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-count-integrity-sg.html"><span class="phrase">blk_rq_count_integrity_sg</span></a></span><span class="refpurpose"> — 
+  Count number of integrity scatterlist elements
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-rq-map-integrity-sg.html"><span class="phrase">blk_rq_map_integrity_sg</span></a></span><span class="refpurpose"> — 
+     Map integrity metadata into a scatterlist
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-integrity-compare.html"><span class="phrase">blk_integrity_compare</span></a></span><span class="refpurpose"> — 
+     Compare integrity profile of two disks
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-integrity-register.html"><span class="phrase">blk_integrity_register</span></a></span><span class="refpurpose"> — 
+     Register a gendisk as being integrity-capable
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-integrity-unregister.html"><span class="phrase">blk_integrity_unregister</span></a></span><span class="refpurpose"> — 
+     Remove block integrity profile
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-trace-ioctl.html"><span class="phrase">blk_trace_ioctl</span></a></span><span class="refpurpose"> — 
+  handle the ioctls associated with tracing
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-trace-shutdown.html"><span class="phrase">blk_trace_shutdown</span></a></span><span class="refpurpose"> — 
+     stop and cleanup trace structures
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-add-trace-rq.html"><span class="phrase">blk_add_trace_rq</span></a></span><span class="refpurpose"> — 
+     Add a trace for a request oriented action
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-add-trace-bio.html"><span class="phrase">blk_add_trace_bio</span></a></span><span class="refpurpose"> — 
+     Add a trace for a bio oriented action
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-add-trace-bio-remap.html"><span class="phrase">blk_add_trace_bio_remap</span></a></span><span class="refpurpose"> — 
+     Add a trace for a bio-remap operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-add-trace-rq-remap.html"><span class="phrase">blk_add_trace_rq_remap</span></a></span><span class="refpurpose"> — 
+     Add a trace for a request-remap operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-mangle-minor.html"><span class="phrase">blk_mangle_minor</span></a></span><span class="refpurpose"> — 
+  scatter minor numbers apart
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-alloc-devt.html"><span class="phrase">blk_alloc_devt</span></a></span><span class="refpurpose"> — 
+     allocate a dev_t for a partition
+ </span></dt><dt><span class="refentrytitle"><a href="API-blk-free-devt.html"><span class="phrase">blk_free_devt</span></a></span><span class="refpurpose"> — 
+     free a dev_t
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-replace-part-tbl.html"><span class="phrase">disk_replace_part_tbl</span></a></span><span class="refpurpose"> — 
+     replace disk-&gt;part_tbl in RCU-safe way
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-expand-part-tbl.html"><span class="phrase">disk_expand_part_tbl</span></a></span><span class="refpurpose"> — 
+     expand disk-&gt;part_tbl
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-block-events.html"><span class="phrase">disk_block_events</span></a></span><span class="refpurpose"> — 
+     block and flush disk event checking
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-unblock-events.html"><span class="phrase">disk_unblock_events</span></a></span><span class="refpurpose"> — 
+     unblock disk event checking
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-flush-events.html"><span class="phrase">disk_flush_events</span></a></span><span class="refpurpose"> — 
+     schedule immediate event checking and flushing
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-clear-events.html"><span class="phrase">disk_clear_events</span></a></span><span class="refpurpose"> — 
+     synchronously check, clear and return pending events
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-get-part.html"><span class="phrase">disk_get_part</span></a></span><span class="refpurpose"> — 
+  get partition
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-part-iter-init.html"><span class="phrase">disk_part_iter_init</span></a></span><span class="refpurpose"> — 
+     initialize partition iterator
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-part-iter-next.html"><span class="phrase">disk_part_iter_next</span></a></span><span class="refpurpose"> — 
+     proceed iterator to the next partition and return it
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-part-iter-exit.html"><span class="phrase">disk_part_iter_exit</span></a></span><span class="refpurpose"> — 
+     finish up partition iteration
+ </span></dt><dt><span class="refentrytitle"><a href="API-disk-map-sector-rcu.html"><span class="phrase">disk_map_sector_rcu</span></a></span><span class="refpurpose"> — 
+     map sector to partition
+ </span></dt><dt><span class="refentrytitle"><a href="API-register-blkdev.html"><span class="phrase">register_blkdev</span></a></span><span class="refpurpose"> — 
+     register a new block device
+ </span></dt><dt><span class="refentrytitle"><a href="API-add-disk.html"><span class="phrase">add_disk</span></a></span><span class="refpurpose"> — 
+     add partitioning information to kernel list
+ </span></dt><dt><span class="refentrytitle"><a href="API-get-gendisk.html"><span class="phrase">get_gendisk</span></a></span><span class="refpurpose"> — 
+     get partitioning information for a given device
+ </span></dt><dt><span class="refentrytitle"><a href="API-bdget-disk.html"><span class="phrase">bdget_disk</span></a></span><span class="refpurpose"> — 
+     do <code class="function">bdget</code> by gendisk and partition number
+ </span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-acct-process.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-blk-get-backing-dev-info.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">acct_process</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">blk_get_backing_dev_info</span></td></tr></table></div></body></html>

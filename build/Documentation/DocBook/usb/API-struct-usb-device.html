@@ -1,0 +1,180 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct usb_device</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="hostside.html" title="Chapter 4. Host-Side Data Types and Macros"><link rel="prev" href="API-struct-usb-host-config.html" title="struct usb_host_config"><link rel="next" href="API-usb-hub-for-each-child.html" title="usb_hub_for_each_child"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct usb_device</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-usb-host-config.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Host-Side Data Types and Macros</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-hub-for-each-child.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-usb-device"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct usb_device — 
+     kernel's representation of a USB device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct usb_device {
+  int devnum;
+  char devpath[16];
+  u32 route;
+  enum usb_device_state state;
+  enum usb_device_speed speed;
+  struct usb_tt * tt;
+  int ttport;
+  unsigned int toggle[2];
+  struct usb_device * parent;
+  struct usb_bus * bus;
+  struct usb_host_endpoint ep0;
+  struct device dev;
+  struct usb_device_descriptor descriptor;
+  struct usb_host_bos * bos;
+  struct usb_host_config * config;
+  struct usb_host_config * actconfig;
+  struct usb_host_endpoint * ep_in[16];
+  struct usb_host_endpoint * ep_out[16];
+  char ** rawdescriptors;
+  unsigned short bus_mA;
+  u8 portnum;
+  u8 level;
+  unsigned can_submit:1;
+  unsigned persist_enabled:1;
+  unsigned have_langid:1;
+  unsigned authorized:1;
+  unsigned authenticated:1;
+  unsigned wusb:1;
+  unsigned lpm_capable:1;
+  unsigned usb2_hw_lpm_capable:1;
+  unsigned usb2_hw_lpm_besl_capable:1;
+  unsigned usb2_hw_lpm_enabled:1;
+  unsigned usb2_hw_lpm_allowed:1;
+  unsigned usb3_lpm_enabled:1;
+  int string_langid;
+  char * product;
+  char * manufacturer;
+  char * serial;
+  struct list_head filelist;
+  int maxchild;
+  u32 quirks;
+  atomic_t urbnum;
+  unsigned long active_duration;
+#ifdef CONFIG_PM
+  unsigned long connect_time;
+  unsigned do_remote_wakeup:1;
+  unsigned reset_resume:1;
+  unsigned port_is_suspended:1;
+#endif
+  struct wusb_dev * wusb_dev;
+  int slot_id;
+  enum usb_device_removable removable;
+  struct usb2_lpm_parameters l1_params;
+  struct usb3_lpm_parameters u1_params;
+  struct usb3_lpm_parameters u2_params;
+  unsigned lpm_disable_count;
+};  </pre></div><div class="refsect1"><a name="idm369"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">devnum</span></dt><dd><p>
+   device number; address on a USB bus
+      </p></dd><dt><span class="term">devpath[16]</span></dt><dd><p>
+   device ID string for use in messages (e.g., /port/...)
+      </p></dd><dt><span class="term">route</span></dt><dd><p>
+   tree topology hex string for use with xHCI
+      </p></dd><dt><span class="term">state</span></dt><dd><p>
+   device state: configured, not attached, etc.
+      </p></dd><dt><span class="term">speed</span></dt><dd><p>
+   device speed: high/full/low (or error)
+      </p></dd><dt><span class="term">tt</span></dt><dd><p>
+   Transaction Translator info; used with low/full speed dev, highspeed hub
+      </p></dd><dt><span class="term">ttport</span></dt><dd><p>
+   device port on that tt hub
+      </p></dd><dt><span class="term">toggle[2]</span></dt><dd><p>
+   one bit for each endpoint, with ([0] = IN, [1] = OUT) endpoints
+      </p></dd><dt><span class="term">parent</span></dt><dd><p>
+   our hub, unless we're the root
+      </p></dd><dt><span class="term">bus</span></dt><dd><p>
+   bus we're part of
+      </p></dd><dt><span class="term">ep0</span></dt><dd><p>
+   endpoint 0 data (default control pipe)
+      </p></dd><dt><span class="term">dev</span></dt><dd><p>
+   generic device interface
+      </p></dd><dt><span class="term">descriptor</span></dt><dd><p>
+   USB device descriptor
+      </p></dd><dt><span class="term">bos</span></dt><dd><p>
+   USB device BOS descriptor set
+      </p></dd><dt><span class="term">config</span></dt><dd><p>
+   all of the device's configs
+      </p></dd><dt><span class="term">actconfig</span></dt><dd><p>
+   the active configuration
+      </p></dd><dt><span class="term">ep_in[16]</span></dt><dd><p>
+   array of IN endpoints
+      </p></dd><dt><span class="term">ep_out[16]</span></dt><dd><p>
+   array of OUT endpoints
+      </p></dd><dt><span class="term">rawdescriptors</span></dt><dd><p>
+   raw descriptors for each config
+      </p></dd><dt><span class="term">bus_mA</span></dt><dd><p>
+   Current available from the bus
+      </p></dd><dt><span class="term">portnum</span></dt><dd><p>
+   parent port number (origin 1)
+      </p></dd><dt><span class="term">level</span></dt><dd><p>
+   number of USB hub ancestors
+      </p></dd><dt><span class="term">can_submit</span></dt><dd><p>
+   URBs may be submitted
+      </p></dd><dt><span class="term">persist_enabled</span></dt><dd><p>
+   USB_PERSIST enabled for this device
+      </p></dd><dt><span class="term">have_langid</span></dt><dd><p>
+   whether string_langid is valid
+      </p></dd><dt><span class="term">authorized</span></dt><dd><p>
+   policy has said we can use it;
+   (user space) policy determines if we authorize this device to be
+   used or not. By default, wired USB devices are authorized.
+   WUSB devices are not, until we authorize them from user space.
+   FIXME -- complete doc
+      </p></dd><dt><span class="term">authenticated</span></dt><dd><p>
+   Crypto authentication passed
+      </p></dd><dt><span class="term">wusb</span></dt><dd><p>
+   device is Wireless USB
+      </p></dd><dt><span class="term">lpm_capable</span></dt><dd><p>
+   device supports LPM
+      </p></dd><dt><span class="term">usb2_hw_lpm_capable</span></dt><dd><p>
+   device can perform USB2 hardware LPM
+      </p></dd><dt><span class="term">usb2_hw_lpm_besl_capable</span></dt><dd><p>
+   device can perform USB2 hardware BESL LPM
+      </p></dd><dt><span class="term">usb2_hw_lpm_enabled</span></dt><dd><p>
+   USB2 hardware LPM is enabled
+      </p></dd><dt><span class="term">usb2_hw_lpm_allowed</span></dt><dd><p>
+   Userspace allows USB 2.0 LPM to be enabled
+      </p></dd><dt><span class="term">usb3_lpm_enabled</span></dt><dd><p>
+   USB3 hardware LPM enabled
+      </p></dd><dt><span class="term">string_langid</span></dt><dd><p>
+   language ID for strings
+      </p></dd><dt><span class="term">product</span></dt><dd><p>
+   iProduct string, if present (static)
+      </p></dd><dt><span class="term">manufacturer</span></dt><dd><p>
+   iManufacturer string, if present (static)
+      </p></dd><dt><span class="term">serial</span></dt><dd><p>
+   iSerialNumber string, if present (static)
+      </p></dd><dt><span class="term">filelist</span></dt><dd><p>
+   usbfs files that are open to this device
+      </p></dd><dt><span class="term">maxchild</span></dt><dd><p>
+   number of ports if hub
+      </p></dd><dt><span class="term">quirks</span></dt><dd><p>
+   quirks of the whole device
+      </p></dd><dt><span class="term">urbnum</span></dt><dd><p>
+   number of URBs submitted for the whole device
+      </p></dd><dt><span class="term">active_duration</span></dt><dd><p>
+   total time device is not suspended
+      </p></dd><dt><span class="term">connect_time</span></dt><dd><p>
+   time device was first connected
+      </p></dd><dt><span class="term">do_remote_wakeup</span></dt><dd><p>
+   remote wakeup should be enabled
+      </p></dd><dt><span class="term">reset_resume</span></dt><dd><p>
+   needs reset instead of resume
+      </p></dd><dt><span class="term">port_is_suspended</span></dt><dd><p>
+   the upstream port is suspended (L2 or U3)
+      </p></dd><dt><span class="term">wusb_dev</span></dt><dd><p>
+   if this is a Wireless USB device, link to the WUSB
+   specific data for the device.
+      </p></dd><dt><span class="term">slot_id</span></dt><dd><p>
+   Slot ID assigned by xHCI
+      </p></dd><dt><span class="term">removable</span></dt><dd><p>
+   Device can be physically removed from this port
+      </p></dd><dt><span class="term">l1_params</span></dt><dd><p>
+   best effor service latency for USB2 L1 LPM state, and L1 timeout.
+      </p></dd><dt><span class="term">u1_params</span></dt><dd><p>
+   exit latencies for USB3 U1 LPM state, and hub-initiated timeout.
+      </p></dd><dt><span class="term">u2_params</span></dt><dd><p>
+   exit latencies for USB3 U2 LPM state, and hub-initiated timeout.
+      </p></dd><dt><span class="term">lpm_disable_count</span></dt><dd><p>
+   Ref count used by <code class="function">usb_disable_lpm</code> and <code class="function">usb_enable_lpm</code>
+   to keep track of the number of functions that require USB 3.0 Link Power
+   Management to be disabled for this usb_device.  This count should only
+   be manipulated by those functions, with the bandwidth_mutex is held.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm590"></a><h2>Notes</h2><p>
+   Usbcore drivers should not set usbdev-&gt;state directly.  Instead use
+   <code class="function">usb_set_device_state</code>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-usb-host-config.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="hostside.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-hub-for-each-child.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct usb_host_config</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_hub_for_each_child</span></td></tr></table></div></body></html>

@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>mpt_attach</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="message_devices.html#idm20108" title="Fusion message devices"><link rel="prev" href="API-mpt-verify-adapter.html" title="mpt_verify_adapter"><link rel="next" href="API-mpt-detach.html" title="mpt_detach"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">mpt_attach</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-mpt-verify-adapter.html">Prev</a> </td><th width="60%" align="center">Fusion message devices</th><td width="20%" align="right"> <a accesskey="n" href="API-mpt-detach.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-mpt-attach"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>mpt_attach — 
+     Install a PCI intelligent MPT adapter.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">mpt_attach </b>(</code></td><td>struct pci_dev * <var class="pdparam">pdev</var>, </td></tr><tr><td> </td><td>const struct pci_device_id * <var class="pdparam">id</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm20704"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>pdev</code></em></span></dt><dd><p>
+     Pointer to pci_dev structure
+    </p></dd><dt><span class="term"><em class="parameter"><code>id</code></em></span></dt><dd><p>
+     PCI device ID information
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm20717"></a><h2>Description</h2><p>
+   This routine performs all the steps necessary to bring the IOC of
+   a MPT adapter to a OPERATIONAL state.  This includes registering
+   memory regions, registering the interrupt, and allocating request
+   and reply memory pools.
+   </p><p>
+
+   This routine also pre-fetches the LAN MAC address of a Fibre Channel
+   MPT adapter.
+   </p><p>
+
+   Returns 0 for success, non-zero for failure.
+</p></div><div class="refsect1"><a name="idm20722"></a><h2>TODO</h2><p>
+   Add support for polled controllers
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-mpt-verify-adapter.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="message_devices.html#idm20108">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-mpt-detach.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">mpt_verify_adapter</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">mpt_detach</span></td></tr></table></div></body></html>

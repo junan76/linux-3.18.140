@@ -1,0 +1,89 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct station_parameters</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The 802.11 subsystems – for kernel developers"><link rel="up" href="bk01ch02.html" title="Chapter 2. Actions and configuration"><link rel="prev" href="API-struct-cfg80211-ap-settings.html" title="struct cfg80211_ap_settings"><link rel="next" href="API-enum-station-info-flags.html" title="enum station_info_flags"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct station_parameters</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-cfg80211-ap-settings.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Actions and configuration</th><td width="20%" align="right"> <a accesskey="n" href="API-enum-station-info-flags.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-station-parameters"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct station_parameters — 
+  station parameters
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct station_parameters {
+  const u8 * supported_rates;
+  struct net_device * vlan;
+  u32 sta_flags_mask;
+  u32 sta_flags_set;
+  u32 sta_modify_mask;
+  int listen_interval;
+  u16 aid;
+  u8 supported_rates_len;
+  u8 plink_action;
+  u8 plink_state;
+  const struct ieee80211_ht_cap * ht_capa;
+  const struct ieee80211_vht_cap * vht_capa;
+  u8 uapsd_queues;
+  u8 max_sp;
+  enum nl80211_mesh_power_mode local_pm;
+  u16 capability;
+  const u8 * ext_capab;
+  u8 ext_capab_len;
+  const u8 * supported_channels;
+  u8 supported_channels_len;
+  const u8 * supported_oper_classes;
+  u8 supported_oper_classes_len;
+  u8 opmode_notif;
+  bool opmode_notif_used;
+};  </pre></div><div class="refsect1"><a name="idm2273"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">supported_rates</span></dt><dd><p>
+supported rates in IEEE 802.11 format
+(or NULL for no change)
+      </p></dd><dt><span class="term">vlan</span></dt><dd><p>
+vlan interface station should belong to
+      </p></dd><dt><span class="term">sta_flags_mask</span></dt><dd><p>
+station flags that changed
+(bitmask of BIT(NL80211_STA_FLAG_...))
+      </p></dd><dt><span class="term">sta_flags_set</span></dt><dd><p>
+station flags values
+(bitmask of BIT(NL80211_STA_FLAG_...))
+      </p></dd><dt><span class="term">sta_modify_mask</span></dt><dd><p>
+bitmap indicating which parameters changed
+(for those that don't have a natural <span class="quote">“<span class="quote">no change</span>”</span> value),
+see <span class="structname">enum</span> station_parameters_apply_mask
+      </p></dd><dt><span class="term">listen_interval</span></dt><dd><p>
+listen interval or -1 for no change
+      </p></dd><dt><span class="term">aid</span></dt><dd><p>
+AID or zero for no change
+      </p></dd><dt><span class="term">supported_rates_len</span></dt><dd><p>
+number of supported rates
+      </p></dd><dt><span class="term">plink_action</span></dt><dd><p>
+plink action to take
+      </p></dd><dt><span class="term">plink_state</span></dt><dd><p>
+set the peer link state for a station
+      </p></dd><dt><span class="term">ht_capa</span></dt><dd><p>
+HT capabilities of station
+      </p></dd><dt><span class="term">vht_capa</span></dt><dd><p>
+VHT capabilities of station
+      </p></dd><dt><span class="term">uapsd_queues</span></dt><dd><p>
+bitmap of queues configured for uapsd. same format
+as the AC bitmap in the QoS info field
+      </p></dd><dt><span class="term">max_sp</span></dt><dd><p>
+max Service Period. same format as the MAX_SP in the
+QoS info field (but already shifted down)
+      </p></dd><dt><span class="term">local_pm</span></dt><dd><p>
+local link-specific mesh power save mode (no change when set
+to unknown)
+      </p></dd><dt><span class="term">capability</span></dt><dd><p>
+station capability
+      </p></dd><dt><span class="term">ext_capab</span></dt><dd><p>
+extended capabilities of the station
+      </p></dd><dt><span class="term">ext_capab_len</span></dt><dd><p>
+number of extended capabilities
+      </p></dd><dt><span class="term">supported_channels</span></dt><dd><p>
+supported channels in IEEE 802.11 format
+      </p></dd><dt><span class="term">supported_channels_len</span></dt><dd><p>
+number of supported channels
+      </p></dd><dt><span class="term">supported_oper_classes</span></dt><dd><p>
+supported oper classes in IEEE 802.11 format
+      </p></dd><dt><span class="term">supported_oper_classes_len</span></dt><dd><p>
+number of supported operating classes
+      </p></dd><dt><span class="term">opmode_notif</span></dt><dd><p>
+operating mode field from Operating Mode Notification
+      </p></dd><dt><span class="term">opmode_notif_used</span></dt><dd><p>
+information if operating mode field is used
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm2374"></a><h2>Description</h2><p>
+   </p><p>
+
+   Used to change and create a new station.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-cfg80211-ap-settings.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="bk01ch02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-enum-station-info-flags.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct cfg80211_ap_settings</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">enum station_info_flags</span></td></tr></table></div></body></html>

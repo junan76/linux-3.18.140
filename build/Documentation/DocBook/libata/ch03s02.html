@@ -1,0 +1,41 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>How commands are issued</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="libataEH.html" title="Chapter 3. Error handling"><link rel="prev" href="libataEH.html" title="Chapter 3. Error handling"><link rel="next" href="ch03s03.html" title="How commands are processed"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">How commands are issued</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="libataEH.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Error handling</th><td width="20%" align="right"> <a accesskey="n" href="ch03s03.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm134"></a>How commands are issued</h2></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">Internal commands</span></dt><dd><p>
+	First, qc is allocated and initialized using
+	ata_qc_new_init().  Although ata_qc_new_init() doesn't
+	implement any wait or retry mechanism when qc is not
+	available, internal commands are currently issued only during
+	initialization and error recovery, so no other command is
+	active and allocation is guaranteed to succeed.
+	</p><p>
+	Once allocated qc's taskfile is initialized for the command to
+	be executed.  qc currently has two mechanisms to notify
+	completion.  One is via qc-&gt;complete_fn() callback and the
+	other is completion qc-&gt;waiting.  qc-&gt;complete_fn() callback
+	is the asynchronous path used by normal SCSI translated
+	commands and qc-&gt;waiting is the synchronous (issuer sleeps in
+	process context) path used by internal commands.
+	</p><p>
+	Once initialization is complete, host_set lock is acquired
+	and the qc is issued.
+	</p></dd><dt><span class="term">SCSI commands</span></dt><dd><p>
+	All libata drivers use ata_scsi_queuecmd() as
+	hostt-&gt;queuecommand callback.  scmds can either be simulated
+	or translated.  No qc is involved in processing a simulated
+	scmd.  The result is computed right away and the scmd is
+	completed.
+	</p><p>
+	For a translated scmd, ata_qc_new_init() is invoked to
+	allocate a qc and the scmd is translated into the qc.  SCSI
+	midlayer's completion notification function pointer is stored
+	into qc-&gt;scsidone.
+	</p><p>
+	qc-&gt;complete_fn() callback is used for completion
+	notification.  ATA commands use ata_scsi_qc_complete() while
+	ATAPI commands use atapi_qc_complete().  Both functions end up
+	calling qc-&gt;scsidone to notify upper layer when the qc is
+	finished.  After translation is completed, the qc is issued
+	with ata_qc_issue().
+	</p><p>
+	Note that SCSI midlayer invokes hostt-&gt;queuecommand while
+	holding host_set lock, so all above occur while holding
+	host_set lock.
+	</p></dd></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="libataEH.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="libataEH.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. Error handling </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> How commands are processed</td></tr></table></div></body></html>

@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>kgdb_arch_handle_exception</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="up" href="CommonBackEndReq.html#kgdbArchitecture" title="Architecture Specifics"><link rel="prev" href="API-gdb-regs-to-pt-regs.html" title="gdb_regs_to_pt_regs"><link rel="next" href="API-kgdb-roundup-cpus.html" title="kgdb_roundup_cpus"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">kgdb_arch_handle_exception</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-gdb-regs-to-pt-regs.html">Prev</a> </td><th width="60%" align="center">Architecture Specifics</th><td width="20%" align="right"> <a accesskey="n" href="API-kgdb-roundup-cpus.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-kgdb-arch-handle-exception"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>kgdb_arch_handle_exception — 
+     Handle architecture specific GDB packets.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">kgdb_arch_handle_exception </b>(</code></td><td>int <var class="pdparam">vector</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">signo</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">err_code</var>, </td></tr><tr><td> </td><td>char * <var class="pdparam">remcom_in_buffer</var>, </td></tr><tr><td> </td><td>char * <var class="pdparam">remcom_out_buffer</var>, </td></tr><tr><td> </td><td>struct pt_regs * <var class="pdparam">regs</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm805"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>vector</code></em></span></dt><dd><p>
+     The error vector of the exception that happened.
+    </p></dd><dt><span class="term"><em class="parameter"><code>signo</code></em></span></dt><dd><p>
+     The signal number of the exception that happened.
+    </p></dd><dt><span class="term"><em class="parameter"><code>err_code</code></em></span></dt><dd><p>
+     The error code of the exception that happened.
+    </p></dd><dt><span class="term"><em class="parameter"><code>remcom_in_buffer</code></em></span></dt><dd><p>
+     The buffer of the packet we have read.
+    </p></dd><dt><span class="term"><em class="parameter"><code>remcom_out_buffer</code></em></span></dt><dd><p>
+     The buffer of <code class="constant">BUFMAX</code> bytes to write a packet into.
+    </p></dd><dt><span class="term"><em class="parameter"><code>regs</code></em></span></dt><dd><p>
+     The <span class="structname">struct pt_regs</span> of the current process.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm840"></a><h2>Description</h2><p>
+   This function MUST handle the 'c' and 's' command packets,
+   as well packets to set / remove a hardware breakpoint, if used.
+   If there are additional packets which the hardware needs to handle,
+   they are handled here.  The code should return -1 if it wants to
+   process more packets, and a <code class="constant">0</code> or <code class="constant">1</code> if it wants to exit from the
+   kgdb callback.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-gdb-regs-to-pt-regs.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="CommonBackEndReq.html#kgdbArchitecture">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-kgdb-roundup-cpus.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">gdb_regs_to_pt_regs</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">kgdb_roundup_cpus</span></td></tr></table></div></body></html>

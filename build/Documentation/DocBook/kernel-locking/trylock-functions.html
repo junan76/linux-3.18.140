@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 6. The trylock Functions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="index.html" title="Unreliable Guide To Locking"><link rel="prev" href="cheatsheet.html" title="Chapter 5. Cheat Sheet For Locking"><link rel="next" href="Examples.html" title="Chapter 7. Common Examples"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. The trylock Functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="cheatsheet.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="Examples.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="trylock-functions"></a>Chapter 6. The trylock Functions</h1></div></div></div><p>
+   There are functions that try to acquire a lock only once and immediately
+   return a value telling about success or failure to acquire the lock.
+   They can be used if you need no access to the data protected with the lock
+   when some other thread is holding the lock. You should acquire the lock
+   later if you then need access to the data protected with the lock.
+  </p><p>
+    <code class="function">spin_trylock()</code> does not spin but returns non-zero if
+    it acquires the spinlock on the first try or 0 if not. This function can
+    be used in all contexts like <code class="function">spin_lock</code>: you must have
+    disabled the contexts that might interrupt you and acquire the spin lock.
+  </p><p>
+    <code class="function">mutex_trylock()</code> does not suspend your task
+    but returns non-zero if it could lock the mutex on the first try
+    or 0 if not. This function cannot be safely used in hardware or software
+    interrupt contexts despite not sleeping.
+  </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="cheatsheet.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="Examples.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 5. Cheat Sheet For Locking </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 7. Common Examples</td></tr></table></div></body></html>

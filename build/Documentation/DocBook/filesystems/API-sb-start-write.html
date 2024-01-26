@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>sb_start_write</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="vfs.html#the_filesystem_types" title="The Filesystem types"><link rel="prev" href="API-sb-end-intwrite.html" title="sb_end_intwrite"><link rel="next" href="API-sb-start-pagefault.html" title="sb_start_pagefault"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">sb_start_write</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-sb-end-intwrite.html">Prev</a> </td><th width="60%" align="center">The Filesystem types</th><td width="20%" align="right"> <a accesskey="n" href="API-sb-start-pagefault.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-sb-start-write"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>sb_start_write — 
+     get write access to a superblock
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">sb_start_write </b>(</code></td><td>struct super_block * <var class="pdparam">sb</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm163"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>sb</code></em></span></dt><dd><p>
+     the super we write to
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm171"></a><h2>Description</h2><p>
+   When a process wants to write data or metadata to a file system (i.e. dirty
+   a page or an inode), it should embed the operation in a <code class="function">sb_start_write</code> -
+   <code class="function">sb_end_write</code> pair to get exclusion against file system freezing. This
+   function increments number of writers preventing freezing. If the file
+   system is already frozen, the function waits until the file system is
+   thawed.
+   </p><p>
+
+   Since freeze protection behaves as a lock, users have to preserve
+   ordering of freeze protection and other filesystem locks. Generally,
+   freeze protection should be the outermost lock. In particular, we have:
+   </p><p>
+
+   sb_start_write
+   -&gt; i_mutex			(write path, truncate, directory ops, ...)
+   -&gt; s_umount		(freeze_super, thaw_super)
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-sb-end-intwrite.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="vfs.html#the_filesystem_types">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-sb-start-pagefault.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">sb_end_intwrite</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">sb_start_pagefault</span></td></tr></table></div></body></html>

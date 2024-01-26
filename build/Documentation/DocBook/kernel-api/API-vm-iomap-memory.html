@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>vm_iomap_memory</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-remap-pfn-range.html" title="remap_pfn_range"><link rel="next" href="API-unmap-mapping-range.html" title="unmap_mapping_range"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">vm_iomap_memory</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-remap-pfn-range.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-unmap-mapping-range.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-vm-iomap-memory"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>vm_iomap_memory — 
+     remap memory to userspace
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">vm_iomap_memory </b>(</code></td><td>struct vm_area_struct * <var class="pdparam">vma</var>, </td></tr><tr><td> </td><td>phys_addr_t <var class="pdparam">start</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">len</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9790"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>vma</code></em></span></dt><dd><p>
+     user vma to map to
+    </p></dd><dt><span class="term"><em class="parameter"><code>start</code></em></span></dt><dd><p>
+     start of area
+    </p></dd><dt><span class="term"><em class="parameter"><code>len</code></em></span></dt><dd><p>
+     size of area
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9808"></a><h2>Description</h2><p>
+   This is a simplified <code class="function">io_remap_pfn_range</code> for common driver use. The
+   driver just needs to give us the physical memory range to be mapped,
+   we'll figure out the rest from the vma information.
+   </p><p>
+
+   NOTE! Some drivers might want to tweak vma-&gt;vm_page_prot first to get
+   whatever write-combining details or similar.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-remap-pfn-range.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-unmap-mapping-range.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">remap_pfn_range</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">unmap_mapping_range</span></td></tr></table></div></body></html>

@@ -1,0 +1,37 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>rio_mport_get_feature</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="RapidIO Subsystem Guide"><link rel="up" href="drivers.html#Functions" title="Functions"><link rel="prev" href="API-rio-mport-get-efb.html" title="rio_mport_get_efb"><link rel="next" href="API-rio-get-asm.html" title="rio_get_asm"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">rio_mport_get_feature</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-rio-mport-get-efb.html">Prev</a> </td><th width="60%" align="center">Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-rio-get-asm.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-rio-mport-get-feature"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>rio_mport_get_feature — 
+     query for devices' extended features
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">u32 <b class="fsfunc">rio_mport_get_feature </b>(</code></td><td>struct rio_mport * <var class="pdparam">port</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">local</var>, </td></tr><tr><td> </td><td>u16 <var class="pdparam">destid</var>, </td></tr><tr><td> </td><td>u8 <var class="pdparam">hopcount</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">ftr</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2138"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>port</code></em></span></dt><dd><p>
+     Master port to issue transaction
+    </p></dd><dt><span class="term"><em class="parameter"><code>local</code></em></span></dt><dd><p>
+     Indicate a local master port or remote device access
+    </p></dd><dt><span class="term"><em class="parameter"><code>destid</code></em></span></dt><dd><p>
+     Destination ID of the device
+    </p></dd><dt><span class="term"><em class="parameter"><code>hopcount</code></em></span></dt><dd><p>
+     Number of switch hops to the device
+    </p></dd><dt><span class="term"><em class="parameter"><code>ftr</code></em></span></dt><dd><p>
+     Extended feature code
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2166"></a><h2>Description</h2><p>
+   Tell if a device supports a given RapidIO capability.
+   Returns the offset of the requested extended feature
+   block within the device's RIO configuration space or
+   0 in case the device does not support it.  Possible
+   values for <em class="parameter"><code>ftr</code></em>:
+   </p><p>
+
+   <code class="constant">RIO_EFB_PAR_EP_ID</code>		LP/LVDS EP Devices
+   </p><p>
+
+   <code class="constant">RIO_EFB_PAR_EP_REC_ID</code>	LP/LVDS EP Recovery Devices
+   </p><p>
+
+   <code class="constant">RIO_EFB_PAR_EP_FREE_ID</code>	LP/LVDS EP Free Devices
+   </p><p>
+
+   <code class="constant">RIO_EFB_SER_EP_ID</code>		LP/Serial EP Devices
+   </p><p>
+
+   <code class="constant">RIO_EFB_SER_EP_REC_ID</code>	LP/Serial EP Recovery Devices
+   </p><p>
+
+   <code class="constant">RIO_EFB_SER_EP_FREE_ID</code>	LP/Serial EP Free Devices
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-rio-mport-get-efb.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drivers.html#Functions">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-rio-get-asm.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">rio_mport_get_efb</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">rio_get_asm</span></td></tr></table></div></body></html>

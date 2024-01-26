@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_gstrings_attach</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="composite.html" title="Composite Device Framework"><link rel="prev" href="API-usb-string-ids-tab.html" title="usb_string_ids_tab"><link rel="next" href="API-usb-string-ids-n.html" title="usb_string_ids_n"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_gstrings_attach</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-string-ids-tab.html">Prev</a> </td><th width="60%" align="center">Composite Device Framework</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-string-ids-n.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-gstrings-attach"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_gstrings_attach — 
+     attach gadget strings to a cdev and assign ids
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct usb_string * <b class="fsfunc">usb_gstrings_attach </b>(</code></td><td>struct usb_composite_dev * <var class="pdparam">cdev</var>, </td></tr><tr><td> </td><td>struct usb_gadget_strings ** <var class="pdparam">sp</var>, </td></tr><tr><td> </td><td>unsigned <var class="pdparam">n_strings</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2753"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>cdev</code></em></span></dt><dd><p>
+     the device whose string descriptor IDs are being allocated
+     and attached.
+    </p></dd><dt><span class="term"><em class="parameter"><code>sp</code></em></span></dt><dd><p>
+     an array of usb_gadget_strings to attach.
+    </p></dd><dt><span class="term"><em class="parameter"><code>n_strings</code></em></span></dt><dd><p>
+     number of entries in each usb_strings array (sp[]-&gt;strings)
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2771"></a><h2>Description</h2><p>
+   This function will create a deep copy of usb_gadget_strings and usb_string
+   and attach it to the cdev. The actual string (usb_string.s) will not be
+   copied but only a referenced will be made. The struct usb_gadget_strings
+   array may contain multiple languges and should be NULL terminated.
+   The -&gt;language pointer of each struct usb_gadget_strings has to contain the
+   same amount of entries.
+</p></div><div class="refsect1"><a name="idm2774"></a><h2>For instance</h2><p>
+   sp[0] is en-US, sp[1] is es-ES. It is expected that the first
+   usb_string entry of es-ES containts the translation of the first usb_string
+   entry of en-US. Therefore both entries become the same id assign.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-string-ids-tab.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="composite.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-string-ids-n.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_string_ids_tab</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_string_ids_n</span></td></tr></table></div></body></html>

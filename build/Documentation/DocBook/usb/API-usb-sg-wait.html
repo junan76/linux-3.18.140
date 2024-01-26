@@ -1,0 +1,49 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_sg_wait</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbcore.html" title="Chapter 5. USB Core APIs"><link rel="prev" href="API-usb-sg-init.html" title="usb_sg_init"><link rel="next" href="API-usb-sg-cancel.html" title="usb_sg_cancel"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_sg_wait</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-sg-init.html">Prev</a> </td><th width="60%" align="center">Chapter 5. USB Core APIs</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-sg-cancel.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-sg-wait"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_sg_wait — 
+     synchronously execute scatter/gather request
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">usb_sg_wait </b>(</code></td><td>struct usb_sg_request * <var class="pdparam">io</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm3103"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>io</code></em></span></dt><dd><p>
+     request block handle, as initialized with <code class="function">usb_sg_init</code>.
+     some fields become accessible when this call returns.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm3112"></a><h2>Context</h2><p>
+   !in_interrupt ()
+</p></div><div class="refsect1"><a name="idm3115"></a><h2>Description</h2><p>
+   This function blocks until the specified I/O operation completes.  It
+   leverages the grouping of the related I/O requests to get good transfer
+   rates, by queueing the requests.  At higher speeds, such queuing can
+   significantly improve USB throughput.
+   </p><p>
+
+   There are three kinds of completion for this function.
+   (1) success, where io-&gt;status is zero.  The number of io-&gt;bytes
+   transferred is as requested.
+   (2) error, where io-&gt;status is a negative errno value.  The number
+   of io-&gt;bytes transferred before the error is usually less
+   than requested, and can be nonzero.
+   (3) cancellation, a type of error with status -ECONNRESET that
+   is initiated by <code class="function">usb_sg_cancel</code>.
+   </p><p>
+
+   When this function returns, all memory allocated through <code class="function">usb_sg_init</code> or
+   this call will have been freed.  The request block parameter may still be
+   passed to <code class="function">usb_sg_cancel</code>, or it may be freed.  It could also be
+   reinitialized and then reused.
+</p></div><div class="refsect1"><a name="idm3123"></a><h2>Data Transfer Rates</h2><p>
+   </p><p>
+
+   Bulk transfers are valid for full or high speed endpoints.
+   The best full speed data rate is 19 packets of 64 bytes each
+   per frame, or 1216 bytes per millisecond.
+   The best high speed data rate is 13 packets of 512 bytes each
+   per microframe, or 52 KBytes per millisecond.
+   </p><p>
+
+   The reason to use interrupt transfers through this API would most likely
+   be to reserve high speed bandwidth, where up to 24 KBytes per millisecond
+   could be transferred.  That capability is less useful for low or full
+   speed interrupt endpoints, which allow at most one packet per millisecond,
+   of at most 8 or 64 bytes (respectively).
+   </p><p>
+
+   It is not necessary to call this function to reserve bandwidth for devices
+   under an xHCI host controller, as the bandwidth is reserved when the
+   configuration or interface alt setting is selected.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-sg-init.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-sg-cancel.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_sg_init</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_sg_cancel</span></td></tr></table></div></body></html>

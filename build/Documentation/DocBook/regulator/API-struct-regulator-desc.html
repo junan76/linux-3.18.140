@@ -1,0 +1,118 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct regulator_desc</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Voltage and current regulator API"><link rel="up" href="api.html" title="Chapter 5. API reference"><link rel="prev" href="API-struct-regulator-ops.html" title="struct regulator_ops"><link rel="next" href="API-struct-regulator-config.html" title="struct regulator_config"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct regulator_desc</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-regulator-ops.html">Prev</a> </td><th width="60%" align="center">Chapter 5. API reference</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-regulator-config.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-regulator-desc"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct regulator_desc — 
+     Static regulator descriptor
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct regulator_desc {
+  const char * name;
+  const char * supply_name;
+  const char * of_match;
+  const char * regulators_node;
+  int id;
+  bool continuous_voltage_range;
+  unsigned n_voltages;
+  const struct regulator_ops * ops;
+  int irq;
+  enum regulator_type type;
+  struct module * owner;
+  unsigned int min_uV;
+  unsigned int uV_step;
+  unsigned int linear_min_sel;
+  int fixed_uV;
+  unsigned int ramp_delay;
+  const struct regulator_linear_range * linear_ranges;
+  int n_linear_ranges;
+  const unsigned int * volt_table;
+  unsigned int vsel_reg;
+  unsigned int vsel_mask;
+  unsigned int apply_reg;
+  unsigned int apply_bit;
+  unsigned int enable_reg;
+  unsigned int enable_mask;
+  unsigned int enable_val;
+  unsigned int disable_val;
+  bool enable_is_inverted;
+  unsigned int bypass_reg;
+  unsigned int bypass_mask;
+  unsigned int bypass_val_on;
+  unsigned int bypass_val_off;
+  unsigned int enable_time;
+  unsigned int off_on_delay;
+};  </pre></div><div class="refsect1"><a name="idm572"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">name</span></dt><dd><p>
+   Identifying name for the regulator.
+      </p></dd><dt><span class="term">supply_name</span></dt><dd><p>
+   Identifying the regulator supply
+      </p></dd><dt><span class="term">of_match</span></dt><dd><p>
+   Name used to identify regulator in DT.
+      </p></dd><dt><span class="term">regulators_node</span></dt><dd><p>
+   Name of node containing regulator definitions in DT.
+      </p></dd><dt><span class="term">id</span></dt><dd><p>
+   Numerical identifier for the regulator.
+      </p></dd><dt><span class="term">continuous_voltage_range</span></dt><dd><p>
+   Indicates if the regulator can set any
+   voltage within constrains range.
+      </p></dd><dt><span class="term">n_voltages</span></dt><dd><p>
+   Number of selectors available for ops.<code class="function">list_voltage</code>.
+      </p></dd><dt><span class="term">ops</span></dt><dd><p>
+   Regulator operations table.
+      </p></dd><dt><span class="term">irq</span></dt><dd><p>
+   Interrupt number for the regulator.
+      </p></dd><dt><span class="term">type</span></dt><dd><p>
+   Indicates if the regulator is a voltage or current regulator.
+      </p></dd><dt><span class="term">owner</span></dt><dd><p>
+   Module providing the regulator, used for refcounting.
+      </p></dd><dt><span class="term">min_uV</span></dt><dd><p>
+   Voltage given by the lowest selector (if linear mapping)
+      </p></dd><dt><span class="term">uV_step</span></dt><dd><p>
+   Voltage increase with each selector (if linear mapping)
+      </p></dd><dt><span class="term">linear_min_sel</span></dt><dd><p>
+   Minimal selector for starting linear mapping
+      </p></dd><dt><span class="term">fixed_uV</span></dt><dd><p>
+   Fixed voltage of rails.
+      </p></dd><dt><span class="term">ramp_delay</span></dt><dd><p>
+   Time to settle down after voltage change (unit: uV/us)
+      </p></dd><dt><span class="term">linear_ranges</span></dt><dd><p>
+   A constant table of possible voltage ranges.
+      </p></dd><dt><span class="term">n_linear_ranges</span></dt><dd><p>
+   Number of entries in the <em class="parameter"><code>linear_ranges</code></em> table.
+      </p></dd><dt><span class="term">volt_table</span></dt><dd><p>
+   Voltage mapping table (if table based mapping)
+      </p></dd><dt><span class="term">vsel_reg</span></dt><dd><p>
+   Register for selector when using regulator_regmap_X_voltage_
+      </p></dd><dt><span class="term">vsel_mask</span></dt><dd><p>
+   Mask for register bitfield used for selector
+      </p></dd><dt><span class="term">apply_reg</span></dt><dd><p>
+   Register for initiate voltage change on the output when
+   using regulator_set_voltage_sel_regmap
+      </p></dd><dt><span class="term">apply_bit</span></dt><dd><p>
+   Register bitfield used for initiate voltage change on the
+   output when using regulator_set_voltage_sel_regmap
+      </p></dd><dt><span class="term">enable_reg</span></dt><dd><p>
+   Register for control when using regmap enable/disable ops
+      </p></dd><dt><span class="term">enable_mask</span></dt><dd><p>
+   Mask for control when using regmap enable/disable ops
+      </p></dd><dt><span class="term">enable_val</span></dt><dd><p>
+   Enabling value for control when using regmap enable/disable ops
+      </p></dd><dt><span class="term">disable_val</span></dt><dd><p>
+   Disabling value for control when using regmap enable/disable ops
+      </p></dd><dt><span class="term">enable_is_inverted</span></dt><dd><p>
+   A flag to indicate set enable_mask bits to disable
+   when using regulator_enable_regmap and friends APIs.
+      </p></dd><dt><span class="term">bypass_reg</span></dt><dd><p>
+   Register for control when using regmap set_bypass
+      </p></dd><dt><span class="term">bypass_mask</span></dt><dd><p>
+   Mask for control when using regmap set_bypass
+      </p></dd><dt><span class="term">bypass_val_on</span></dt><dd><p>
+   Enabling value for control when using regmap set_bypass
+      </p></dd><dt><span class="term">bypass_val_off</span></dt><dd><p>
+   Disabling value for control when using regmap set_bypass
+      </p></dd><dt><span class="term">enable_time</span></dt><dd><p>
+   Time taken for initial enable of regulator (in uS).
+      </p></dd><dt><span class="term">off_on_delay</span></dt><dd><p>
+   guard time (in uS), before re-enabling a regulator
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm713"></a><h2>Description</h2><p>
+   </p><p>
+
+   Each regulator registered with the core is described with a
+   structure of this type and a struct regulator_config.  This
+   structure contains the non-varying parts of the regulator
+   description.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-regulator-ops.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="api.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-regulator-config.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct regulator_ops</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct regulator_config</span></td></tr></table></div></body></html>

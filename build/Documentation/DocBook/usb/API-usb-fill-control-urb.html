@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_fill_control_urb</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="hostside.html" title="Chapter 4. Host-Side Data Types and Macros"><link rel="prev" href="API-struct-urb.html" title="struct urb"><link rel="next" href="API-usb-fill-bulk-urb.html" title="usb_fill_bulk_urb"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_fill_control_urb</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-urb.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Host-Side Data Types and Macros</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-fill-bulk-urb.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-fill-control-urb"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_fill_control_urb — 
+     initializes a control urb
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">usb_fill_control_urb </b>(</code></td><td>struct urb * <var class="pdparam">urb</var>, </td></tr><tr><td> </td><td>struct usb_device * <var class="pdparam">dev</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">pipe</var>, </td></tr><tr><td> </td><td>unsigned char * <var class="pdparam">setup_packet</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">transfer_buffer</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">buffer_length</var>, </td></tr><tr><td> </td><td>usb_complete_t <var class="pdparam">complete_fn</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">context</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1621"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>urb</code></em></span></dt><dd><p>
+     pointer to the urb to initialize.
+    </p></dd><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     pointer to the struct usb_device for this urb.
+    </p></dd><dt><span class="term"><em class="parameter"><code>pipe</code></em></span></dt><dd><p>
+     the endpoint pipe
+    </p></dd><dt><span class="term"><em class="parameter"><code>setup_packet</code></em></span></dt><dd><p>
+     pointer to the setup_packet buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>transfer_buffer</code></em></span></dt><dd><p>
+     pointer to the transfer buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>buffer_length</code></em></span></dt><dd><p>
+     length of the transfer buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>complete_fn</code></em></span></dt><dd><p>
+     pointer to the usb_complete_t function
+    </p></dd><dt><span class="term"><em class="parameter"><code>context</code></em></span></dt><dd><p>
+     what to set the urb context to.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1664"></a><h2>Description</h2><p>
+   Initializes a control urb with the proper information needed to submit
+   it to a device.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-urb.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="hostside.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-fill-bulk-urb.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct urb</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_fill_bulk_urb</span></td></tr></table></div></body></html>

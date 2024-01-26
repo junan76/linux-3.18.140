@@ -1,0 +1,50 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>futex_wait_requeue_pi</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="apiref-futex.html" title="Chapter 12. Futex API reference"><link rel="prev" href="API-handle-early-requeue-pi-wakeup.html" title="handle_early_requeue_pi_wakeup"><link rel="next" href="API-sys-set-robust-list.html" title="sys_set_robust_list"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">futex_wait_requeue_pi</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-handle-early-requeue-pi-wakeup.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Futex API reference</th><td width="20%" align="right"> <a accesskey="n" href="API-sys-set-robust-list.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-futex-wait-requeue-pi"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>futex_wait_requeue_pi — 
+     Wait on uaddr and take uaddr2
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">futex_wait_requeue_pi </b>(</code></td><td>u32 __user * <var class="pdparam">uaddr</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">flags</var>, </td></tr><tr><td> </td><td>u32 <var class="pdparam">val</var>, </td></tr><tr><td> </td><td>ktime_t * <var class="pdparam">abs_time</var>, </td></tr><tr><td> </td><td>u32 <var class="pdparam">bitset</var>, </td></tr><tr><td> </td><td>u32 __user * <var class="pdparam">uaddr2</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1776"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>uaddr</code></em></span></dt><dd><p>
+     the futex we initially wait on (non-pi)
+    </p></dd><dt><span class="term"><em class="parameter"><code>flags</code></em></span></dt><dd><p>
+     futex flags (FLAGS_SHARED, FLAGS_CLOCKRT, etc.), they must be
+     the same type, no requeueing from private to shared, etc.
+    </p></dd><dt><span class="term"><em class="parameter"><code>val</code></em></span></dt><dd><p>
+     the expected value of uaddr
+    </p></dd><dt><span class="term"><em class="parameter"><code>abs_time</code></em></span></dt><dd><p>
+     absolute timeout
+    </p></dd><dt><span class="term"><em class="parameter"><code>bitset</code></em></span></dt><dd><p>
+     32 bit wakeup bitset set by userspace, defaults to all
+    </p></dd><dt><span class="term"><em class="parameter"><code>uaddr2</code></em></span></dt><dd><p>
+     the pi futex we will take prior to returning to user-space
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1809"></a><h2>Description</h2><p>
+   The caller will wait on uaddr and will be requeued by <code class="function">futex_requeue</code> to
+   uaddr2 which must be PI aware and unique from uaddr.  Normal wakeup will wake
+   on uaddr2 and complete the acquisition of the rt_mutex prior to returning to
+   userspace.  This ensures the rt_mutex maintains an owner when it has waiters;
+   without one, the pi logic would not know which task to boost/deboost, if
+   there was a need to.
+   </p><p>
+
+   We call schedule in <code class="function">futex_wait_queue_me</code> when we enqueue and return there
+   via the following--
+   1) wakeup on uaddr2 after an atomic lock acquisition by <code class="function">futex_requeue</code>
+   2) wakeup on uaddr2 after a requeue
+   3) signal
+   4) timeout
+   </p><p>
+
+   If 3, cleanup and return -ERESTARTNOINTR.
+   </p><p>
+
+   If 2, we may then block on trying to take the rt_mutex and return via:
+   5) successful lock
+   6) signal
+   7) timeout
+   8) other lock acquisition failure
+   </p><p>
+
+   If 6, return -EWOULDBLOCK (restarting the syscall would do the same).
+   </p><p>
+
+   If 4 or 7, we cleanup and return with -ETIMEDOUT.
+</p></div><div class="refsect1"><a name="idm1820"></a><h2>Return</h2><p>
+   0 - On success;
+   &lt;0 - On error
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-handle-early-requeue-pi-wakeup.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="apiref-futex.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-sys-set-robust-list.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">handle_early_requeue_pi_wakeup</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">sys_set_robust_list</span></td></tr></table></div></body></html>

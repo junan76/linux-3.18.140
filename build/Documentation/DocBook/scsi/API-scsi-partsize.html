@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>scsi_partsize</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="mid_layer.html#scsicam.c" title="drivers/scsi/scsicam.c"><link rel="prev" href="API-scsicam-bios-param.html" title="scsicam_bios_param"><link rel="next" href="API-scsi-schedule-eh.html" title="scsi_schedule_eh"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">scsi_partsize</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-scsicam-bios-param.html">Prev</a> </td><th width="60%" align="center">drivers/scsi/scsicam.c</th><td width="20%" align="right"> <a accesskey="n" href="API-scsi-schedule-eh.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-scsi-partsize"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>scsi_partsize — 
+     Parse cylinders/heads/sectors from PC partition table
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">scsi_partsize </b>(</code></td><td>unsigned char * <var class="pdparam">buf</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">capacity</var>, </td></tr><tr><td> </td><td>unsigned int * <var class="pdparam">cyls</var>, </td></tr><tr><td> </td><td>unsigned int * <var class="pdparam">hds</var>, </td></tr><tr><td> </td><td>unsigned int * <var class="pdparam">secs</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm917"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>buf</code></em></span></dt><dd><p>
+     partition table, see <code class="function">scsi_bios_ptable</code>
+    </p></dd><dt><span class="term"><em class="parameter"><code>capacity</code></em></span></dt><dd><p>
+     size of the disk in sectors
+    </p></dd><dt><span class="term"><em class="parameter"><code>cyls</code></em></span></dt><dd><p>
+     put cylinders here
+    </p></dd><dt><span class="term"><em class="parameter"><code>hds</code></em></span></dt><dd><p>
+     put heads here
+    </p></dd><dt><span class="term"><em class="parameter"><code>secs</code></em></span></dt><dd><p>
+     put sectors here
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm946"></a><h2>Description</h2><p>
+   determine the BIOS mapping/geometry used to create the partition
+   table, storing the results in *cyls, *hds, and *secs 
+</p></div><div class="refsect1"><a name="idm949"></a><h2>Returns</h2><p>
+   -1 on failure, 0 on success.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-scsicam-bios-param.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="mid_layer.html#scsicam.c">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-scsi-schedule-eh.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">scsicam_bios_param</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">scsi_schedule_eh</span></td></tr></table></div></body></html>

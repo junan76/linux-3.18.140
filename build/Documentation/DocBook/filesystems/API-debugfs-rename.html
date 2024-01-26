@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>debugfs_rename</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="debugfs.html#debugfs_interface" title="debugfs interface"><link rel="prev" href="API-debugfs-remove-recursive.html" title="debugfs_remove_recursive"><link rel="next" href="API-debugfs-initialized.html" title="debugfs_initialized"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">debugfs_rename</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-debugfs-remove-recursive.html">Prev</a> </td><th width="60%" align="center">debugfs interface</th><td width="20%" align="right"> <a accesskey="n" href="API-debugfs-initialized.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-debugfs-rename"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>debugfs_rename — 
+     rename a file/directory in the debugfs filesystem
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct dentry * <b class="fsfunc">debugfs_rename </b>(</code></td><td>struct dentry * <var class="pdparam">old_dir</var>, </td></tr><tr><td> </td><td>struct dentry * <var class="pdparam">old_dentry</var>, </td></tr><tr><td> </td><td>struct dentry * <var class="pdparam">new_dir</var>, </td></tr><tr><td> </td><td>const char * <var class="pdparam">new_name</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9260"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>old_dir</code></em></span></dt><dd><p>
+     a pointer to the parent dentry for the renamed object. This
+     should be a directory dentry.
+    </p></dd><dt><span class="term"><em class="parameter"><code>old_dentry</code></em></span></dt><dd><p>
+     dentry of an object to be renamed.
+    </p></dd><dt><span class="term"><em class="parameter"><code>new_dir</code></em></span></dt><dd><p>
+     a pointer to the parent dentry where the object should be
+     moved. This should be a directory dentry.
+    </p></dd><dt><span class="term"><em class="parameter"><code>new_name</code></em></span></dt><dd><p>
+     a pointer to a string containing the target name.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9283"></a><h2>Description</h2><p>
+   This function renames a file/directory in debugfs.  The target must not
+   exist for rename to succeed.
+   </p><p>
+
+   This function will return a pointer to old_dentry (which is updated to
+   reflect renaming) if it succeeds. If an error occurs, <code class="constant">NULL</code> will be
+   returned.
+   </p><p>
+
+   If debugfs is not enabled in the kernel, the value -<code class="constant">ENODEV</code> will be
+   returned.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-debugfs-remove-recursive.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="debugfs.html#debugfs_interface">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-debugfs-initialized.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">debugfs_remove_recursive</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">debugfs_initialized</span></td></tr></table></div></body></html>

@@ -1,0 +1,348 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Runtime Pointer - The Chest of PCM Information</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="pcm-interface.html" title="Chapter 5. PCM Interface"><link rel="prev" href="pcm-interface-destructor.html" title="... And the Destructor?"><link rel="next" href="pcm-interface-operators.html" title="Operators"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Runtime Pointer - The Chest of PCM Information</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pcm-interface-destructor.html">Prev</a> </td><th width="60%" align="center">Chapter 5. PCM Interface</th><td width="20%" align="right"> <a accesskey="n" href="pcm-interface-operators.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pcm-interface-runtime"></a>Runtime Pointer - The Chest of PCM Information</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="pcm-interface-runtime.html#pcm-interface-runtime-hw">Hardware Description</a></span></dt><dt><span class="section"><a href="pcm-interface-runtime.html#pcm-interface-runtime-config">PCM Configurations</a></span></dt><dt><span class="section"><a href="pcm-interface-runtime.html#pcm-interface-runtime-dma">DMA Buffer Information</a></span></dt><dt><span class="section"><a href="pcm-interface-runtime.html#pcm-interface-runtime-status">Running Status</a></span></dt><dt><span class="section"><a href="pcm-interface-runtime.html#pcm-interface-runtime-private">Private Data</a></span></dt><dt><span class="section"><a href="pcm-interface-runtime.html#pcm-interface-runtime-intr">Interrupt Callbacks</a></span></dt></dl></div><p>
+	  When the PCM substream is opened, a PCM runtime instance is
+	allocated and assigned to the substream. This pointer is
+	accessible via <code class="constant">substream-&gt;runtime</code>.
+	This runtime pointer holds most information you need
+	to control the PCM: the copy of hw_params and sw_params configurations, the buffer
+	pointers, mmap records, spinlocks, etc.
+	</p><p>
+	The definition of runtime instance is found in
+	<code class="filename">&lt;sound/pcm.h&gt;</code>.  Here are
+       the contents of this file:
+          </p><div class="informalexample"><pre class="programlisting">
+
+struct _snd_pcm_runtime {
+	/* -- Status -- */
+	struct snd_pcm_substream *trigger_master;
+	snd_timestamp_t trigger_tstamp;	/* trigger timestamp */
+	int overrange;
+	snd_pcm_uframes_t avail_max;
+	snd_pcm_uframes_t hw_ptr_base;	/* Position at buffer restart */
+	snd_pcm_uframes_t hw_ptr_interrupt; /* Position at interrupt time*/
+
+	/* -- HW params -- */
+	snd_pcm_access_t access;	/* access mode */
+	snd_pcm_format_t format;	/* SNDRV_PCM_FORMAT_* */
+	snd_pcm_subformat_t subformat;	/* subformat */
+	unsigned int rate;		/* rate in Hz */
+	unsigned int channels;		/* channels */
+	snd_pcm_uframes_t period_size;	/* period size */
+	unsigned int periods;		/* periods */
+	snd_pcm_uframes_t buffer_size;	/* buffer size */
+	unsigned int tick_time;		/* tick time */
+	snd_pcm_uframes_t min_align;	/* Min alignment for the format */
+	size_t byte_align;
+	unsigned int frame_bits;
+	unsigned int sample_bits;
+	unsigned int info;
+	unsigned int rate_num;
+	unsigned int rate_den;
+
+	/* -- SW params -- */
+	struct timespec tstamp_mode;	/* mmap timestamp is updated */
+  	unsigned int period_step;
+	unsigned int sleep_min;		/* min ticks to sleep */
+	snd_pcm_uframes_t start_threshold;
+	snd_pcm_uframes_t stop_threshold;
+	snd_pcm_uframes_t silence_threshold; /* Silence filling happens when
+						noise is nearest than this */
+	snd_pcm_uframes_t silence_size;	/* Silence filling size */
+	snd_pcm_uframes_t boundary;	/* pointers wrap point */
+
+	snd_pcm_uframes_t silenced_start;
+	snd_pcm_uframes_t silenced_size;
+
+	snd_pcm_sync_id_t sync;		/* hardware synchronization ID */
+
+	/* -- mmap -- */
+	volatile struct snd_pcm_mmap_status *status;
+	volatile struct snd_pcm_mmap_control *control;
+	atomic_t mmap_count;
+
+	/* -- locking / scheduling -- */
+	spinlock_t lock;
+	wait_queue_head_t sleep;
+	struct timer_list tick_timer;
+	struct fasync_struct *fasync;
+
+	/* -- private section -- */
+	void *private_data;
+	void (*private_free)(struct snd_pcm_runtime *runtime);
+
+	/* -- hardware description -- */
+	struct snd_pcm_hardware hw;
+	struct snd_pcm_hw_constraints hw_constraints;
+
+	/* -- interrupt callbacks -- */
+	void (*transfer_ack_begin)(struct snd_pcm_substream *substream);
+	void (*transfer_ack_end)(struct snd_pcm_substream *substream);
+
+	/* -- timer -- */
+	unsigned int timer_resolution;	/* timer resolution */
+
+	/* -- DMA -- */           
+	unsigned char *dma_area;	/* DMA area */
+	dma_addr_t dma_addr;		/* physical bus address (not accessible from main CPU) */
+	size_t dma_bytes;		/* size of DMA area */
+
+	struct snd_dma_buffer *dma_buffer_p;	/* allocated buffer */
+
+#if defined(CONFIG_SND_PCM_OSS) || defined(CONFIG_SND_PCM_OSS_MODULE)
+	/* -- OSS things -- */
+	struct snd_pcm_oss_runtime oss;
+#endif
+};
+
+            </pre></div><p>
+	</p><p>
+	  For the operators (callbacks) of each sound driver, most of
+	these records are supposed to be read-only.  Only the PCM
+	middle-layer changes / updates them.  The exceptions are
+	the hardware description (hw), interrupt callbacks
+	(transfer_ack_xxx), DMA buffer information, and the private
+	data.  Besides, if you use the standard buffer allocation
+	method via <code class="function">snd_pcm_lib_malloc_pages()</code>,
+	you don't need to set the DMA buffer information by yourself.
+	</p><p>
+	In the sections below, important records are explained.
+	</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pcm-interface-runtime-hw"></a>Hardware Description</h3></div></div></div><p>
+	  The hardware descriptor (struct <span class="structname">snd_pcm_hardware</span>)
+	contains the definitions of the fundamental hardware
+	configuration.  Above all, you'll need to define this in
+	<a class="link" href="pcm-interface-operators.html#pcm-interface-operators-open-callback" title="open callback"><em class="citetitle">
+	the open callback</em></a>.
+	Note that the runtime instance holds the copy of the
+	descriptor, not the pointer to the existing descriptor.  That
+	is, in the open callback, you can modify the copied descriptor
+	(<code class="constant">runtime-&gt;hw</code>) as you need.  For example, if the maximum
+	number of channels is 1 only on some chip models, you can
+	still use the same hardware descriptor and change the
+	channels_max later:
+          </p><div class="informalexample"><pre class="programlisting">
+
+          struct snd_pcm_runtime *runtime = substream-&gt;runtime;
+          ...
+          runtime-&gt;hw = snd_mychip_playback_hw; /* common definition */
+          if (chip-&gt;model == VERY_OLD_ONE)
+                  runtime-&gt;hw.channels_max = 1;
+
+            </pre></div><p>
+	</p><p>
+	  Typically, you'll have a hardware descriptor as below:
+          </p><div class="informalexample"><pre class="programlisting">
+
+  static struct snd_pcm_hardware snd_mychip_playback_hw = {
+          .info = (SNDRV_PCM_INFO_MMAP |
+                   SNDRV_PCM_INFO_INTERLEAVED |
+                   SNDRV_PCM_INFO_BLOCK_TRANSFER |
+                   SNDRV_PCM_INFO_MMAP_VALID),
+          .formats =          SNDRV_PCM_FMTBIT_S16_LE,
+          .rates =            SNDRV_PCM_RATE_8000_48000,
+          .rate_min =         8000,
+          .rate_max =         48000,
+          .channels_min =     2,
+          .channels_max =     2,
+          .buffer_bytes_max = 32768,
+          .period_bytes_min = 4096,
+          .period_bytes_max = 32768,
+          .periods_min =      1,
+          .periods_max =      1024,
+  };
+
+            </pre></div><p>
+        </p><p>
+	</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          The <em class="structfield"><code>info</code></em> field contains the type and
+        capabilities of this pcm. The bit flags are defined in
+        <code class="filename">&lt;sound/asound.h&gt;</code> as
+        <code class="constant">SNDRV_PCM_INFO_XXX</code>. Here, at least, you
+        have to specify whether the mmap is supported and which
+        interleaved format is supported.
+        When the hardware supports mmap, add the
+        <code class="constant">SNDRV_PCM_INFO_MMAP</code> flag here. When the
+        hardware supports the interleaved or the non-interleaved
+        formats, <code class="constant">SNDRV_PCM_INFO_INTERLEAVED</code> or
+        <code class="constant">SNDRV_PCM_INFO_NONINTERLEAVED</code> flag must
+        be set, respectively. If both are supported, you can set both,
+        too. 
+        </p><p>
+          In the above example, <code class="constant">MMAP_VALID</code> and
+        <code class="constant">BLOCK_TRANSFER</code> are specified for the OSS mmap
+        mode. Usually both are set. Of course,
+        <code class="constant">MMAP_VALID</code> is set only if the mmap is
+        really supported. 
+        </p><p>
+          The other possible flags are
+        <code class="constant">SNDRV_PCM_INFO_PAUSE</code> and
+        <code class="constant">SNDRV_PCM_INFO_RESUME</code>. The
+        <code class="constant">PAUSE</code> bit means that the pcm supports the
+        <span class="quote">“<span class="quote">pause</span>”</span> operation, while the
+        <code class="constant">RESUME</code> bit means that the pcm supports
+        the full <span class="quote">“<span class="quote">suspend/resume</span>”</span> operation.
+	If the <code class="constant">PAUSE</code> flag is set,
+	the <em class="structfield"><code>trigger</code></em> callback below
+        must handle the corresponding (pause push/release) commands.
+	The suspend/resume trigger commands can be defined even without
+	the <code class="constant">RESUME</code> flag.  See <a class="link" href="power-management.html" title="Chapter 13. Power Management"><em class="citetitle">
+	Power Management</em></a> section for details.
+        </p><p>
+	  When the PCM substreams can be synchronized (typically,
+	synchronized start/stop of a playback and a capture streams),
+	you can give <code class="constant">SNDRV_PCM_INFO_SYNC_START</code>,
+	too.  In this case, you'll need to check the linked-list of
+	PCM substreams in the trigger callback.  This will be
+	described in the later section.
+	</p></li><li class="listitem"><p>
+          <em class="structfield"><code>formats</code></em> field contains the bit-flags
+        of supported formats (<code class="constant">SNDRV_PCM_FMTBIT_XXX</code>).
+        If the hardware supports more than one format, give all or'ed
+        bits.  In the example above, the signed 16bit little-endian
+        format is specified.
+        </p></li><li class="listitem"><p>
+        <em class="structfield"><code>rates</code></em> field contains the bit-flags of
+        supported rates (<code class="constant">SNDRV_PCM_RATE_XXX</code>).
+        When the chip supports continuous rates, pass
+        <code class="constant">CONTINUOUS</code> bit additionally.
+        The pre-defined rate bits are provided only for typical
+	rates. If your chip supports unconventional rates, you need to add
+        the <code class="constant">KNOT</code> bit and set up the hardware
+        constraint manually (explained later).
+        </p></li><li class="listitem"><p>
+	<em class="structfield"><code>rate_min</code></em> and
+	<em class="structfield"><code>rate_max</code></em> define the minimum and
+	maximum sample rate.  This should correspond somehow to
+	<em class="structfield"><code>rates</code></em> bits.
+	</p></li><li class="listitem"><p>
+	<em class="structfield"><code>channel_min</code></em> and
+	<em class="structfield"><code>channel_max</code></em> 
+	define, as you might already expected, the minimum and maximum
+	number of channels.
+	</p></li><li class="listitem"><p>
+	<em class="structfield"><code>buffer_bytes_max</code></em> defines the
+	maximum buffer size in bytes.  There is no
+	<em class="structfield"><code>buffer_bytes_min</code></em> field, since
+	it can be calculated from the minimum period size and the
+	minimum number of periods.
+	Meanwhile, <em class="structfield"><code>period_bytes_min</code></em> and
+	define the minimum and maximum size of the period in bytes.
+	<em class="structfield"><code>periods_max</code></em> and
+	<em class="structfield"><code>periods_min</code></em> define the maximum and
+	minimum number of periods in the buffer.
+        </p><p>
+	The <span class="quote">“<span class="quote">period</span>”</span> is a term that corresponds to
+	a fragment in the OSS world. The period defines the size at
+	which a PCM interrupt is generated. This size strongly
+	depends on the hardware. 
+	Generally, the smaller period size will give you more
+	interrupts, that is, more controls. 
+	In the case of capture, this size defines the input latency.
+	On the other hand, the whole buffer size defines the
+	output latency for the playback direction.
+	</p></li><li class="listitem"><p>
+	There is also a field <em class="structfield"><code>fifo_size</code></em>.
+	This specifies the size of the hardware FIFO, but currently it
+	is neither used in the driver nor in the alsa-lib.  So, you
+	can ignore this field.
+	</p></li></ul></div><p>
+	</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pcm-interface-runtime-config"></a>PCM Configurations</h3></div></div></div><p>
+	Ok, let's go back again to the PCM runtime records.
+	The most frequently referred records in the runtime instance are
+	the PCM configurations.
+	The PCM configurations are stored in the runtime instance
+	after the application sends <span class="type">hw_params</span> data via
+	alsa-lib.  There are many fields copied from hw_params and
+	sw_params structs.  For example,
+	<em class="structfield"><code>format</code></em> holds the format type
+	chosen by the application.  This field contains the enum value
+	<code class="constant">SNDRV_PCM_FORMAT_XXX</code>.
+	</p><p>
+	One thing to be noted is that the configured buffer and period
+	sizes are stored in <span class="quote">“<span class="quote">frames</span>”</span> in the runtime.
+        In the ALSA world, 1 frame = channels * samples-size.
+	For conversion between frames and bytes, you can use the
+	<code class="function">frames_to_bytes()</code> and
+          <code class="function">bytes_to_frames()</code> helper functions. 
+          </p><div class="informalexample"><pre class="programlisting">
+
+  period_bytes = frames_to_bytes(runtime, runtime-&gt;period_size);
+
+            </pre></div><p>
+        </p><p>
+	Also, many software parameters (sw_params) are
+	stored in frames, too.  Please check the type of the field.
+	<span class="type">snd_pcm_uframes_t</span> is for the frames as unsigned
+	integer while <span class="type">snd_pcm_sframes_t</span> is for the frames
+	as signed integer.
+	</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pcm-interface-runtime-dma"></a>DMA Buffer Information</h3></div></div></div><p>
+	The DMA buffer is defined by the following four fields,
+	<em class="structfield"><code>dma_area</code></em>,
+	<em class="structfield"><code>dma_addr</code></em>,
+	<em class="structfield"><code>dma_bytes</code></em> and
+	<em class="structfield"><code>dma_private</code></em>.
+	The <em class="structfield"><code>dma_area</code></em> holds the buffer
+	pointer (the logical address).  You can call
+	<code class="function">memcpy</code> from/to 
+	this pointer.  Meanwhile, <em class="structfield"><code>dma_addr</code></em>
+	holds the physical address of the buffer.  This field is
+	specified only when the buffer is a linear buffer.
+	<em class="structfield"><code>dma_bytes</code></em> holds the size of buffer
+	in bytes.  <em class="structfield"><code>dma_private</code></em> is used for
+	the ALSA DMA allocator.
+	</p><p>
+	If you use a standard ALSA function,
+	<code class="function">snd_pcm_lib_malloc_pages()</code>, for
+	allocating the buffer, these fields are set by the ALSA middle
+	layer, and you should <span class="emphasis"><em>not</em></span> change them by
+	yourself.  You can read them but not write them.
+	On the other hand, if you want to allocate the buffer by
+	yourself, you'll need to manage it in hw_params callback.
+	At least, <em class="structfield"><code>dma_bytes</code></em> is mandatory.
+	<em class="structfield"><code>dma_area</code></em> is necessary when the
+	buffer is mmapped.  If your driver doesn't support mmap, this
+	field is not necessary.  <em class="structfield"><code>dma_addr</code></em>
+	is also optional.  You can use
+	<em class="structfield"><code>dma_private</code></em> as you like, too.
+	</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pcm-interface-runtime-status"></a>Running Status</h3></div></div></div><p>
+	The running status can be referred via <code class="constant">runtime-&gt;status</code>.
+	This is the pointer to the struct <span class="structname">snd_pcm_mmap_status</span>
+	record.  For example, you can get the current DMA hardware
+	pointer via <code class="constant">runtime-&gt;status-&gt;hw_ptr</code>.
+	</p><p>
+	The DMA application pointer can be referred via
+	<code class="constant">runtime-&gt;control</code>, which points to the
+	struct <span class="structname">snd_pcm_mmap_control</span> record.
+	However, accessing directly to this value is not recommended.
+	</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pcm-interface-runtime-private"></a>Private Data</h3></div></div></div><p>
+	You can allocate a record for the substream and store it in
+	<code class="constant">runtime-&gt;private_data</code>.  Usually, this
+	is done in
+	<a class="link" href="pcm-interface-operators.html#pcm-interface-operators-open-callback" title="open callback"><em class="citetitle">
+	the open callback</em></a>.
+	Don't mix this with <code class="constant">pcm-&gt;private_data</code>.
+	The <code class="constant">pcm-&gt;private_data</code> usually points to the
+	chip instance assigned statically at the creation of PCM, while the 
+	<code class="constant">runtime-&gt;private_data</code> points to a dynamic
+	data structure created at the PCM open callback.
+
+          </p><div class="informalexample"><pre class="programlisting">
+
+  static int snd_xxx_open(struct snd_pcm_substream *substream)
+  {
+          struct my_pcm_data *data;
+          ....
+          data = kmalloc(sizeof(*data), GFP_KERNEL);
+          substream-&gt;runtime-&gt;private_data = data;
+          ....
+  }
+
+            </pre></div><p>
+        </p><p>
+          The allocated object must be released in
+	<a class="link" href="pcm-interface-operators.html#pcm-interface-operators-open-callback" title="open callback"><em class="citetitle">
+	the close callback</em></a>.
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pcm-interface-runtime-intr"></a>Interrupt Callbacks</h3></div></div></div><p>
+	The field <em class="structfield"><code>transfer_ack_begin</code></em> and
+	<em class="structfield"><code>transfer_ack_end</code></em> are called at
+	the beginning and at the end of
+	<code class="function">snd_pcm_period_elapsed()</code>, respectively. 
+	</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pcm-interface-destructor.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pcm-interface.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="pcm-interface-operators.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">... And the Destructor? </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Operators</td></tr></table></div></body></html>

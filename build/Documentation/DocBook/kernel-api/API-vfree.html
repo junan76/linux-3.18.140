@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>vfree</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-unmap-kernel-range.html" title="unmap_kernel_range"><link rel="next" href="API-vunmap.html" title="vunmap"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">vfree</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-unmap-kernel-range.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-vunmap.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-vfree"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>vfree — 
+     release memory allocated by <code class="function">vmalloc</code>
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">vfree </b>(</code></td><td>const void * <var class="pdparam">addr</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm10151"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>addr</code></em></span></dt><dd><p>
+     memory base address
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm10159"></a><h2>Description</h2><p>
+   Free the virtually continuous memory area starting at <em class="parameter"><code>addr</code></em>, as
+   obtained from <code class="function">vmalloc</code>, <code class="function">vmalloc_32</code> or <code class="function">__vmalloc</code>. If <em class="parameter"><code>addr</code></em> is
+   NULL, no operation is performed.
+   </p><p>
+
+   Must not be called in NMI context (strictly speaking, only if we don't
+   have CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG, but making the calling
+   conventions for <code class="function">vfree</code> arch-depenedent would be a really bad idea)
+</p></div><div class="refsect1"><a name="idm10169"></a><h2>NOTE</h2><p>
+   assumes that the object at *addr has a size &gt;= sizeof(llist_node)
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-unmap-kernel-range.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-vunmap.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">unmap_kernel_range</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">vunmap</span></td></tr></table></div></body></html>

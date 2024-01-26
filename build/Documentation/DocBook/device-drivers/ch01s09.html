@@ -1,0 +1,106 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Kernel utility functions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="Basics.html" title="Chapter 1. Driver Basics"><link rel="prev" href="API-kset-create-and-add.html" title="kset_create_and_add"><link rel="next" href="API-upper-32-bits.html" title="upper_32_bits"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Kernel utility functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-kset-create-and-add.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Driver Basics</th><td width="20%" align="right"> <a accesskey="n" href="API-upper-32-bits.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm7894"></a>Kernel utility functions</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-upper-32-bits.html"><span class="phrase">upper_32_bits</span></a></span><span class="refpurpose"> — 
+  return bits 32-63 of a number
+ </span></dt><dt><span class="refentrytitle"><a href="API-lower-32-bits.html"><span class="phrase">lower_32_bits</span></a></span><span class="refpurpose"> — 
+     return bits 0-31 of a number
+ </span></dt><dt><span class="refentrytitle"><a href="API-might-sleep.html"><span class="phrase">might_sleep</span></a></span><span class="refpurpose"> — 
+     annotation for functions that can sleep
+ </span></dt><dt><span class="refentrytitle"><a href="API-reciprocal-scale.html"><span class="phrase">reciprocal_scale</span></a></span><span class="refpurpose"> — 
+     "scale" a value into range [0, ep_ro)
+ </span></dt><dt><span class="refentrytitle"><a href="API-kstrtoul.html"><span class="phrase">kstrtoul</span></a></span><span class="refpurpose"> — 
+     convert a string to an unsigned long
+ </span></dt><dt><span class="refentrytitle"><a href="API-kstrtol.html"><span class="phrase">kstrtol</span></a></span><span class="refpurpose"> — 
+     convert a string to a long
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-printk.html"><span class="phrase">trace_printk</span></a></span><span class="refpurpose"> — 
+     printf formatting in the ftrace buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-trace-puts.html"><span class="phrase">trace_puts</span></a></span><span class="refpurpose"> — 
+     write a string into the ftrace buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-min-not-zero.html"><span class="phrase">min_not_zero</span></a></span><span class="refpurpose"> — 
+     return the minimum that is _not_ zero, unless both are zero
+ </span></dt><dt><span class="refentrytitle"><a href="API-clamp.html"><span class="phrase">clamp</span></a></span><span class="refpurpose"> — 
+     return a value clamped to a given range with strict typechecking
+ </span></dt><dt><span class="refentrytitle"><a href="API-clamp-t.html"><span class="phrase">clamp_t</span></a></span><span class="refpurpose"> — 
+     return a value clamped to a given range using a given type
+ </span></dt><dt><span class="refentrytitle"><a href="API-clamp-val.html"><span class="phrase">clamp_val</span></a></span><span class="refpurpose"> — 
+     return a value clamped to a given range using val's type
+ </span></dt><dt><span class="refentrytitle"><a href="API-container-of.html"><span class="phrase">container_of</span></a></span><span class="refpurpose"> — 
+     cast a member of a structure out to the containing structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-printk.html"><span class="phrase">printk</span></a></span><span class="refpurpose"> — 
+  print a kernel message
+ </span></dt><dt><span class="refentrytitle"><a href="API-console-lock.html"><span class="phrase">console_lock</span></a></span><span class="refpurpose"> — 
+     lock the console system for exclusive use.
+ </span></dt><dt><span class="refentrytitle"><a href="API-console-trylock.html"><span class="phrase">console_trylock</span></a></span><span class="refpurpose"> — 
+     try to lock the console system for exclusive use.
+ </span></dt><dt><span class="refentrytitle"><a href="API-console-unlock.html"><span class="phrase">console_unlock</span></a></span><span class="refpurpose"> — 
+     unlock the console system
+ </span></dt><dt><span class="refentrytitle"><a href="API-console-conditional-schedule.html"><span class="phrase">console_conditional_schedule</span></a></span><span class="refpurpose"> — 
+     yield the CPU if required
+ </span></dt><dt><span class="refentrytitle"><a href="API-printk-timed-ratelimit.html"><span class="phrase">printk_timed_ratelimit</span></a></span><span class="refpurpose"> — 
+     caller-controlled printk ratelimiting
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmsg-dump-register.html"><span class="phrase">kmsg_dump_register</span></a></span><span class="refpurpose"> — 
+     register a kernel log dumper.
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmsg-dump-unregister.html"><span class="phrase">kmsg_dump_unregister</span></a></span><span class="refpurpose"> — 
+     unregister a kmsg dumper.
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmsg-dump-get-line.html"><span class="phrase">kmsg_dump_get_line</span></a></span><span class="refpurpose"> — 
+     retrieve one kmsg log line
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmsg-dump-get-buffer.html"><span class="phrase">kmsg_dump_get_buffer</span></a></span><span class="refpurpose"> — 
+     copy kmsg log lines
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmsg-dump-rewind.html"><span class="phrase">kmsg_dump_rewind</span></a></span><span class="refpurpose"> — 
+     reset the interator
+ </span></dt><dt><span class="refentrytitle"><a href="API-panic.html"><span class="phrase">panic</span></a></span><span class="refpurpose"> — 
+  halt the system
+ </span></dt><dt><span class="refentrytitle"><a href="API-add-taint.html"><span class="phrase">add_taint</span></a></span><span class="refpurpose"> — 
+   </span></dt><dt><span class="refentrytitle"><a href="re211.html">
+   ..//kernel/sys.c
+  </a></span><span class="refpurpose"> — 
+   Document generation inconsistency
+  </span></dt><dt><span class="refentrytitle"><a href="API-init-srcu-struct.html"><span class="phrase">init_srcu_struct</span></a></span><span class="refpurpose"> — 
+  initialize a sleep-RCU structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-cleanup-srcu-struct.html"><span class="phrase">cleanup_srcu_struct</span></a></span><span class="refpurpose"> — 
+     deconstruct a sleep-RCU structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-synchronize-srcu.html"><span class="phrase">synchronize_srcu</span></a></span><span class="refpurpose"> — 
+     wait for prior SRCU read-side critical-section completion
+ </span></dt><dt><span class="refentrytitle"><a href="API-synchronize-srcu-expedited.html"><span class="phrase">synchronize_srcu_expedited</span></a></span><span class="refpurpose"> — 
+     Brute-force SRCU grace period
+ </span></dt><dt><span class="refentrytitle"><a href="API-srcu-barrier.html"><span class="phrase">srcu_barrier</span></a></span><span class="refpurpose"> — 
+     Wait until all in-flight <code class="function">call_srcu</code> callbacks complete.
+ </span></dt><dt><span class="refentrytitle"><a href="API-srcu-batches-completed.html"><span class="phrase">srcu_batches_completed</span></a></span><span class="refpurpose"> — 
+     return batches completed.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rcu-idle-enter.html"><span class="phrase">rcu_idle_enter</span></a></span><span class="refpurpose"> — 
+  inform RCU that current CPU is entering idle
+ </span></dt><dt><span class="refentrytitle"><a href="API-rcu-idle-exit.html"><span class="phrase">rcu_idle_exit</span></a></span><span class="refpurpose"> — 
+     inform RCU that current CPU is leaving idle
+ </span></dt><dt><span class="refentrytitle"><a href="API-rcu-is-watching.html"><span class="phrase">rcu_is_watching</span></a></span><span class="refpurpose"> — 
+     see if RCU thinks that the current CPU is idle
+ </span></dt><dt><span class="refentrytitle"><a href="API-synchronize-sched.html"><span class="phrase">synchronize_sched</span></a></span><span class="refpurpose"> — 
+     wait until an rcu-sched grace period has elapsed.
+ </span></dt><dt><span class="refentrytitle"><a href="API-synchronize-rcu-bh.html"><span class="phrase">synchronize_rcu_bh</span></a></span><span class="refpurpose"> — 
+     wait until an rcu_bh grace period has elapsed.
+ </span></dt><dt><span class="refentrytitle"><a href="API-get-state-synchronize-rcu.html"><span class="phrase">get_state_synchronize_rcu</span></a></span><span class="refpurpose"> — 
+     Snapshot current RCU state
+ </span></dt><dt><span class="refentrytitle"><a href="API-cond-synchronize-rcu.html"><span class="phrase">cond_synchronize_rcu</span></a></span><span class="refpurpose"> — 
+     Conditionally wait for an RCU grace period
+ </span></dt><dt><span class="refentrytitle"><a href="API-synchronize-sched-expedited.html"><span class="phrase">synchronize_sched_expedited</span></a></span><span class="refpurpose"> — 
+     Brute-force RCU-sched grace period
+ </span></dt><dt><span class="refentrytitle"><a href="API-rcu-barrier-bh.html"><span class="phrase">rcu_barrier_bh</span></a></span><span class="refpurpose"> — 
+     Wait until all in-flight <code class="function">call_rcu_bh</code> callbacks complete.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rcu-barrier-sched.html"><span class="phrase">rcu_barrier_sched</span></a></span><span class="refpurpose"> — 
+     Wait for in-flight <code class="function">call_rcu_sched</code> callbacks.
+ </span></dt><dt><span class="refentrytitle"><a href="API-synchronize-rcu.html"><span class="phrase">synchronize_rcu</span></a></span><span class="refpurpose"> — 
+  wait until a grace period has elapsed.
+ </span></dt><dt><span class="refentrytitle"><a href="API-synchronize-rcu-expedited.html"><span class="phrase">synchronize_rcu_expedited</span></a></span><span class="refpurpose"> — 
+     Brute-force RCU grace period
+ </span></dt><dt><span class="refentrytitle"><a href="API-rcu-barrier.html"><span class="phrase">rcu_barrier</span></a></span><span class="refpurpose"> — 
+     Wait until all in-flight <code class="function">call_rcu</code> callbacks complete.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rcu-read-lock-held.html"><span class="phrase">rcu_read_lock_held</span></a></span><span class="refpurpose"> — 
+  might we be in RCU read-side critical section?
+ </span></dt><dt><span class="refentrytitle"><a href="API-rcu-read-lock-bh-held.html"><span class="phrase">rcu_read_lock_bh_held</span></a></span><span class="refpurpose"> — 
+     might we be in RCU-bh read-side critical section?
+ </span></dt><dt><span class="refentrytitle"><a href="API-init-rcu-head-on-stack.html"><span class="phrase">init_rcu_head_on_stack</span></a></span><span class="refpurpose"> — 
+     initialize on-stack rcu_head for debugobjects
+ </span></dt><dt><span class="refentrytitle"><a href="API-destroy-rcu-head-on-stack.html"><span class="phrase">destroy_rcu_head_on_stack</span></a></span><span class="refpurpose"> — 
+     destroy on-stack rcu_head for debugobjects
+ </span></dt><dt><span class="refentrytitle"><a href="API-synchronize-rcu-tasks.html"><span class="phrase">synchronize_rcu_tasks</span></a></span><span class="refpurpose"> — 
+     wait until an rcu-tasks grace period has elapsed.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rcu-barrier-tasks.html"><span class="phrase">rcu_barrier_tasks</span></a></span><span class="refpurpose"> — 
+     Wait for in-flight <code class="function">call_rcu_tasks</code> callbacks.
+ </span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-kset-create-and-add.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="Basics.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-upper-32-bits.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">kset_create_and_add</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">upper_32_bits</span></td></tr></table></div></body></html>

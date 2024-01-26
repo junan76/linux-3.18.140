@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct hsi_controller</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="hsi.html" title="Chapter 11. High Speed Synchronous Serial Interface (HSI)"><link rel="prev" href="API-struct-hsi-port.html" title="struct hsi_port"><link rel="next" href="API-hsi-id.html" title="hsi_id"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct hsi_controller</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-hsi-port.html">Prev</a> </td><th width="60%" align="center">Chapter 11. High Speed Synchronous Serial Interface (HSI)</th><td width="20%" align="right"> <a accesskey="n" href="API-hsi-id.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-hsi-controller"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct hsi_controller — 
+     HSI controller device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct hsi_controller {
+  struct device device;
+  struct module * owner;
+  unsigned int id;
+  unsigned int num_ports;
+  struct hsi_port ** port;
+};  </pre></div><div class="refsect1"><a name="idm44394"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">device</span></dt><dd><p>
+   Driver model representation of the device
+      </p></dd><dt><span class="term">owner</span></dt><dd><p>
+   Pointer to the module owning the controller
+      </p></dd><dt><span class="term">id</span></dt><dd><p>
+   HSI controller ID
+      </p></dd><dt><span class="term">num_ports</span></dt><dd><p>
+   Number of ports in the HSI controller
+      </p></dd><dt><span class="term">port</span></dt><dd><p>
+   Array of HSI ports
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-hsi-port.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="hsi.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-hsi-id.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct hsi_port</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">hsi_id</span></td></tr></table></div></body></html>

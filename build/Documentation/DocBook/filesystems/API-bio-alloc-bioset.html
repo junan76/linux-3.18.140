@@ -1,0 +1,40 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>bio_alloc_bioset</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="other_functions.html" title="Other Functions"><link rel="prev" href="API-bio-chain.html" title="bio_chain"><link rel="next" href="API-bio-put.html" title="bio_put"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">bio_alloc_bioset</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-bio-chain.html">Prev</a> </td><th width="60%" align="center">Other Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-bio-put.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-bio-alloc-bioset"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>bio_alloc_bioset — 
+     allocate a bio for I/O
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct bio * <b class="fsfunc">bio_alloc_bioset </b>(</code></td><td>gfp_t <var class="pdparam">gfp_mask</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">nr_iovecs</var>, </td></tr><tr><td> </td><td>struct bio_set * <var class="pdparam">bs</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4651"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>gfp_mask</code></em></span></dt><dd><p>
+     the GFP_ mask given to the slab allocator
+    </p></dd><dt><span class="term"><em class="parameter"><code>nr_iovecs</code></em></span></dt><dd><p>
+     number of iovecs to pre-allocate
+    </p></dd><dt><span class="term"><em class="parameter"><code>bs</code></em></span></dt><dd><p>
+     the bio_set to allocate from.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4669"></a><h2>Description</h2><p>
+   If <em class="parameter"><code>bs</code></em> is NULL, uses <code class="function">kmalloc</code> to allocate the bio; else the allocation is
+   backed by the <em class="parameter"><code>bs</code></em>'s mempool.
+   </p><p>
+
+   When <em class="parameter"><code>bs</code></em> is not NULL, if <code class="constant">__GFP_WAIT</code> is set then bio_alloc will always be
+   able to allocate a bio. This is due to the mempool guarantees. To make this
+   work, callers must never allocate more than 1 bio at a time from this pool.
+   Callers that need to allocate more than 1 bio must always submit the
+   previously allocated bio for IO before attempting to allocate a new one.
+   Failure to do so can cause deadlocks under memory pressure.
+   </p><p>
+
+   Note that when running under <code class="function">generic_make_request</code> (i.e. any block
+   driver), bios are not submitted until after you return - see the code in
+   <code class="function">generic_make_request</code> that converts recursion into iteration, to prevent
+   stack overflows.
+   </p><p>
+
+   This would normally mean allocating multiple bios under
+   <code class="function">generic_make_request</code> would be susceptible to deadlocks, but we have
+   deadlock avoidance code that resubmits any blocked bios from a rescuer
+   thread.
+   </p><p>
+
+   However, we do not guarantee forward progress for allocations from other
+   mempools. Doing multiple allocations from the same mempool under
+   <code class="function">generic_make_request</code> should be avoided - instead, use bio_set's front_pad
+   for per bio allocations.
+</p></div><div class="refsect1"><a name="idm4685"></a><h2>RETURNS</h2><p>
+   Pointer to new bio on success, NULL on failure.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-bio-chain.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="other_functions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-bio-put.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">bio_chain</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">bio_put</span></td></tr></table></div></body></html>

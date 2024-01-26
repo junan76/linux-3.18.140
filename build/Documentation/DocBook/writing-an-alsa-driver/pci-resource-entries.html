@@ -1,0 +1,87 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>PCI Entries</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="pci-resource.html" title="Chapter 4. PCI Resource Management"><link rel="prev" href="pci-resource-resource-allocation.html" title="Resource Allocation"><link rel="next" href="pcm-interface.html" title="Chapter 5. PCM Interface"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">PCI Entries</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pci-resource-resource-allocation.html">Prev</a> </td><th width="60%" align="center">Chapter 4. PCI Resource Management</th><td width="20%" align="right"> <a accesskey="n" href="pcm-interface.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pci-resource-entries"></a>PCI Entries</h2></div></div></div><p>
+        So far, so good. Let's finish the missing PCI
+      stuff. At first, we need a
+      <span class="structname">pci_device_id</span> table for this
+      chipset. It's a table of PCI vendor/device ID number, and some
+      masks. 
+      </p><p>
+        For example,
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  static struct pci_device_id snd_mychip_ids[] = {
+          { PCI_VENDOR_ID_FOO, PCI_DEVICE_ID_BAR,
+            PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0, },
+          ....
+          { 0, }
+  };
+  MODULE_DEVICE_TABLE(pci, snd_mychip_ids);
+
+          </pre></div><p>
+      </p><p>
+        The first and second fields of
+      the <span class="structname">pci_device_id</span> structure are the vendor and
+      device IDs. If you have no reason to filter the matching
+      devices, you can leave the remaining fields as above. The last
+      field of the <span class="structname">pci_device_id</span> struct contains
+      private data for this entry. You can specify any value here, for
+      example, to define specific operations for supported device IDs.
+      Such an example is found in the intel8x0 driver. 
+      </p><p>
+        The last entry of this list is the terminator. You must
+      specify this all-zero entry. 
+      </p><p>
+        Then, prepare the <span class="structname">pci_driver</span> record:
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  static struct pci_driver driver = {
+          .name = KBUILD_MODNAME,
+          .id_table = snd_mychip_ids,
+          .probe = snd_mychip_probe,
+          .remove = snd_mychip_remove,
+  };
+
+          </pre></div><p>
+      </p><p>
+        The <em class="structfield"><code>probe</code></em> and
+      <em class="structfield"><code>remove</code></em> functions have already
+      been defined in the previous sections.
+      The <em class="structfield"><code>name</code></em>
+      field is the name string of this device. Note that you must not
+      use a slash <span class="quote">“<span class="quote">/</span>”</span> in this string. 
+      </p><p>
+        And at last, the module entries:
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  static int __init alsa_card_mychip_init(void)
+  {
+          return pci_register_driver(&amp;driver);
+  }
+
+  static void __exit alsa_card_mychip_exit(void)
+  {
+          pci_unregister_driver(&amp;driver);
+  }
+
+  module_init(alsa_card_mychip_init)
+  module_exit(alsa_card_mychip_exit)
+
+          </pre></div><p>
+      </p><p>
+        Note that these module entries are tagged with
+      <em class="parameter"><code>__init</code></em> and 
+      <em class="parameter"><code>__exit</code></em> prefixes.
+      </p><p>
+        Oh, one thing was forgotten. If you have no exported symbols,
+        you need to declare it in 2.2 or 2.4 kernels (it's not necessary in 2.6 kernels).
+
+        </p><div class="informalexample"><pre class="programlisting">
+
+  EXPORT_NO_SYMBOLS;
+
+          </pre></div><p>
+
+        That's all!
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pci-resource-resource-allocation.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pci-resource.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="pcm-interface.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Resource Allocation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 5. PCM Interface</td></tr></table></div></body></html>

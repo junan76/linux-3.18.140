@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Atomicity</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="pcm-interface.html" title="Chapter 5. PCM Interface"><link rel="prev" href="pcm-interface-interrupt-handler.html" title="Interrupt Handler"><link rel="next" href="pcm-interface-constraints.html" title="Constraints"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Atomicity</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pcm-interface-interrupt-handler.html">Prev</a> </td><th width="60%" align="center">Chapter 5. PCM Interface</th><td width="20%" align="right"> <a accesskey="n" href="pcm-interface-constraints.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pcm-interface-atomicity"></a>Atomicity</h2></div></div></div><p>
+      One of the most important (and thus difficult to debug) problems
+      in kernel programming are race conditions.
+      In the Linux kernel, they are usually avoided via spin-locks, mutexes
+      or semaphores.  In general, if a race condition can happen
+      in an interrupt handler, it has to be managed atomically, and you
+      have to use a spinlock to protect the critical session. If the
+      critical section is not in interrupt handler code and
+      if taking a relatively long time to execute is acceptable, you
+      should use mutexes or semaphores instead.
+      </p><p>
+      As already seen, some pcm callbacks are atomic and some are
+      not.  For example, the <em class="parameter"><code>hw_params</code></em> callback is
+      non-atomic, while <em class="parameter"><code>trigger</code></em> callback is
+      atomic.  This means, the latter is called already in a spinlock
+      held by the PCM middle layer. Please take this atomicity into
+      account when you choose a locking scheme in the callbacks.
+      </p><p>
+      In the atomic callbacks, you cannot use functions which may call
+      <code class="function">schedule</code> or go to
+      <code class="function">sleep</code>.  Semaphores and mutexes can sleep,
+      and hence they cannot be used inside the atomic callbacks
+      (e.g. <em class="parameter"><code>trigger</code></em> callback).
+      To implement some delay in such a callback, please use
+      <code class="function">udelay()</code> or <code class="function">mdelay()</code>.
+      </p><p>
+      All three atomic callbacks (trigger, pointer, and ack) are
+      called with local interrupts disabled.
+      </p><p>
+      The recent changes in PCM core code, however, allow all PCM
+      operations to be non-atomic.  This assumes that the all caller
+      sides are in non-atomic contexts.  For example, the function
+      <code class="function">snd_pcm_period_elapsed()</code> is called
+      typically from the interrupt handler.  But, if you set up the
+      driver to use a threaded interrupt handler, this call can be in
+      non-atomic context, too.  In such a case, you can set
+      <em class="structfield"><code>nonatomic</code></em> filed of
+      <span class="structname">snd_pcm</span> object after creating it.
+      When this flag is set, mutex and rwsem are used internally in
+      the PCM core instead of spin and rwlocks, so that you can call
+      all PCM functions safely in a non-atomic context.
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pcm-interface-interrupt-handler.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pcm-interface.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="pcm-interface-constraints.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Interrupt Handler </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Constraints</td></tr></table></div></body></html>

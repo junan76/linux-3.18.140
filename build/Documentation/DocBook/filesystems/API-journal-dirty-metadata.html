@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>journal_dirty_metadata</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="functions.html#transaction_level" title="Transasction Level"><link rel="prev" href="API-journal-dirty-data.html" title="journal_dirty_data"><link rel="next" href="API-journal-forget.html" title="journal_forget"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">journal_dirty_metadata</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-journal-dirty-data.html">Prev</a> </td><th width="60%" align="center">Transasction Level</th><td width="20%" align="right"> <a accesskey="n" href="API-journal-forget.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-journal-dirty-metadata"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>journal_dirty_metadata — 
+     mark a buffer as containing dirty metadata
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">journal_dirty_metadata </b>(</code></td><td>handle_t * <var class="pdparam">handle</var>, </td></tr><tr><td> </td><td>struct buffer_head * <var class="pdparam">bh</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm11596"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>handle</code></em></span></dt><dd><p>
+     transaction to add buffer to.
+    </p></dd><dt><span class="term"><em class="parameter"><code>bh</code></em></span></dt><dd><p>
+     buffer to mark
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm11609"></a><h2>Description</h2><p>
+   Mark dirty metadata which needs to be journaled as part of the current
+   transaction.
+   </p><p>
+
+   The buffer is placed on the transaction's metadata list and is marked
+   as belonging to the transaction.
+   </p><p>
+
+   Returns error number or 0 on success.
+   </p><p>
+
+   Special care needs to be taken if the buffer already belongs to the
+   current committing transaction (in which case we should have frozen
+   data present for that commit).  In that case, we don't relink the
+</p></div><div class="refsect1"><a name="idm11615"></a><h2>buffer</h2><p>
+   that only gets done when the old transaction finally
+   completes its commit.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-journal-dirty-data.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="functions.html#transaction_level">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-journal-forget.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">journal_dirty_data</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">journal_forget</span></td></tr></table></div></body></html>

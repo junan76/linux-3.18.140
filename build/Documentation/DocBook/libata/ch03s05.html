@@ -1,0 +1,30 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ata_scsi_error()</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="libataEH.html" title="Chapter 3. Error handling"><link rel="prev" href="ch03s04.html" title="How commands are completed"><link rel="next" href="ch03s06.html" title="Problems with the current EH"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">ata_scsi_error()</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s04.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Error handling</th><td width="20%" align="right"> <a accesskey="n" href="ch03s06.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm197"></a>ata_scsi_error()</h2></div></div></div><p>
+	ata_scsi_error() is the current transportt-&gt;eh_strategy_handler()
+	for libata.  As discussed above, this will be entered in two
+	cases - timeout and ATAPI error completion.  This function
+	calls low level libata driver's eng_timeout() callback, the
+	standard callback for which is ata_eng_timeout().  It checks
+	if a qc is active and calls ata_qc_timeout() on the qc if so.
+	Actual error handling occurs in ata_qc_timeout().
+	</p><p>
+	If EH is invoked for timeout, ata_qc_timeout() stops BMDMA and
+	completes the qc.  Note that as we're currently in EH, we
+	cannot call scsi_done.  As described in SCSI EH doc, a
+	recovered scmd should be either retried with
+	scsi_queue_insert() or finished with scsi_finish_command().
+	Here, we override qc-&gt;scsidone with scsi_finish_command() and
+	calls ata_qc_complete().
+	</p><p>
+	If EH is invoked due to a failed ATAPI qc, the qc here is
+	completed but not deallocated.  The purpose of this
+	half-completion is to use the qc as place holder to make EH
+	code reach this place.  This is a bit hackish, but it works.
+	</p><p>
+	Once control reaches here, the qc is deallocated by invoking
+	__ata_qc_complete() explicitly.  Then, internal qc for REQUEST
+	SENSE is issued.  Once sense data is acquired, scmd is
+	finished by directly invoking scsi_finish_command() on the
+	scmd.  Note that as we already have completed and deallocated
+	the qc which was associated with the scmd, we don't need
+	to/cannot call ata_qc_complete() again.
+	</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="libataEH.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">How commands are completed </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Problems with the current EH</td></tr></table></div></body></html>

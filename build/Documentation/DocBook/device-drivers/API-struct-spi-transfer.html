@@ -1,0 +1,118 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct spi_transfer</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="spi.html" title="Chapter 9. Serial Peripheral Interface (SPI)"><link rel="prev" href="API-struct-spi-master.html" title="struct spi_master"><link rel="next" href="API-struct-spi-message.html" title="struct spi_message"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct spi_transfer</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-spi-master.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Serial Peripheral Interface (SPI)</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-spi-message.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-spi-transfer"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct spi_transfer — 
+     a read/write buffer pair
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct spi_transfer {
+  const void * tx_buf;
+  void * rx_buf;
+  unsigned len;
+  dma_addr_t tx_dma;
+  dma_addr_t rx_dma;
+  struct sg_table tx_sg;
+  struct sg_table rx_sg;
+  unsigned cs_change:1;
+  unsigned tx_nbits:3;
+  unsigned rx_nbits:3;
+#define SPI_NBITS_SINGLE	0x01
+#define SPI_NBITS_DUAL		0x02
+#define SPI_NBITS_QUAD		0x04
+  u8 bits_per_word;
+  u16 delay_usecs;
+  u32 speed_hz;
+  struct list_head transfer_list;
+};  </pre></div><div class="refsect1"><a name="idm41179"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">tx_buf</span></dt><dd><p>
+   data to be written (dma-safe memory), or NULL
+      </p></dd><dt><span class="term">rx_buf</span></dt><dd><p>
+   data to be read (dma-safe memory), or NULL
+      </p></dd><dt><span class="term">len</span></dt><dd><p>
+   size of rx and tx buffers (in bytes)
+      </p></dd><dt><span class="term">tx_dma</span></dt><dd><p>
+   DMA address of tx_buf, if <em class="parameter"><code>spi_message</code></em>.is_dma_mapped
+      </p></dd><dt><span class="term">rx_dma</span></dt><dd><p>
+   DMA address of rx_buf, if <em class="parameter"><code>spi_message</code></em>.is_dma_mapped
+      </p></dd><dt><span class="term">tx_sg</span></dt><dd><p>
+   Scatterlist for transmit, currently not for client use
+      </p></dd><dt><span class="term">rx_sg</span></dt><dd><p>
+   Scatterlist for receive, currently not for client use
+      </p></dd><dt><span class="term">cs_change</span></dt><dd><p>
+   affects chipselect after this transfer completes
+      </p></dd><dt><span class="term">tx_nbits</span></dt><dd><p>
+   number of bits used for writing. If 0 the default
+   (SPI_NBITS_SINGLE) is used.
+      </p></dd><dt><span class="term">rx_nbits</span></dt><dd><p>
+   number of bits used for reading. If 0 the default
+   (SPI_NBITS_SINGLE) is used.
+      </p></dd><dt><span class="term">bits_per_word</span></dt><dd><p>
+   select a bits_per_word other than the device default
+   for this transfer. If 0 the default (from <em class="parameter"><code>spi_device</code></em>) is used.
+      </p></dd><dt><span class="term">delay_usecs</span></dt><dd><p>
+   microseconds to delay after this transfer before
+   (optionally) changing the chipselect status, then starting
+   the next transfer or completing this <em class="parameter"><code>spi_message</code></em>.
+      </p></dd><dt><span class="term">speed_hz</span></dt><dd><p>
+   Select a speed other than the device default for this
+   transfer. If 0 the default (from <em class="parameter"><code>spi_device</code></em>) is used.
+      </p></dd><dt><span class="term">transfer_list</span></dt><dd><p>
+   transfers are sequenced through <em class="parameter"><code>spi_message</code></em>.transfers
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm41244"></a><h2>Description</h2><p>
+   SPI transfers always write the same number of bytes as they read.
+   Protocol drivers should always provide <em class="parameter"><code>rx_buf</code></em> and/or <em class="parameter"><code>tx_buf</code></em>.
+   In some cases, they may also want to provide DMA addresses for
+   the data being transferred; that may reduce overhead, when the
+   underlying driver uses dma.
+   </p><p>
+
+   If the transmit buffer is null, zeroes will be shifted out
+   while filling <em class="parameter"><code>rx_buf</code></em>.  If the receive buffer is null, the data
+   shifted in will be discarded.  Only <span class="quote">“<span class="quote">len</span>”</span> bytes shift out (or in).
+   It's an error to try to shift out a partial word.  (For example, by
+   shifting out three bytes with word size of sixteen or twenty bits;
+   the former uses two bytes per word, the latter uses four bytes.)
+   </p><p>
+
+   In-memory data values are always in native CPU byte order, translated
+   from the wire byte order (big-endian except with SPI_LSB_FIRST).  So
+   for example when bits_per_word is sixteen, buffers are 2N bytes long
+   (<em class="parameter"><code>len</code></em> = 2N) and hold N sixteen bit words in CPU byte order.
+   </p><p>
+
+   When the word size of the SPI transfer is not a power-of-two multiple
+   of eight bits, those in-memory words include extra bits.  In-memory
+   words are always seen by protocol drivers as right-justified, so the
+   undefined (rx) or unused (tx) bits are always the most significant bits.
+   </p><p>
+
+   All SPI transfers start with the relevant chipselect active.  Normally
+   it stays selected until after the last transfer in a message.  Drivers
+   can affect the chipselect signal using cs_change.
+   </p><p>
+
+   (i) If the transfer isn't the last one in the message, this flag is
+   used to make the chipselect briefly go inactive in the middle of the
+   message.  Toggling chipselect in this way may be needed to terminate
+   a chip command, letting a single spi_message perform all of group of
+   chip transactions together.
+   </p><p>
+
+   (ii) When the transfer is the last one in the message, the chip may
+   stay selected until the next transfer.  On multi-device SPI busses
+   with nothing blocking messages going to other devices, this is just
+   a performance hint; starting a message to another device deselects
+   this one.  But in other cases, this can be used to ensure correctness.
+   Some devices need protocol transactions to be built from a series of
+   spi_message submissions, where the content of one message is determined
+   by the results of previous messages and where the whole transaction
+   ends when the chipselect goes intactive.
+   </p><p>
+
+   When SPI can transfer in 1x,2x or 4x. It can get this transfer information
+   from device through <em class="parameter"><code>tx_nbits</code></em> and <em class="parameter"><code>rx_nbits</code></em>. In Bi-direction, these
+   two should both be set. User can set transfer mode with SPI_NBITS_SINGLE(1x)
+   SPI_NBITS_DUAL(2x) and SPI_NBITS_QUAD(4x) to support these three transfer.
+   </p><p>
+
+   The code that submits an spi_message (and its spi_transfers)
+   to the lower layers is responsible for managing its memory.
+   Zero-initialize every field you don't set up explicitly, to
+   insulate against future API updates.  After you submit a message
+   and its transfers, ignore them until its completion callback.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-spi-master.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="spi.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-spi-message.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct spi_master</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct spi_message</span></td></tr></table></div></body></html>

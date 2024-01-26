@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>try_to_release_page</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-generic-file-write-iter.html" title="generic_file_write_iter"><link rel="next" href="API-zap-vma-ptes.html" title="zap_vma_ptes"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">try_to_release_page</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-generic-file-write-iter.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-zap-vma-ptes.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-try-to-release-page"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>try_to_release_page — 
+     release old fs-specific metadata on a page
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">try_to_release_page </b>(</code></td><td>struct page * <var class="pdparam">page</var>, </td></tr><tr><td> </td><td>gfp_t <var class="pdparam">gfp_mask</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9535"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>page</code></em></span></dt><dd><p>
+     the page which the kernel is trying to free
+    </p></dd><dt><span class="term"><em class="parameter"><code>gfp_mask</code></em></span></dt><dd><p>
+     memory allocation flags (and I/O mode)
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9548"></a><h2>Description</h2><p>
+   The address_space is to try to release any data against the page
+   (presumably at page-&gt;private).  If the release was successful, return `1'.
+   Otherwise return zero.
+   </p><p>
+
+   This may also be called if PG_fscache is set on a page, indicating that the
+   page is known to the local caching routines.
+   </p><p>
+
+   The <em class="parameter"><code>gfp_mask</code></em> argument specifies whether I/O may be performed to release
+   this page (__GFP_IO), and whether the call may block (__GFP_WAIT &amp; __GFP_FS).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-generic-file-write-iter.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-zap-vma-ptes.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">generic_file_write_iter</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">zap_vma_ptes</span></td></tr></table></div></body></html>

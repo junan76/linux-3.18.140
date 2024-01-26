@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>fc_remote_port_add</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="Transport_classes.html#Fibre_Channel_transport" title="Fibre Channel transport"><link rel="prev" href="API-fc-remove-host.html" title="fc_remove_host"><link rel="next" href="API-fc-remote-port-delete.html" title="fc_remote_port_delete"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">fc_remote_port_add</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-fc-remove-host.html">Prev</a> </td><th width="60%" align="center">Fibre Channel transport</th><td width="20%" align="right"> <a accesskey="n" href="API-fc-remote-port-delete.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-fc-remote-port-add"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>fc_remote_port_add — 
+     notify fc transport of the existence of a remote FC port.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct fc_rport * <b class="fsfunc">fc_remote_port_add </b>(</code></td><td>struct Scsi_Host * <var class="pdparam">shost</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">channel</var>, </td></tr><tr><td> </td><td>struct fc_rport_identifiers * <var class="pdparam">ids</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4487"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>shost</code></em></span></dt><dd><p>
+     scsi host the remote port is connected to.
+    </p></dd><dt><span class="term"><em class="parameter"><code>channel</code></em></span></dt><dd><p>
+     Channel on shost port connected to.
+    </p></dd><dt><span class="term"><em class="parameter"><code>ids</code></em></span></dt><dd><p>
+     The world wide names, fc address, and FC4 port
+     roles for the remote port.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4505"></a><h2>Description</h2><p>
+   The LLDD calls this routine to notify the transport of the existence
+   of a remote port. The LLDD provides the unique identifiers (wwpn,wwn)
+   of the port, it's FC address (port_id), and the FC4 roles that are
+   active for the port.
+   </p><p>
+
+   For ports that are FCP targets (aka scsi targets), the FC transport
+   maintains consistent target id bindings on behalf of the LLDD.
+   A consistent target id binding is an assignment of a target id to
+   a remote port identifier, which persists while the scsi host is
+   attached. The remote port can disappear, then later reappear, and
+   it's target id assignment remains the same. This allows for shifts
+   in FC addressing (if binding by wwpn or wwnn) with no apparent
+   changes to the scsi subsystem which is based on scsi host number and
+   target id values.  Bindings are only valid during the attachment of
+   the scsi host. If the host detaches, then later re-attaches, target
+   id bindings may change.
+   </p><p>
+
+   This routine is responsible for returning a remote port structure.
+   The routine will search the list of remote ports it maintains
+   internally on behalf of consistent target id mappings. If found, the
+   remote port structure will be reused. Otherwise, a new remote port
+   structure will be allocated.
+   </p><p>
+
+   Whenever a remote port is allocated, a new fc_remote_port class
+   device is created.
+   </p><p>
+
+   Should not be called from interrupt context.
+</p></div><div class="refsect1"><a name="idm4512"></a><h2>Notes</h2><p>
+   This routine assumes no locks are held on entry.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-fc-remove-host.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="Transport_classes.html#Fibre_Channel_transport">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-fc-remote-port-delete.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">fc_remove_host</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">fc_remote_port_delete</span></td></tr></table></div></body></html>

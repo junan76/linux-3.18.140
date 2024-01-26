@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>wait_event_interruptible_hrtimeout</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch01s04.html" title="Wait queues and Wake events"><link rel="prev" href="API-wait-event-hrtimeout.html" title="wait_event_hrtimeout"><link rel="next" href="API-wait-event-interruptible-locked.html" title="wait_event_interruptible_locked"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">wait_event_interruptible_hrtimeout</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-wait-event-hrtimeout.html">Prev</a> </td><th width="60%" align="center">Wait queues and Wake events</th><td width="20%" align="right"> <a accesskey="n" href="API-wait-event-interruptible-locked.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-wait-event-interruptible-hrtimeout"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>wait_event_interruptible_hrtimeout — 
+     sleep until a condition gets true or a timeout elapses
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef"> <b class="fsfunc">wait_event_interruptible_hrtimeout </b>(</code></td><td> <var class="pdparam">wq</var>, </td></tr><tr><td> </td><td> <var class="pdparam">condition</var>, </td></tr><tr><td> </td><td> <var class="pdparam">timeout</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm3059"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>wq</code></em></span></dt><dd><p>
+     the waitqueue to wait on
+    </p></dd><dt><span class="term"><em class="parameter"><code>condition</code></em></span></dt><dd><p>
+     a C expression for the event to wait for
+    </p></dd><dt><span class="term"><em class="parameter"><code>timeout</code></em></span></dt><dd><p>
+     timeout, as a ktime_t
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm3077"></a><h2>Description</h2><p>
+   The process is put to sleep (TASK_INTERRUPTIBLE) until the
+   <em class="parameter"><code>condition</code></em> evaluates to true or a signal is received.
+   The <em class="parameter"><code>condition</code></em> is checked each time the waitqueue <em class="parameter"><code>wq</code></em> is woken up.
+   </p><p>
+
+   <code class="function">wake_up</code> has to be called after changing any variable that could
+   change the result of the wait condition.
+   </p><p>
+
+   The function returns 0 if <em class="parameter"><code>condition</code></em> became true, -ERESTARTSYS if it was
+   interrupted by a signal, or -ETIME if the timeout elapsed.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-wait-event-hrtimeout.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-wait-event-interruptible-locked.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">wait_event_hrtimeout</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">wait_event_interruptible_locked</span></td></tr></table></div></body></html>

@@ -1,0 +1,58 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>enum ieee80211_channel_flags</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The 802.11 subsystems – for kernel developers"><link rel="up" href="bk01ch01.html" title="Chapter 1. Device registration"><link rel="prev" href="API-enum-ieee80211-band.html" title="enum ieee80211_band"><link rel="next" href="API-struct-ieee80211-channel.html" title="struct ieee80211_channel"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">enum ieee80211_channel_flags</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-enum-ieee80211-band.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Device registration</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-ieee80211-channel.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-enum-ieee80211-channel-flags"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>enum ieee80211_channel_flags — 
+  channel flags
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+enum ieee80211_channel_flags {
+  IEEE80211_CHAN_DISABLED,
+  IEEE80211_CHAN_NO_IR,
+  IEEE80211_CHAN_RADAR,
+  IEEE80211_CHAN_NO_HT40PLUS,
+  IEEE80211_CHAN_NO_HT40MINUS,
+  IEEE80211_CHAN_NO_OFDM,
+  IEEE80211_CHAN_NO_80MHZ,
+  IEEE80211_CHAN_NO_160MHZ,
+  IEEE80211_CHAN_INDOOR_ONLY,
+  IEEE80211_CHAN_GO_CONCURRENT,
+  IEEE80211_CHAN_NO_20MHZ,
+  IEEE80211_CHAN_NO_10MHZ
+};  </pre></div><div class="refsect1"><a name="idm93"></a><h2>Constants</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">IEEE80211_CHAN_DISABLED</span></dt><dd><p>
+This channel is disabled.
+      </p></dd><dt><span class="term">IEEE80211_CHAN_NO_IR</span></dt><dd><p>
+do not initiate radiation, this includes
+sending probe requests or beaconing.
+      </p></dd><dt><span class="term">IEEE80211_CHAN_RADAR</span></dt><dd><p>
+Radar detection is required on this channel.
+      </p></dd><dt><span class="term">IEEE80211_CHAN_NO_HT40PLUS</span></dt><dd><p>
+extension channel above this channel
+is not permitted.
+      </p></dd><dt><span class="term">IEEE80211_CHAN_NO_HT40MINUS</span></dt><dd><p>
+extension channel below this channel
+is not permitted.
+      </p></dd><dt><span class="term">IEEE80211_CHAN_NO_OFDM</span></dt><dd><p>
+OFDM is not allowed on this channel.
+      </p></dd><dt><span class="term">IEEE80211_CHAN_NO_80MHZ</span></dt><dd><p>
+If the driver supports 80 MHz on the band,
+this flag indicates that an 80 MHz channel cannot use this
+channel as the control or any of the secondary channels.
+This may be due to the driver or due to regulatory bandwidth
+restrictions.
+      </p></dd><dt><span class="term">IEEE80211_CHAN_NO_160MHZ</span></dt><dd><p>
+If the driver supports 160 MHz on the band,
+this flag indicates that an 160 MHz channel cannot use this
+channel as the control or any of the secondary channels.
+This may be due to the driver or due to regulatory bandwidth
+restrictions.
+      </p></dd><dt><span class="term">IEEE80211_CHAN_INDOOR_ONLY</span></dt><dd><p>
+see <code class="constant">NL80211_FREQUENCY_ATTR_INDOOR_ONLY</code>
+      </p></dd><dt><span class="term">IEEE80211_CHAN_GO_CONCURRENT</span></dt><dd><p>
+see <code class="constant">NL80211_FREQUENCY_ATTR_GO_CONCURRENT</code>
+      </p></dd><dt><span class="term">IEEE80211_CHAN_NO_20MHZ</span></dt><dd><p>
+20 MHz bandwidth is not permitted
+on this channel.
+      </p></dd><dt><span class="term">IEEE80211_CHAN_NO_10MHZ</span></dt><dd><p>
+10 MHz bandwidth is not permitted
+on this channel.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm146"></a><h2>Description</h2><p>
+   </p><p>
+
+   Channel flags set by the regulatory control code.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-enum-ieee80211-band.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="bk01ch01.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-ieee80211-channel.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">enum ieee80211_band</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct ieee80211_channel</span></td></tr></table></div></body></html>

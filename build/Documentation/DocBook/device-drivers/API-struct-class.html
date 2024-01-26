@@ -1,0 +1,60 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct class</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="devdrivers.html#idm11078" title="The Basic Device Driver-Model Structures"><link rel="prev" href="API-struct-subsys-interface.html" title="struct subsys_interface"><link rel="next" href="API-struct-device.html" title="struct device"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct class</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-subsys-interface.html">Prev</a> </td><th width="60%" align="center">The Basic Device Driver-Model Structures </th><td width="20%" align="right"> <a accesskey="n" href="API-struct-device.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-class"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct class — 
+     device classes
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct class {
+  const char * name;
+  struct module * owner;
+  struct class_attribute * class_attrs;
+  const struct attribute_group ** dev_groups;
+  struct kobject * dev_kobj;
+  int (* dev_uevent) (struct device *dev, struct kobj_uevent_env *env);
+  char *(* devnode) (struct device *dev, umode_t *mode);
+  void (* class_release) (struct class *class);
+  void (* dev_release) (struct device *dev);
+  int (* suspend) (struct device *dev, pm_message_t state);
+  int (* resume) (struct device *dev);
+  const struct kobj_ns_type_operations * ns_type;
+  const void *(* namespace) (struct device *dev);
+  const struct dev_pm_ops * pm;
+  struct subsys_private * p;
+};  </pre></div><div class="refsect1"><a name="idm11324"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">name</span></dt><dd><p>
+   Name of the class.
+      </p></dd><dt><span class="term">owner</span></dt><dd><p>
+   The module owner.
+      </p></dd><dt><span class="term">class_attrs</span></dt><dd><p>
+   Default attributes of this class.
+      </p></dd><dt><span class="term">dev_groups</span></dt><dd><p>
+   Default attributes of the devices that belong to the class.
+      </p></dd><dt><span class="term">dev_kobj</span></dt><dd><p>
+   The kobject that represents this class and links it into the hierarchy.
+      </p></dd><dt><span class="term">dev_uevent</span></dt><dd><p>
+   Called when a device is added, removed from this class, or a
+   few other things that generate uevents to add the environment
+   variables.
+      </p></dd><dt><span class="term">devnode</span></dt><dd><p>
+   Callback to provide the devtmpfs.
+      </p></dd><dt><span class="term">class_release</span></dt><dd><p>
+   Called to release this class.
+      </p></dd><dt><span class="term">dev_release</span></dt><dd><p>
+   Called to release the device.
+      </p></dd><dt><span class="term">suspend</span></dt><dd><p>
+   Used to put the device to sleep mode, usually to a low power
+   state.
+      </p></dd><dt><span class="term">resume</span></dt><dd><p>
+   Used to bring the device from the sleep mode.
+      </p></dd><dt><span class="term">ns_type</span></dt><dd><p>
+   Callbacks so sysfs can detemine namespaces.
+      </p></dd><dt><span class="term">namespace</span></dt><dd><p>
+   Namespace of the device belongs to this class.
+      </p></dd><dt><span class="term">pm</span></dt><dd><p>
+   The default device power management operations of this class.
+      </p></dd><dt><span class="term">p</span></dt><dd><p>
+   The private data of the driver core, no one other than the
+   driver core can touch this.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm11387"></a><h2>Description</h2><p>
+   A class is a higher-level view of a device that abstracts out low-level
+   implementation details. Drivers may see a SCSI disk or an ATA disk, but,
+   at the class level, they are all simply disks. Classes allow user space
+   to work with devices based on what they do, rather than how they are
+   connected or how they work.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-subsys-interface.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="devdrivers.html#idm11078">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-device.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct subsys_interface</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct device</span></td></tr></table></div></body></html>

@@ -1,0 +1,33 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Linux Security Modules: General Security Hooks for Linux</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Security Modules: General Security Hooks for Linux"><link rel="next" href="framework.html" title="LSM Framework"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Linux Security Modules:  General Security Hooks for Linux</th></tr><tr><td width="20%" align="left"> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="framework.html">Next</a></td></tr></table><hr></div><div lang="en" class="article"><div class="titlepage"><div><div><h2 class="title"><a name="LinuxSecurityModule"></a>Linux Security Modules:  General Security Hooks for Linux</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Stephen</span> <span class="surname">Smalley</span></h3><div class="affiliation"><span class="orgname">NAI Labs<br></span><div class="address"><p><code class="email">&lt;<a class="email" href="mailto:ssmalley@nai.com">ssmalley@nai.com</a>&gt;</code></p></div></div></div><div class="author"><h3 class="author"><span class="firstname">Timothy</span> <span class="surname">Fraser</span></h3><div class="affiliation"><span class="orgname">NAI Labs<br></span><div class="address"><p><code class="email">&lt;<a class="email" href="mailto:tfraser@nai.com">tfraser@nai.com</a>&gt;</code></p></div></div></div><div class="author"><h3 class="author"><span class="firstname">Chris</span> <span class="surname">Vance</span></h3><div class="affiliation"><span class="orgname">NAI Labs<br></span><div class="address"><p><code class="email">&lt;<a class="email" href="mailto:cvance@nai.com">cvance@nai.com</a>&gt;</code></p></div></div></div></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="index.html#Introduction">Introduction</a></span></dt><dt><span class="sect1"><a href="framework.html">LSM Framework</a></span></dt><dt><span class="sect1"><a href="cap.html">LSM Capabilities Module</a></span></dt></dl></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Introduction"></a>Introduction</h2></div></div></div><p>
+In March 2001, the National Security Agency (NSA) gave a presentation
+about Security-Enhanced Linux (SELinux) at the 2.5 Linux Kernel
+Summit.  SELinux is an implementation of flexible and fine-grained
+nondiscretionary access controls in the Linux kernel, originally
+implemented as its own particular kernel patch.  Several other
+security projects (e.g. RSBAC, Medusa) have also developed flexible
+access control architectures for the Linux kernel, and various
+projects have developed particular access control models for Linux
+(e.g. LIDS, DTE, SubDomain).  Each project has developed and
+maintained its own kernel patch to support its security needs.
+</p><p>
+In response to the NSA presentation, Linus Torvalds made a set of
+remarks that described a security framework he would be willing to
+consider for inclusion in the mainstream Linux kernel.  He described a
+general framework that would provide a set of security hooks to
+control operations on kernel objects and a set of opaque security
+fields in kernel data structures for maintaining security attributes.
+This framework could then be used by loadable kernel modules to
+implement any desired model of security.  Linus also suggested the
+possibility of migrating the Linux capabilities code into such a
+module.
+</p><p>
+The Linux Security Modules (LSM) project was started by WireX to
+develop such a framework.  LSM is a joint development effort by
+several security projects, including Immunix, SELinux, SGI and Janus,
+and several individuals, including Greg Kroah-Hartman and James
+Morris, to develop a Linux kernel patch that implements this
+framework.  The patch is currently tracking the 2.4 series and is
+targeted for integration into the 2.5 development series.  This
+technical report provides an overview of the framework and the example
+capabilities security module provided by the LSM kernel patch.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="framework.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"> </td><td width="40%" align="right" valign="top"> LSM Framework</td></tr></table></div></body></html>

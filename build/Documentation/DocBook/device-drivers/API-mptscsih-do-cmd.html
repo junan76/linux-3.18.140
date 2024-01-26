@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>mptscsih_do_cmd</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="message_devices.html#idm20108" title="Fusion message devices"><link rel="prev" href="API-mptscsih-get-completion-code.html" title="mptscsih_get_completion_code"><link rel="next" href="API-mptscsih-synchronize-cache.html" title="mptscsih_synchronize_cache"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">mptscsih_do_cmd</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-mptscsih-get-completion-code.html">Prev</a> </td><th width="60%" align="center">Fusion message devices</th><td width="20%" align="right"> <a accesskey="n" href="API-mptscsih-synchronize-cache.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-mptscsih-do-cmd"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>mptscsih_do_cmd — 
+     Do internal command.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">mptscsih_do_cmd </b>(</code></td><td>MPT_SCSI_HOST * <var class="pdparam">hd</var>, </td></tr><tr><td> </td><td>INTERNAL_CMD * <var class="pdparam">io</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm24318"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>hd</code></em></span></dt><dd><p>
+     MPT_SCSI_HOST pointer
+    </p></dd><dt><span class="term"><em class="parameter"><code>io</code></em></span></dt><dd><p>
+     INTERNAL_CMD pointer.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm24331"></a><h2>Description</h2><p>
+   Issue the specified internally generated command and do command
+   specific cleanup. For bus scan / DV only.
+</p></div><div class="refsect1"><a name="idm24334"></a><h2>NOTES</h2><p>
+   If command is Inquiry and status is good,
+   initialize a target structure, save the data
+</p></div><div class="refsect1"><a name="idm24337"></a><h2>Remark</h2><p>
+   Single threaded access only.
+</p></div><div class="refsect1"><a name="idm24340"></a><h2>Return</h2><p>
+   &lt; 0 if an illegal command or no resources
+   </p><p>
+
+   0 if good
+   </p><p>
+
+   &gt; 0 if command complete but some type of completion error.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-mptscsih-get-completion-code.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="message_devices.html#idm20108">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-mptscsih-synchronize-cache.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">mptscsih_get_completion_code</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">mptscsih_synchronize_cache</span></td></tr></table></div></body></html>

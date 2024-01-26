@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>gnet_stats_copy_app</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s04.html" title="Generic Network Statistics"><link rel="prev" href="API-gnet-stats-copy-queue.html" title="gnet_stats_copy_queue"><link rel="next" href="API-gnet-stats-finish-copy.html" title="gnet_stats_finish_copy"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">gnet_stats_copy_app</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-gnet-stats-copy-queue.html">Prev</a> </td><th width="60%" align="center">Generic Network Statistics</th><td width="20%" align="right"> <a accesskey="n" href="API-gnet-stats-finish-copy.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-gnet-stats-copy-app"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>gnet_stats_copy_app — 
+     copy application specific statistics into statistics TLV
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">gnet_stats_copy_app </b>(</code></td><td>struct gnet_dump * <var class="pdparam">d</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">st</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">len</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm7687"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>d</code></em></span></dt><dd><p>
+     dumping handle
+    </p></dd><dt><span class="term"><em class="parameter"><code>st</code></em></span></dt><dd><p>
+     application specific statistics data
+    </p></dd><dt><span class="term"><em class="parameter"><code>len</code></em></span></dt><dd><p>
+     length of data
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm7705"></a><h2>Description</h2><p>
+   Appends the application specific statistics to the top level TLV created by
+   <code class="function">gnet_stats_start_copy</code> and remembers the data for XSTATS if the dumping
+   handle is in backward compatibility mode.
+   </p><p>
+
+   Returns 0 on success or -1 with the statistic lock released
+   if the room in the socket buffer was not sufficient.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-gnet-stats-copy-queue.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-gnet-stats-finish-copy.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">gnet_stats_copy_queue</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">gnet_stats_finish_copy</span></td></tr></table></div></body></html>

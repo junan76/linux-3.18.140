@@ -1,0 +1,133 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 4. PCI Resource Management</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="index.html" title="Writing an ALSA Driver"><link rel="prev" href="card-management-registration.html" title="Registration and Release"><link rel="next" href="pci-resource-some-haftas.html" title="Some Hafta's"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. PCI Resource Management</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="card-management-registration.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="pci-resource-some-haftas.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="pci-resource"></a>Chapter 4. PCI Resource Management</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="section"><a href="pci-resource.html#pci-resource-example">Full Code Example</a></span></dt><dt><span class="section"><a href="pci-resource-some-haftas.html">Some Hafta's</a></span></dt><dt><span class="section"><a href="pci-resource-resource-allocation.html">Resource Allocation</a></span></dt><dt><span class="section"><a href="pci-resource-entries.html">PCI Entries</a></span></dt></dl></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pci-resource-example"></a>Full Code Example</h2></div></div></div><p>
+        In this section, we'll complete the chip-specific constructor,
+      destructor and PCI entries. Example code is shown first,
+      below. 
+
+        </p><div class="example"><a name="idm317"></a><p class="title"><b>Example 4.1. PCI Resource Management Example</b></p><div class="example-contents"><pre class="programlisting">
+
+  struct mychip {
+          struct snd_card *card;
+          struct pci_dev *pci;
+
+          unsigned long port;
+          int irq;
+  };
+
+  static int snd_mychip_free(struct mychip *chip)
+  {
+          /* disable hardware here if any */
+          .... /* (not implemented in this document) */
+
+          /* release the irq */
+          if (chip-&gt;irq &gt;= 0)
+                  free_irq(chip-&gt;irq, chip);
+          /* release the I/O ports &amp; memory */
+          pci_release_regions(chip-&gt;pci);
+          /* disable the PCI entry */
+          pci_disable_device(chip-&gt;pci);
+          /* release the data */
+          kfree(chip);
+          return 0;
+  }
+
+  /* chip-specific constructor */
+  static int snd_mychip_create(struct snd_card *card,
+                               struct pci_dev *pci,
+                               struct mychip **rchip)
+  {
+          struct mychip *chip;
+          int err;
+          static struct snd_device_ops ops = {
+                 .dev_free = snd_mychip_dev_free,
+          };
+
+          *rchip = NULL;
+
+          /* initialize the PCI entry */
+          err = pci_enable_device(pci);
+          if (err &lt; 0)
+                  return err;
+          /* check PCI availability (28bit DMA) */
+          if (pci_set_dma_mask(pci, DMA_BIT_MASK(28)) &lt; 0 ||
+              pci_set_consistent_dma_mask(pci, DMA_BIT_MASK(28)) &lt; 0) {
+                  printk(KERN_ERR "error to set 28bit mask DMA\n");
+                  pci_disable_device(pci);
+                  return -ENXIO;
+          }
+
+          chip = kzalloc(sizeof(*chip), GFP_KERNEL);
+          if (chip == NULL) {
+                  pci_disable_device(pci);
+                  return -ENOMEM;
+          }
+
+          /* initialize the stuff */
+          chip-&gt;card = card;
+          chip-&gt;pci = pci;
+          chip-&gt;irq = -1;
+
+          /* (1) PCI resource allocation */
+          err = pci_request_regions(pci, "My Chip");
+          if (err &lt; 0) {
+                  kfree(chip);
+                  pci_disable_device(pci);
+                  return err;
+          }
+          chip-&gt;port = pci_resource_start(pci, 0);
+          if (request_irq(pci-&gt;irq, snd_mychip_interrupt,
+                          IRQF_SHARED, KBUILD_MODNAME, chip)) {
+                  printk(KERN_ERR "cannot grab irq %d\n", pci-&gt;irq);
+                  snd_mychip_free(chip);
+                  return -EBUSY;
+          }
+          chip-&gt;irq = pci-&gt;irq;
+
+          /* (2) initialization of the chip hardware */
+          .... /*   (not implemented in this document) */
+
+          err = snd_device_new(card, SNDRV_DEV_LOWLEVEL, chip, &amp;ops);
+          if (err &lt; 0) {
+                  snd_mychip_free(chip);
+                  return err;
+          }
+
+          *rchip = chip;
+          return 0;
+  }        
+
+  /* PCI IDs */
+  static struct pci_device_id snd_mychip_ids[] = {
+          { PCI_VENDOR_ID_FOO, PCI_DEVICE_ID_BAR,
+            PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0, },
+          ....
+          { 0, }
+  };
+  MODULE_DEVICE_TABLE(pci, snd_mychip_ids);
+
+  /* pci_driver definition */
+  static struct pci_driver driver = {
+          .name = KBUILD_MODNAME,
+          .id_table = snd_mychip_ids,
+          .probe = snd_mychip_probe,
+          .remove = snd_mychip_remove,
+  };
+
+  /* module initialization */
+  static int __init alsa_card_mychip_init(void)
+  {
+          return pci_register_driver(&amp;driver);
+  }
+
+  /* module clean up */
+  static void __exit alsa_card_mychip_exit(void)
+  {
+          pci_unregister_driver(&amp;driver);
+  }
+
+  module_init(alsa_card_mychip_init)
+  module_exit(alsa_card_mychip_exit)
+
+  EXPORT_NO_SYMBOLS; /* for old kernels only */
+
+          </pre></div></div><p><br class="example-break">
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="card-management-registration.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="pci-resource-some-haftas.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Registration and Release </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Some Hafta's</td></tr></table></div></body></html>

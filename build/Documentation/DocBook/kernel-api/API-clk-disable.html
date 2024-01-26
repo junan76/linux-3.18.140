@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>clk_disable</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="clk.html" title="Chapter 17. Clock Framework"><link rel="prev" href="API-clk-enable.html" title="clk_enable"><link rel="next" href="API-clk-get-rate.html" title="clk_get_rate"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">clk_disable</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-clk-enable.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Clock Framework</th><td width="20%" align="right"> <a accesskey="n" href="API-clk-get-rate.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-clk-disable"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>clk_disable — 
+     inform the system when the clock source is no longer required.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">clk_disable </b>(</code></td><td>struct clk * <var class="pdparam">clk</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm31942"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>clk</code></em></span></dt><dd><p>
+     clock source
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm31950"></a><h2>Description</h2><p>
+   Inform the system that a clock source is no longer required by
+   a driver and may be shut down.
+   </p><p>
+
+   May be called from atomic contexts.
+</p></div><div class="refsect1"><a name="idm31954"></a><h2>Implementation detail</h2><p>
+   if the clock source is shared between
+   multiple drivers, <code class="function">clk_enable</code> calls must be balanced by the
+   same number of <code class="function">clk_disable</code> calls for the clock source to be
+   disabled.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-clk-enable.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="clk.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-clk-get-rate.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">clk_enable</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">clk_get_rate</span></td></tr></table></div></body></html>

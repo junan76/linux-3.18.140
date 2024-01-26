@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>pci_dev_get</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch09s05.html" title="PCI Support Library"><link rel="prev" href="API-pci-dev-driver.html" title="pci_dev_driver"><link rel="next" href="API-pci-dev-put.html" title="pci_dev_put"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">pci_dev_get</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-pci-dev-driver.html">Prev</a> </td><th width="60%" align="center">PCI Support Library</th><td width="20%" align="right"> <a accesskey="n" href="API-pci-dev-put.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-pci-dev-get"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>pci_dev_get — 
+     increments the reference count of the pci device structure
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct pci_dev * <b class="fsfunc">pci_dev_get </b>(</code></td><td>struct pci_dev * <var class="pdparam">dev</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm20445"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     the device being referenced
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm20453"></a><h2>Description</h2><p>
+   Each live reference to a device should be refcounted.
+   </p><p>
+
+   Drivers for PCI devices should normally record such references in
+   their <code class="function">probe</code> methods, when they bind to a device, and release
+   them by calling <code class="function">pci_dev_put</code>, in their <code class="function">disconnect</code> methods.
+   </p><p>
+
+   A pointer to the device with the incremented reference counter is returned.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-pci-dev-driver.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch09s05.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-pci-dev-put.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">pci_dev_driver</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">pci_dev_put</span></td></tr></table></div></body></html>

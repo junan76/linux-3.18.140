@@ -1,0 +1,81 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_match_id</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbcore.html" title="Chapter 5. USB Core APIs"><link rel="prev" href="API-usb-driver-release-interface.html" title="usb_driver_release_interface"><link rel="next" href="API-usb-register-device-driver.html" title="usb_register_device_driver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_match_id</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-driver-release-interface.html">Prev</a> </td><th width="60%" align="center">Chapter 5. USB Core APIs</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-register-device-driver.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-match-id"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_match_id — 
+     find first usb_device_id matching device or interface
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">const struct usb_device_id * <b class="fsfunc">usb_match_id </b>(</code></td><td>struct usb_interface * <var class="pdparam">interface</var>, </td></tr><tr><td> </td><td>const struct usb_device_id * <var class="pdparam">id</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm3801"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>interface</code></em></span></dt><dd><p>
+     the interface of interest
+    </p></dd><dt><span class="term"><em class="parameter"><code>id</code></em></span></dt><dd><p>
+     array of usb_device_id structures, terminated by zero entry
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm3814"></a><h2>Description</h2><p>
+   usb_match_id searches an array of usb_device_id's and returns
+   the first one matching the device or interface, or null.
+   This is used when binding (or rebinding) a driver to an interface.
+   Most USB device drivers will use this indirectly, through the usb core,
+   but some layered driver frameworks use it directly.
+   These device tables are exported with MODULE_DEVICE_TABLE, through
+   modutils, to support the driver loading functionality of USB hotplugging.
+</p></div><div class="refsect1"><a name="idm3817"></a><h2>Return</h2><p>
+   The first matching usb_device_id, or <code class="constant">NULL</code>.
+</p></div><div class="refsect1"><a name="idm3821"></a><h2>What Matches</h2><p>
+   </p><p>
+
+   The <span class="quote">“<span class="quote">match_flags</span>”</span> element in a usb_device_id controls which
+   members are used.  If the corresponding bit is set, the
+   value in the device_id must match its corresponding member
+   in the device or interface descriptor, or else the device_id
+   does not match.
+   </p><p>
+
+   <span class="quote">“<span class="quote">driver_info</span>”</span> is normally used only by device drivers,
+   but you can create a wildcard <span class="quote">“<span class="quote">matches anything</span>”</span> usb_device_id
+   as a driver's <span class="quote">“<span class="quote">modules.usbmap</span>”</span> entry if you provide an id with
+   only a nonzero <span class="quote">“<span class="quote">driver_info</span>”</span> field.  If you do this, the USB device
+   driver's <code class="function">probe</code> routine should use additional intelligence to
+   decide whether to bind to the specified interface.
+</p></div><div class="refsect1"><a name="idm3832"></a><h2>What Makes Good usb_device_id Tables</h2><p>
+   </p><p>
+
+   The match algorithm is very simple, so that intelligence in
+   driver selection must come from smart driver id records.
+   Unless you have good reasons to use another selection policy,
+   provide match elements only in related groups, and order match
+   specifiers from specific to general.  Use the macros provided
+   for that purpose if you can.
+   </p><p>
+
+   The most specific match specifiers use device descriptor
+   data.  These are commonly used with product-specific matches;
+   the USB_DEVICE macro lets you provide vendor and product IDs,
+   and you can also match against ranges of product revisions.
+   These are widely used for devices with application or vendor
+   specific bDeviceClass values.
+   </p><p>
+
+   Matches based on device class/subclass/protocol specifications
+   are slightly more general; use the USB_DEVICE_INFO macro, or
+   its siblings.  These are used with single-function devices
+   where bDeviceClass doesn't specify that each interface has
+   its own class.
+   </p><p>
+
+   Matches based on interface class/subclass/protocol are the
+   most general; they let drivers bind to any interface on a
+   multiple-function device.  Use the USB_INTERFACE_INFO
+   macro, or its siblings, to match class-per-interface style
+   devices (as recorded in bInterfaceClass).
+   </p><p>
+
+   Note that an entry created by USB_INTERFACE_INFO won't match
+   any interface if the device class is set to Vendor-Specific.
+   This is deliberate; according to the USB spec the meanings of
+   the interface class/subclass/protocol for these devices are also
+   vendor-specific, and hence matching against a standard product
+   class wouldn't work anyway.  If you really want to use an
+   interface-based match for such a device, create a match record
+   that also specifies the vendor ID.  (Unforunately there isn't a
+   standard macro for creating records like this.)
+   </p><p>
+
+   Within those groups, remember that not all combinations are
+   meaningful.  For example, don't give a product version range
+   without vendor and product IDs; or specify a protocol without
+   its associated class and subclass.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-driver-release-interface.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-register-device-driver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_driver_release_interface</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_register_device_driver</span></td></tr></table></div></body></html>

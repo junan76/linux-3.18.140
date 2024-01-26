@@ -1,0 +1,72 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Spare area (auto)placement</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="MTD NAND Driver Programming Interface"><link rel="up" href="boarddriversadvanced.html" title="Chapter 5. Advanced board driver functions"><link rel="prev" href="Bad_Block_table_support.html" title="Bad block table support"><link rel="next" href="Spare_area_autoplacement_default.html" title="Spare area autoplacement default schemes"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Spare area (auto)placement</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Bad_Block_table_support.html">Prev</a> </td><th width="60%" align="center">Chapter 5. Advanced board driver functions</th><td width="20%" align="right"> <a accesskey="n" href="Spare_area_autoplacement_default.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Spare_area_placement"></a>Spare area (auto)placement</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="Spare_area_placement.html#Placement_defined_by_fs_driver">Placement defined by fs driver</a></span></dt><dt><span class="sect2"><a href="Spare_area_placement.html#Automatic_placement">Automatic placement</a></span></dt></dl></div><p>
+			The nand driver implements different possibilities for
+			placement of filesystem data in the spare area, 
+			</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Placement defined by fs driver</p></li><li class="listitem"><p>Automatic placement</p></li></ul></div><p>
+			The default placement function is automatic placement. The
+			nand driver has built in default placement schemes for the
+			various chiptypes. If due to hardware ECC functionality the
+			default placement does not fit then the board driver can
+			provide a own placement scheme.
+		</p><p>
+			File system drivers can provide a own placement scheme which
+			is used instead of the default placement scheme.
+		</p><p>
+			Placement schemes are defined by a nand_oobinfo structure
+	     		</p><pre class="programlisting">
+struct nand_oobinfo {
+	int	useecc;
+	int	eccbytes;
+	int	eccpos[24];
+	int	oobfree[8][2];
+};
+	     		</pre><p>
+			</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>useecc</p><p>
+				The useecc member controls the ecc and placement function. The header
+				file include/mtd/mtd-abi.h contains constants to select ecc and
+				placement. MTD_NANDECC_OFF switches off the ecc complete. This is
+				not recommended and available for testing and diagnosis only.
+				MTD_NANDECC_PLACE selects caller defined placement, MTD_NANDECC_AUTOPLACE
+				selects automatic placement.
+			</p></li><li class="listitem"><p>eccbytes</p><p>
+				The eccbytes member defines the number of ecc bytes per page.
+			</p></li><li class="listitem"><p>eccpos</p><p>
+				The eccpos array holds the byte offsets in the spare area where
+				the ecc codes are placed.
+			</p></li><li class="listitem"><p>oobfree</p><p>
+				The oobfree array defines the areas in the spare area which can be
+				used for automatic placement. The information is given in the format
+				{offset, size}. offset defines the start of the usable area, size the
+				length in bytes. More than one area can be defined. The list is terminated
+				by an {0, 0} entry.
+			</p></li></ul></div><p>
+		</p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Placement_defined_by_fs_driver"></a>Placement defined by fs driver</h3></div></div></div><p>
+				The calling function provides a pointer to a nand_oobinfo
+				structure which defines the ecc placement. For writes the
+				caller must provide a spare area buffer along with the
+				data buffer. The spare area buffer size is (number of pages) *
+				(size of spare area). For reads the buffer size is
+				(number of pages) * ((size of spare area) + (number of ecc
+				steps per page) * sizeof (int)). The driver stores the
+				result of the ecc check for each tuple in the spare buffer.
+				The storage sequence is 
+			</p><p>
+				&lt;spare data page 0&gt;&lt;ecc result 0&gt;...&lt;ecc result n&gt;
+			</p><p>
+				...
+			</p><p>
+				&lt;spare data page n&gt;&lt;ecc result 0&gt;...&lt;ecc result n&gt;
+			</p><p>
+				This is a legacy mode used by YAFFS1.
+			</p><p>
+				If the spare area buffer is NULL then only the ECC placement is
+				done according to the given scheme in the nand_oobinfo structure.
+			</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Automatic_placement"></a>Automatic placement</h3></div></div></div><p>
+				Automatic placement uses the built in defaults to place the
+				ecc bytes in the spare area. If filesystem data have to be stored /
+				read into the spare area then the calling function must provide a
+				buffer. The buffer size per page is determined by the oobfree array in
+				the nand_oobinfo structure.
+			</p><p>
+				If the spare area buffer is NULL then only the ECC placement is
+				done according to the default builtin scheme.
+			</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Bad_Block_table_support.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="boarddriversadvanced.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="Spare_area_autoplacement_default.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Bad block table support </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Spare area autoplacement default schemes</td></tr></table></div></body></html>

@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>blkdev_get</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="other_functions.html" title="Other Functions"><link rel="prev" href="API-revalidate-disk.html" title="revalidate_disk"><link rel="next" href="API-blkdev-get-by-path.html" title="blkdev_get_by_path"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">blkdev_get</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-revalidate-disk.html">Prev</a> </td><th width="60%" align="center">Other Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-blkdev-get-by-path.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-blkdev-get"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>blkdev_get — 
+     open a block device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">blkdev_get </b>(</code></td><td>struct block_device * <var class="pdparam">bdev</var>, </td></tr><tr><td> </td><td>fmode_t <var class="pdparam">mode</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">holder</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm7428"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>bdev</code></em></span></dt><dd><p>
+     block_device to open
+    </p></dd><dt><span class="term"><em class="parameter"><code>mode</code></em></span></dt><dd><p>
+     FMODE_* mask
+    </p></dd><dt><span class="term"><em class="parameter"><code>holder</code></em></span></dt><dd><p>
+     exclusive holder identifier
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm7446"></a><h2>Description</h2><p>
+   Open <em class="parameter"><code>bdev</code></em> with <em class="parameter"><code>mode</code></em>.  If <em class="parameter"><code>mode</code></em> includes <code class="constant">FMODE_EXCL</code>, <em class="parameter"><code>bdev</code></em> is
+   open with exclusive access.  Specifying <code class="constant">FMODE_EXCL</code> with <code class="constant">NULL</code>
+   <em class="parameter"><code>holder</code></em> is invalid.  Exclusive opens may nest for the same <em class="parameter"><code>holder</code></em>.
+   </p><p>
+
+   On success, the reference count of <em class="parameter"><code>bdev</code></em> is unchanged.  On failure,
+   <em class="parameter"><code>bdev</code></em> is put.
+</p></div><div class="refsect1"><a name="idm7461"></a><h2>CONTEXT</h2><p>
+   Might sleep.
+</p></div><div class="refsect1"><a name="idm7464"></a><h2>RETURNS</h2><p>
+   0 on success, -errno on failure.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-revalidate-disk.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="other_functions.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-blkdev-get-by-path.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">revalidate_disk</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">blkdev_get_by_path</span></td></tr></table></div></body></html>

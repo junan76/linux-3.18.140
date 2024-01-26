@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>blk_rq_check_limits</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="blkdev.html" title="Chapter 14. Block Devices"><link rel="prev" href="API-submit-bio.html" title="submit_bio"><link rel="next" href="API-blk-insert-cloned-request.html" title="blk_insert_cloned_request"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">blk_rq_check_limits</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-submit-bio.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Block Devices</th><td width="20%" align="right"> <a accesskey="n" href="API-blk-insert-cloned-request.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-blk-rq-check-limits"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>blk_rq_check_limits — 
+     Helper function to check a request for the queue limit
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">blk_rq_check_limits </b>(</code></td><td>struct request_queue * <var class="pdparam">q</var>, </td></tr><tr><td> </td><td>struct request * <var class="pdparam">rq</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm25933"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>q</code></em></span></dt><dd><p>
+     the queue
+    </p></dd><dt><span class="term"><em class="parameter"><code>rq</code></em></span></dt><dd><p>
+     the request being checked
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm25946"></a><h2>Description</h2><p>
+   <em class="parameter"><code>rq</code></em> may have been made based on weaker limitations of upper-level queues
+   in request stacking drivers, and it may violate the limitation of <em class="parameter"><code>q</code></em>.
+   Since the block layer and the underlying device driver trust <em class="parameter"><code>rq</code></em>
+   after it is inserted to <em class="parameter"><code>q</code></em>, it should be checked against <em class="parameter"><code>q</code></em> before
+   the insertion using this generic function.
+   </p><p>
+
+   This function should also be useful for request stacking drivers
+   in some cases below, so export this function.
+   Request stacking drivers like request-based dm may change the queue
+   limits while requests are in the queue (e.g. dm's table swapping).
+   Such request stacking drivers should check those requests against
+   the new queue limits again when they dispatch those requests,
+   although such checkings are also done against the old queue limits
+   when submitting requests.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-submit-bio.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="blkdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-blk-insert-cloned-request.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">submit_bio</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">blk_insert_cloned_request</span></td></tr></table></div></body></html>

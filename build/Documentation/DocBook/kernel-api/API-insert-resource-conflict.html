@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>insert_resource_conflict</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch09s03.html" title="Resources Management"><link rel="prev" href="API-lookup-resource.html" title="lookup_resource"><link rel="next" href="API-insert-resource.html" title="insert_resource"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">insert_resource_conflict</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-lookup-resource.html">Prev</a> </td><th width="60%" align="center">Resources Management</th><td width="20%" align="right"> <a accesskey="n" href="API-insert-resource.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-insert-resource-conflict"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>insert_resource_conflict — 
+     Inserts resource in the resource tree
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct resource * <b class="fsfunc">insert_resource_conflict </b>(</code></td><td>struct resource * <var class="pdparam">parent</var>, </td></tr><tr><td> </td><td>struct resource * <var class="pdparam">new</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm16832"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>parent</code></em></span></dt><dd><p>
+     parent of the new resource
+    </p></dd><dt><span class="term"><em class="parameter"><code>new</code></em></span></dt><dd><p>
+     new resource to insert
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm16845"></a><h2>Description</h2><p>
+   Returns 0 on success, conflict resource if the resource can't be inserted.
+   </p><p>
+
+   This function is equivalent to request_resource_conflict when no conflict
+   happens. If a conflict happens, and the conflicting resources
+   entirely fit within the range of the new resource, then the new
+   resource is inserted and the conflicting resources become children of
+   the new resource.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-lookup-resource.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch09s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-insert-resource.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">lookup_resource</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">insert_resource</span></td></tr></table></div></body></html>

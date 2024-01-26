@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>drm_property_create_range</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drm-kms-init.html#idm5217" title="KMS API Functions"><link rel="prev" href="API-drm-property-create-bitmask.html" title="drm_property_create_bitmask"><link rel="next" href="API-drm-property-add-enum.html" title="drm_property_add_enum"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">drm_property_create_range</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-property-create-bitmask.html">Prev</a> </td><th width="60%" align="center">KMS API Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-property-add-enum.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-drm-property-create-range"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>drm_property_create_range — 
+     create a new ranged property type
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct drm_property * <b class="fsfunc">drm_property_create_range </b>(</code></td><td>struct drm_device * <var class="pdparam">dev</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">flags</var>, </td></tr><tr><td> </td><td>const char * <var class="pdparam">name</var>, </td></tr><tr><td> </td><td>uint64_t <var class="pdparam">min</var>, </td></tr><tr><td> </td><td>uint64_t <var class="pdparam">max</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm6928"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     drm device
+    </p></dd><dt><span class="term"><em class="parameter"><code>flags</code></em></span></dt><dd><p>
+     flags specifying the property type
+    </p></dd><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>
+     name of the property
+    </p></dd><dt><span class="term"><em class="parameter"><code>min</code></em></span></dt><dd><p>
+     minimum value of the property
+    </p></dd><dt><span class="term"><em class="parameter"><code>max</code></em></span></dt><dd><p>
+     maximum value of the property
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm6956"></a><h2>Description</h2><p>
+   This creates a new generic drm property which can then be attached to a drm
+   object with drm_object_attach_property. The returned property object must be
+   freed with drm_property_destroy.
+   </p><p>
+
+   Userspace is allowed to set any interger value in the (min, max) range
+   inclusive.
+</p></div><div class="refsect1"><a name="idm6960"></a><h2>Returns</h2><p>
+   A pointer to the newly created property on success, NULL on failure.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-property-create-bitmask.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drm-kms-init.html#idm5217">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-property-add-enum.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_property_create_bitmask</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_property_add_enum</span></td></tr></table></div></body></html>

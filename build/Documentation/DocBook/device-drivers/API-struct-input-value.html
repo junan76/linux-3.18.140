@@ -1,0 +1,14 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct input_value</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="input_subsystem.html#idm37901" title="Input core"><link rel="prev" href="input_subsystem.html" title="Chapter 8. Input Subsystem"><link rel="next" href="API-struct-input-dev.html" title="struct input_dev"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct input_value</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="input_subsystem.html">Prev</a> </td><th width="60%" align="center">Input core</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-input-dev.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-input-value"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct input_value — 
+  input value representation
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct input_value {
+  __u16 type;
+  __u16 code;
+  __s32 value;
+};  </pre></div><div class="refsect1"><a name="idm37919"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">type</span></dt><dd><p>
+type of value (EV_KEY, EV_ABS, etc)
+      </p></dd><dt><span class="term">code</span></dt><dd><p>
+the value code
+      </p></dd><dt><span class="term">value</span></dt><dd><p>
+the value
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="input_subsystem.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="input_subsystem.html#idm37901">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-input-dev.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 8. Input Subsystem </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct input_dev</span></td></tr></table></div></body></html>

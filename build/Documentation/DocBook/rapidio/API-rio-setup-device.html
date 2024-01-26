@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>rio_setup_device</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="RapidIO Subsystem Guide"><link rel="up" href="Enumeration_and_Discovery.html" title="Enumeration and Discovery"><link rel="prev" href="API-rio-is-switch.html" title="rio_is_switch"><link rel="next" href="API-rio-sport-is-active.html" title="rio_sport_is_active"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">rio_setup_device</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-rio-is-switch.html">Prev</a> </td><th width="60%" align="center">Enumeration and Discovery</th><td width="20%" align="right"> <a accesskey="n" href="API-rio-sport-is-active.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-rio-setup-device"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>rio_setup_device — 
+     Allocates and sets up a RIO device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct rio_dev * <b class="fsfunc">rio_setup_device </b>(</code></td><td>struct rio_net * <var class="pdparam">net</var>, </td></tr><tr><td> </td><td>struct rio_mport * <var class="pdparam">port</var>, </td></tr><tr><td> </td><td>u16 <var class="pdparam">destid</var>, </td></tr><tr><td> </td><td>u8 <var class="pdparam">hopcount</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">do_enum</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm4050"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>net</code></em></span></dt><dd><p>
+     RIO network
+    </p></dd><dt><span class="term"><em class="parameter"><code>port</code></em></span></dt><dd><p>
+     Master port to send transactions
+    </p></dd><dt><span class="term"><em class="parameter"><code>destid</code></em></span></dt><dd><p>
+     Current destination ID
+    </p></dd><dt><span class="term"><em class="parameter"><code>hopcount</code></em></span></dt><dd><p>
+     Current hopcount
+    </p></dd><dt><span class="term"><em class="parameter"><code>do_enum</code></em></span></dt><dd><p>
+     Enumeration/Discovery mode flag
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm4078"></a><h2>Description</h2><p>
+   Allocates a RIO device and configures fields based on configuration
+   space contents. If device has a destination ID register, a destination
+   ID is either assigned in enumeration mode or read from configuration
+   space in discovery mode.  If the device has switch capabilities, then
+   a switch is allocated and configured appropriately. Returns a pointer
+   to a RIO device on success or NULL on failure.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-rio-is-switch.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="Enumeration_and_Discovery.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-rio-sport-is-active.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">rio_is_switch</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">rio_sport_is_active</span></td></tr></table></div></body></html>

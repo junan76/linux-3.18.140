@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Kernel parameter: kgdbcon</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="up" href="kgdbKernelArgs.html" title="Chapter 3. Kernel Debugger Boot Arguments"><link rel="prev" href="kgdbwait.html" title="Kernel parameter: kgdbwait"><link rel="next" href="kgdbreboot.html" title="Run time parameter: kgdbreboot"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Kernel parameter: kgdbcon</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="kgdbwait.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Kernel Debugger Boot Arguments</th><td width="20%" align="right"> <a accesskey="n" href="kgdbreboot.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="kgdbcon"></a>Kernel parameter: kgdbcon</h2></div></div></div><p> The kgdbcon feature allows you to see printk() messages
+   inside gdb while gdb is connected to the kernel.  Kdb does not make
+    use of the kgdbcon feature.
+   </p><p>Kgdb supports using the gdb serial protocol to send console
+   messages to the debugger when the debugger is connected and running.
+   There are two ways to activate this feature.
+   </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Activate with the kernel command line option:</p><p><code class="constant">kgdbcon</code></p></li><li class="listitem"><p>Use sysfs before configuring an I/O driver</p><p>
+   <code class="constant">echo 1 &gt; /sys/module/kgdb/parameters/kgdb_use_con</code>
+   </p><p>
+   NOTE: If you do this after you configure the kgdb I/O driver, the
+   setting will not take effect until the next point the I/O is
+   reconfigured.
+   </p></li></ol></div><p>
+   </p><p>IMPORTANT NOTE: You cannot use kgdboc + kgdbcon on a tty that is an
+   active system console.  An example incorrect usage is <code class="constant">console=ttyS0,115200 kgdboc=ttyS0 kgdbcon</code>
+   </p><p>
+   </p><p>It is possible to use this option with kgdboc on a tty that is not a system console.
+   </p><p>
+  </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="kgdbwait.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="kgdbKernelArgs.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="kgdbreboot.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Kernel parameter: kgdbwait </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Run time parameter: kgdbreboot</td></tr></table></div></body></html>

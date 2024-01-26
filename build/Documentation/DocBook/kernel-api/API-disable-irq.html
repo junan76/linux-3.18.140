@@ -1,0 +1,14 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>disable_irq</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="hardware.html#idm16067" title="Interrupt Handling"><link rel="prev" href="API-disable-irq-nosync.html" title="disable_irq_nosync"><link rel="next" href="API-enable-irq.html" title="enable_irq"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">disable_irq</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-disable-irq-nosync.html">Prev</a> </td><th width="60%" align="center">Interrupt Handling</th><td width="20%" align="right"> <a accesskey="n" href="API-enable-irq.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-disable-irq"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>disable_irq — 
+     disable an irq and wait for completion
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">disable_irq </b>(</code></td><td>unsigned int <var class="pdparam">irq</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm16232"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>irq</code></em></span></dt><dd><p>
+     Interrupt to disable
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm16240"></a><h2>Description</h2><p>
+   Disable the selected interrupt line.  Enables and Disables are
+   nested.
+   This function waits for any pending IRQ handlers for this interrupt
+   to complete before returning. If you use this function while
+   holding a resource the IRQ handler may need you will deadlock.
+   </p><p>
+
+   This function may be called - with care - from IRQ context.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-disable-irq-nosync.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="hardware.html#idm16067">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-enable-irq.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">disable_irq_nosync</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">enable_irq</span></td></tr></table></div></body></html>

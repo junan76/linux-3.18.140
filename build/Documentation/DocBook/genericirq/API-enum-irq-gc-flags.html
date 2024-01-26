@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>enum irq_gc_flags</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux generic IRQ handling"><link rel="up" href="structs.html" title="Chapter 8. Structures"><link rel="prev" href="API-struct-irq-chip-generic.html" title="struct irq_chip_generic"><link rel="next" href="API-struct-irqaction.html" title="struct irqaction"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">enum irq_gc_flags</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-irq-chip-generic.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Structures</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-irqaction.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-enum-irq-gc-flags"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>enum irq_gc_flags — 
+     Initialization flags for generic irq chips
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+enum irq_gc_flags {
+  IRQ_GC_INIT_MASK_CACHE,
+  IRQ_GC_INIT_NESTED_LOCK,
+  IRQ_GC_MASK_CACHE_PER_TYPE,
+  IRQ_GC_NO_MASK
+};  </pre></div><div class="refsect1"><a name="idm1003"></a><h2>Constants</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">IRQ_GC_INIT_MASK_CACHE</span></dt><dd><p>
+   Initialize the mask_cache by reading mask reg
+      </p></dd><dt><span class="term">IRQ_GC_INIT_NESTED_LOCK</span></dt><dd><p>
+   Set the lock class of the irqs to nested for
+   irq chips which need to call <code class="function">irq_set_wake</code> on
+   the parent irq. Usually GPIO implementations
+      </p></dd><dt><span class="term">IRQ_GC_MASK_CACHE_PER_TYPE</span></dt><dd><p>
+   Mask cache is chip type private
+      </p></dd><dt><span class="term">IRQ_GC_NO_MASK</span></dt><dd><p>
+   Do not calculate irq_data-&gt;mask
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-irq-chip-generic.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="structs.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-irqaction.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct irq_chip_generic</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct irqaction</span></td></tr></table></div></body></html>

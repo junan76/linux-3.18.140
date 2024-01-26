@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 3. Memory Mapped IO</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Bus-Independent Device Accesses"><link rel="up" href="index.html" title="Bus-Independent Device Accesses"><link rel="prev" href="bugs.html" title="Chapter 2. Known Bugs And Assumptions"><link rel="next" href="accessing_the_device.html" title="Accessing the device"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. Memory Mapped IO</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="bugs.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="accessing_the_device.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="mmio"></a>Chapter 3. Memory Mapped IO</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="mmio.html#getting_access_to_the_device">Getting Access to the Device</a></span></dt><dt><span class="sect1"><a href="accessing_the_device.html">Accessing the device</a></span></dt></dl></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="getting_access_to_the_device"></a>Getting Access to the Device</h2></div></div></div><p>
+	The most widely supported form of IO is memory mapped IO.
+	That is, a part of the CPU's address space is interpreted
+	not as accesses to memory, but as accesses to a device.  Some
+	architectures define devices to be at a fixed address, but most
+	have some method of discovering devices.  The PCI bus walk is a
+	good example of such a scheme.	This document does not cover how
+	to receive such an address, but assumes you are starting with one.
+	Physical addresses are of type unsigned long. 
+      </p><p>
+	This address should not be used directly.  Instead, to get an
+	address suitable for passing to the accessor functions described
+	below, you should call <code class="function">ioremap</code>.
+	An address suitable for accessing the device will be returned to you.
+      </p><p>
+	After you've finished using the device (say, in your module's
+	exit routine), call <code class="function">iounmap</code> in order to return
+	the address space to the kernel.  Most architectures allocate new
+	address space each time you call <code class="function">ioremap</code>, and
+	they can run out unless you call <code class="function">iounmap</code>.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="bugs.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="accessing_the_device.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. Known Bugs And Assumptions </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Accessing the device</td></tr></table></div></body></html>

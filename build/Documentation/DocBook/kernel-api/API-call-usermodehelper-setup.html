@@ -1,0 +1,34 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>call_usermodehelper_setup</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="modload.html#idm15840" title="Module Loading"><link rel="prev" href="API---request-module.html" title="__request_module"><link rel="next" href="API-call-usermodehelper-exec.html" title="call_usermodehelper_exec"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">call_usermodehelper_setup</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API---request-module.html">Prev</a> </td><th width="60%" align="center">Module Loading</th><td width="20%" align="right"> <a accesskey="n" href="API-call-usermodehelper-exec.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-call-usermodehelper-setup"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>call_usermodehelper_setup — 
+     prepare to call a usermode helper
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct subprocess_info * <b class="fsfunc">call_usermodehelper_setup </b>(</code></td><td>char * <var class="pdparam">path</var>, </td></tr><tr><td> </td><td>char ** <var class="pdparam">argv</var>, </td></tr><tr><td> </td><td>char ** <var class="pdparam">envp</var>, </td></tr><tr><td> </td><td>gfp_t <var class="pdparam">gfp_mask</var>, </td></tr><tr><td> </td><td>int (*<var class="pdparam">init</var>)
+     <code>(</code>struct subprocess_info *info, struct cred *new<code>)</code>, </td></tr><tr><td> </td><td>void (*<var class="pdparam">cleanup</var>)
+     <code>(</code>struct subprocess_info *info<code>)</code>, </td></tr><tr><td> </td><td>void * <var class="pdparam">data</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm15924"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>path</code></em></span></dt><dd><p>
+     path to usermode executable
+    </p></dd><dt><span class="term"><em class="parameter"><code>argv</code></em></span></dt><dd><p>
+     arg vector for process
+    </p></dd><dt><span class="term"><em class="parameter"><code>envp</code></em></span></dt><dd><p>
+     environment for process
+    </p></dd><dt><span class="term"><em class="parameter"><code>gfp_mask</code></em></span></dt><dd><p>
+     gfp mask for memory allocation
+    </p></dd><dt><span class="term"><em class="parameter"><code>init</code></em></span></dt><dd><p>
+     an init function
+    </p></dd><dt><span class="term"><em class="parameter"><code>cleanup</code></em></span></dt><dd><p>
+     a cleanup function
+    </p></dd><dt><span class="term"><em class="parameter"><code>data</code></em></span></dt><dd><p>
+     arbitrary context sensitive data
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm15962"></a><h2>Description</h2><p>
+   Returns either <code class="constant">NULL</code> on allocation failure, or a subprocess_info
+   structure.  This should be passed to call_usermodehelper_exec to
+   exec the process and free the structure.
+   </p><p>
+
+   The init function is used to customize the helper process prior to
+   exec.  A non-zero return code causes the process to error out, exit,
+   and return the failure to the calling process
+   </p><p>
+
+   The cleanup function is just before ethe subprocess_info is about to
+   be freed.  This can be used for freeing the argv and envp.  The
+   Function must be runnable in either a process context or the
+   context in which call_usermodehelper_exec is called.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API---request-module.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="modload.html#idm15840">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-call-usermodehelper-exec.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">__request_module</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">call_usermodehelper_exec</span></td></tr></table></div></body></html>

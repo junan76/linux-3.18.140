@@ -1,0 +1,130 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 3. RapidIO driver interface</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="RapidIO Subsystem Guide"><link rel="up" href="index.html" title="RapidIO Subsystem Guide"><link rel="prev" href="Limitations.html" title="Limitations"><link rel="next" href="API-rio-local-read-config-32.html" title="rio_local_read_config_32"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. RapidIO driver interface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Limitations.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-rio-local-read-config-32.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="drivers"></a>Chapter 3. RapidIO driver interface</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="drivers.html#Functions">Functions</a></span></dt></dl></div><p>
+		Drivers are provided a set of calls in order
+		to interface with the subsystem to gather info
+		on devices, request/map memory region resources,
+		and manage mailboxes/doorbells.
+	</p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Functions"></a>Functions</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-rio-local-read-config-32.html"><span class="phrase">rio_local_read_config_32</span></a></span><span class="refpurpose"> — 
+  Read 32 bits from local configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-local-write-config-32.html"><span class="phrase">rio_local_write_config_32</span></a></span><span class="refpurpose"> — 
+     Write 32 bits to local configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-local-read-config-16.html"><span class="phrase">rio_local_read_config_16</span></a></span><span class="refpurpose"> — 
+     Read 16 bits from local configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-local-write-config-16.html"><span class="phrase">rio_local_write_config_16</span></a></span><span class="refpurpose"> — 
+     Write 16 bits to local configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-local-read-config-8.html"><span class="phrase">rio_local_read_config_8</span></a></span><span class="refpurpose"> — 
+     Read 8 bits from local configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-local-write-config-8.html"><span class="phrase">rio_local_write_config_8</span></a></span><span class="refpurpose"> — 
+     Write 8 bits to local configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-read-config-32.html"><span class="phrase">rio_read_config_32</span></a></span><span class="refpurpose"> — 
+     Read 32 bits from configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-write-config-32.html"><span class="phrase">rio_write_config_32</span></a></span><span class="refpurpose"> — 
+     Write 32 bits to configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-read-config-16.html"><span class="phrase">rio_read_config_16</span></a></span><span class="refpurpose"> — 
+     Read 16 bits from configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-write-config-16.html"><span class="phrase">rio_write_config_16</span></a></span><span class="refpurpose"> — 
+     Write 16 bits to configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-read-config-8.html"><span class="phrase">rio_read_config_8</span></a></span><span class="refpurpose"> — 
+     Read 8 bits from configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-write-config-8.html"><span class="phrase">rio_write_config_8</span></a></span><span class="refpurpose"> — 
+     Write 8 bits to configuration space
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-send-doorbell.html"><span class="phrase">rio_send_doorbell</span></a></span><span class="refpurpose"> — 
+     Send a doorbell message to a device
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-init-mbox-res.html"><span class="phrase">rio_init_mbox_res</span></a></span><span class="refpurpose"> — 
+     Initialize a RIO mailbox resource
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-init-dbell-res.html"><span class="phrase">rio_init_dbell_res</span></a></span><span class="refpurpose"> — 
+     Initialize a RIO doorbell resource
+ </span></dt><dt><span class="refentrytitle"><a href="API-RIO-DEVICE.html"><span class="phrase">RIO_DEVICE</span></a></span><span class="refpurpose"> — 
+     macro used to describe a specific RIO device
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-add-outb-message.html"><span class="phrase">rio_add_outb_message</span></a></span><span class="refpurpose"> — 
+     Add RIO message to an outbound mailbox queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-add-inb-buffer.html"><span class="phrase">rio_add_inb_buffer</span></a></span><span class="refpurpose"> — 
+     Add buffer to an inbound mailbox queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-get-inb-message.html"><span class="phrase">rio_get_inb_message</span></a></span><span class="refpurpose"> — 
+     Get A RIO message from an inbound mailbox queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-name.html"><span class="phrase">rio_name</span></a></span><span class="refpurpose"> — 
+     Get the unique RIO device identifier
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-get-drvdata.html"><span class="phrase">rio_get_drvdata</span></a></span><span class="refpurpose"> — 
+     Get RIO driver specific data
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-set-drvdata.html"><span class="phrase">rio_set_drvdata</span></a></span><span class="refpurpose"> — 
+     Set RIO driver specific data
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-dev-get.html"><span class="phrase">rio_dev_get</span></a></span><span class="refpurpose"> — 
+  Increments the reference count of the RIO device structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-dev-put.html"><span class="phrase">rio_dev_put</span></a></span><span class="refpurpose"> — 
+     Release a use of the RIO device structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-register-driver.html"><span class="phrase">rio_register_driver</span></a></span><span class="refpurpose"> — 
+     register a new RIO driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-unregister-driver.html"><span class="phrase">rio_unregister_driver</span></a></span><span class="refpurpose"> — 
+     unregister a RIO driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-local-get-device-id.html"><span class="phrase">rio_local_get_device_id</span></a></span><span class="refpurpose"> — 
+  Get the base/extended device id for a port
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-add-device.html"><span class="phrase">rio_add_device</span></a></span><span class="refpurpose"> — 
+     Adds a RIO device to the device model
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-request-inb-mbox.html"><span class="phrase">rio_request_inb_mbox</span></a></span><span class="refpurpose"> — 
+     request inbound mailbox service
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-release-inb-mbox.html"><span class="phrase">rio_release_inb_mbox</span></a></span><span class="refpurpose"> — 
+     release inbound mailbox message service
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-request-outb-mbox.html"><span class="phrase">rio_request_outb_mbox</span></a></span><span class="refpurpose"> — 
+     request outbound mailbox service
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-release-outb-mbox.html"><span class="phrase">rio_release_outb_mbox</span></a></span><span class="refpurpose"> — 
+     release outbound mailbox message service
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-request-inb-dbell.html"><span class="phrase">rio_request_inb_dbell</span></a></span><span class="refpurpose"> — 
+     request inbound doorbell message service
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-release-inb-dbell.html"><span class="phrase">rio_release_inb_dbell</span></a></span><span class="refpurpose"> — 
+     release inbound doorbell message service
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-request-outb-dbell.html"><span class="phrase">rio_request_outb_dbell</span></a></span><span class="refpurpose"> — 
+     request outbound doorbell message range
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-release-outb-dbell.html"><span class="phrase">rio_release_outb_dbell</span></a></span><span class="refpurpose"> — 
+     release outbound doorbell message range
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-request-inb-pwrite.html"><span class="phrase">rio_request_inb_pwrite</span></a></span><span class="refpurpose"> — 
+     request inbound port-write message service
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-release-inb-pwrite.html"><span class="phrase">rio_release_inb_pwrite</span></a></span><span class="refpurpose"> — 
+     release inbound port-write message service
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-map-inb-region.html"><span class="phrase">rio_map_inb_region</span></a></span><span class="refpurpose"> — 
+     - Map inbound memory region.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-unmap-inb-region.html"><span class="phrase">rio_unmap_inb_region</span></a></span><span class="refpurpose"> — 
+     - Unmap the inbound memory region
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-mport-get-physefb.html"><span class="phrase">rio_mport_get_physefb</span></a></span><span class="refpurpose"> — 
+     Helper function that returns register offset for Physical Layer Extended Features Block.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-get-comptag.html"><span class="phrase">rio_get_comptag</span></a></span><span class="refpurpose"> — 
+     Begin or continue searching for a RIO device by component tag
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-set-port-lockout.html"><span class="phrase">rio_set_port_lockout</span></a></span><span class="refpurpose"> — 
+     Sets/clears LOCKOUT bit (RIO EM 1.3) for a switch port.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-enable-rx-tx-port.html"><span class="phrase">rio_enable_rx_tx_port</span></a></span><span class="refpurpose"> — 
+     enable input receiver and output transmitter of given port
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-mport-chk-dev-access.html"><span class="phrase">rio_mport_chk_dev_access</span></a></span><span class="refpurpose"> — 
+     Validate access to the specified device.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-inb-pwrite-handler.html"><span class="phrase">rio_inb_pwrite_handler</span></a></span><span class="refpurpose"> — 
+     process inbound port-write message
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-mport-get-efb.html"><span class="phrase">rio_mport_get_efb</span></a></span><span class="refpurpose"> — 
+     get pointer to next extended features block
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-mport-get-feature.html"><span class="phrase">rio_mport_get_feature</span></a></span><span class="refpurpose"> — 
+     query for devices' extended features
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-get-asm.html"><span class="phrase">rio_get_asm</span></a></span><span class="refpurpose"> — 
+     Begin or continue searching for a RIO device by vid/did/asm_vid/asm_did
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-get-device.html"><span class="phrase">rio_get_device</span></a></span><span class="refpurpose"> — 
+     Begin or continue searching for a RIO device by vid/did
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-lock-device.html"><span class="phrase">rio_lock_device</span></a></span><span class="refpurpose"> — 
+     Acquires host device lock for specified device
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-unlock-device.html"><span class="phrase">rio_unlock_device</span></a></span><span class="refpurpose"> — 
+     Releases host device lock for specified device
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-route-add-entry.html"><span class="phrase">rio_route_add_entry</span></a></span><span class="refpurpose"> — 
+     Add a route entry to a switch routing table
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-route-get-entry.html"><span class="phrase">rio_route_get_entry</span></a></span><span class="refpurpose"> — 
+     Read an entry from a switch routing table
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-route-clr-table.html"><span class="phrase">rio_route_clr_table</span></a></span><span class="refpurpose"> — 
+     Clear a switch routing table
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-request-mport-dma.html"><span class="phrase">rio_request_mport_dma</span></a></span><span class="refpurpose"> — 
+     request RapidIO capable DMA channel associated with specified local RapidIO mport device.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-request-dma.html"><span class="phrase">rio_request_dma</span></a></span><span class="refpurpose"> — 
+     request RapidIO capable DMA channel that supports specified target RapidIO device.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-release-dma.html"><span class="phrase">rio_release_dma</span></a></span><span class="refpurpose"> — 
+     release specified DMA channel
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-dma-prep-xfer.html"><span class="phrase">rio_dma_prep_xfer</span></a></span><span class="refpurpose"> — 
+     RapidIO specific wrapper for device_prep_slave_sg callback defined by DMAENGINE.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-dma-prep-slave-sg.html"><span class="phrase">rio_dma_prep_slave_sg</span></a></span><span class="refpurpose"> — 
+     RapidIO specific wrapper for device_prep_slave_sg callback defined by DMAENGINE.
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-register-scan.html"><span class="phrase">rio_register_scan</span></a></span><span class="refpurpose"> — 
+     enumeration/discovery method registration interface
+ </span></dt><dt><span class="refentrytitle"><a href="API-rio-unregister-scan.html"><span class="phrase">rio_unregister_scan</span></a></span><span class="refpurpose"> — 
+     removes enumeration/discovery method from mport
+ </span></dt></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Limitations.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-rio-local-read-config-32.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Limitations </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">rio_local_read_config_32</span></td></tr></table></div></body></html>

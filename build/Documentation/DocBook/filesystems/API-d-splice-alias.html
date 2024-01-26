@@ -1,0 +1,30 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>d_splice_alias</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="the_directory_cache.html" title="The Directory Cache"><link rel="prev" href="API-dentry-update-name-case.html" title="dentry_update_name_case"><link rel="next" href="API-d-materialise-unique.html" title="d_materialise_unique"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">d_splice_alias</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-dentry-update-name-case.html">Prev</a> </td><th width="60%" align="center">The Directory Cache</th><td width="20%" align="right"> <a accesskey="n" href="API-d-materialise-unique.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-d-splice-alias"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>d_splice_alias — 
+     splice a disconnected dentry into the tree if one exists
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct dentry * <b class="fsfunc">d_splice_alias </b>(</code></td><td>struct inode * <var class="pdparam">inode</var>, </td></tr><tr><td> </td><td>struct dentry * <var class="pdparam">dentry</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm983"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>inode</code></em></span></dt><dd><p>
+     the inode which may have a disconnected dentry
+    </p></dd><dt><span class="term"><em class="parameter"><code>dentry</code></em></span></dt><dd><p>
+     a negative dentry which we want to point to the inode.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm996"></a><h2>Description</h2><p>
+   If inode is a directory and has an IS_ROOT alias, then d_move that in
+   place of the given dentry and return it, else simply d_add the inode
+   to the dentry and return NULL.
+   </p><p>
+
+   If a non-IS_ROOT directory is found, the filesystem is corrupt, and
+</p></div><div class="refsect1"><a name="idm1000"></a><h2>we should error out</h2><p>
+   directories can't have multiple aliases.
+   </p><p>
+
+   This is needed in the lookup routine of any filesystem that is exportable
+   (via knfsd) so that we can build dcache paths to directories effectively.
+   </p><p>
+
+   If a dentry was found and moved, then it is returned.  Otherwise NULL
+   is returned.  This matches the expected return value of -&gt;lookup.
+   </p><p>
+
+   Cluster filesystems may call this function with a negative, hashed dentry.
+   In that case, we know that the inode will be a regular file, and also this
+   will only occur during atomic_open. So we need to check for the dentry
+   being already hashed only in the final case.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-dentry-update-name-case.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="the_directory_cache.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-d-materialise-unique.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">dentry_update_name_case</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">d_materialise_unique</span></td></tr></table></div></body></html>

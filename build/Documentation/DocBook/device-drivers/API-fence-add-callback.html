@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>fence_add_callback</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch02s03.html" title="Device Drivers DMA Management"><link rel="prev" href="API-fence-enable-sw-signaling.html" title="fence_enable_sw_signaling"><link rel="next" href="API-fence-remove-callback.html" title="fence_remove_callback"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">fence_add_callback</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-fence-enable-sw-signaling.html">Prev</a> </td><th width="60%" align="center">Device Drivers DMA Management</th><td width="20%" align="right"> <a accesskey="n" href="API-fence-remove-callback.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-fence-add-callback"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>fence_add_callback — 
+     add a callback to be called when the fence is signaled
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">fence_add_callback </b>(</code></td><td>struct fence * <var class="pdparam">fence</var>, </td></tr><tr><td> </td><td>struct fence_cb * <var class="pdparam">cb</var>, </td></tr><tr><td> </td><td>fence_func_t <var class="pdparam">func</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm16778"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>fence</code></em></span></dt><dd><p>
+     [in]	the fence to wait on
+    </p></dd><dt><span class="term"><em class="parameter"><code>cb</code></em></span></dt><dd><p>
+     [in]	the callback to register
+    </p></dd><dt><span class="term"><em class="parameter"><code>func</code></em></span></dt><dd><p>
+     [in]	the function to call
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm16796"></a><h2>Description</h2><p>
+   cb will be initialized by fence_add_callback, no initialization
+   by the caller is required. Any number of callbacks can be registered
+   to a fence, but a callback can only be registered to one fence at a time.
+   </p><p>
+
+   Note that the callback can be called from an atomic context.  If
+   fence is already signaled, this function will return -ENOENT (and
+   *not* call the callback)
+   </p><p>
+
+   Add a software callback to the fence. Same restrictions apply to
+   refcount as it does to fence_wait, however the caller doesn't need to
+</p></div><div class="refsect1"><a name="idm16801"></a><h2>keep a refcount to fence afterwards</h2><p>
+   when software access is enabled,
+   the creator of the fence is required to keep the fence alive until
+   after it signals with fence_signal. The callback itself can be called
+   from irq context.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-fence-enable-sw-signaling.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-fence-remove-callback.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">fence_enable_sw_signaling</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">fence_remove_callback</span></td></tr></table></div></body></html>

@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct uio_info</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch02s07.html" title="Userspace IO devices"><link rel="prev" href="API-struct-uio-port.html" title="struct uio_port"><link rel="next" href="parportdev.html" title="Chapter 3. Parallel Port Devices"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct uio_info</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-uio-port.html">Prev</a> </td><th width="60%" align="center">Userspace IO devices</th><td width="20%" align="right"> <a accesskey="n" href="parportdev.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-uio-info"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct uio_info — 
+     UIO device capabilities
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct uio_info {
+  struct uio_device * uio_dev;
+  const char * name;
+  const char * version;
+  struct uio_mem mem[MAX_UIO_MAPS];
+  struct uio_port port[MAX_UIO_PORT_REGIONS];
+  long irq;
+  unsigned long irq_flags;
+  void * priv;
+  irqreturn_t (* handler) (int irq, struct uio_info *dev_info);
+  int (* mmap) (struct uio_info *info, struct vm_area_struct *vma);
+  int (* open) (struct uio_info *info, struct inode *inode);
+  int (* release) (struct uio_info *info, struct inode *inode);
+  int (* irqcontrol) (struct uio_info *info, s32 irq_on);
+};  </pre></div><div class="refsect1"><a name="idm19011"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">uio_dev</span></dt><dd><p>
+   the UIO device this info belongs to
+      </p></dd><dt><span class="term">name</span></dt><dd><p>
+   device name
+      </p></dd><dt><span class="term">version</span></dt><dd><p>
+   device driver version
+      </p></dd><dt><span class="term">mem[MAX_UIO_MAPS]</span></dt><dd><p>
+   list of mappable memory regions, size==0 for end of list
+      </p></dd><dt><span class="term">port[MAX_UIO_PORT_REGIONS]</span></dt><dd><p>
+   list of port regions, size==0 for end of list
+      </p></dd><dt><span class="term">irq</span></dt><dd><p>
+   interrupt number or UIO_IRQ_CUSTOM
+      </p></dd><dt><span class="term">irq_flags</span></dt><dd><p>
+   flags for <code class="function">request_irq</code>
+      </p></dd><dt><span class="term">priv</span></dt><dd><p>
+   optional private data
+      </p></dd><dt><span class="term">handler</span></dt><dd><p>
+   the device's irq handler
+      </p></dd><dt><span class="term">mmap</span></dt><dd><p>
+   mmap operation for this uio device
+      </p></dd><dt><span class="term">open</span></dt><dd><p>
+   open operation for this uio device
+      </p></dd><dt><span class="term">release</span></dt><dd><p>
+   release operation for this uio device
+      </p></dd><dt><span class="term">irqcontrol</span></dt><dd><p>
+   disable/enable irqs when 0/1 is written to /dev/uioX
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-uio-port.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s07.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="parportdev.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct uio_port</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. Parallel Port Devices</td></tr></table></div></body></html>

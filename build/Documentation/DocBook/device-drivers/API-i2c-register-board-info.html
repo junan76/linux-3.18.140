@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>i2c_register_board_info</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="i2c.html" title="Chapter 10. I2C and SMBus Subsystem"><link rel="prev" href="API-module-i2c-driver.html" title="module_i2c_driver"><link rel="next" href="API-i2c-verify-client.html" title="i2c_verify_client"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">i2c_register_board_info</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-module-i2c-driver.html">Prev</a> </td><th width="60%" align="center">Chapter 10. I<sup>2</sup>C and SMBus Subsystem</th><td width="20%" align="right"> <a accesskey="n" href="API-i2c-verify-client.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-i2c-register-board-info"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>i2c_register_board_info — 
+  statically declare I2C devices
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">i2c_register_board_info </b>(</code></td><td>int <var class="pdparam">busnum</var>, </td></tr><tr><td> </td><td>struct i2c_board_info const * <var class="pdparam">info</var>, </td></tr><tr><td> </td><td>unsigned <var class="pdparam">len</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm42949"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>busnum</code></em></span></dt><dd><p>
+     identifies the bus to which these devices belong
+    </p></dd><dt><span class="term"><em class="parameter"><code>info</code></em></span></dt><dd><p>
+     vector of i2c device descriptors
+    </p></dd><dt><span class="term"><em class="parameter"><code>len</code></em></span></dt><dd><p>
+     how many descriptors in the vector; may be zero to reserve
+     the specified bus number.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm42967"></a><h2>Description</h2><p>
+   Systems using the Linux I2C driver stack can declare tables of board info
+   while they initialize.  This should be done in board-specific init code
+   near <code class="function">arch_initcall</code> time, or equivalent, before any I2C adapter driver is
+   registered.  For example, mainboard init code could define several devices,
+   as could the init code for each daughtercard in a board stack.
+   </p><p>
+
+   The I2C devices will be created later, after the adapter for the relevant
+   bus has been registered.  After that moment, standard driver model tools
+   are used to bind <span class="quote">“<span class="quote">new style</span>”</span> I2C drivers to the devices.  The bus number
+   for any device declared using this routine is not available for dynamic
+   allocation.
+   </p><p>
+
+   The board info passed can safely be __initdata, but be careful of embedded
+   pointers (for platform_data, functions, etc) since that won't be copied.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-module-i2c-driver.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="i2c.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-i2c-verify-client.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">module_i2c_driver</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">i2c_verify_client</span></td></tr></table></div></body></html>

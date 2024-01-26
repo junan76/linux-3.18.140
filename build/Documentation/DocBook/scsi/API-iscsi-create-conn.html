@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>iscsi_create_conn</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="Transport_classes.html#iSCSI_transport" title="iSCSI transport class"><link rel="prev" href="API-iscsi-destroy-session.html" title="iscsi_destroy_session"><link rel="next" href="API-iscsi-destroy-conn.html" title="iscsi_destroy_conn"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">iscsi_create_conn</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-iscsi-destroy-session.html">Prev</a> </td><th width="60%" align="center">iSCSI transport class</th><td width="20%" align="right"> <a accesskey="n" href="API-iscsi-destroy-conn.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-iscsi-create-conn"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>iscsi_create_conn — 
+     create iscsi class connection
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct iscsi_cls_conn * <b class="fsfunc">iscsi_create_conn </b>(</code></td><td>struct iscsi_cls_session * <var class="pdparam">session</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">dd_size</var>, </td></tr><tr><td> </td><td>uint32_t <var class="pdparam">cid</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm5241"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>session</code></em></span></dt><dd><p>
+     iscsi cls session
+    </p></dd><dt><span class="term"><em class="parameter"><code>dd_size</code></em></span></dt><dd><p>
+     private driver data size
+    </p></dd><dt><span class="term"><em class="parameter"><code>cid</code></em></span></dt><dd><p>
+     connection id
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm5259"></a><h2>Description</h2><p>
+   This can be called from a LLD or iscsi_transport. The connection
+   is child of the session so cid must be unique for all connections
+   on the session.
+   </p><p>
+
+   Since we do not support MCS, cid will normally be zero. In some cases
+   for software iscsi we could be trying to preallocate a connection struct
+   in which case there could be two connection structs and cid would be
+   non-zero.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-iscsi-destroy-session.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="Transport_classes.html#iSCSI_transport">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-iscsi-destroy-conn.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">iscsi_destroy_session</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">iscsi_destroy_conn</span></td></tr></table></div></body></html>

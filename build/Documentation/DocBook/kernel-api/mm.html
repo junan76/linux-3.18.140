@@ -1,0 +1,33 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 4. Memory Management in Linux</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="index.html" title="The Linux Kernel API"><link rel="prev" href="API-ida-init.html" title="ida_init"><link rel="next" href="API-kmalloc.html" title="kmalloc"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Memory Management in Linux</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-ida-init.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-kmalloc.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="mm"></a>Chapter 4. Memory Management in Linux</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="mm.html#idm7194">The Slab Cache</a></span></dt><dt><span class="sect1"><a href="ch04s02.html">User Space Memory Access</a></span></dt><dt><span class="sect1"><a href="ch04s03.html">More Memory Management Functions</a></span></dt></dl></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm7194"></a>The Slab Cache</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-kmalloc.html"><span class="phrase">kmalloc</span></a></span><span class="refpurpose"> — 
+  allocate memory
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmalloc-array.html"><span class="phrase">kmalloc_array</span></a></span><span class="refpurpose"> — 
+     allocate memory for an array.
+ </span></dt><dt><span class="refentrytitle"><a href="API-kcalloc.html"><span class="phrase">kcalloc</span></a></span><span class="refpurpose"> — 
+     allocate memory for an array. The memory is set to zero.
+ </span></dt><dt><span class="refentrytitle"><a href="API-kzalloc.html"><span class="phrase">kzalloc</span></a></span><span class="refpurpose"> — 
+     allocate memory. The memory is set to zero.
+ </span></dt><dt><span class="refentrytitle"><a href="API-kzalloc-node.html"><span class="phrase">kzalloc_node</span></a></span><span class="refpurpose"> — 
+     allocate zeroed memory from a particular memory node.
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmem-cache-alloc.html"><span class="phrase">kmem_cache_alloc</span></a></span><span class="refpurpose"> — 
+  Allocate an object
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmem-cache-alloc-node.html"><span class="phrase">kmem_cache_alloc_node</span></a></span><span class="refpurpose"> — 
+     Allocate an object on the specified node
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmem-cache-free.html"><span class="phrase">kmem_cache_free</span></a></span><span class="refpurpose"> — 
+     Deallocate an object
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfree.html"><span class="phrase">kfree</span></a></span><span class="refpurpose"> — 
+     free previously allocated memory
+ </span></dt><dt><span class="refentrytitle"><a href="API-ksize.html"><span class="phrase">ksize</span></a></span><span class="refpurpose"> — 
+     get the actual amount of memory allocated for a given object
+ </span></dt><dt><span class="refentrytitle"><a href="API-kstrdup.html"><span class="phrase">kstrdup</span></a></span><span class="refpurpose"> — 
+  allocate space for and copy an existing string
+ </span></dt><dt><span class="refentrytitle"><a href="API-kstrndup.html"><span class="phrase">kstrndup</span></a></span><span class="refpurpose"> — 
+     allocate space for and copy an existing string
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmemdup.html"><span class="phrase">kmemdup</span></a></span><span class="refpurpose"> — 
+     duplicate region of memory
+ </span></dt><dt><span class="refentrytitle"><a href="API-kmemdup-nul.html"><span class="phrase">kmemdup_nul</span></a></span><span class="refpurpose"> — 
+     Create a NUL-terminated string from unterminated data
+ </span></dt><dt><span class="refentrytitle"><a href="API-memdup-user.html"><span class="phrase">memdup_user</span></a></span><span class="refpurpose"> — 
+     duplicate memory region from user space
+ </span></dt><dt><span class="refentrytitle"><a href="API-get-user-pages-fast.html"><span class="phrase">get_user_pages_fast</span></a></span><span class="refpurpose"> — 
+     pin user pages in memory
+ </span></dt></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-ida-init.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-kmalloc.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">ida_init</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">kmalloc</span></td></tr></table></div></body></html>

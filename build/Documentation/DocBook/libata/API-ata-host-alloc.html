@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ata_host_alloc</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="libATA Developer's Guide"><link rel="up" href="libataExt.html" title="Chapter 4. libata Library"><link rel="prev" href="API-ata-host-resume.html" title="ata_host_resume"><link rel="next" href="API-ata-host-alloc-pinfo.html" title="ata_host_alloc_pinfo"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">ata_host_alloc</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-ata-host-resume.html">Prev</a> </td><th width="60%" align="center">Chapter 4. libata Library</th><td width="20%" align="right"> <a accesskey="n" href="API-ata-host-alloc-pinfo.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-ata-host-alloc"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ata_host_alloc — 
+     allocate and init basic ATA host resources
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct ata_host * <b class="fsfunc">ata_host_alloc </b>(</code></td><td>struct device * <var class="pdparam">dev</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">max_ports</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2382"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     generic device this host is associated with
+    </p></dd><dt><span class="term"><em class="parameter"><code>max_ports</code></em></span></dt><dd><p>
+     maximum number of ATA ports associated with this host
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2395"></a><h2>Description</h2><p>
+   Allocate and initialize basic ATA host resources.  LLD calls
+   this function to allocate a host, initializes it fully and
+   attaches it using <code class="function">ata_host_register</code>.
+   </p><p>
+
+   <em class="parameter"><code>max_ports</code></em> ports are allocated and host-&gt;n_ports is
+   initialized to <em class="parameter"><code>max_ports</code></em>.  The caller is allowed to decrease
+   host-&gt;n_ports before calling <code class="function">ata_host_register</code>.  The unused
+   ports will be automatically freed on registration.
+</p></div><div class="refsect1"><a name="idm2403"></a><h2>RETURNS</h2><p>
+   Allocate ATA host on success, NULL on failure.
+</p></div><div class="refsect1"><a name="idm2406"></a><h2>LOCKING</h2><p>
+   Inherited from calling layer (may sleep).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-ata-host-resume.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="libataExt.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-ata-host-alloc-pinfo.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">ata_host_resume</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ata_host_alloc_pinfo</span></td></tr></table></div></body></html>

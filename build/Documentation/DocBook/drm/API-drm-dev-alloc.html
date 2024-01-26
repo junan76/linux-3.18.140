@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>drm_dev_alloc</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drmInternals.html#idm135" title="Device Registration"><link rel="prev" href="API-drm-put-dev.html" title="drm_put_dev"><link rel="next" href="API-drm-dev-ref.html" title="drm_dev_ref"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">drm_dev_alloc</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-put-dev.html">Prev</a> </td><th width="60%" align="center">Device Registration</th><td width="20%" align="right"> <a accesskey="n" href="API-drm-dev-ref.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-drm-dev-alloc"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>drm_dev_alloc — 
+     Allocate new DRM device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct drm_device * <b class="fsfunc">drm_dev_alloc </b>(</code></td><td>struct drm_driver * <var class="pdparam">driver</var>, </td></tr><tr><td> </td><td>struct device * <var class="pdparam">parent</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm465"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>driver</code></em></span></dt><dd><p>
+     DRM driver to allocate device for
+    </p></dd><dt><span class="term"><em class="parameter"><code>parent</code></em></span></dt><dd><p>
+     Parent device object
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm478"></a><h2>Description</h2><p>
+   Allocate and initialize a new DRM device. No device registration is done.
+   Call <code class="function">drm_dev_register</code> to advertice the device to user space and register it
+   with other core subsystems.
+   </p><p>
+
+   The initial ref-count of the object is 1. Use <code class="function">drm_dev_ref</code> and
+   <code class="function">drm_dev_unref</code> to take and drop further ref-counts.
+</p></div><div class="refsect1"><a name="idm485"></a><h2>RETURNS</h2><p>
+   Pointer to new DRM device, or NULL if out of memory.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-put-dev.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drmInternals.html#idm135">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-drm-dev-ref.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_put_dev</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">drm_dev_ref</span></td></tr></table></div></body></html>

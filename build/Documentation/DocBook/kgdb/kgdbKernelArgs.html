@@ -1,0 +1,66 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 3. Kernel Debugger Boot Arguments</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="up" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="prev" href="CompileKDB.html" title="Kernel config options for kdb"><link rel="next" href="kgdbwait.html" title="Kernel parameter: kgdbwait"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. Kernel Debugger Boot Arguments</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="CompileKDB.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="kgdbwait.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="kgdbKernelArgs"></a>Chapter 3. Kernel Debugger Boot Arguments</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="kgdbKernelArgs.html#kgdboc">Kernel parameter: kgdboc</a></span></dt><dd><dl><dt><span class="sect2"><a href="kgdbKernelArgs.html#kgdbocArgs">kgdboc arguments</a></span></dt></dl></dd><dt><span class="sect1"><a href="kgdbwait.html">Kernel parameter: kgdbwait</a></span></dt><dt><span class="sect1"><a href="kgdbcon.html">Kernel parameter: kgdbcon</a></span></dt><dt><span class="sect1"><a href="kgdbreboot.html">Run time parameter: kgdbreboot</a></span></dt></dl></div><p>This section describes the various runtime kernel
+  parameters that affect the configuration of the kernel debugger.
+  The following chapter covers using kdb and kgdb as well as
+  provides some examples of the configuration parameters.</p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="kgdboc"></a>Kernel parameter: kgdboc</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="kgdbKernelArgs.html#kgdbocArgs">kgdboc arguments</a></span></dt></dl></div><p>The kgdboc driver was originally an abbreviation meant to
+   stand for "kgdb over console".  Today it is the primary mechanism
+   to configure how to communicate from gdb to kgdb as well as the
+   devices you want to use to interact with the kdb shell.
+   </p><p>For kgdb/gdb, kgdboc is designed to work with a single serial
+   port. It is intended to cover the circumstance where you want to
+   use a serial console as your primary console as well as using it to
+   perform kernel debugging.  It is also possible to use kgdb on a
+   serial port which is not designated as a system console.  Kgdboc
+   may be configured as a kernel built-in or a kernel loadable module.
+   You can only make use of <code class="constant">kgdbwait</code> and early
+   debugging if you build kgdboc into the kernel as a built-in.
+   </p><p>Optionally you can elect to activate kms (Kernel Mode
+   Setting) integration.  When you use kms with kgdboc and you have a
+   video driver that has atomic mode setting hooks, it is possible to
+   enter the debugger on the graphics console.  When the kernel
+   execution is resumed, the previous graphics mode will be restored.
+   This integration can serve as a useful tool to aid in diagnosing
+   crashes or doing analysis of memory with kdb while allowing the
+   full graphics console applications to run.
+   </p><p>
+   </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="kgdbocArgs"></a>kgdboc arguments</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect3"><a href="kgdbKernelArgs.html#kgdbocArgs1">Using loadable module or built-in</a></span></dt><dt><span class="sect3"><a href="kgdbKernelArgs.html#kgdbocArgs2">Configure kgdboc at runtime with sysfs</a></span></dt><dt><span class="sect3"><a href="kgdbKernelArgs.html#kgdbocArgs3">More examples</a></span></dt></dl></div><p>Usage: <code class="constant">kgdboc=[kms][[,]kbd][[,]serial_device][,baud]</code></p><p>The order listed above must be observed if you use any of the
+   optional configurations together.
+   </p><p>Abbreviations:
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>kms = Kernel Mode Setting</p></li><li class="listitem"><p>kbd = Keyboard</p></li></ul></div><p>
+   </p><p>You can configure kgdboc to use the keyboard, and or a serial
+   device depending on if you are using kdb and or kgdb, in one of the
+   following scenarios.  The order listed above must be observed if
+   you use any of the optional configurations together.  Using kms +
+   only gdb is generally not a useful combination.</p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="kgdbocArgs1"></a>Using loadable module or built-in</h4></div></div></div><p>
+   </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>As a kernel built-in:</p><p>Use the kernel boot argument: <code class="constant">kgdboc=&lt;tty-device&gt;,[baud]</code></p></li><li class="listitem"><p>As a kernel loadable module:</p><p>Use the command: <code class="constant">modprobe kgdboc kgdboc=&lt;tty-device&gt;,[baud]</code></p><p>Here are two examples of how you might format the kgdboc
+   string. The first is for an x86 target using the first serial port.
+   The second example is for the ARM Versatile AB using the second
+   serial port.
+   </p><div class="orderedlist"><ol class="orderedlist" type="a"><li class="listitem"><p><code class="constant">kgdboc=ttyS0,115200</code></p></li><li class="listitem"><p><code class="constant">kgdboc=ttyAMA1,115200</code></p></li></ol></div><p>
+   </p></li></ol></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="kgdbocArgs2"></a>Configure kgdboc at runtime with sysfs</h4></div></div></div><p>At run time you can enable or disable kgdboc by echoing a
+   parameters into the sysfs.  Here are two examples:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Enable kgdboc on ttyS0</p><p><code class="constant">echo ttyS0 &gt; /sys/module/kgdboc/parameters/kgdboc</code></p></li><li class="listitem"><p>Disable kgdboc</p><p><code class="constant">echo "" &gt; /sys/module/kgdboc/parameters/kgdboc</code></p></li></ol></div><p>NOTE: You do not need to specify the baud if you are
+   configuring the console on tty which is already configured or
+   open.</p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="kgdbocArgs3"></a>More examples</h4></div></div></div><p>You can configure kgdboc to use the keyboard, and or a serial
+   device depending on if you are using kdb and or kgdb, in one of the
+   following scenarios.</p><p>You can configure kgdboc to use the keyboard, and or a serial device
+   depending on if you are using kdb and or kgdb, in one of the
+   following scenarios.
+   </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>kdb and kgdb over only a serial port</p><p><code class="constant">kgdboc=&lt;serial_device&gt;[,baud]</code></p><p>Example: <code class="constant">kgdboc=ttyS0,115200</code></p></li><li class="listitem"><p>kdb and kgdb with keyboard and a serial port</p><p><code class="constant">kgdboc=kbd,&lt;serial_device&gt;[,baud]</code></p><p>Example: <code class="constant">kgdboc=kbd,ttyS0,115200</code></p></li><li class="listitem"><p>kdb with a keyboard</p><p><code class="constant">kgdboc=kbd</code></p></li><li class="listitem"><p>kdb with kernel mode setting</p><p><code class="constant">kgdboc=kms,kbd</code></p></li><li class="listitem"><p>kdb with kernel mode setting and kgdb over a serial port</p><p><code class="constant">kgdboc=kms,kbd,ttyS0,115200</code></p></li></ol></div><p>
+   </p></div><p>NOTE: Kgdboc does not support interrupting the target via the
+   gdb remote protocol.  You must manually send a sysrq-g unless you
+   have a proxy that splits console output to a terminal program.
+   A console proxy has a separate TCP port for the debugger and a separate
+   TCP port for the "human" console.  The proxy can take care of sending
+   the sysrq-g for you.
+   </p><p>When using kgdboc with no debugger proxy, you can end up
+    connecting the debugger at one of two entry points.  If an
+    exception occurs after you have loaded kgdboc, a message should
+    print on the console stating it is waiting for the debugger.  In
+    this case you disconnect your terminal program and then connect the
+    debugger in its place.  If you want to interrupt the target system
+    and forcibly enter a debug session you have to issue a Sysrq
+    sequence and then type the letter <code class="constant">g</code>.  Then
+    you disconnect the terminal session and connect gdb.  Your options
+    if you don't like this are to hack gdb to send the sysrq-g for you
+    as well as on the initial connect, or to use a debugger proxy that
+    allows an unmodified gdb to do the debugging.
+   </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="CompileKDB.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="kgdbwait.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Kernel config options for kdb </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Kernel parameter: kgdbwait</td></tr></table></div></body></html>

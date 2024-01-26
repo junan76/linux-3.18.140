@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 2. Driver Modes</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Z8530 Programming Guide"><link rel="up" href="index.html" title="Z8530 Programming Guide"><link rel="prev" href="intro.html" title="Chapter 1. Introduction"><link rel="next" href="Using_the_Z85230_driver.html" title="Chapter 3. Using the Z85230 driver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. Driver Modes</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="intro.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="Using_the_Z85230_driver.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="Driver_Modes"></a>Chapter 2. Driver Modes</h1></div></div></div><p>
+	The Z85230 driver layer can drive Z8530, Z85C30 and Z85230 devices
+	in three different modes. Each mode can be applied to an individual
+	channel on the chip (each chip has two channels).
+  </p><p>
+	The PIO synchronous mode supports the most common Z8530 wiring. Here
+	the chip is interface to the I/O and interrupt facilities of the
+	host machine but not to the DMA subsystem. When running PIO the
+	Z8530 has extremely tight timing requirements. Doing high speeds,
+	even with a Z85230 will be tricky. Typically you should expect to
+	achieve at best 9600 baud with a Z8C530 and 64Kbits with a Z85230.
+  </p><p>
+	The DMA mode supports the chip when it is configured to use dual DMA
+	channels on an ISA bus. The better cards tend to support this mode
+	of operation for a single channel. With DMA running the Z85230 tops
+	out when it starts to hit ISA DMA constraints at about 512Kbits. It
+	is worth noting here that many PC machines hang or crash when the
+	chip is driven fast enough to hold the ISA bus solid.
+  </p><p>
+	Transmit DMA mode uses a single DMA channel. The DMA channel is used
+	for transmission as the transmit FIFO is smaller than the receive
+	FIFO. it gives better performance than pure PIO mode but is nowhere
+	near as ideal as pure DMA mode. 
+  </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="intro.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="Using_the_Z85230_driver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Introduction </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. Using the Z85230 driver</td></tr></table></div></body></html>

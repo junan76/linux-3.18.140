@@ -1,0 +1,38 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct ccwgroup_driver</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing s390 channel device drivers"><link rel="up" href="ccwgroup.html#ccwgroupdevices" title="ccw group devices"><link rel="prev" href="API-struct-ccwgroup-device.html" title="struct ccwgroup_device"><link rel="next" href="API-ccwgroup-set-online.html" title="ccwgroup_set_online"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct ccwgroup_driver</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-ccwgroup-device.html">Prev</a> </td><th width="60%" align="center">ccw group devices</th><td width="20%" align="right"> <a accesskey="n" href="API-ccwgroup-set-online.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-ccwgroup-driver"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct ccwgroup_driver — 
+     driver for ccw group devices
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct ccwgroup_driver {
+  int (* setup) (struct ccwgroup_device *);
+  void (* remove) (struct ccwgroup_device *);
+  int (* set_online) (struct ccwgroup_device *);
+  int (* set_offline) (struct ccwgroup_device *);
+  void (* shutdown) (struct ccwgroup_device *);
+  int (* prepare) (struct ccwgroup_device *);
+  void (* complete) (struct ccwgroup_device *);
+  int (* freeze) (struct ccwgroup_device *);
+  int (* thaw) (struct ccwgroup_device *);
+  int (* restore) (struct ccwgroup_device *);
+  struct device_driver driver;
+};  </pre></div><div class="refsect1"><a name="idm2346"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">setup</span></dt><dd><p>
+   function called during device creation to setup the device
+      </p></dd><dt><span class="term">remove</span></dt><dd><p>
+   function called on remove
+      </p></dd><dt><span class="term">set_online</span></dt><dd><p>
+   function called when device is set online
+      </p></dd><dt><span class="term">set_offline</span></dt><dd><p>
+   function called when device is set offline
+      </p></dd><dt><span class="term">shutdown</span></dt><dd><p>
+   function called when device is shut down
+      </p></dd><dt><span class="term">prepare</span></dt><dd><p>
+   prepare for pm state transition
+      </p></dd><dt><span class="term">complete</span></dt><dd><p>
+   undo work done in <em class="parameter"><code>prepare</code></em>
+      </p></dd><dt><span class="term">freeze</span></dt><dd><p>
+   callback for freezing during hibernation snapshotting
+      </p></dd><dt><span class="term">thaw</span></dt><dd><p>
+   undo work done in <em class="parameter"><code>freeze</code></em>
+      </p></dd><dt><span class="term">restore</span></dt><dd><p>
+   callback for restoring after hibernation
+      </p></dd><dt><span class="term">driver</span></dt><dd><p>
+   embedded driver structure
+      </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-ccwgroup-device.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ccwgroup.html#ccwgroupdevices">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-ccwgroup-set-online.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct ccwgroup_device</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ccwgroup_set_online</span></td></tr></table></div></body></html>

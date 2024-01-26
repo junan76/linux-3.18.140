@@ -1,0 +1,36 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>... And the Destructor?</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="pcm-interface.html" title="Chapter 5. PCM Interface"><link rel="prev" href="pcm-interface-constructor.html" title="Constructor"><link rel="next" href="pcm-interface-runtime.html" title="Runtime Pointer - The Chest of PCM Information"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">... And the Destructor?</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pcm-interface-constructor.html">Prev</a> </td><th width="60%" align="center">Chapter 5. PCM Interface</th><td width="20%" align="right"> <a accesskey="n" href="pcm-interface-runtime.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pcm-interface-destructor"></a>... And the Destructor?</h2></div></div></div><p>
+        The destructor for a pcm instance is not always
+      necessary. Since the pcm device will be released by the middle
+      layer code automatically, you don't have to call the destructor
+      explicitly.
+      </p><p>
+        The destructor would be necessary if you created
+        special records internally and needed to release them. In such a
+        case, set the destructor function to
+        pcm-&gt;private_free: 
+
+        </p><div class="example"><a name="idm481"></a><p class="title"><b>Example 5.2. PCM Instance with a Destructor</b></p><div class="example-contents"><pre class="programlisting">
+
+  static void mychip_pcm_free(struct snd_pcm *pcm)
+  {
+          struct mychip *chip = snd_pcm_chip(pcm);
+          /* free your own data */
+          kfree(chip-&gt;my_private_pcm_data);
+          /* do what you like else */
+          ....
+  }
+
+  static int snd_mychip_new_pcm(struct mychip *chip)
+  {
+          struct snd_pcm *pcm;
+          ....
+          /* allocate your own data */
+          chip-&gt;my_private_pcm_data = kmalloc(...);
+          /* set the destructor */
+          pcm-&gt;private_data = chip;
+          pcm-&gt;private_free = mychip_pcm_free;
+          ....
+  }
+
+          </pre></div></div><p><br class="example-break">
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pcm-interface-constructor.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pcm-interface.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="pcm-interface-runtime.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Constructor </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Runtime Pointer - The Chest of PCM Information</td></tr></table></div></body></html>

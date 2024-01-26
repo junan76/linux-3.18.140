@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>trace_signal_generate</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel Tracepoint API"><link rel="up" href="signal.html" title="Chapter 3. SIGNAL"><link rel="prev" href="signal.html" title="Chapter 3. SIGNAL"><link rel="next" href="API-trace-signal-deliver.html" title="trace_signal_deliver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">trace_signal_generate</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="signal.html">Prev</a> </td><th width="60%" align="center">Chapter 3. SIGNAL</th><td width="20%" align="right"> <a accesskey="n" href="API-trace-signal-deliver.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-trace-signal-generate"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>trace_signal_generate — 
+  called when a signal is generated
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">trace_signal_generate </b>(</code></td><td>int <var class="pdparam">sig</var>, </td></tr><tr><td> </td><td>struct siginfo * <var class="pdparam">info</var>, </td></tr><tr><td> </td><td>struct task_struct * <var class="pdparam">task</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">group</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">result</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm250"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>sig</code></em></span></dt><dd><p>
+     signal number
+    </p></dd><dt><span class="term"><em class="parameter"><code>info</code></em></span></dt><dd><p>
+     pointer to struct siginfo
+    </p></dd><dt><span class="term"><em class="parameter"><code>task</code></em></span></dt><dd><p>
+     pointer to struct task_struct
+    </p></dd><dt><span class="term"><em class="parameter"><code>group</code></em></span></dt><dd><p>
+     shared or private
+    </p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>
+     TRACE_SIGNAL_*
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm278"></a><h2>Description</h2><p>
+   Current process sends a 'sig' signal to 'task' process with
+   'info' siginfo. If 'info' is SEND_SIG_NOINFO or SEND_SIG_PRIV,
+   'info' is not a pointer and you can't access its field. Instead,
+   SEND_SIG_NOINFO means that si_code is SI_USER, and SEND_SIG_PRIV
+   means that si_code is SI_KERNEL.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="signal.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="signal.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-trace-signal-deliver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. SIGNAL </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">trace_signal_deliver</span></td></tr></table></div></body></html>

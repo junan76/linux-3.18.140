@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>workqueue_congested</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch01s06.html" title="Workqueues and Kevents"><link rel="prev" href="API-workqueue-set-max-active.html" title="workqueue_set_max_active"><link rel="next" href="API-work-busy.html" title="work_busy"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">workqueue_congested</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-workqueue-set-max-active.html">Prev</a> </td><th width="60%" align="center">Workqueues and Kevents</th><td width="20%" align="right"> <a accesskey="n" href="API-work-busy.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-workqueue-congested"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>workqueue_congested — 
+     test whether a workqueue is congested
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">bool <b class="fsfunc">workqueue_congested </b>(</code></td><td>int <var class="pdparam">cpu</var>, </td></tr><tr><td> </td><td>struct workqueue_struct * <var class="pdparam">wq</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm5756"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>cpu</code></em></span></dt><dd><p>
+     CPU in question
+    </p></dd><dt><span class="term"><em class="parameter"><code>wq</code></em></span></dt><dd><p>
+     target workqueue
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm5769"></a><h2>Description</h2><p>
+   Test whether <em class="parameter"><code>wq</code></em>'s cpu workqueue for <em class="parameter"><code>cpu</code></em> is congested.  There is
+   no synchronization around this function and the test result is
+   unreliable and only useful as advisory hints or for debugging.
+   </p><p>
+
+   If <em class="parameter"><code>cpu</code></em> is WORK_CPU_UNBOUND, the test is performed on the local CPU.
+   Note that both per-cpu and unbound workqueues may be associated with
+   multiple pool_workqueues which have separate congested states.  A
+   workqueue being congested on one CPU doesn't mean the workqueue is also
+   contested on other CPUs / NUMA nodes.
+</p></div><div class="refsect1"><a name="idm5776"></a><h2>Return</h2><p>
+   <code class="constant">true</code> if congested, <code class="constant">false</code> otherwise.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-workqueue-set-max-active.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s06.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-work-busy.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">workqueue_set_max_active</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">work_busy</span></td></tr></table></div></body></html>

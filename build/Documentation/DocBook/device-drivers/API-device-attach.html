@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>device_attach</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch02s02.html" title="Device Drivers Base"><link rel="prev" href="API-wait-for-device-probe.html" title="wait_for_device_probe"><link rel="next" href="API-driver-attach.html" title="driver_attach"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">device_attach</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-wait-for-device-probe.html">Prev</a> </td><th width="60%" align="center">Device Drivers Base</th><td width="20%" align="right"> <a accesskey="n" href="API-driver-attach.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-device-attach"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>device_attach — 
+     try to attach device to a driver.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">device_attach </b>(</code></td><td>struct device * <var class="pdparam">dev</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm14262"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     device.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm14270"></a><h2>Description</h2><p>
+   Walk the list of drivers that the bus has and call
+   <code class="function">driver_probe_device</code> for each pair. If a compatible
+   pair is found, break out and return.
+   </p><p>
+
+   Returns 1 if the device was bound to a driver;
+   0 if no matching driver was found;
+   -ENODEV if the device is not registered.
+   </p><p>
+
+   When called for a USB interface, <em class="parameter"><code>dev</code></em>-&gt;parent lock must be held.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-wait-for-device-probe.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-driver-attach.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">wait_for_device_probe</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">driver_attach</span></td></tr></table></div></body></html>

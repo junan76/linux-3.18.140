@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>spi_new_device</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="spi.html" title="Chapter 9. Serial Peripheral Interface (SPI)"><link rel="prev" href="API-spi-add-device.html" title="spi_add_device"><link rel="next" href="API-spi-finalize-current-transfer.html" title="spi_finalize_current_transfer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">spi_new_device</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-spi-add-device.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Serial Peripheral Interface (SPI)</th><td width="20%" align="right"> <a accesskey="n" href="API-spi-finalize-current-transfer.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-spi-new-device"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>spi_new_device — 
+     instantiate one new SPI device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct spi_device * <b class="fsfunc">spi_new_device </b>(</code></td><td>struct spi_master * <var class="pdparam">master</var>, </td></tr><tr><td> </td><td>struct spi_board_info * <var class="pdparam">chip</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm41882"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>master</code></em></span></dt><dd><p>
+     Controller to which device is connected
+    </p></dd><dt><span class="term"><em class="parameter"><code>chip</code></em></span></dt><dd><p>
+     Describes the SPI device
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm41895"></a><h2>Context</h2><p>
+   can sleep
+</p></div><div class="refsect1"><a name="idm41898"></a><h2>Description</h2><p>
+   On typical mainboards, this is purely internal; and it's not needed
+   after board init creates the hard-wired devices.  Some development
+   platforms may not be able to use spi_register_board_info though, and
+   this is exported so that for example a USB or parport based adapter
+   driver could add devices (which it would learn about out-of-band).
+   </p><p>
+
+   Returns the new device, or NULL.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-spi-add-device.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="spi.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-spi-finalize-current-transfer.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">spi_add_device</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">spi_finalize_current_transfer</span></td></tr></table></div></body></html>

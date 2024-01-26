@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Running kdb commands from gdb</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="up" href="switchKdbKgdb.html" title="Chapter 6. kgdb and kdb interoperability"><link rel="prev" href="switchKdbKgdb.html" title="Chapter 6. kgdb and kdb interoperability"><link rel="next" href="KGDBTestSuite.html" title="Chapter 7. kgdb Test Suite"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Running kdb commands from gdb</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="switchKdbKgdb.html">Prev</a> </td><th width="60%" align="center">Chapter 6. kgdb and kdb interoperability</th><td width="20%" align="right"> <a accesskey="n" href="KGDBTestSuite.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm406"></a>Running kdb commands from gdb</h2></div></div></div><p>It is possible to run a limited set of kdb commands from gdb,
+  using the gdb monitor command.  You don't want to execute any of the
+  run control or breakpoint operations, because it can disrupt the
+  state of the kernel debugger.  You should be using gdb for
+  breakpoints and run control operations if you have gdb connected.
+  The more useful commands to run are things like lsmod, dmesg, ps or
+  possibly some of the memory information commands.  To see all the kdb
+  commands you can run <code class="constant">monitor help</code>.</p><p>Example:
+  </p><div class="informalexample"><pre class="programlisting">
+(gdb) monitor ps
+1 idle process (state I) and
+27 sleeping system daemon (state M) processes suppressed,
+use 'ps A' to see all.
+Task Addr       Pid   Parent [*] cpu State Thread     Command
+
+0xc78291d0        1        0  0    0   S  0xc7829404  init
+0xc7954150      942        1  0    0   S  0xc7954384  dropbear
+0xc78789c0      944        1  0    0   S  0xc7878bf4  sh
+(gdb)
+  </pre></div><p>
+  </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="switchKdbKgdb.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="switchKdbKgdb.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="KGDBTestSuite.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 6. kgdb and kdb interoperability </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 7. kgdb Test Suite</td></tr></table></div></body></html>

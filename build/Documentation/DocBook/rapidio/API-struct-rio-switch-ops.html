@@ -1,0 +1,32 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct rio_switch_ops</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="RapidIO Subsystem Guide"><link rel="up" href="internals.html#Structures" title="Structures"><link rel="prev" href="API-struct-rio-switch.html" title="struct rio_switch"><link rel="next" href="API-struct-rio-dev.html" title="struct rio_dev"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct rio_switch_ops</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-rio-switch.html">Prev</a> </td><th width="60%" align="center">Structures</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-rio-dev.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-rio-switch-ops"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct rio_switch_ops — 
+     Per-switch operations
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct rio_switch_ops {
+  struct module * owner;
+  int (* add_entry) (struct rio_mport *mport, u16 destid, u8 hopcount,u16 table, u16 route_destid, u8 route_port);
+  int (* get_entry) (struct rio_mport *mport, u16 destid, u8 hopcount,u16 table, u16 route_destid, u8 *route_port);
+  int (* clr_table) (struct rio_mport *mport, u16 destid, u8 hopcount,u16 table);
+  int (* set_domain) (struct rio_mport *mport, u16 destid, u8 hopcount,u8 sw_domain);
+  int (* get_domain) (struct rio_mport *mport, u16 destid, u8 hopcount,u8 *sw_domain);
+  int (* em_init) (struct rio_dev *dev);
+  int (* em_handle) (struct rio_dev *dev, u8 swport);
+};  </pre></div><div class="refsect1"><a name="idm2958"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">owner</span></dt><dd><p>
+   The module owner of this structure
+      </p></dd><dt><span class="term">add_entry</span></dt><dd><p>
+   Callback for switch-specific route add function
+      </p></dd><dt><span class="term">get_entry</span></dt><dd><p>
+   Callback for switch-specific route get function
+      </p></dd><dt><span class="term">clr_table</span></dt><dd><p>
+   Callback for switch-specific clear route table function
+      </p></dd><dt><span class="term">set_domain</span></dt><dd><p>
+   Callback for switch-specific domain setting function
+      </p></dd><dt><span class="term">get_domain</span></dt><dd><p>
+   Callback for switch-specific domain get function
+      </p></dd><dt><span class="term">em_init</span></dt><dd><p>
+   Callback for switch-specific error management init function
+      </p></dd><dt><span class="term">em_handle</span></dt><dd><p>
+   Callback for switch-specific error management handler function
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm2993"></a><h2>Description</h2><p>
+   Defines the operations that are necessary to initialize/control
+   a particular RIO switch device.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-rio-switch.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="internals.html#Structures">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-rio-dev.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct rio_switch</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct rio_dev</span></td></tr></table></div></body></html>

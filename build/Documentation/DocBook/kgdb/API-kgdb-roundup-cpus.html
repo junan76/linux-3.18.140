@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>kgdb_roundup_cpus</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Using kgdb, kdb and the kernel debugger internals"><link rel="up" href="CommonBackEndReq.html#kgdbArchitecture" title="Architecture Specifics"><link rel="prev" href="API-kgdb-arch-handle-exception.html" title="kgdb_arch_handle_exception"><link rel="next" href="API-kgdb-arch-set-pc.html" title="kgdb_arch_set_pc"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">kgdb_roundup_cpus</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-kgdb-arch-handle-exception.html">Prev</a> </td><th width="60%" align="center">Architecture Specifics</th><td width="20%" align="right"> <a accesskey="n" href="API-kgdb-arch-set-pc.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-kgdb-roundup-cpus"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>kgdb_roundup_cpus — 
+     Get other CPUs into a holding pattern
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">kgdb_roundup_cpus </b>(</code></td><td>unsigned long <var class="pdparam">flags</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm866"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>flags</code></em></span></dt><dd><p>
+     Current IRQ state
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm874"></a><h2>Description</h2><p>
+   On SMP systems, we need to get the attention of the other CPUs
+   and get them into a known state.  This should do what is needed
+   to get the other CPUs to call <code class="function">kgdb_wait</code>. Note that on some arches,
+   the NMI approach is not used for rounding up all the CPUs. For example,
+   in case of MIPS, <code class="function">smp_call_function</code> is used to roundup CPUs. In
+   this case, we have to make sure that interrupts are enabled before
+   calling <code class="function">smp_call_function</code>. The argument to this function is
+   the flags that will be used when restoring the interrupts. There is
+   <code class="function">local_irq_save</code> call before <code class="function">kgdb_roundup_cpus</code>.
+   </p><p>
+
+   On non-SMP systems, this is not called.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-kgdb-arch-handle-exception.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="CommonBackEndReq.html#kgdbArchitecture">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-kgdb-arch-set-pc.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">kgdb_arch_handle_exception</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">kgdb_arch_set_pc</span></td></tr></table></div></body></html>

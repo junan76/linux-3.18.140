@@ -1,0 +1,233 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>MTD NAND Driver Programming Interface</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="MTD NAND Driver Programming Interface"><link rel="next" href="intro.html" title="Chapter 1. Introduction"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">MTD NAND Driver Programming Interface</th></tr><tr><td width="20%" align="left"> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="intro.html">Next</a></td></tr></table><hr></div><div class="book"><div class="titlepage"><div><div><h1 class="title"><a name="MTD-NAND-Guide"></a>MTD NAND Driver Programming Interface</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Thomas</span> <span class="surname">Gleixner</span></h3><div class="affiliation"><div class="address"><p><br>
+      <code class="email">&lt;<a class="email" href="mailto:tglx@linutronix.de">tglx@linutronix.de</a>&gt;</code><br>
+     </p></div></div></div></div></div><div><p class="copyright">Copyright © 2004 Thomas Gleixner</p></div><div><div class="legalnotice"><a name="idm14"></a><p>
+     This documentation is free software; you can redistribute
+     it and/or modify it under the terms of the GNU General Public
+     License version 2 as published by the Free Software Foundation.
+   </p><p>
+     This program is distributed in the hope that it will be
+     useful, but WITHOUT ANY WARRANTY; without even the implied
+     warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+     See the GNU General Public License for more details.
+   </p><p>
+     You should have received a copy of the GNU General Public
+     License along with this program; if not, write to the Free
+     Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+     MA 02111-1307 USA
+   </p><p>
+     For more details see the file COPYING in the source
+     distribution of Linux.
+   </p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="chapter"><a href="intro.html">1. Introduction</a></span></dt><dt><span class="chapter"><a href="bugs.html">2. Known Bugs And Assumptions</a></span></dt><dt><span class="chapter"><a href="dochints.html">3. Documentation hints</a></span></dt><dd><dl><dt><span class="sect1"><a href="dochints.html#Function_identifiers_XXX">Function identifiers [XXX]</a></span></dt><dt><span class="sect1"><a href="Struct_member_identifiers_XXX.html">Struct member identifiers [XXX]</a></span></dt></dl></dd><dt><span class="chapter"><a href="basicboarddriver.html">4. Basic board driver</a></span></dt><dd><dl><dt><span class="sect1"><a href="basicboarddriver.html#Basic_defines">Basic defines</a></span></dt><dt><span class="sect1"><a href="Partition_defines.html">Partition defines</a></span></dt><dt><span class="sect1"><a href="Hardware_control_functions.html">Hardware control function</a></span></dt><dt><span class="sect1"><a href="Device_ready_function.html">Device ready function</a></span></dt><dt><span class="sect1"><a href="Init_function.html">Init function</a></span></dt><dt><span class="sect1"><a href="Exit_function.html">Exit function</a></span></dt></dl></dd><dt><span class="chapter"><a href="boarddriversadvanced.html">5. Advanced board driver functions</a></span></dt><dd><dl><dt><span class="sect1"><a href="boarddriversadvanced.html#Multiple_chip_control">Multiple chip control</a></span></dt><dt><span class="sect1"><a href="Hardware_ECC_support.html">Hardware ECC support</a></span></dt><dd><dl><dt><span class="sect2"><a href="Hardware_ECC_support.html#Functions_and_constants">Functions and constants</a></span></dt><dt><span class="sect2"><a href="Hardware_ECC_support.html#Hardware_ECC_with_syndrome_calculation">Hardware ECC with syndrome calculation</a></span></dt></dl></dd><dt><span class="sect1"><a href="Bad_Block_table_support.html">Bad block table support</a></span></dt><dd><dl><dt><span class="sect2"><a href="Bad_Block_table_support.html#Flash_based_tables">Flash based tables</a></span></dt><dt><span class="sect2"><a href="Bad_Block_table_support.html#User_defined_tables">User defined tables</a></span></dt></dl></dd><dt><span class="sect1"><a href="Spare_area_placement.html">Spare area (auto)placement</a></span></dt><dd><dl><dt><span class="sect2"><a href="Spare_area_placement.html#Placement_defined_by_fs_driver">Placement defined by fs driver</a></span></dt><dt><span class="sect2"><a href="Spare_area_placement.html#Automatic_placement">Automatic placement</a></span></dt></dl></dd><dt><span class="sect1"><a href="Spare_area_autoplacement_default.html">Spare area autoplacement default schemes</a></span></dt><dd><dl><dt><span class="sect2"><a href="Spare_area_autoplacement_default.html#pagesize_256">256 byte pagesize</a></span></dt><dt><span class="sect2"><a href="Spare_area_autoplacement_default.html#pagesize_512">512 byte pagesize</a></span></dt><dt><span class="sect2"><a href="Spare_area_autoplacement_default.html#pagesize_2048">2048 byte pagesize</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="filesystems.html">6. Filesystem support</a></span></dt><dt><span class="chapter"><a href="tools.html">7. Tools</a></span></dt><dt><span class="chapter"><a href="defines.html">8. Constants</a></span></dt><dd><dl><dt><span class="sect1"><a href="defines.html#Chip_option_constants">Chip option constants</a></span></dt><dd><dl><dt><span class="sect2"><a href="defines.html#Constants_for_chip_id_table">Constants for chip id table</a></span></dt><dt><span class="sect2"><a href="defines.html#Constants_for_runtime_options">Constants for runtime options</a></span></dt></dl></dd><dt><span class="sect1"><a href="EEC_selection_constants.html">ECC selection constants</a></span></dt><dt><span class="sect1"><a href="Hardware_control_related_constants.html">Hardware control related constants</a></span></dt><dt><span class="sect1"><a href="Bad_block_table_constants.html">Bad block table related constants</a></span></dt></dl></dd><dt><span class="chapter"><a href="structs.html">9. Structures</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-struct-nand-hw-control.html"><span class="phrase">struct nand_hw_control</span></a></span><span class="refpurpose"> — 
+  Control structure for hardware controller (e.g ECC generator) shared among independent devices
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-nand-ecc-ctrl.html"><span class="phrase">struct nand_ecc_ctrl</span></a></span><span class="refpurpose"> — 
+     Control structure for ECC
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-nand-buffers.html"><span class="phrase">struct nand_buffers</span></a></span><span class="refpurpose"> — 
+     buffer structure for read/write
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-nand-chip.html"><span class="phrase">struct nand_chip</span></a></span><span class="refpurpose"> — 
+     NAND Private Flash Chip Data
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-nand-flash-dev.html"><span class="phrase">struct nand_flash_dev</span></a></span><span class="refpurpose"> — 
+     NAND Flash Device ID Structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-nand-manufacturers.html"><span class="phrase">struct nand_manufacturers</span></a></span><span class="refpurpose"> — 
+     NAND Flash Manufacturer ID Structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-platform-nand-chip.html"><span class="phrase">struct platform_nand_chip</span></a></span><span class="refpurpose"> — 
+     chip level device structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-platform-nand-ctrl.html"><span class="phrase">struct platform_nand_ctrl</span></a></span><span class="refpurpose"> — 
+     controller level device structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-platform-nand-data.html"><span class="phrase">struct platform_nand_data</span></a></span><span class="refpurpose"> — 
+     container structure for platform-specific data
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-opcode-8bits.html"><span class="phrase">nand_opcode_8bits</span></a></span><span class="refpurpose"> — 
+   </span></dt></dl></dd><dt><span class="chapter"><a href="pubfunctions.html">10. Public Functions Provided</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-nand-unlock.html"><span class="phrase">nand_unlock</span></a></span><span class="refpurpose"> — 
+  [REPLACEABLE] unlocks specified locked blocks
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-lock.html"><span class="phrase">nand_lock</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] locks all blocks present in the device
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-scan-ident.html"><span class="phrase">nand_scan_ident</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Scan for the NAND device
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-scan-tail.html"><span class="phrase">nand_scan_tail</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Scan for the NAND device
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-scan.html"><span class="phrase">nand_scan</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Scan for the NAND device
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-release.html"><span class="phrase">nand_release</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Free resources held by the NAND device
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-scan-bbt.html"><span class="phrase">nand_scan_bbt</span></a></span><span class="refpurpose"> — 
+  [NAND Interface] scan, find, read and maybe create bad block table(s)
+ </span></dt><dt><span class="refentrytitle"><a href="API---nand-calculate-ecc.html"><span class="phrase">__nand_calculate_ecc</span></a></span><span class="refpurpose"> — 
+  [NAND Interface] Calculate 3-byte ECC for 256/512-byte block
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-calculate-ecc.html"><span class="phrase">nand_calculate_ecc</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Calculate 3-byte ECC for 256/512-byte block
+ </span></dt><dt><span class="refentrytitle"><a href="API---nand-correct-data.html"><span class="phrase">__nand_correct_data</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Detect and correct bit error(s)
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-correct-data.html"><span class="phrase">nand_correct_data</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Detect and correct bit error(s)
+ </span></dt></dl></dd><dt><span class="chapter"><a href="intfunctions.html">11. Internal Functions Provided</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-nand-release-device.html"><span class="phrase">nand_release_device</span></a></span><span class="refpurpose"> — 
+  [GENERIC] release chip
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-byte.html"><span class="phrase">nand_read_byte</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] read one byte from the chip
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-byte16.html"><span class="phrase">nand_read_byte16</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] read one byte endianness aware from the chip nand_read_byte16 - [DEFAULT] read one byte endianness aware from the chip
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-word.html"><span class="phrase">nand_read_word</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] read one word from the chip
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-select-chip.html"><span class="phrase">nand_select_chip</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] control CE line
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-byte.html"><span class="phrase">nand_write_byte</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] write single byte to chip
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-byte16.html"><span class="phrase">nand_write_byte16</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] write single byte to a chip with width 16
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-buf.html"><span class="phrase">nand_write_buf</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] write buffer to chip
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-buf.html"><span class="phrase">nand_read_buf</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] read chip data into buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-buf16.html"><span class="phrase">nand_write_buf16</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] write buffer to chip
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-buf16.html"><span class="phrase">nand_read_buf16</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] read chip data into buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-block-bad.html"><span class="phrase">nand_block_bad</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] Read bad block marker from the chip
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-default-block-markbad.html"><span class="phrase">nand_default_block_markbad</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] mark a block bad via bad block marker
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-block-markbad-lowlevel.html"><span class="phrase">nand_block_markbad_lowlevel</span></a></span><span class="refpurpose"> — 
+     mark a block bad
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-check-wp.html"><span class="phrase">nand_check_wp</span></a></span><span class="refpurpose"> — 
+     [GENERIC] check if the chip is write protected
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-block-isreserved.html"><span class="phrase">nand_block_isreserved</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Check if a block is marked bad
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-block-checkbad.html"><span class="phrase">nand_block_checkbad</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Check if a block is marked bad
+ </span></dt><dt><span class="refentrytitle"><a href="API-panic-nand-wait-ready.html"><span class="phrase">panic_nand_wait_ready</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Wait for the ready pin after commands.
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-command.html"><span class="phrase">nand_command</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] Send command to NAND device
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-command-lp.html"><span class="phrase">nand_command_lp</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] Send command to NAND large page device
+ </span></dt><dt><span class="refentrytitle"><a href="API-panic-nand-get-device.html"><span class="phrase">panic_nand_get_device</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Get chip for selected access
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-get-device.html"><span class="phrase">nand_get_device</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Get chip for selected access
+ </span></dt><dt><span class="refentrytitle"><a href="API-panic-nand-wait.html"><span class="phrase">panic_nand_wait</span></a></span><span class="refpurpose"> — 
+     [GENERIC] wait until the command is done
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-wait.html"><span class="phrase">nand_wait</span></a></span><span class="refpurpose"> — 
+     [DEFAULT] wait until the command is done
+ </span></dt><dt><span class="refentrytitle"><a href="API---nand-unlock.html"><span class="phrase">__nand_unlock</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] unlocks specified locked blocks
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-page-raw.html"><span class="phrase">nand_read_page_raw</span></a></span><span class="refpurpose"> — 
+     [INTERN] read raw page data without ecc
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-page-raw-syndrome.html"><span class="phrase">nand_read_page_raw_syndrome</span></a></span><span class="refpurpose"> — 
+     [INTERN] read raw page data without ecc
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-page-swecc.html"><span class="phrase">nand_read_page_swecc</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] software ECC based page read function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-subpage.html"><span class="phrase">nand_read_subpage</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] ECC based sub-page read function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-page-hwecc.html"><span class="phrase">nand_read_page_hwecc</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] hardware ECC based page read function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-page-hwecc-oob-first.html"><span class="phrase">nand_read_page_hwecc_oob_first</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] hw ecc, read oob first
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-page-syndrome.html"><span class="phrase">nand_read_page_syndrome</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] hardware ECC syndrome based page read
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-transfer-oob.html"><span class="phrase">nand_transfer_oob</span></a></span><span class="refpurpose"> — 
+     [INTERN] Transfer oob to client buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-setup-read-retry.html"><span class="phrase">nand_setup_read_retry</span></a></span><span class="refpurpose"> — 
+     [INTERN] Set the READ RETRY mode
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-do-read-ops.html"><span class="phrase">nand_do_read_ops</span></a></span><span class="refpurpose"> — 
+     [INTERN] Read data with ECC
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read.html"><span class="phrase">nand_read</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] MTD compatibility function for nand_do_read_ecc
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-oob-std.html"><span class="phrase">nand_read_oob_std</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] the most common OOB data read function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-oob-syndrome.html"><span class="phrase">nand_read_oob_syndrome</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] OOB data read function for HW ECC with syndromes
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-oob-std.html"><span class="phrase">nand_write_oob_std</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] the most common OOB data write function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-oob-syndrome.html"><span class="phrase">nand_write_oob_syndrome</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] OOB data write function for HW ECC with syndrome - only for large page flash
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-do-read-oob.html"><span class="phrase">nand_do_read_oob</span></a></span><span class="refpurpose"> — 
+     [INTERN] NAND read out-of-band
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-read-oob.html"><span class="phrase">nand_read_oob</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] NAND read data and/or out-of-band
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-page-raw.html"><span class="phrase">nand_write_page_raw</span></a></span><span class="refpurpose"> — 
+     [INTERN] raw page write function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-page-raw-syndrome.html"><span class="phrase">nand_write_page_raw_syndrome</span></a></span><span class="refpurpose"> — 
+     [INTERN] raw page write function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-page-swecc.html"><span class="phrase">nand_write_page_swecc</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] software ECC based page write function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-page-hwecc.html"><span class="phrase">nand_write_page_hwecc</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] hardware ECC based page write function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-subpage-hwecc.html"><span class="phrase">nand_write_subpage_hwecc</span></a></span><span class="refpurpose"> — 
+     [REPLACABLE] hardware ECC based subpage write
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-page-syndrome.html"><span class="phrase">nand_write_page_syndrome</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] hardware ECC syndrome based page write
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-page.html"><span class="phrase">nand_write_page</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] write one page
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-fill-oob.html"><span class="phrase">nand_fill_oob</span></a></span><span class="refpurpose"> — 
+     [INTERN] Transfer client buffer to oob
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-do-write-ops.html"><span class="phrase">nand_do_write_ops</span></a></span><span class="refpurpose"> — 
+     [INTERN] NAND write with ECC
+ </span></dt><dt><span class="refentrytitle"><a href="API-panic-nand-write.html"><span class="phrase">panic_nand_write</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] NAND write with ECC
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write.html"><span class="phrase">nand_write</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] NAND write with ECC
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-do-write-oob.html"><span class="phrase">nand_do_write_oob</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] NAND write out-of-band
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-write-oob.html"><span class="phrase">nand_write_oob</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] NAND write data and/or out-of-band
+ </span></dt><dt><span class="refentrytitle"><a href="API-single-erase.html"><span class="phrase">single_erase</span></a></span><span class="refpurpose"> — 
+     [GENERIC] NAND standard block erase command function
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-erase.html"><span class="phrase">nand_erase</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] erase block(s)
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-erase-nand.html"><span class="phrase">nand_erase_nand</span></a></span><span class="refpurpose"> — 
+     [INTERN] erase block(s)
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-sync.html"><span class="phrase">nand_sync</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] sync
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-block-isbad.html"><span class="phrase">nand_block_isbad</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] Check if block at offset is bad
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-block-markbad.html"><span class="phrase">nand_block_markbad</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] Mark block at the given offset as bad
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-onfi-set-features.html"><span class="phrase">nand_onfi_set_features</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] set features for ONFI nand
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-onfi-get-features.html"><span class="phrase">nand_onfi_get_features</span></a></span><span class="refpurpose"> — 
+     [REPLACEABLE] get features for ONFI nand
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-suspend.html"><span class="phrase">nand_suspend</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] Suspend the NAND flash
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-resume.html"><span class="phrase">nand_resume</span></a></span><span class="refpurpose"> — 
+     [MTD Interface] Resume the NAND flash
+ </span></dt><dt><span class="refentrytitle"><a href="API-check-pattern.html"><span class="phrase">check_pattern</span></a></span><span class="refpurpose"> — 
+  [GENERIC] check if a pattern is in the buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-check-short-pattern.html"><span class="phrase">check_short_pattern</span></a></span><span class="refpurpose"> — 
+     [GENERIC] check if a pattern is in the buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-add-marker-len.html"><span class="phrase">add_marker_len</span></a></span><span class="refpurpose"> — 
+     compute the length of the marker in data area
+ </span></dt><dt><span class="refentrytitle"><a href="API-read-bbt.html"><span class="phrase">read_bbt</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Read the bad block table starting from page
+ </span></dt><dt><span class="refentrytitle"><a href="API-read-abs-bbt.html"><span class="phrase">read_abs_bbt</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Read the bad block table starting at a given page
+ </span></dt><dt><span class="refentrytitle"><a href="API-scan-read-oob.html"><span class="phrase">scan_read_oob</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Scan data+OOB region to buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-read-abs-bbts.html"><span class="phrase">read_abs_bbts</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Read the bad block table(s) for all chips starting at a given page
+ </span></dt><dt><span class="refentrytitle"><a href="API-create-bbt.html"><span class="phrase">create_bbt</span></a></span><span class="refpurpose"> — 
+     [GENERIC] Create a bad block table by scanning the device
+ </span></dt><dt><span class="refentrytitle"><a href="API-search-bbt.html"><span class="phrase">search_bbt</span></a></span><span class="refpurpose"> — 
+     [GENERIC] scan the device for a specific bad block table
+ </span></dt><dt><span class="refentrytitle"><a href="API-search-read-bbts.html"><span class="phrase">search_read_bbts</span></a></span><span class="refpurpose"> — 
+     [GENERIC] scan the device for bad block table(s)
+ </span></dt><dt><span class="refentrytitle"><a href="API-write-bbt.html"><span class="phrase">write_bbt</span></a></span><span class="refpurpose"> — 
+     [GENERIC] (Re)write the bad block table
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-memory-bbt.html"><span class="phrase">nand_memory_bbt</span></a></span><span class="refpurpose"> — 
+     [GENERIC] create a memory based bad block table
+ </span></dt><dt><span class="refentrytitle"><a href="API-check-create.html"><span class="phrase">check_create</span></a></span><span class="refpurpose"> — 
+     [GENERIC] create and write bbt(s) if necessary
+ </span></dt><dt><span class="refentrytitle"><a href="API-mark-bbt-region.html"><span class="phrase">mark_bbt_region</span></a></span><span class="refpurpose"> — 
+     [GENERIC] mark the bad block table regions
+ </span></dt><dt><span class="refentrytitle"><a href="API-verify-bbt-descr.html"><span class="phrase">verify_bbt_descr</span></a></span><span class="refpurpose"> — 
+     verify the bad block description
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-update-bbt.html"><span class="phrase">nand_update_bbt</span></a></span><span class="refpurpose"> — 
+     update bad block table(s)
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-create-badblock-pattern.html"><span class="phrase">nand_create_badblock_pattern</span></a></span><span class="refpurpose"> — 
+     [INTERN] Creates a BBT descriptor structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-default-bbt.html"><span class="phrase">nand_default_bbt</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Select a default bad block table for the device
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-isreserved-bbt.html"><span class="phrase">nand_isreserved_bbt</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Check if a block is reserved
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-isbad-bbt.html"><span class="phrase">nand_isbad_bbt</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Check if a block is bad
+ </span></dt><dt><span class="refentrytitle"><a href="API-nand-markbad-bbt.html"><span class="phrase">nand_markbad_bbt</span></a></span><span class="refpurpose"> — 
+     [NAND Interface] Mark a block bad in the BBT
+ </span></dt></dl></dd><dt><span class="chapter"><a href="credits.html">12. Credits</a></span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="intro.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"> </td><td width="40%" align="right" valign="top"> Chapter 1. Introduction</td></tr></table></div></body></html>

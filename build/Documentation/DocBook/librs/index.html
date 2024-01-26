@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Reed-Solomon Library Programming Interface</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Reed-Solomon Library Programming Interface"><link rel="next" href="intro.html" title="Chapter 1. Introduction"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Reed-Solomon Library Programming Interface</th></tr><tr><td width="20%" align="left"> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="intro.html">Next</a></td></tr></table><hr></div><div class="book"><div class="titlepage"><div><div><h1 class="title"><a name="Reed-Solomon-Library-Guide"></a>Reed-Solomon Library Programming Interface</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Thomas</span> <span class="surname">Gleixner</span></h3><div class="affiliation"><div class="address"><p><br>
+      <code class="email">&lt;<a class="email" href="mailto:tglx@linutronix.de">tglx@linutronix.de</a>&gt;</code><br>
+     </p></div></div></div></div></div><div><p class="copyright">Copyright © 2004 Thomas Gleixner</p></div><div><div class="legalnotice"><a name="idm14"></a><p>
+     This documentation is free software; you can redistribute
+     it and/or modify it under the terms of the GNU General Public
+     License version 2 as published by the Free Software Foundation.
+   </p><p>
+     This program is distributed in the hope that it will be
+     useful, but WITHOUT ANY WARRANTY; without even the implied
+     warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+     See the GNU General Public License for more details.
+   </p><p>
+     You should have received a copy of the GNU General Public
+     License along with this program; if not, write to the Free
+     Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+     MA 02111-1307 USA
+   </p><p>
+     For more details see the file COPYING in the source
+     distribution of Linux.
+   </p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="chapter"><a href="intro.html">1. Introduction</a></span></dt><dt><span class="chapter"><a href="bugs.html">2. Known Bugs And Assumptions</a></span></dt><dt><span class="chapter"><a href="usage.html">3. Usage</a></span></dt><dd><dl><dt><span class="sect1"><a href="usage.html#idm31">Initializing</a></span></dt><dt><span class="sect1"><a href="ch03s02.html">Encoding</a></span></dt><dt><span class="sect1"><a href="ch03s03.html">Decoding</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03s03.html#idm47">
+			Decoding with syndrome calculation, direct data correction
+		</a></span></dt><dt><span class="sect2"><a href="ch03s03.html#idm50">
+			Decoding with syndrome given by hardware decoder, direct data correction
+		</a></span></dt><dt><span class="sect2"><a href="ch03s03.html#idm53">
+			Decoding with syndrome given by hardware decoder, no direct data correction.
+		</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03s04.html">Cleanup</a></span></dt></dl></dd><dt><span class="chapter"><a href="structs.html">4. Structures</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-struct-rs-control.html"><span class="phrase">struct rs_control</span></a></span><span class="refpurpose"> — 
+  rs control structure
+ </span></dt></dl></dd><dt><span class="chapter"><a href="pubfunctions.html">5. Public Functions Provided</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-free-rs.html"><span class="phrase">free_rs</span></a></span><span class="refpurpose"> — 
+  Free the rs control structure, if it is no longer used
+ </span></dt><dt><span class="refentrytitle"><a href="API-init-rs.html"><span class="phrase">init_rs</span></a></span><span class="refpurpose"> — 
+     Find a matching or allocate a new rs control structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-init-rs-non-canonical.html"><span class="phrase">init_rs_non_canonical</span></a></span><span class="refpurpose"> — 
+     Find a matching or allocate a new rs control structure, for fields with non-canonical representation
+ </span></dt><dt><span class="refentrytitle"><a href="API-encode-rs8.html"><span class="phrase">encode_rs8</span></a></span><span class="refpurpose"> — 
+     Calculate the parity for data values (8bit data width)
+ </span></dt><dt><span class="refentrytitle"><a href="API-decode-rs8.html"><span class="phrase">decode_rs8</span></a></span><span class="refpurpose"> — 
+     Decode codeword (8bit data width)
+ </span></dt><dt><span class="refentrytitle"><a href="API-encode-rs16.html"><span class="phrase">encode_rs16</span></a></span><span class="refpurpose"> — 
+     Calculate the parity for data values (16bit data width)
+ </span></dt><dt><span class="refentrytitle"><a href="API-decode-rs16.html"><span class="phrase">decode_rs16</span></a></span><span class="refpurpose"> — 
+     Decode codeword (16bit data width)
+ </span></dt></dl></dd><dt><span class="chapter"><a href="credits.html">6. Credits</a></span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="intro.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"> </td><td width="40%" align="right" valign="top"> Chapter 1. Introduction</td></tr></table></div></body></html>

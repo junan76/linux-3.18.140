@@ -1,0 +1,57 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Audio Inputs and Outputs</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="LINUX MEDIA INFRASTRUCTURE API"><link rel="up" href="common.html" title="Chapter 1. Common API Elements"><link rel="prev" href="video.html" title="Video Inputs and Outputs"><link rel="next" href="tuner.html" title="Tuners and Modulators"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Audio Inputs and Outputs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="video.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Common API Elements</th><td width="20%" align="right"> <a accesskey="n" href="tuner.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="audio"></a>Audio Inputs and Outputs</h2></div></div></div><p>Audio inputs and outputs are physical connectors of a
+device. Video capture devices have inputs, output devices have
+outputs, zero or more each. Radio devices have no audio inputs or
+outputs. They have exactly one tuner which in fact
+<span class="emphasis"><em>is</em></span> an audio source, but this API associates
+tuners with video inputs or outputs only, and radio devices have
+none of these.<a href="#ftn.idm495" class="footnote" name="idm495"><sup class="footnote">[4]</sup></a> A connector on a TV card to loop back the received
+audio signal to a sound card is not considered an audio output.</p><p>Audio and video inputs and outputs are associated. Selecting
+a video source also selects an audio source. This is most evident when
+the video and audio source is a tuner. Further audio connectors can
+combine with more than one video input or output. Assumed two
+composite video inputs and two audio inputs exist, there may be up to
+four valid combinations. The relation of video and audio connectors
+is defined in the <em class="structfield"><code>audioset</code></em> field of the
+respective struct <a class="link" href="vidioc-enuminput.html#v4l2-input" title="Table A.38. struct v4l2_input">v4l2_input</a> or struct <a class="link" href="vidioc-enumoutput.html#v4l2-output" title="Table A.42. struct v4l2_output">v4l2_output</a>, where each bit represents
+the index number, starting at zero, of one audio input or output.</p><p>To learn about the number and attributes of the
+available inputs and outputs applications can enumerate them with the
+<a class="link" href="vidioc-enumaudio.html" title="ioctl VIDIOC_ENUMAUDIO"><code class="constant">VIDIOC_ENUMAUDIO</code></a> and <a class="link" href="vidioc-enumaudioout.html" title="ioctl VIDIOC_ENUMAUDOUT"><code class="constant">VIDIOC_ENUMAUDOUT</code></a> ioctl, respectively. The
+struct <a class="link" href="vidioc-g-audio.html#v4l2-audio" title="Table A.50. struct v4l2_audio">v4l2_audio</a> returned by the <code class="constant">VIDIOC_ENUMAUDIO</code> ioctl
+also contains signal status information applicable when the current
+audio input is queried.</p><p>The <a class="link" href="vidioc-g-audio.html" title="ioctl VIDIOC_G_AUDIO, VIDIOC_S_AUDIO"><code class="constant">VIDIOC_G_AUDIO</code></a> and <a class="link" href="vidioc-g-audioout.html" title="ioctl VIDIOC_G_AUDOUT, VIDIOC_S_AUDOUT"><code class="constant">VIDIOC_G_AUDOUT</code></a> ioctls report
+the current audio input and output, respectively. Note that, unlike
+<a class="link" href="vidioc-g-input.html" title="ioctl VIDIOC_G_INPUT, VIDIOC_S_INPUT"><code class="constant">VIDIOC_G_INPUT</code></a> and <a class="link" href="vidioc-g-output.html" title="ioctl VIDIOC_G_OUTPUT, VIDIOC_S_OUTPUT"><code class="constant">VIDIOC_G_OUTPUT</code></a> these ioctls return a structure
+as <code class="constant">VIDIOC_ENUMAUDIO</code> and
+<code class="constant">VIDIOC_ENUMAUDOUT</code> do, not just an index.</p><p>To select an audio input and change its properties
+applications call the <a class="link" href="vidioc-g-audio.html" title="ioctl VIDIOC_G_AUDIO, VIDIOC_S_AUDIO"><code class="constant">VIDIOC_S_AUDIO</code></a> ioctl. To select an audio
+output (which presently has no changeable properties) applications
+call the <a class="link" href="vidioc-g-audioout.html" title="ioctl VIDIOC_G_AUDOUT, VIDIOC_S_AUDOUT"><code class="constant">VIDIOC_S_AUDOUT</code></a> ioctl.</p><p>Drivers must implement all audio input ioctls when the device
+has multiple selectable audio inputs, all audio output ioctls when the
+device has multiple selectable audio outputs. When the device has any
+audio inputs or outputs the driver must set the <code class="constant">V4L2_CAP_AUDIO</code>
+flag in the struct <a class="link" href="vidioc-querycap.html#v4l2-capability" title="Table A.92. struct v4l2_capability">v4l2_capability</a> returned by the <a class="link" href="vidioc-querycap.html" title="ioctl VIDIOC_QUERYCAP"><code class="constant">VIDIOC_QUERYCAP</code></a> ioctl.</p><div class="example"><a name="idm532"></a><p class="title"><b>Example 1.3. Information about the current audio input</b></p><div class="example-contents"><pre class="programlisting">
+struct <a class="link" href="vidioc-g-audio.html#v4l2-audio" title="Table A.50. struct v4l2_audio">v4l2_audio</a> audio;
+
+memset(&amp;audio, 0, sizeof(audio));
+
+if (-1 == ioctl(fd, <a class="link" href="vidioc-g-audio.html" title="ioctl VIDIOC_G_AUDIO, VIDIOC_S_AUDIO"><code class="constant">VIDIOC_G_AUDIO</code></a>, &amp;audio)) {
+	perror("VIDIOC_G_AUDIO");
+	exit(EXIT_FAILURE);
+}
+
+printf("Current input: %s\n", audio.name);
+      </pre></div></div><br class="example-break"><div class="example"><a name="idm538"></a><p class="title"><b>Example 1.4. Switching to the first audio input</b></p><div class="example-contents"><pre class="programlisting">
+struct <a class="link" href="vidioc-g-audio.html#v4l2-audio" title="Table A.50. struct v4l2_audio">v4l2_audio</a> audio;
+
+memset(&amp;audio, 0, sizeof(audio)); /* clear audio.mode, audio.reserved */
+
+audio.index = 0;
+
+if (-1 == ioctl(fd, <a class="link" href="vidioc-g-audio.html" title="ioctl VIDIOC_G_AUDIO, VIDIOC_S_AUDIO"><code class="constant">VIDIOC_S_AUDIO</code></a>, &amp;audio)) {
+	perror("VIDIOC_S_AUDIO");
+	exit(EXIT_FAILURE);
+}
+      </pre></div></div><br class="example-break"><div class="footnotes"><br><hr style="width:100; text-align:left;margin-left: 0"><div id="ftn.idm495" class="footnote"><p><a href="#idm495" class="para"><sup class="para">[4] </sup></a>Actually struct <a class="link" href="vidioc-g-audio.html#v4l2-audio" title="Table A.50. struct v4l2_audio">v4l2_audio</a> ought to have a
+<em class="structfield"><code>tuner</code></em> field like struct <a class="link" href="vidioc-enuminput.html#v4l2-input" title="Table A.38. struct v4l2_input">v4l2_input</a>, not only
+making the API more consistent but also permitting radio devices with
+multiple tuners.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="video.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="common.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="tuner.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Video Inputs and Outputs </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Tuners and Modulators</td></tr></table></div></body></html>

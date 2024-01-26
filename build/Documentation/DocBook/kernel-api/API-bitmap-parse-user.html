@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>bitmap_parse_user</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="kernel-lib.html#idm4941" title="Bitmap Operations"><link rel="prev" href="API---bitmap-parse.html" title="__bitmap_parse"><link rel="next" href="API-bitmap-scnlistprintf.html" title="bitmap_scnlistprintf"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">bitmap_parse_user</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API---bitmap-parse.html">Prev</a> </td><th width="60%" align="center">Bitmap Operations</th><td width="20%" align="right"> <a accesskey="n" href="API-bitmap-scnlistprintf.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-bitmap-parse-user"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>bitmap_parse_user — 
+     convert an ASCII hex string in a user buffer into a bitmap
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">bitmap_parse_user </b>(</code></td><td>const char __user * <var class="pdparam">ubuf</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">ulen</var>, </td></tr><tr><td> </td><td>unsigned long * <var class="pdparam">maskp</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">nmaskbits</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm5265"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>ubuf</code></em></span></dt><dd><p>
+     pointer to user buffer containing string.
+    </p></dd><dt><span class="term"><em class="parameter"><code>ulen</code></em></span></dt><dd><p>
+     buffer size in bytes.  If string is smaller than this
+     then it must be terminated with a \0.
+    </p></dd><dt><span class="term"><em class="parameter"><code>maskp</code></em></span></dt><dd><p>
+     pointer to bitmap array that will contain result.
+    </p></dd><dt><span class="term"><em class="parameter"><code>nmaskbits</code></em></span></dt><dd><p>
+     size of bitmap, in bits.
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm5288"></a><h2>Description</h2><p>
+   Wrapper for <code class="function">__bitmap_parse</code>, providing it with user buffer.
+   </p><p>
+
+   We cannot have this as an inline function in bitmap.h because it needs
+   linux/uaccess.h to get the <code class="function">access_ok</code> declaration and this causes
+   cyclic dependencies.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API---bitmap-parse.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="kernel-lib.html#idm4941">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-bitmap-scnlistprintf.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">__bitmap_parse</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">bitmap_scnlistprintf</span></td></tr></table></div></body></html>

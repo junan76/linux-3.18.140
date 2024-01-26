@@ -1,0 +1,50 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct spi_board_info</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="spi.html" title="Chapter 9. Serial Peripheral Interface (SPI)"><link rel="prev" href="API-spi-w8r16be.html" title="spi_w8r16be"><link rel="next" href="API-spi-register-board-info.html" title="spi_register_board_info"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct spi_board_info</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-spi-w8r16be.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Serial Peripheral Interface (SPI)</th><td width="20%" align="right"> <a accesskey="n" href="API-spi-register-board-info.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-spi-board-info"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct spi_board_info — 
+     board-specific template for a SPI device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct spi_board_info {
+  char modalias[SPI_NAME_SIZE];
+  const void * platform_data;
+  void * controller_data;
+  int irq;
+  u32 max_speed_hz;
+  u16 bus_num;
+  u16 chip_select;
+  u16 mode;
+};  </pre></div><div class="refsect1"><a name="idm41668"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">modalias[SPI_NAME_SIZE]</span></dt><dd><p>
+   Initializes spi_device.modalias; identifies the driver.
+      </p></dd><dt><span class="term">platform_data</span></dt><dd><p>
+   Initializes spi_device.platform_data; the particular
+   data stored there is driver-specific.
+      </p></dd><dt><span class="term">controller_data</span></dt><dd><p>
+   Initializes spi_device.controller_data; some
+   controllers need hints about hardware setup, e.g. for DMA.
+      </p></dd><dt><span class="term">irq</span></dt><dd><p>
+   Initializes spi_device.irq; depends on how the board is wired.
+      </p></dd><dt><span class="term">max_speed_hz</span></dt><dd><p>
+   Initializes spi_device.max_speed_hz; based on limits
+   from the chip datasheet and board-specific signal quality issues.
+      </p></dd><dt><span class="term">bus_num</span></dt><dd><p>
+   Identifies which spi_master parents the spi_device; unused
+   by <code class="function">spi_new_device</code>, and otherwise depends on board wiring.
+      </p></dd><dt><span class="term">chip_select</span></dt><dd><p>
+   Initializes spi_device.chip_select; depends on how
+   the board is wired.
+      </p></dd><dt><span class="term">mode</span></dt><dd><p>
+   Initializes spi_device.mode; based on the chip datasheet, board
+   wiring (some devices support both 3WIRE and standard modes), and
+   possibly presence of an inverter in the chipselect path.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm41704"></a><h2>Description</h2><p>
+   When adding new SPI devices to the device tree, these structures serve
+   as a partial device template.  They hold information which can't always
+   be determined by drivers.  Information that <code class="function">probe</code> can establish (such
+   as the default transfer wordsize) is not included here.
+   </p><p>
+
+   These structures are used in two places.  Their primary role is to
+   be stored in tables of board-specific device descriptors, which are
+   declared early in board initialization and then used (much later) to
+   populate a controller's device tree after the that controller's driver
+   initializes.  A secondary (and atypical) role is as a parameter to
+   <code class="function">spi_new_device</code> call, which happens after those controller drivers
+   are active in some dynamic board configuration models.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-spi-w8r16be.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="spi.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-spi-register-board-info.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">spi_w8r16be</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">spi_register_board_info</span></td></tr></table></div></body></html>

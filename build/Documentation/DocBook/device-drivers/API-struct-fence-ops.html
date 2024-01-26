@@ -1,0 +1,80 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct fence_ops</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch02s03.html" title="Device Drivers DMA Management"><link rel="prev" href="API-struct-fence-cb.html" title="struct fence_cb"><link rel="next" href="API-fence-get.html" title="fence_get"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct fence_ops</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-fence-cb.html">Prev</a> </td><th width="60%" align="center">Device Drivers DMA Management</th><td width="20%" align="right"> <a accesskey="n" href="API-fence-get.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-fence-ops"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct fence_ops — 
+     operations implemented for fence
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct fence_ops {
+  const char * (* get_driver_name) (struct fence *fence);
+  const char * (* get_timeline_name) (struct fence *fence);
+  bool (* enable_signaling) (struct fence *fence);
+  bool (* signaled) (struct fence *fence);
+  signed long (* wait) (struct fence *fence, bool intr, signed long timeout);
+  void (* release) (struct fence *fence);
+  int (* fill_driver_data) (struct fence *fence, void *data, int size);
+  void (* fence_value_str) (struct fence *fence, char *str, int size);
+  void (* timeline_value_str) (struct fence *fence, char *str, int size);
+};  </pre></div><div class="refsect1"><a name="idm17071"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">get_driver_name</span></dt><dd><p>
+   returns the driver name.
+      </p></dd><dt><span class="term">get_timeline_name</span></dt><dd><p>
+   return the name of the context this fence belongs to.
+      </p></dd><dt><span class="term">enable_signaling</span></dt><dd><p>
+   enable software signaling of fence.
+      </p></dd><dt><span class="term">signaled</span></dt><dd><p>
+   [optional] peek whether the fence is signaled, can be null.
+      </p></dd><dt><span class="term">wait</span></dt><dd><p>
+   custom wait implementation, or fence_default_wait.
+      </p></dd><dt><span class="term">release</span></dt><dd><p>
+   [optional] called on destruction of fence, can be null
+      </p></dd><dt><span class="term">fill_driver_data</span></dt><dd><p>
+   [optional] callback to fill in free-form debug info
+   Returns amount of bytes filled, or -errno.
+      </p></dd><dt><span class="term">fence_value_str</span></dt><dd><p>
+   [optional] fills in the value of the fence as a string
+      </p></dd><dt><span class="term">timeline_value_str</span></dt><dd><p>
+   [optional] fills in the current value of the timeline
+   as a string
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm17110"></a><h2>Notes on enable_signaling</h2><p>
+   For fence implementations that have the capability for hw-&gt;hw
+   signaling, they can implement this op to enable the necessary
+   irqs, or insert commands into cmdstream, etc.  This is called
+   in the first <code class="function">wait</code> or <code class="function">add_callback</code> path to let the fence
+   implementation know that there is another driver waiting on
+   the signal (ie. hw-&gt;sw case).
+   </p><p>
+
+   This function can be called called from atomic context, but not
+   from irq context, so normal spinlocks can be used.
+   </p><p>
+
+   A return value of false indicates the fence already passed,
+   or some failure occured that made it impossible to enable
+   signaling. True indicates succesful enabling.
+   </p><p>
+
+   fence-&gt;status may be set in enable_signaling, but only when false is
+   returned.
+   </p><p>
+
+   Calling fence_signal before enable_signaling is called allows
+   for a tiny race window in which enable_signaling is called during,
+   before, or after fence_signal. To fight this, it is recommended
+   that before enable_signaling returns true an extra reference is
+   taken on the fence, to be released when the fence is signaled.
+   This will mean fence_signal will still be called twice, but
+   the second time will be a noop since it was already signaled.
+</p></div><div class="refsect1"><a name="idm17119"></a><h2>Notes on signaled</h2><p>
+   May set fence-&gt;status if returning true.
+</p></div><div class="refsect1"><a name="idm17122"></a><h2>Notes on wait</h2><p>
+   Must not be NULL, set to fence_default_wait for default implementation.
+   the fence_default_wait implementation should work for any fence, as long
+   as enable_signaling works correctly.
+   </p><p>
+
+   Must return -ERESTARTSYS if the wait is intr = true and the wait was
+   interrupted, and remaining jiffies if fence has signaled, or 0 if wait
+   timed out. Can also return other error values on custom implementations,
+   which should be treated as if the fence is signaled. For example a hardware
+   lockup could be reported like that.
+</p></div><div class="refsect1"><a name="idm17126"></a><h2>Notes on release</h2><p>
+   Can be NULL, this function allows additional commands to run on
+   destruction of the fence. Can be called from irq context.
+   If pointer is set to NULL, kfree will get called instead.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-fence-cb.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-fence-get.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct fence_cb</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">fence_get</span></td></tr></table></div></body></html>

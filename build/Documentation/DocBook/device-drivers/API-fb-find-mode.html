@@ -1,0 +1,53 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>fb_find_mode</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Device Drivers"><link rel="up" href="ch07s03.html" title="Frame Buffer Video Mode Database"><link rel="prev" href="API-fb-delete-videomode.html" title="fb_delete_videomode"><link rel="next" href="API-fb-var-to-videomode.html" title="fb_var_to_videomode"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">fb_find_mode</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-fb-delete-videomode.html">Prev</a> </td><th width="60%" align="center">Frame Buffer Video Mode Database</th><td width="20%" align="right"> <a accesskey="n" href="API-fb-var-to-videomode.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-fb-find-mode"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>fb_find_mode — 
+  finds a valid video mode
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">fb_find_mode </b>(</code></td><td>struct fb_var_screeninfo * <var class="pdparam">var</var>, </td></tr><tr><td> </td><td>struct fb_info * <var class="pdparam">info</var>, </td></tr><tr><td> </td><td>const char * <var class="pdparam">mode_option</var>, </td></tr><tr><td> </td><td>const struct fb_videomode * <var class="pdparam">db</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">dbsize</var>, </td></tr><tr><td> </td><td>const struct fb_videomode * <var class="pdparam">default_mode</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">default_bpp</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm37352"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>var</code></em></span></dt><dd><p>
+     frame buffer user defined part of display
+    </p></dd><dt><span class="term"><em class="parameter"><code>info</code></em></span></dt><dd><p>
+     frame buffer info structure
+    </p></dd><dt><span class="term"><em class="parameter"><code>mode_option</code></em></span></dt><dd><p>
+     string video mode to find
+    </p></dd><dt><span class="term"><em class="parameter"><code>db</code></em></span></dt><dd><p>
+     video mode database
+    </p></dd><dt><span class="term"><em class="parameter"><code>dbsize</code></em></span></dt><dd><p>
+     size of <em class="parameter"><code>db</code></em>
+    </p></dd><dt><span class="term"><em class="parameter"><code>default_mode</code></em></span></dt><dd><p>
+     default video mode to fall back to
+    </p></dd><dt><span class="term"><em class="parameter"><code>default_bpp</code></em></span></dt><dd><p>
+     default color depth in bits per pixel
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm37391"></a><h2>Description</h2><p>
+   Finds a suitable video mode, starting with the specified mode
+   in <em class="parameter"><code>mode_option</code></em> with fallback to <em class="parameter"><code>default_mode</code></em>.  If
+   <em class="parameter"><code>default_mode</code></em> fails, all modes in the video mode database will
+   be tried.
+   </p><p>
+
+   Valid mode specifiers for <em class="parameter"><code>mode_option</code></em>:
+   </p><p>
+
+   &lt;xres&gt;x&lt;yres&gt;[M][R][-&lt;bpp&gt;][@&lt;refresh&gt;][i][p][m] or
+   &lt;name&gt;[-&lt;bpp&gt;][@&lt;refresh&gt;]
+   </p><p>
+
+   with &lt;xres&gt;, &lt;yres&gt;, &lt;bpp&gt; and &lt;refresh&gt; decimal numbers and
+   &lt;name&gt; a string.
+   </p><p>
+
+   If 'M' is present after yres (and before refresh/bpp if present),
+   the function will compute the timings using VESA(tm) Coordinated
+   Video Timings (CVT).  If 'R' is present after 'M', will compute with
+   reduced blanking (for flatpanels).  If 'i' or 'p' are present, compute
+   interlaced or progressive mode.  If 'm' is present, add margins equal
+   to 1.8% of xres rounded down to 8 pixels, and 1.8% of yres. The chars
+   'i', 'p' and 'm' must be after 'M' and 'R'. Example:
+   </p><p>
+
+   1024x768MR-8<em class="parameter"><code>60m</code></em> - Reduced blank with margins at 60Hz.
+</p></div><div class="refsect1"><a name="idm37404"></a><h2>NOTE</h2><p>
+   The passed struct <em class="parameter"><code>var</code></em> is _not_ cleared!  This allows you
+   to supply values for e.g. the grayscale and accel_flags fields.
+   </p><p>
+
+   Returns zero for failure, 1 if using specified <em class="parameter"><code>mode_option</code></em>,
+   2 if using specified <em class="parameter"><code>mode_option</code></em> with an ignored refresh rate,
+   3 if default mode is used, 4 if fall back to any valid mode.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-fb-delete-videomode.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-fb-var-to-videomode.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">fb_delete_videomode</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">fb_var_to_videomode</span></td></tr></table></div></body></html>

@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>config_ep_by_speed</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="USB Gadget API for Linux"><link rel="up" href="composite.html" title="Composite Device Framework"><link rel="prev" href="API-struct-usb-composite-dev.html" title="struct usb_composite_dev"><link rel="next" href="API-usb-add-function.html" title="usb_add_function"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">config_ep_by_speed</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-usb-composite-dev.html">Prev</a> </td><th width="60%" align="center">Composite Device Framework</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-add-function.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-config-ep-by-speed"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>config_ep_by_speed — 
+  configures the given endpoint according to gadget speed.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">config_ep_by_speed </b>(</code></td><td>struct usb_gadget * <var class="pdparam">g</var>, </td></tr><tr><td> </td><td>struct usb_function * <var class="pdparam">f</var>, </td></tr><tr><td> </td><td>struct usb_ep * <var class="pdparam">_ep</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm2399"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>g</code></em></span></dt><dd><p>
+     pointer to the gadget
+    </p></dd><dt><span class="term"><em class="parameter"><code>f</code></em></span></dt><dd><p>
+     usb function
+    </p></dd><dt><span class="term"><em class="parameter"><code>_ep</code></em></span></dt><dd><p>
+     the endpoint to configure
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm2417"></a><h2>Return</h2><p>
+   error code, 0 on success
+   </p><p>
+
+   This function chooses the right descriptors for a given
+   endpoint according to gadget speed and saves it in the
+   endpoint desc field. If the endpoint already has a descriptor
+   assigned to it - overwrites it with currently corresponding
+   descriptor. The endpoint maxpacket field is updated according
+   to the chosen descriptor.
+</p></div><div class="refsect1"><a name="idm2421"></a><h2>Note</h2><p>
+   the supplied function should hold all the descriptors
+   for supported speeds
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-usb-composite-dev.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="composite.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-add-function.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct usb_composite_dev</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_add_function</span></td></tr></table></div></body></html>

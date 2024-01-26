@@ -1,0 +1,34 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ccw_device_start_timeout</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing s390 channel device drivers"><link rel="up" href="ccwdev.html" title="ccw devices"><link rel="prev" href="API-ccw-device-start.html" title="ccw_device_start"><link rel="next" href="API-ccw-device-halt.html" title="ccw_device_halt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">ccw_device_start_timeout</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-ccw-device-start.html">Prev</a> </td><th width="60%" align="center">ccw devices</th><td width="20%" align="right"> <a accesskey="n" href="API-ccw-device-halt.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-ccw-device-start-timeout"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ccw_device_start_timeout — 
+     start a s390 channel program with timeout
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">ccw_device_start_timeout </b>(</code></td><td>struct ccw_device * <var class="pdparam">cdev</var>, </td></tr><tr><td> </td><td>struct ccw1 * <var class="pdparam">cpa</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">intparm</var>, </td></tr><tr><td> </td><td>__u8 <var class="pdparam">lpm</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">flags</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">expires</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1471"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>cdev</code></em></span></dt><dd><p>
+     target ccw device
+    </p></dd><dt><span class="term"><em class="parameter"><code>cpa</code></em></span></dt><dd><p>
+     logical start address of channel program
+    </p></dd><dt><span class="term"><em class="parameter"><code>intparm</code></em></span></dt><dd><p>
+     user specific interruption parameter; will be presented back to
+     <em class="parameter"><code>cdev</code></em>'s interrupt handler. Allows a device driver to associate
+     the interrupt with a particular I/O request.
+    </p></dd><dt><span class="term"><em class="parameter"><code>lpm</code></em></span></dt><dd><p>
+     defines the channel path to be used for a specific I/O request. A
+     value of 0 will make cio use the opm.
+    </p></dd><dt><span class="term"><em class="parameter"><code>flags</code></em></span></dt><dd><p>
+     additional flags; defines the action to be performed for I/O
+     processing.
+    </p></dd><dt><span class="term"><em class="parameter"><code>expires</code></em></span></dt><dd><p>
+     timeout value in jiffies
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1505"></a><h2>Description</h2><p>
+   Start a S/390 channel program. When the interrupt arrives, the
+   IRQ handler is called, either immediately, delayed (dev-end missing,
+   or sense required) or never (no IRQ handler registered).
+   This function notifies the device driver if the channel program has not
+   completed during the time specified by <em class="parameter"><code>expires</code></em>. If a timeout occurs, the
+   channel program is terminated via xsch, hsch or csch, and the device's
+   interrupt handler will be called with an irb containing ERR_PTR(-<code class="constant">ETIMEDOUT</code>).
+</p></div><div class="refsect1"><a name="idm1510"></a><h2>Returns</h2><p>
+   <code class="constant">0</code>, if the operation was successful;
+   -<code class="constant">EBUSY</code>, if the device is busy, or status pending;
+   -<code class="constant">EACCES</code>, if no path specified in <em class="parameter"><code>lpm</code></em> is operational;
+   -<code class="constant">ENODEV</code>, if the device is not operational.
+</p></div><div class="refsect1"><a name="idm1518"></a><h2>Context</h2><p>
+   Interrupts disabled, ccw device lock held
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-ccw-device-start.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ccwdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-ccw-device-halt.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">ccw_device_start</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">ccw_device_halt</span></td></tr></table></div></body></html>

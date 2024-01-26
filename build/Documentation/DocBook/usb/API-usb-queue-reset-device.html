@@ -1,0 +1,32 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>usb_queue_reset_device</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="usbcore.html" title="Chapter 5. USB Core APIs"><link rel="prev" href="API-usb-reset-device.html" title="usb_reset_device"><link rel="next" href="API-usb-hub-find-child.html" title="usb_hub_find_child"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">usb_queue_reset_device</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-reset-device.html">Prev</a> </td><th width="60%" align="center">Chapter 5. USB Core APIs</th><td width="20%" align="right"> <a accesskey="n" href="API-usb-hub-find-child.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-usb-queue-reset-device"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>usb_queue_reset_device — 
+     Reset a USB device from an atomic context
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">usb_queue_reset_device </b>(</code></td><td>struct usb_interface * <var class="pdparam">iface</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm5368"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>iface</code></em></span></dt><dd><p>
+     USB interface belonging to the device to reset
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm5376"></a><h2>Description</h2><p>
+   This function can be used to reset a USB device from an atomic
+   context, where <code class="function">usb_reset_device</code> won't work (as it blocks).
+   </p><p>
+
+   Doing a reset via this method is functionally equivalent to calling
+   <code class="function">usb_reset_device</code>, except for the fact that it is delayed to a
+   workqueue. This means that any drivers bound to other interfaces
+   might be unbound, as well as users from usbfs in user space.
+</p></div><div class="refsect1"><a name="idm5382"></a><h2>Corner cases</h2><p>
+   </p><p>
+
+   - Scheduling two resets at the same time from two different drivers
+   attached to two different interfaces of the same device is
+   possible; depending on how the driver attached to each interface
+   handles -&gt;<code class="function">pre_reset</code>, the second reset might happen or not.
+   </p><p>
+
+   - If the reset is delayed so long that the interface is unbound from
+   its driver, the reset will be skipped.
+   </p><p>
+
+   - This function can be called during .<code class="function">probe</code>.  It can also be called
+   during .<code class="function">disconnect</code>, but doing so is pointless because the reset
+   will not occur.  If you really want to reset the device during
+   .<code class="function">disconnect</code>, call <code class="function">usb_reset_device</code> directly -- but watch out
+   for nested unbinding issues!
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-reset-device.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="usbcore.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-usb-hub-find-child.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_reset_device</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">usb_hub_find_child</span></td></tr></table></div></body></html>

@@ -1,0 +1,67 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 6. FIFO Buffer</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="index.html" title="The Linux Kernel API"><link rel="prev" href="API-ipc-parse-version.html" title="ipc_parse_version"><link rel="next" href="API-DECLARE-KFIFO-PTR.html" title="DECLARE_KFIFO_PTR"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. FIFO Buffer</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-ipc-parse-version.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-DECLARE-KFIFO-PTR.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="kfifo"></a>Chapter 6. FIFO Buffer</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="kfifo.html#idm13515">kfifo interface</a></span></dt></dl></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm13515"></a>kfifo interface</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-DECLARE-KFIFO-PTR.html"><span class="phrase">DECLARE_KFIFO_PTR</span></a></span><span class="refpurpose"> — 
+  macro to declare a fifo pointer object
+ </span></dt><dt><span class="refentrytitle"><a href="API-DECLARE-KFIFO.html"><span class="phrase">DECLARE_KFIFO</span></a></span><span class="refpurpose"> — 
+     macro to declare a fifo object
+ </span></dt><dt><span class="refentrytitle"><a href="API-INIT-KFIFO.html"><span class="phrase">INIT_KFIFO</span></a></span><span class="refpurpose"> — 
+     Initialize a fifo declared by DECLARE_KFIFO
+ </span></dt><dt><span class="refentrytitle"><a href="API-DEFINE-KFIFO.html"><span class="phrase">DEFINE_KFIFO</span></a></span><span class="refpurpose"> — 
+     macro to define and initialize a fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-initialized.html"><span class="phrase">kfifo_initialized</span></a></span><span class="refpurpose"> — 
+     Check if the fifo is initialized
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-esize.html"><span class="phrase">kfifo_esize</span></a></span><span class="refpurpose"> — 
+     returns the size of the element managed by the fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-recsize.html"><span class="phrase">kfifo_recsize</span></a></span><span class="refpurpose"> — 
+     returns the size of the record length field
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-size.html"><span class="phrase">kfifo_size</span></a></span><span class="refpurpose"> — 
+     returns the size of the fifo in elements
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-reset.html"><span class="phrase">kfifo_reset</span></a></span><span class="refpurpose"> — 
+     removes the entire fifo content
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-reset-out.html"><span class="phrase">kfifo_reset_out</span></a></span><span class="refpurpose"> — 
+     skip fifo content
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-len.html"><span class="phrase">kfifo_len</span></a></span><span class="refpurpose"> — 
+     returns the number of used elements in the fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-is-empty.html"><span class="phrase">kfifo_is_empty</span></a></span><span class="refpurpose"> — 
+     returns true if the fifo is empty
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-is-full.html"><span class="phrase">kfifo_is_full</span></a></span><span class="refpurpose"> — 
+     returns true if the fifo is full
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-avail.html"><span class="phrase">kfifo_avail</span></a></span><span class="refpurpose"> — 
+     returns the number of unused elements in the fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-skip.html"><span class="phrase">kfifo_skip</span></a></span><span class="refpurpose"> — 
+     skip output data
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-peek-len.html"><span class="phrase">kfifo_peek_len</span></a></span><span class="refpurpose"> — 
+     gets the size of the next fifo record
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-alloc.html"><span class="phrase">kfifo_alloc</span></a></span><span class="refpurpose"> — 
+     dynamically allocates a new fifo buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-free.html"><span class="phrase">kfifo_free</span></a></span><span class="refpurpose"> — 
+     frees the fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-init.html"><span class="phrase">kfifo_init</span></a></span><span class="refpurpose"> — 
+     initialize a fifo using a preallocated buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-put.html"><span class="phrase">kfifo_put</span></a></span><span class="refpurpose"> — 
+     put data into the fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-get.html"><span class="phrase">kfifo_get</span></a></span><span class="refpurpose"> — 
+     get data from the fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-peek.html"><span class="phrase">kfifo_peek</span></a></span><span class="refpurpose"> — 
+     get data from the fifo without removing
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-in.html"><span class="phrase">kfifo_in</span></a></span><span class="refpurpose"> — 
+     put data into the fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-in-spinlocked.html"><span class="phrase">kfifo_in_spinlocked</span></a></span><span class="refpurpose"> — 
+     put data into the fifo using a spinlock for locking
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-out.html"><span class="phrase">kfifo_out</span></a></span><span class="refpurpose"> — 
+     get data from the fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-out-spinlocked.html"><span class="phrase">kfifo_out_spinlocked</span></a></span><span class="refpurpose"> — 
+     get data from the fifo using a spinlock for locking
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-from-user.html"><span class="phrase">kfifo_from_user</span></a></span><span class="refpurpose"> — 
+     puts some data from user space into the fifo
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-to-user.html"><span class="phrase">kfifo_to_user</span></a></span><span class="refpurpose"> — 
+     copies data from the fifo into user space
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-dma-in-prepare.html"><span class="phrase">kfifo_dma_in_prepare</span></a></span><span class="refpurpose"> — 
+     setup a scatterlist for DMA input
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-dma-in-finish.html"><span class="phrase">kfifo_dma_in_finish</span></a></span><span class="refpurpose"> — 
+     finish a DMA IN operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-dma-out-prepare.html"><span class="phrase">kfifo_dma_out_prepare</span></a></span><span class="refpurpose"> — 
+     setup a scatterlist for DMA output
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-dma-out-finish.html"><span class="phrase">kfifo_dma_out_finish</span></a></span><span class="refpurpose"> — 
+     finish a DMA OUT operation
+ </span></dt><dt><span class="refentrytitle"><a href="API-kfifo-out-peek.html"><span class="phrase">kfifo_out_peek</span></a></span><span class="refpurpose"> — 
+     gets some data from the fifo
+ </span></dt></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-ipc-parse-version.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-DECLARE-KFIFO-PTR.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">ipc_parse_version</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">DECLARE_KFIFO_PTR</span></td></tr></table></div></body></html>

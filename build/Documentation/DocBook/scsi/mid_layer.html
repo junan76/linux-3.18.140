@@ -1,0 +1,249 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 3. SCSI mid layer</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="index.html" title="SCSI Interfaces Guide"><link rel="prev" href="ch.html" title="ch (SCSI Media Changer)"><link rel="next" href="API-shost-for-each-device.html" title="shost_for_each_device"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. SCSI mid layer</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-shost-for-each-device.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="mid_layer"></a>Chapter 3. SCSI mid layer</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="mid_layer.html#midlayer_implementation">SCSI midlayer implementation</a></span></dt><dd><dl><dt><span class="sect2"><a href="mid_layer.html#scsi_device.h">include/scsi/scsi_device.h</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi.c">drivers/scsi/scsi.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsicam.c">drivers/scsi/scsicam.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_error.c">drivers/scsi/scsi_error.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_devinfo.c">drivers/scsi/scsi_devinfo.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_ioctl.c">drivers/scsi/scsi_ioctl.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_lib.c">drivers/scsi/scsi_lib.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_lib_dma.c">drivers/scsi/scsi_lib_dma.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_module.c">drivers/scsi/scsi_module.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_proc.c">drivers/scsi/scsi_proc.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_netlink.c">drivers/scsi/scsi_netlink.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_scan.c">drivers/scsi/scsi_scan.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_sysctl.c">drivers/scsi/scsi_sysctl.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_sysfs.c">drivers/scsi/scsi_sysfs.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#hosts.c">drivers/scsi/hosts.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#constants.c">drivers/scsi/constants.c</a></span></dt></dl></dd><dt><span class="sect1"><a href="Transport_classes.html">Transport classes</a></span></dt><dd><dl><dt><span class="sect2"><a href="Transport_classes.html#Fibre_Channel_transport">Fibre Channel transport</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#iSCSI_transport">iSCSI transport class</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#SAS_transport">Serial Attached SCSI (SAS) transport class</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#SATA_transport">SATA transport class</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#SPI_transport">Parallel SCSI (SPI) transport class</a></span></dt><dt><span class="sect2"><a href="Transport_classes.html#SRP_transport">SCSI RDMA (SRP) transport class</a></span></dt></dl></dd></dl></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="midlayer_implementation"></a>SCSI midlayer implementation</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="mid_layer.html#scsi_device.h">include/scsi/scsi_device.h</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi.c">drivers/scsi/scsi.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsicam.c">drivers/scsi/scsicam.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_error.c">drivers/scsi/scsi_error.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_devinfo.c">drivers/scsi/scsi_devinfo.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_ioctl.c">drivers/scsi/scsi_ioctl.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_lib.c">drivers/scsi/scsi_lib.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_lib_dma.c">drivers/scsi/scsi_lib_dma.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_module.c">drivers/scsi/scsi_module.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_proc.c">drivers/scsi/scsi_proc.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_netlink.c">drivers/scsi/scsi_netlink.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_scan.c">drivers/scsi/scsi_scan.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_sysctl.c">drivers/scsi/scsi_sysctl.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#scsi_sysfs.c">drivers/scsi/scsi_sysfs.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#hosts.c">drivers/scsi/hosts.c</a></span></dt><dt><span class="sect2"><a href="mid_layer.html#constants.c">drivers/scsi/constants.c</a></span></dt></dl></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_device.h"></a>include/scsi/scsi_device.h</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-shost-for-each-device.html"><span class="phrase">shost_for_each_device</span></a></span><span class="refpurpose"> — 
+  iterate over all devices of a host
+ </span></dt><dt><span class="refentrytitle"><a href="API---shost-for-each-device.html"><span class="phrase">__shost_for_each_device</span></a></span><span class="refpurpose"> — 
+     iterate over all devices of a host (UNLOCKED)
+ </span></dt></dl></div><p>
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi.c"></a>drivers/scsi/scsi.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-device-type.html"><span class="phrase">scsi_device_type</span></a></span><span class="refpurpose"> — 
+  Return 17 char string indicating device type.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-cmd-get-serial.html"><span class="phrase">scsi_cmd_get_serial</span></a></span><span class="refpurpose"> — 
+     Assign a serial number to a command
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-adjust-queue-depth.html"><span class="phrase">scsi_adjust_queue_depth</span></a></span><span class="refpurpose"> — 
+     Let low level drivers change a device's queue depth
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-track-queue-full.html"><span class="phrase">scsi_track_queue_full</span></a></span><span class="refpurpose"> — 
+     track QUEUE_FULL events to adjust queue depth
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-get-vpd-page.html"><span class="phrase">scsi_get_vpd_page</span></a></span><span class="refpurpose"> — 
+     Get Vital Product Data from a SCSI device
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-report-opcode.html"><span class="phrase">scsi_report_opcode</span></a></span><span class="refpurpose"> — 
+     Find out if a given command opcode is supported
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-device-get.html"><span class="phrase">scsi_device_get</span></a></span><span class="refpurpose"> — 
+     get an additional reference to a scsi_device
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-device-put.html"><span class="phrase">scsi_device_put</span></a></span><span class="refpurpose"> — 
+     release a reference to a scsi_device
+ </span></dt><dt><span class="refentrytitle"><a href="API-starget-for-each-device.html"><span class="phrase">starget_for_each_device</span></a></span><span class="refpurpose"> — 
+     helper to walk all devices of a target
+ </span></dt><dt><span class="refentrytitle"><a href="API---starget-for-each-device.html"><span class="phrase">__starget_for_each_device</span></a></span><span class="refpurpose"> — 
+     helper to walk all devices of a target (UNLOCKED)
+ </span></dt><dt><span class="refentrytitle"><a href="API---scsi-device-lookup-by-target.html"><span class="phrase">__scsi_device_lookup_by_target</span></a></span><span class="refpurpose"> — 
+     find a device given the target (UNLOCKED)
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-device-lookup-by-target.html"><span class="phrase">scsi_device_lookup_by_target</span></a></span><span class="refpurpose"> — 
+     find a device given the target
+ </span></dt><dt><span class="refentrytitle"><a href="API---scsi-device-lookup.html"><span class="phrase">__scsi_device_lookup</span></a></span><span class="refpurpose"> — 
+     find a device given the host (UNLOCKED)
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-device-lookup.html"><span class="phrase">scsi_device_lookup</span></a></span><span class="refpurpose"> — 
+     find a device given the host
+ </span></dt></dl></div><p>Main file for the SCSI midlayer.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsicam.c"></a>drivers/scsi/scsicam.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-bios-ptable.html"><span class="phrase">scsi_bios_ptable</span></a></span><span class="refpurpose"> — 
+  Read PC partition table out of first sector of device.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsicam-bios-param.html"><span class="phrase">scsicam_bios_param</span></a></span><span class="refpurpose"> — 
+     Determine geometry of a disk in cylinders/heads/sectors.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-partsize.html"><span class="phrase">scsi_partsize</span></a></span><span class="refpurpose"> — 
+     Parse cylinders/heads/sectors from PC partition table
+ </span></dt></dl></div><p>
+          <a class="ulink" href="http://www.t10.org/ftp/t10/drafts/cam/cam-r12b.pdf" target="_top">SCSI
+          Common Access Method</a> support functions, for use with
+          HDIO_GETGEO, etc.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_error.c"></a>drivers/scsi/scsi_error.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-schedule-eh.html"><span class="phrase">scsi_schedule_eh</span></a></span><span class="refpurpose"> — 
+  schedule EH for SCSI host
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-block-when-processing-errors.html"><span class="phrase">scsi_block_when_processing_errors</span></a></span><span class="refpurpose"> — 
+     Prevent cmds from being queued.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-eh-prep-cmnd.html"><span class="phrase">scsi_eh_prep_cmnd</span></a></span><span class="refpurpose"> — 
+     Save a scsi command info as part of error recovery
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-eh-restore-cmnd.html"><span class="phrase">scsi_eh_restore_cmnd</span></a></span><span class="refpurpose"> — 
+     Restore a scsi command info as part of error recovery
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-eh-finish-cmd.html"><span class="phrase">scsi_eh_finish_cmd</span></a></span><span class="refpurpose"> — 
+     Handle a cmd that eh is finished with.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-eh-get-sense.html"><span class="phrase">scsi_eh_get_sense</span></a></span><span class="refpurpose"> — 
+     Get device sense data.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-eh-ready-devs.html"><span class="phrase">scsi_eh_ready_devs</span></a></span><span class="refpurpose"> — 
+     check device ready state and recover if not.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-eh-flush-done-q.html"><span class="phrase">scsi_eh_flush_done_q</span></a></span><span class="refpurpose"> — 
+     finish processed commands or retry them.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-normalize-sense.html"><span class="phrase">scsi_normalize_sense</span></a></span><span class="refpurpose"> — 
+     normalize main elements from either fixed or descriptor sense data format into a common format.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-sense-desc-find.html"><span class="phrase">scsi_sense_desc_find</span></a></span><span class="refpurpose"> — 
+     search for a given descriptor type in descriptor sense data format.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-get-sense-info-fld.html"><span class="phrase">scsi_get_sense_info_fld</span></a></span><span class="refpurpose"> — 
+     get information field from sense data (either fixed or descriptor format)
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-build-sense-buffer.html"><span class="phrase">scsi_build_sense_buffer</span></a></span><span class="refpurpose"> — 
+     build sense data in a buffer
+ </span></dt></dl></div><p>Common SCSI error/timeout handling routines.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_devinfo.c"></a>drivers/scsi/scsi_devinfo.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-dev-info-list-add.html"><span class="phrase">scsi_dev_info_list_add</span></a></span><span class="refpurpose"> — 
+  add one dev_info list entry.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-dev-info-list-add-str.html"><span class="phrase">scsi_dev_info_list_add_str</span></a></span><span class="refpurpose"> — 
+     parse dev_list and add to the scsi_dev_info_list.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-get-device-flags.html"><span class="phrase">scsi_get_device_flags</span></a></span><span class="refpurpose"> — 
+     get device specific flags from the dynamic device list.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-exit-devinfo.html"><span class="phrase">scsi_exit_devinfo</span></a></span><span class="refpurpose"> — 
+     remove /proc/scsi/device_info &amp; the scsi_dev_info_list
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-init-devinfo.html"><span class="phrase">scsi_init_devinfo</span></a></span><span class="refpurpose"> — 
+     set up the dynamic device list.
+ </span></dt></dl></div><p>
+          Manage scsi_dev_info_list, which tracks blacklisted and whitelisted
+          devices.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_ioctl.c"></a>drivers/scsi/scsi_ioctl.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-ioctl.html"><span class="phrase">scsi_ioctl</span></a></span><span class="refpurpose"> — 
+  Dispatch ioctl to scsi device
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-nonblockable-ioctl.html"><span class="phrase">scsi_nonblockable_ioctl</span></a></span><span class="refpurpose"> — 
+     Handle SG_SCSI_RESET
+ </span></dt></dl></div><p>
+          Handle ioctl() calls for SCSI devices.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_lib.c"></a>drivers/scsi/scsi_lib.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-execute.html"><span class="phrase">scsi_execute</span></a></span><span class="refpurpose"> — 
+  insert request and wait for the result
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-mode-select.html"><span class="phrase">scsi_mode_select</span></a></span><span class="refpurpose"> — 
+     issue a mode select
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-mode-sense.html"><span class="phrase">scsi_mode_sense</span></a></span><span class="refpurpose"> — 
+     issue a mode sense, falling back from 10 to six bytes if necessary.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-test-unit-ready.html"><span class="phrase">scsi_test_unit_ready</span></a></span><span class="refpurpose"> — 
+     test if unit is ready
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-device-set-state.html"><span class="phrase">scsi_device_set_state</span></a></span><span class="refpurpose"> — 
+     Take the given device through the device state model.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sdev-evt-send.html"><span class="phrase">sdev_evt_send</span></a></span><span class="refpurpose"> — 
+     send asserted event to uevent thread
+ </span></dt><dt><span class="refentrytitle"><a href="API-sdev-evt-alloc.html"><span class="phrase">sdev_evt_alloc</span></a></span><span class="refpurpose"> — 
+     allocate a new scsi event
+ </span></dt><dt><span class="refentrytitle"><a href="API-sdev-evt-send-simple.html"><span class="phrase">sdev_evt_send_simple</span></a></span><span class="refpurpose"> — 
+     send asserted event to uevent thread
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-device-quiesce.html"><span class="phrase">scsi_device_quiesce</span></a></span><span class="refpurpose"> — 
+     Block user issued commands.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-device-resume.html"><span class="phrase">scsi_device_resume</span></a></span><span class="refpurpose"> — 
+     Restart user issued commands to a quiesced device.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-internal-device-block.html"><span class="phrase">scsi_internal_device_block</span></a></span><span class="refpurpose"> — 
+     internal function to put a device temporarily into the SDEV_BLOCK state
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-internal-device-unblock.html"><span class="phrase">scsi_internal_device_unblock</span></a></span><span class="refpurpose"> — 
+     resume a device after a block request
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-kmap-atomic-sg.html"><span class="phrase">scsi_kmap_atomic_sg</span></a></span><span class="refpurpose"> — 
+     find and atomically map an sg-elemnt
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-kunmap-atomic-sg.html"><span class="phrase">scsi_kunmap_atomic_sg</span></a></span><span class="refpurpose"> — 
+     atomically unmap a virtual address, previously mapped with scsi_kmap_atomic_sg
+ </span></dt></dl></div><p>
+          SCSI queuing library.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_lib_dma.c"></a>drivers/scsi/scsi_lib_dma.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-dma-map.html"><span class="phrase">scsi_dma_map</span></a></span><span class="refpurpose"> — 
+  perform DMA mapping against command's sg lists
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-dma-unmap.html"><span class="phrase">scsi_dma_unmap</span></a></span><span class="refpurpose"> — 
+     unmap command's sg lists mapped by scsi_dma_map
+ </span></dt></dl></div><p>
+          SCSI library functions depending on DMA
+          (map and unmap scatter-gather lists).
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_module.c"></a>drivers/scsi/scsi_module.c</h3></div></div></div><p>
+          The file drivers/scsi/scsi_module.c contains legacy support for
+          old-style host templates.  It should never be used by any new driver.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_proc.c"></a>drivers/scsi/scsi_proc.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-proc-hostdir-add.html"><span class="phrase">scsi_proc_hostdir_add</span></a></span><span class="refpurpose"> — 
+  Create directory in /proc for a scsi host
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-proc-hostdir-rm.html"><span class="phrase">scsi_proc_hostdir_rm</span></a></span><span class="refpurpose"> — 
+     remove directory in /proc for a scsi host
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-proc-host-add.html"><span class="phrase">scsi_proc_host_add</span></a></span><span class="refpurpose"> — 
+     Add entry for this host to appropriate /proc dir
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-proc-host-rm.html"><span class="phrase">scsi_proc_host_rm</span></a></span><span class="refpurpose"> — 
+     remove this host's entry from /proc
+ </span></dt><dt><span class="refentrytitle"><a href="API-proc-print-scsidevice.html"><span class="phrase">proc_print_scsidevice</span></a></span><span class="refpurpose"> — 
+     return data about this host
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-add-single-device.html"><span class="phrase">scsi_add_single_device</span></a></span><span class="refpurpose"> — 
+     Respond to user request to probe for/add device
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-remove-single-device.html"><span class="phrase">scsi_remove_single_device</span></a></span><span class="refpurpose"> — 
+     Respond to user request to remove a device
+ </span></dt><dt><span class="refentrytitle"><a href="API-proc-scsi-write.html"><span class="phrase">proc_scsi_write</span></a></span><span class="refpurpose"> — 
+     handle writes to /proc/scsi/scsi
+ </span></dt><dt><span class="refentrytitle"><a href="API-proc-scsi-open.html"><span class="phrase">proc_scsi_open</span></a></span><span class="refpurpose"> — 
+     glue function
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-init-procfs.html"><span class="phrase">scsi_init_procfs</span></a></span><span class="refpurpose"> — 
+     create scsi and scsi/scsi in procfs
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-exit-procfs.html"><span class="phrase">scsi_exit_procfs</span></a></span><span class="refpurpose"> — 
+     Remove scsi/scsi and scsi from procfs
+ </span></dt></dl></div><p>
+          The functions in this file provide an interface between
+          the PROC file system and the SCSI device drivers
+          It is mainly used for debugging, statistics and to pass
+          information directly to the lowlevel driver.
+
+          I.E. plumbing to manage /proc/scsi/*
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_netlink.c"></a>drivers/scsi/scsi_netlink.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-nl-rcv-msg.html"><span class="phrase">scsi_nl_rcv_msg</span></a></span><span class="refpurpose"> — 
+  Receive message handler.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-netlink-init.html"><span class="phrase">scsi_netlink_init</span></a></span><span class="refpurpose"> — 
+     Called by SCSI subsystem to initialize the SCSI transport netlink interface
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-netlink-exit.html"><span class="phrase">scsi_netlink_exit</span></a></span><span class="refpurpose"> — 
+     Called by SCSI subsystem to disable the SCSI transport netlink interface
+ </span></dt></dl></div><p>
+          Infrastructure to provide async events from transports to userspace
+          via netlink, using a single NETLINK_SCSITRANSPORT protocol for all
+          transports.
+
+          See <a class="ulink" href="http://marc.info/?l=linux-scsi&amp;m=115507374832500&amp;w=2" target="_top">the
+          original patch submission</a> for more details.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_scan.c"></a>drivers/scsi/scsi_scan.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-complete-async-scans.html"><span class="phrase">scsi_complete_async_scans</span></a></span><span class="refpurpose"> — 
+  Wait for asynchronous scans to complete
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-unlock-floptical.html"><span class="phrase">scsi_unlock_floptical</span></a></span><span class="refpurpose"> — 
+     unlock device via a special MODE SENSE command
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-alloc-sdev.html"><span class="phrase">scsi_alloc_sdev</span></a></span><span class="refpurpose"> — 
+     allocate and setup a scsi_Device
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-target-reap-ref-release.html"><span class="phrase">scsi_target_reap_ref_release</span></a></span><span class="refpurpose"> — 
+     remove target from visibility
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-alloc-target.html"><span class="phrase">scsi_alloc_target</span></a></span><span class="refpurpose"> — 
+     allocate a new or find an existing target
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-target-reap.html"><span class="phrase">scsi_target_reap</span></a></span><span class="refpurpose"> — 
+     check to see if target is in use and destroy if not
+ </span></dt><dt><span class="refentrytitle"><a href="API-sanitize-inquiry-string.html"><span class="phrase">sanitize_inquiry_string</span></a></span><span class="refpurpose"> — 
+     remove non-graphical chars from an INQUIRY result string
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-probe-lun.html"><span class="phrase">scsi_probe_lun</span></a></span><span class="refpurpose"> — 
+     probe a single LUN using a SCSI INQUIRY
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-add-lun.html"><span class="phrase">scsi_add_lun</span></a></span><span class="refpurpose"> — 
+     allocate and fully initialze a scsi_device
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-inq-str.html"><span class="phrase">scsi_inq_str</span></a></span><span class="refpurpose"> — 
+     print INQUIRY data from min to max index, strip trailing whitespace
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-probe-and-add-lun.html"><span class="phrase">scsi_probe_and_add_lun</span></a></span><span class="refpurpose"> — 
+     probe a LUN, if a LUN is found add it
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-sequential-lun-scan.html"><span class="phrase">scsi_sequential_lun_scan</span></a></span><span class="refpurpose"> — 
+     sequentially scan a SCSI target
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-report-lun-scan.html"><span class="phrase">scsi_report_lun_scan</span></a></span><span class="refpurpose"> — 
+     Scan using SCSI REPORT LUN results
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-prep-async-scan.html"><span class="phrase">scsi_prep_async_scan</span></a></span><span class="refpurpose"> — 
+     prepare for an async scan
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-finish-async-scan.html"><span class="phrase">scsi_finish_async_scan</span></a></span><span class="refpurpose"> — 
+     asynchronous scan has finished
+ </span></dt></dl></div><p>
+          Scan a host to determine which (if any) devices are attached.
+
+          The general scanning/probing algorithm is as follows, exceptions are
+          made to it depending on device specific flags, compilation options,
+          and global variable (boot or module load time) settings.
+
+          A specific LUN is scanned via an INQUIRY command; if the LUN has a
+          device attached, a scsi_device is allocated and setup for it.
+
+          For every id of every channel on the given host, start by scanning
+          LUN 0.  Skip hosts that don't respond at all to a scan of LUN 0.
+          Otherwise, if LUN 0 has a device attached, allocate and setup a
+          scsi_device for it.  If target is SCSI-3 or up, issue a REPORT LUN,
+          and scan all of the LUNs returned by the REPORT LUN; else,
+          sequentially scan LUNs up until some maximum is reached, or a LUN is
+          seen that cannot have a device attached to it.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_sysctl.c"></a>drivers/scsi/scsi_sysctl.c</h3></div></div></div><p>
+          Set up the sysctl entry: "/dev/scsi/logging_level"
+          (DEV_SCSI_LOGGING_LEVEL) which sets/returns scsi_logging_level.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_sysfs.c"></a>drivers/scsi/scsi_sysfs.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-remove-device.html"><span class="phrase">scsi_remove_device</span></a></span><span class="refpurpose"> — 
+  unregister a device from the scsi bus
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-remove-target.html"><span class="phrase">scsi_remove_target</span></a></span><span class="refpurpose"> — 
+     try to remove a target and all its devices
+ </span></dt></dl></div><p>
+          SCSI sysfs interface routines.
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="hosts.c"></a>drivers/scsi/hosts.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-host-set-state.html"><span class="phrase">scsi_host_set_state</span></a></span><span class="refpurpose"> — 
+  Take the given host through the host state model.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-remove-host.html"><span class="phrase">scsi_remove_host</span></a></span><span class="refpurpose"> — 
+     remove a scsi host
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-add-host-with-dma.html"><span class="phrase">scsi_add_host_with_dma</span></a></span><span class="refpurpose"> — 
+     add a scsi host with dma device
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-host-alloc.html"><span class="phrase">scsi_host_alloc</span></a></span><span class="refpurpose"> — 
+     register a scsi host adapter instance.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-host-lookup.html"><span class="phrase">scsi_host_lookup</span></a></span><span class="refpurpose"> — 
+     get a reference to a Scsi_Host by host no
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-host-get.html"><span class="phrase">scsi_host_get</span></a></span><span class="refpurpose"> — 
+     inc a Scsi_Host ref count
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-host-put.html"><span class="phrase">scsi_host_put</span></a></span><span class="refpurpose"> — 
+     dec a Scsi_Host ref count
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-queue-work.html"><span class="phrase">scsi_queue_work</span></a></span><span class="refpurpose"> — 
+     Queue work to the Scsi_Host workqueue.
+ </span></dt><dt><span class="refentrytitle"><a href="API-scsi-flush-work.html"><span class="phrase">scsi_flush_work</span></a></span><span class="refpurpose"> — 
+     Flush a Scsi_Host's workqueue.
+ </span></dt></dl></div><p>
+          mid to lowlevel SCSI driver interface
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="constants.c"></a>drivers/scsi/constants.c</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-scsi-print-status.html"><span class="phrase">scsi_print_status</span></a></span><span class="refpurpose"> — 
+  print scsi status description
+ </span></dt></dl></div><p>
+          mid to lowlevel SCSI driver interface
+        </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-shost-for-each-device.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">ch (SCSI Media Changer) </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">shost_for_each_device</span></td></tr></table></div></body></html>

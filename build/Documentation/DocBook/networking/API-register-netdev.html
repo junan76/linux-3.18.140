@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>register_netdev</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="netdev.html#idm11836" title="Driver Support"><link rel="prev" href="API-init-dummy-netdev.html" title="init_dummy_netdev"><link rel="next" href="API-dev-get-stats.html" title="dev_get_stats"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">register_netdev</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-init-dummy-netdev.html">Prev</a> </td><th width="60%" align="center">Driver Support</th><td width="20%" align="right"> <a accesskey="n" href="API-dev-get-stats.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-register-netdev"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>register_netdev — 
+     register a network device
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">register_netdev </b>(</code></td><td>struct net_device * <var class="pdparam">dev</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm14315"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     device to register
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm14323"></a><h2>Description</h2><p>
+   Take a completed network device structure and add it to the kernel
+   interfaces. A <code class="constant">NETDEV_REGISTER</code> message is sent to the netdev notifier
+   chain. 0 is returned on success. A negative errno code is returned
+   on a failure to set up the device, or if the name is a duplicate.
+   </p><p>
+
+   This is a wrapper around register_netdevice that takes the rtnl semaphore
+   and expands the device name if you passed a format string to
+   alloc_netdev.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-init-dummy-netdev.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="netdev.html#idm11836">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-dev-get-stats.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">init_dummy_netdev</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">dev_get_stats</span></td></tr></table></div></body></html>

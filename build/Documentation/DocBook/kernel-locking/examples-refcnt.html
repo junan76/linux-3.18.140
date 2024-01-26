@@ -1,0 +1,213 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Exposing Objects Outside This File</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="Examples.html" title="Chapter 7. Common Examples"><link rel="prev" href="examples-interrupt.html" title="Accessing From Interrupt Context"><link rel="next" href="examples-lock-per-obj.html" title="Protecting The Objects Themselves"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Exposing Objects Outside This File</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="examples-interrupt.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Common Examples</th><td width="20%" align="right"> <a accesskey="n" href="examples-lock-per-obj.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="examples-refcnt"></a>Exposing Objects Outside This File</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="examples-refcnt.html#examples-refcnt-atomic">Using Atomic Operations For The Reference Count</a></span></dt></dl></div><p>
+If our objects contained more information, it might not be sufficient
+to copy the information in and out: other parts of the code might want
+to keep pointers to these objects, for example, rather than looking up
+the id every time.  This produces two problems.
+    </p><p>
+The first problem is that we use the <span class="symbol">cache_lock</span> to
+protect objects: we'd need to make this non-static so the rest of the
+code can use it.  This makes locking trickier, as it is no longer all
+in one place.
+    </p><p>
+The second problem is the lifetime problem: if another structure keeps
+a pointer to an object, it presumably expects that pointer to remain
+valid.  Unfortunately, this is only guaranteed while you hold the
+lock, otherwise someone might call <code class="function">cache_delete</code>
+and even worse, add another object, re-using the same address.
+    </p><p>
+As there is only one lock, you can't hold it forever: no-one else would
+get any work done.
+    </p><p>
+The solution to this problem is to use a reference count: everyone who
+has a pointer to the object increases it when they first get the
+object, and drops the reference count when they're finished with it.
+Whoever drops it to zero knows it is unused, and can actually delete it.
+    </p><p>
+Here is the code:
+    </p><pre class="programlisting">
+--- cache.c.interrupt	2003-12-09 14:25:43.000000000 +1100
++++ cache.c.refcnt	2003-12-09 14:33:05.000000000 +1100
+@@ -7,6 +7,7 @@
+ struct object
+ {
+         struct list_head list;
++        unsigned int refcnt;
+         int id;
+         char name[32];
+         int popularity;
+@@ -17,6 +18,35 @@
+ static unsigned int cache_num = 0;
+ #define MAX_CACHE_SIZE 10
+
++static void __object_put(struct object *obj)
++{
++        if (--obj-&gt;refcnt == 0)
++                kfree(obj);
++}
++
++static void __object_get(struct object *obj)
++{
++        obj-&gt;refcnt++;
++}
++
++void object_put(struct object *obj)
++{
++        unsigned long flags;
++
++        spin_lock_irqsave(&amp;cache_lock, flags);
++        __object_put(obj);
++        spin_unlock_irqrestore(&amp;cache_lock, flags);
++}
++
++void object_get(struct object *obj)
++{
++        unsigned long flags;
++
++        spin_lock_irqsave(&amp;cache_lock, flags);
++        __object_get(obj);
++        spin_unlock_irqrestore(&amp;cache_lock, flags);
++}
++
+ /* Must be holding cache_lock */
+ static struct object *__cache_find(int id)
+ {
+@@ -35,6 +65,7 @@
+ {
+         BUG_ON(!obj);
+         list_del(&amp;obj-&gt;list);
++        __object_put(obj);
+         cache_num--;
+ }
+
+@@ -63,6 +94,7 @@
+         strlcpy(obj-&gt;name, name, sizeof(obj-&gt;name));
+         obj-&gt;id = id;
+         obj-&gt;popularity = 0;
++        obj-&gt;refcnt = 1; /* The cache holds a reference */
+
+         spin_lock_irqsave(&amp;cache_lock, flags);
+         __cache_add(obj);
+@@ -79,18 +111,15 @@
+         spin_unlock_irqrestore(&amp;cache_lock, flags);
+ }
+
+-int cache_find(int id, char *name)
++struct object *cache_find(int id)
+ {
+         struct object *obj;
+-        int ret = -ENOENT;
+         unsigned long flags;
+
+         spin_lock_irqsave(&amp;cache_lock, flags);
+         obj = __cache_find(id);
+-        if (obj) {
+-                ret = 0;
+-                strcpy(name, obj-&gt;name);
+-        }
++        if (obj)
++                __object_get(obj);
+         spin_unlock_irqrestore(&amp;cache_lock, flags);
+-        return ret;
++        return obj;
+ }
+</pre><p>
+We encapsulate the reference counting in the standard 'get' and 'put'
+functions.  Now we can return the object itself from
+<code class="function">cache_find</code> which has the advantage that the user
+can now sleep holding the object (eg. to
+<code class="function">copy_to_user</code> to name to userspace).
+</p><p>
+The other point to note is that I said a reference should be held for
+every pointer to the object: thus the reference count is 1 when first
+inserted into the cache.  In some versions the framework does not hold
+a reference count, but they are more complicated.
+</p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="examples-refcnt-atomic"></a>Using Atomic Operations For The Reference Count</h3></div></div></div><p>
+In practice, <span class="type">atomic_t</span> would usually be used for
+<em class="structfield"><code>refcnt</code></em>.  There are a number of atomic
+operations defined in
+
+<code class="filename">include/asm/atomic.h</code>: these are
+guaranteed to be seen atomically from all CPUs in the system, so no
+lock is required.  In this case, it is simpler than using spinlocks,
+although for anything non-trivial using spinlocks is clearer.  The
+<code class="function">atomic_inc</code> and
+<code class="function">atomic_dec_and_test</code> are used instead of the
+standard increment and decrement operators, and the lock is no longer
+used to protect the reference count itself.
+</p><pre class="programlisting">
+--- cache.c.refcnt	2003-12-09 15:00:35.000000000 +1100
++++ cache.c.refcnt-atomic	2003-12-11 15:49:42.000000000 +1100
+@@ -7,7 +7,7 @@
+ struct object
+ {
+         struct list_head list;
+-        unsigned int refcnt;
++        atomic_t refcnt;
+         int id;
+         char name[32];
+         int popularity;
+@@ -18,33 +18,15 @@
+ static unsigned int cache_num = 0;
+ #define MAX_CACHE_SIZE 10
+
+-static void __object_put(struct object *obj)
+-{
+-        if (--obj-&gt;refcnt == 0)
+-                kfree(obj);
+-}
+-
+-static void __object_get(struct object *obj)
+-{
+-        obj-&gt;refcnt++;
+-}
+-
+ void object_put(struct object *obj)
+ {
+-        unsigned long flags;
+-
+-        spin_lock_irqsave(&amp;cache_lock, flags);
+-        __object_put(obj);
+-        spin_unlock_irqrestore(&amp;cache_lock, flags);
++        if (atomic_dec_and_test(&amp;obj-&gt;refcnt))
++                kfree(obj);
+ }
+
+ void object_get(struct object *obj)
+ {
+-        unsigned long flags;
+-
+-        spin_lock_irqsave(&amp;cache_lock, flags);
+-        __object_get(obj);
+-        spin_unlock_irqrestore(&amp;cache_lock, flags);
++        atomic_inc(&amp;obj-&gt;refcnt);
+ }
+
+ /* Must be holding cache_lock */
+@@ -65,7 +47,7 @@
+ {
+         BUG_ON(!obj);
+         list_del(&amp;obj-&gt;list);
+-        __object_put(obj);
++        object_put(obj);
+         cache_num--;
+ }
+
+@@ -94,7 +76,7 @@
+         strlcpy(obj-&gt;name, name, sizeof(obj-&gt;name));
+         obj-&gt;id = id;
+         obj-&gt;popularity = 0;
+-        obj-&gt;refcnt = 1; /* The cache holds a reference */
++        atomic_set(&amp;obj-&gt;refcnt, 1); /* The cache holds a reference */
+
+         spin_lock_irqsave(&amp;cache_lock, flags);
+         __cache_add(obj);
+@@ -119,7 +101,7 @@
+         spin_lock_irqsave(&amp;cache_lock, flags);
+         obj = __cache_find(id);
+         if (obj)
+-                __object_get(obj);
++                object_get(obj);
+         spin_unlock_irqrestore(&amp;cache_lock, flags);
+         return obj;
+ }
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="examples-interrupt.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="Examples.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="examples-lock-per-obj.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Accessing From Interrupt Context </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Protecting The Objects Themselves</td></tr></table></div></body></html>

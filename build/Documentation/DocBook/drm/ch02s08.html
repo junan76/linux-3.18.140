@@ -1,0 +1,127 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Open/Close, File Operations and IOCTLs</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux DRM Developer's Guide"><link rel="up" href="drmInternals.html" title="Chapter 2. DRM Internals"><link rel="prev" href="API-drm-crtc-vblank-waitqueue.html" title="drm_crtc_vblank_waitqueue"><link rel="next" href="ch02s09.html" title="Legacy Support Code"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Open/Close, File Operations and IOCTLs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-drm-crtc-vblank-waitqueue.html">Prev</a> </td><th width="60%" align="center">Chapter 2. DRM Internals</th><td width="20%" align="right"> <a accesskey="n" href="ch02s09.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm15925"></a>Open/Close, File Operations and IOCTLs</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="ch02s08.html#idm15927">Open and Close</a></span></dt><dt><span class="sect2"><a href="ch02s08.html#idm15955">File Operations</a></span></dt><dt><span class="sect2"><a href="ch02s08.html#idm15977">IOCTLs</a></span></dt></dl></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm15927"></a>Open and Close</h3></div></div></div><pre class="synopsis">int (*firstopen) (struct drm_device *);
+void (*lastclose) (struct drm_device *);
+int (*open) (struct drm_device *, struct drm_file *);
+void (*preclose) (struct drm_device *, struct drm_file *);
+void (*postclose) (struct drm_device *, struct drm_file *);</pre><div class="abstract"><p class="title"><b>Abstract</b></p>Open and close handlers. None of those methods are mandatory.
+      </div><p>
+        The <code class="methodname">firstopen</code> method is called by the DRM core
+	for legacy UMS (User Mode Setting) drivers only when an application
+	opens a device that has no other opened file handle. UMS drivers can
+	implement it to acquire device resources. KMS drivers can't use the
+	method and must acquire resources in the <code class="methodname">load</code>
+	method instead.
+      </p><p>
+	Similarly the <code class="methodname">lastclose</code> method is called when
+	the last application holding a file handle opened on the device closes
+	it, for both UMS and KMS drivers. Additionally, the method is also
+	called at module unload time or, for hot-pluggable devices, when the
+	device is unplugged. The <code class="methodname">firstopen</code> and
+	<code class="methodname">lastclose</code> calls can thus be unbalanced.
+      </p><p>
+        The <code class="methodname">open</code> method is called every time the device
+	is opened by an application. Drivers can allocate per-file private data
+	in this method and store them in the struct
+	<span class="structname">drm_file</span> <em class="structfield"><code>driver_priv</code></em>
+	field. Note that the <code class="methodname">open</code> method is called
+	before <code class="methodname">firstopen</code>.
+      </p><p>
+        The close operation is split into <code class="methodname">preclose</code> and
+	<code class="methodname">postclose</code> methods. Drivers must stop and
+	cleanup all per-file operations in the <code class="methodname">preclose</code>
+	method. For instance pending vertical blanking and page flip events must
+	be cancelled. No per-file operation is allowed on the file handle after
+	returning from the <code class="methodname">preclose</code> method.
+      </p><p>
+        Finally the <code class="methodname">postclose</code> method is called as the
+	last step of the close operation, right before calling the
+	<code class="methodname">lastclose</code> method if no other open file handle
+	exists for the device. Drivers that have allocated per-file private data
+	in the <code class="methodname">open</code> method should free it here.
+      </p><p>
+        The <code class="methodname">lastclose</code> method should restore CRTC and
+	plane properties to default value, so that a subsequent open of the
+	device will not inherit state from the previous user. It can also be
+	used to execute delayed power switching state changes, e.g. in
+	conjunction with the vga-switcheroo infrastructure. Beyond that KMS
+	drivers should not do any further cleanup. Only legacy UMS drivers might
+	need to clean up device state so that the vga console or an independent
+	fbdev driver could take over.
+      </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm15955"></a>File Operations</h3></div></div></div><pre class="synopsis">const struct file_operations *fops</pre><div class="abstract"><p class="title"><b>Abstract</b></p>File operations for the DRM device node.</div><p>
+        Drivers must define the file operations structure that forms the DRM
+	userspace API entry point, even though most of those operations are
+	implemented in the DRM core. The <code class="methodname">open</code>,
+	<code class="methodname">release</code> and <code class="methodname">ioctl</code>
+	operations are handled by
+	</p><pre class="programlisting">
+	.owner = THIS_MODULE,
+	.open = drm_open,
+	.release = drm_release,
+	.unlocked_ioctl = drm_ioctl,
+  #ifdef CONFIG_COMPAT
+	.compat_ioctl = drm_compat_ioctl,
+  #endif
+        </pre><p>
+      </p><p>
+        Drivers that implement private ioctls that requires 32/64bit
+	compatibility support must provide their own
+	<code class="methodname">compat_ioctl</code> handler that processes private
+	ioctls and calls <code class="function">drm_compat_ioctl</code> for core ioctls.
+      </p><p>
+        The <code class="methodname">read</code> and <code class="methodname">poll</code>
+	operations provide support for reading DRM events and polling them. They
+	are implemented by
+	</p><pre class="programlisting">
+	.poll = drm_poll,
+	.read = drm_read,
+	.llseek = no_llseek,
+	</pre><p>
+      </p><p>
+        The memory mapping implementation varies depending on how the driver
+	manages memory. Pre-GEM drivers will use <code class="function">drm_mmap</code>,
+	while GEM-aware drivers will use <code class="function">drm_gem_mmap</code>. See
+	<a class="xref" href="drm-memory-management.html#drm-gem" title="The Graphics Execution Manager (GEM)">the section called “The Graphics Execution Manager (GEM)”</a>.
+	</p><pre class="programlisting">
+	.mmap = drm_gem_mmap,
+	</pre><p>
+      </p><p>
+        No other file operation is supported by the DRM API.
+      </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idm15977"></a>IOCTLs</h3></div></div></div><pre class="synopsis">struct drm_ioctl_desc *ioctls;
+int num_ioctls;</pre><div class="abstract"><p class="title"><b>Abstract</b></p>Driver-specific ioctls descriptors table.</div><p>
+        Driver-specific ioctls numbers start at DRM_COMMAND_BASE. The ioctls
+	descriptors table is indexed by the ioctl number offset from the base
+	value. Drivers can use the DRM_IOCTL_DEF_DRV() macro to initialize the
+	table entries.
+      </p><p>
+        </p><pre class="programlisting">DRM_IOCTL_DEF_DRV(ioctl, func, flags)</pre><p>
+	</p><p>
+	  <em class="parameter"><code>ioctl</code></em> is the ioctl name. Drivers must define
+	  the DRM_##ioctl and DRM_IOCTL_##ioctl macros to the ioctl number
+	  offset from DRM_COMMAND_BASE and the ioctl number respectively. The
+	  first macro is private to the device while the second must be exposed
+	  to userspace in a public header.
+	</p><p>
+	</p><p>
+	  <em class="parameter"><code>func</code></em> is a pointer to the ioctl handler function
+	  compatible with the <span class="type">drm_ioctl_t</span> type.
+	  </p><pre class="programlisting">typedef int drm_ioctl_t(struct drm_device *dev, void *data,
+		struct drm_file *file_priv);</pre><p>
+	</p><p>
+	</p><p>
+	  <em class="parameter"><code>flags</code></em> is a bitmask combination of the following
+	  values. It restricts how the ioctl is allowed to be called.
+	  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	      DRM_AUTH - Only authenticated callers allowed
+	    </p></li><li class="listitem"><p>
+	      DRM_MASTER - The ioctl can only be called on the master file
+	      handle
+	    </p></li><li class="listitem"><p>
+	      DRM_ROOT_ONLY - Only callers with the SYSADMIN capability allowed
+	    </p></li><li class="listitem"><p>
+	      DRM_CONTROL_ALLOW - The ioctl can only be called on a control
+	      device
+	    </p></li><li class="listitem"><p>
+	      DRM_UNLOCKED - The ioctl handler will be called without locking
+	      the DRM global mutex
+	    </p></li></ul></div><p>
+	</p><p>
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-drm-crtc-vblank-waitqueue.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="drmInternals.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s09.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">drm_crtc_vblank_waitqueue</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Legacy Support Code</td></tr></table></div></body></html>

@@ -1,0 +1,385 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct cfg80211_ops</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The 802.11 subsystems – for kernel developers"><link rel="up" href="bk01ch02.html" title="Chapter 2. Actions and configuration"><link rel="prev" href="bk01ch02.html" title="Chapter 2. Actions and configuration"><link rel="next" href="API-struct-vif-params.html" title="struct vif_params"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct cfg80211_ops</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="bk01ch02.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Actions and configuration</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-vif-params.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-cfg80211-ops"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct cfg80211_ops — 
+  backend description for wireless configuration
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct cfg80211_ops {
+  int (* suspend) (struct wiphy *wiphy, struct cfg80211_wowlan *wow);
+  int (* resume) (struct wiphy *wiphy);
+  void (* set_wakeup) (struct wiphy *wiphy, bool enabled);
+  struct wireless_dev * (* add_virtual_intf) (struct wiphy *wiphy,const char *name,enum nl80211_iftype type,u32 *flags,struct vif_params *params);
+  int (* del_virtual_intf) (struct wiphy *wiphy,struct wireless_dev *wdev);
+  int (* change_virtual_intf) (struct wiphy *wiphy,struct net_device *dev,enum nl80211_iftype type, u32 *flags,struct vif_params *params);
+  int (* add_key) (struct wiphy *wiphy, struct net_device *netdev,u8 key_index, bool pairwise, const u8 *mac_addr,struct key_params *params);
+  int (* get_key) (struct wiphy *wiphy, struct net_device *netdev,u8 key_index, bool pairwise, const u8 *mac_addr,void *cookie,void (*callback);
+  int (* del_key) (struct wiphy *wiphy, struct net_device *netdev,u8 key_index, bool pairwise, const u8 *mac_addr);
+  int (* set_default_key) (struct wiphy *wiphy,struct net_device *netdev,u8 key_index, bool unicast, bool multicast);
+  int (* set_default_mgmt_key) (struct wiphy *wiphy,struct net_device *netdev,u8 key_index);
+  int (* start_ap) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_ap_settings *settings);
+  int (* change_beacon) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_beacon_data *info);
+  int (* stop_ap) (struct wiphy *wiphy, struct net_device *dev);
+  int (* add_station) (struct wiphy *wiphy, struct net_device *dev,const u8 *mac,struct station_parameters *params);
+  int (* del_station) (struct wiphy *wiphy, struct net_device *dev,const u8 *mac);
+  int (* change_station) (struct wiphy *wiphy, struct net_device *dev,const u8 *mac,struct station_parameters *params);
+  int (* get_station) (struct wiphy *wiphy, struct net_device *dev,const u8 *mac, struct station_info *sinfo);
+  int (* dump_station) (struct wiphy *wiphy, struct net_device *dev,int idx, u8 *mac, struct station_info *sinfo);
+  int (* add_mpath) (struct wiphy *wiphy, struct net_device *dev,const u8 *dst, const u8 *next_hop);
+  int (* del_mpath) (struct wiphy *wiphy, struct net_device *dev,const u8 *dst);
+  int (* change_mpath) (struct wiphy *wiphy, struct net_device *dev,const u8 *dst, const u8 *next_hop);
+  int (* get_mpath) (struct wiphy *wiphy, struct net_device *dev,u8 *dst, u8 *next_hop, struct mpath_info *pinfo);
+  int (* dump_mpath) (struct wiphy *wiphy, struct net_device *dev,int idx, u8 *dst, u8 *next_hop,struct mpath_info *pinfo);
+  int (* get_mesh_config) (struct wiphy *wiphy,struct net_device *dev,struct mesh_config *conf);
+  int (* update_mesh_config) (struct wiphy *wiphy,struct net_device *dev, u32 mask,const struct mesh_config *nconf);
+  int (* join_mesh) (struct wiphy *wiphy, struct net_device *dev,const struct mesh_config *conf,const struct mesh_setup *setup);
+  int (* leave_mesh) (struct wiphy *wiphy, struct net_device *dev);
+  int (* change_bss) (struct wiphy *wiphy, struct net_device *dev,struct bss_parameters *params);
+  int (* set_txq_params) (struct wiphy *wiphy, struct net_device *dev,struct ieee80211_txq_params *params);
+  int (* libertas_set_mesh_channel) (struct wiphy *wiphy,struct net_device *dev,struct ieee80211_channel *chan);
+  int (* set_monitor_channel) (struct wiphy *wiphy,struct cfg80211_chan_def *chandef);
+  int (* scan) (struct wiphy *wiphy,struct cfg80211_scan_request *request);
+  int (* auth) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_auth_request *req);
+  int (* assoc) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_assoc_request *req);
+  int (* deauth) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_deauth_request *req);
+  int (* disassoc) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_disassoc_request *req);
+  int (* connect) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_connect_params *sme);
+  int (* disconnect) (struct wiphy *wiphy, struct net_device *dev,u16 reason_code);
+  int (* join_ibss) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_ibss_params *params);
+  int (* leave_ibss) (struct wiphy *wiphy, struct net_device *dev);
+  int (* set_mcast_rate) (struct wiphy *wiphy, struct net_device *dev,int rate[IEEE80211_NUM_BANDS]);
+  int (* set_wiphy_params) (struct wiphy *wiphy, u32 changed);
+  int (* set_tx_power) (struct wiphy *wiphy, struct wireless_dev *wdev,enum nl80211_tx_power_setting type, int mbm);
+  int (* get_tx_power) (struct wiphy *wiphy, struct wireless_dev *wdev,int *dbm);
+  int (* set_wds_peer) (struct wiphy *wiphy, struct net_device *dev,const u8 *addr);
+  void (* rfkill_poll) (struct wiphy *wiphy);
+#ifdef CONFIG_NL80211_TESTMODE
+  int (* testmode_cmd) (struct wiphy *wiphy, struct wireless_dev *wdev,void *data, int len);
+  int (* testmode_dump) (struct wiphy *wiphy, struct sk_buff *skb,struct netlink_callback *cb,void *data, int len);
+#endif
+  int (* set_bitrate_mask) (struct wiphy *wiphy,struct net_device *dev,const u8 *peer,const struct cfg80211_bitrate_mask *mask);
+  int (* dump_survey) (struct wiphy *wiphy, struct net_device *netdev,int idx, struct survey_info *info);
+  int (* set_pmksa) (struct wiphy *wiphy, struct net_device *netdev,struct cfg80211_pmksa *pmksa);
+  int (* del_pmksa) (struct wiphy *wiphy, struct net_device *netdev,struct cfg80211_pmksa *pmksa);
+  int (* flush_pmksa) (struct wiphy *wiphy, struct net_device *netdev);
+  int (* remain_on_channel) (struct wiphy *wiphy,struct wireless_dev *wdev,struct ieee80211_channel *chan,unsigned int duration,u64 *cookie);
+  int (* cancel_remain_on_channel) (struct wiphy *wiphy,struct wireless_dev *wdev,u64 cookie);
+  int (* mgmt_tx) (struct wiphy *wiphy, struct wireless_dev *wdev,struct cfg80211_mgmt_tx_params *params,u64 *cookie);
+  int (* mgmt_tx_cancel_wait) (struct wiphy *wiphy,struct wireless_dev *wdev,u64 cookie);
+  int (* set_power_mgmt) (struct wiphy *wiphy, struct net_device *dev,bool enabled, int timeout);
+  int (* set_cqm_rssi_config) (struct wiphy *wiphy,struct net_device *dev,s32 rssi_thold, u32 rssi_hyst);
+  int (* set_cqm_txe_config) (struct wiphy *wiphy,struct net_device *dev,u32 rate, u32 pkts, u32 intvl);
+  void (* mgmt_frame_register) (struct wiphy *wiphy,struct wireless_dev *wdev,u16 frame_type, bool reg);
+  int (* set_antenna) (struct wiphy *wiphy, u32 tx_ant, u32 rx_ant);
+  int (* get_antenna) (struct wiphy *wiphy, u32 *tx_ant, u32 *rx_ant);
+  int (* sched_scan_start) (struct wiphy *wiphy,struct net_device *dev,struct cfg80211_sched_scan_request *request);
+  int (* sched_scan_stop) (struct wiphy *wiphy, struct net_device *dev);
+  int (* set_rekey_data) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_gtk_rekey_data *data);
+  int (* tdls_mgmt) (struct wiphy *wiphy, struct net_device *dev,const u8 *peer, u8 action_code,  u8 dialog_token,u16 status_code, u32 peer_capability,bool initiator, const u8 *buf, size_t len);
+  int (* tdls_oper) (struct wiphy *wiphy, struct net_device *dev,const u8 *peer, enum nl80211_tdls_operation oper);
+  int (* probe_client) (struct wiphy *wiphy, struct net_device *dev,const u8 *peer, u64 *cookie);
+  int (* set_noack_map) (struct wiphy *wiphy,struct net_device *dev,u16 noack_map);
+  int (* get_channel) (struct wiphy *wiphy,struct wireless_dev *wdev,struct cfg80211_chan_def *chandef);
+  int (* start_p2p_device) (struct wiphy *wiphy,struct wireless_dev *wdev);
+  void (* stop_p2p_device) (struct wiphy *wiphy,struct wireless_dev *wdev);
+  int (* set_mac_acl) (struct wiphy *wiphy, struct net_device *dev,const struct cfg80211_acl_data *params);
+  int (* start_radar_detection) (struct wiphy *wiphy,struct net_device *dev,struct cfg80211_chan_def *chandef,u32 cac_time_ms);
+  int (* update_ft_ies) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_update_ft_ies_params *ftie);
+  int (* crit_proto_start) (struct wiphy *wiphy,struct wireless_dev *wdev,enum nl80211_crit_proto_id protocol,u16 duration);
+  void (* crit_proto_stop) (struct wiphy *wiphy,struct wireless_dev *wdev);
+  int (* set_coalesce) (struct wiphy *wiphy,struct cfg80211_coalesce *coalesce);
+  int (* channel_switch) (struct wiphy *wiphy,struct net_device *dev,struct cfg80211_csa_settings *params);
+  int (* set_qos_map) (struct wiphy *wiphy,struct net_device *dev,struct cfg80211_qos_map *qos_map);
+  int (* set_ap_chanwidth) (struct wiphy *wiphy, struct net_device *dev,struct cfg80211_chan_def *chandef);
+  int (* add_tx_ts) (struct wiphy *wiphy, struct net_device *dev,u8 tsid, const u8 *peer, u8 user_prio,u16 admitted_time);
+  int (* del_tx_ts) (struct wiphy *wiphy, struct net_device *dev,u8 tsid, const u8 *peer);
+};  </pre></div><div class="refsect1"><a name="idm1529"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">suspend</span></dt><dd><p>
+wiphy device needs to be suspended. The variable <em class="parameter"><code>wow</code></em> will
+be <code class="constant">NULL</code> or contain the enabled Wake-on-Wireless triggers that are
+configured for the device.
+      </p></dd><dt><span class="term">resume</span></dt><dd><p>
+wiphy device needs to be resumed
+      </p></dd><dt><span class="term">set_wakeup</span></dt><dd><p>
+Called when WoWLAN is enabled/disabled, use this callback
+to call <code class="function">device_set_wakeup_enable</code> to enable/disable wakeup from
+the device.
+      </p></dd><dt><span class="term">add_virtual_intf</span></dt><dd><p>
+create a new virtual interface with the given name,
+must set the struct wireless_dev's iftype. Beware: You must create
+the new netdev in the wiphy's network namespace! Returns the struct
+wireless_dev, or an ERR_PTR. For P2P device wdevs, the driver must
+also set the address member in the wdev.
+      </p></dd><dt><span class="term">del_virtual_intf</span></dt><dd><p>
+remove the virtual interface
+      </p></dd><dt><span class="term">change_virtual_intf</span></dt><dd><p>
+change type/configuration of virtual interface,
+keep the struct wireless_dev's iftype updated.
+      </p></dd><dt><span class="term">add_key</span></dt><dd><p>
+add a key with the given parameters. <em class="parameter"><code>mac_addr</code></em> will be <code class="constant">NULL</code>
+when adding a group key.
+      </p></dd><dt><span class="term">get_key</span></dt><dd><p>
+get information about the key with the given parameters.
+<em class="parameter"><code>mac_addr</code></em> will be <code class="constant">NULL</code> when requesting information for a group
+key. All pointers given to the <em class="parameter"><code>callback</code></em> function need not be valid
+after it returns. This function should return an error if it is
+not possible to retrieve the key, -ENOENT if it doesn't exist.
+      </p></dd><dt><span class="term">del_key</span></dt><dd><p>
+remove a key given the <em class="parameter"><code>mac_addr</code></em> (<code class="constant">NULL</code> for a group key)
+and <em class="parameter"><code>key_index</code></em>, return -ENOENT if the key doesn't exist.
+      </p></dd><dt><span class="term">set_default_key</span></dt><dd><p>
+set the default key on an interface
+      </p></dd><dt><span class="term">set_default_mgmt_key</span></dt><dd><p>
+set the default management frame key on an interface
+      </p></dd><dt><span class="term">start_ap</span></dt><dd><p>
+Start acting in AP mode defined by the parameters.
+      </p></dd><dt><span class="term">change_beacon</span></dt><dd><p>
+Change the beacon parameters for an access point mode
+interface. This should reject the call when AP mode wasn't started.
+      </p></dd><dt><span class="term">stop_ap</span></dt><dd><p>
+Stop being an AP, including stopping beaconing.
+      </p></dd><dt><span class="term">add_station</span></dt><dd><p>
+Add a new station.
+      </p></dd><dt><span class="term">del_station</span></dt><dd><p>
+Remove a station; <em class="parameter"><code>mac</code></em> may be NULL to remove all stations.
+      </p></dd><dt><span class="term">change_station</span></dt><dd><p>
+Modify a given station. Note that flags changes are not much
+validated in cfg80211, in particular the auth/assoc/authorized flags
+might come to the driver in invalid combinations -- make sure to check
+them, also against the existing state! Drivers must call
+<code class="function">cfg80211_check_station_change</code> to validate the information.
+      </p></dd><dt><span class="term">get_station</span></dt><dd><p>
+get station information for the station identified by <em class="parameter"><code>mac</code></em>
+      </p></dd><dt><span class="term">dump_station</span></dt><dd><p>
+dump station callback -- resume dump at index <em class="parameter"><code>idx</code></em>
+      </p></dd><dt><span class="term">add_mpath</span></dt><dd><p>
+add a fixed mesh path
+      </p></dd><dt><span class="term">del_mpath</span></dt><dd><p>
+delete a given mesh path
+      </p></dd><dt><span class="term">change_mpath</span></dt><dd><p>
+change a given mesh path
+      </p></dd><dt><span class="term">get_mpath</span></dt><dd><p>
+get a mesh path for the given parameters
+      </p></dd><dt><span class="term">dump_mpath</span></dt><dd><p>
+dump mesh path callback -- resume dump at index <em class="parameter"><code>idx</code></em>
+      </p></dd><dt><span class="term">get_mesh_config</span></dt><dd><p>
+Get the current mesh configuration
+      </p></dd><dt><span class="term">update_mesh_config</span></dt><dd><p>
+Update mesh parameters on a running mesh.
+The mask is a bitfield which tells us which parameters to
+set, and which to leave alone.
+      </p></dd><dt><span class="term">join_mesh</span></dt><dd><p>
+join the mesh network with the specified parameters
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">leave_mesh</span></dt><dd><p>
+leave the current mesh network
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">change_bss</span></dt><dd><p>
+Modify parameters for a given BSS.
+      </p></dd><dt><span class="term">set_txq_params</span></dt><dd><p>
+Set TX queue parameters
+      </p></dd><dt><span class="term">libertas_set_mesh_channel</span></dt><dd><p>
+Only for backward compatibility for libertas,
+as it doesn't implement join_mesh and needs to set the channel to
+join the mesh instead.
+      </p></dd><dt><span class="term">set_monitor_channel</span></dt><dd><p>
+Set the monitor mode channel for the device. If other
+interfaces are active this callback should reject the configuration.
+If no interfaces are active or the device is down, the channel should
+be stored for when a monitor interface becomes active.
+      </p></dd><dt><span class="term">scan</span></dt><dd><p>
+Request to do a scan. If returning zero, the scan request is given
+the driver, and will be valid until passed to <code class="function">cfg80211_scan_done</code>.
+For scan results, call <code class="function">cfg80211_inform_bss</code>; you can call this outside
+the scan/scan_done bracket too.
+      </p></dd><dt><span class="term">auth</span></dt><dd><p>
+Request to authenticate with the specified peer
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">assoc</span></dt><dd><p>
+Request to (re)associate with the specified peer
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">deauth</span></dt><dd><p>
+Request to deauthenticate from the specified peer
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">disassoc</span></dt><dd><p>
+Request to disassociate from the specified peer
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">connect</span></dt><dd><p>
+Connect to the ESS with the specified parameters. When connected,
+call <code class="function">cfg80211_connect_result</code> with status code <code class="constant">WLAN_STATUS_SUCCESS</code>.
+If the connection fails for some reason, call <code class="function">cfg80211_connect_result</code>
+with the status from the AP.
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">disconnect</span></dt><dd><p>
+Disconnect from the BSS/ESS.
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">join_ibss</span></dt><dd><p>
+Join the specified IBSS (or create if necessary). Once done, call
+<code class="function">cfg80211_ibss_joined</code>, also call that function when changing BSSID due
+to a merge.
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">leave_ibss</span></dt><dd><p>
+Leave the IBSS.
+(invoked with the wireless_dev mutex held)
+      </p></dd><dt><span class="term">set_mcast_rate</span></dt><dd><p>
+Set the specified multicast rate (only if vif is in ADHOC or
+MESH mode)
+      </p></dd><dt><span class="term">set_wiphy_params</span></dt><dd><p>
+Notify that wiphy parameters have changed;
+<em class="parameter"><code>changed</code></em> bitfield (see <span class="structname">enum</span> wiphy_params_flags) describes which values
+have changed. The actual parameter values are available in
+struct wiphy. If returning an error, no value should be changed.
+      </p></dd><dt><span class="term">set_tx_power</span></dt><dd><p>
+set the transmit power according to the parameters,
+the power passed is in mBm, to get dBm use <code class="function">MBM_TO_DBM</code>. The
+wdev may be <code class="constant">NULL</code> if power was set for the wiphy, and will
+always be <code class="constant">NULL</code> unless the driver supports per-vif TX power
+(as advertised by the nl80211 feature flag.)
+      </p></dd><dt><span class="term">get_tx_power</span></dt><dd><p>
+store the current TX power into the dbm variable;
+return 0 if successful
+      </p></dd><dt><span class="term">set_wds_peer</span></dt><dd><p>
+set the WDS peer for a WDS interface
+      </p></dd><dt><span class="term">rfkill_poll</span></dt><dd><p>
+polls the hw rfkill line, use cfg80211 reporting
+functions to adjust rfkill hw state
+      </p></dd><dt><span class="term">testmode_cmd</span></dt><dd><p>
+run a test mode command; <em class="parameter"><code>wdev</code></em> may be <code class="constant">NULL</code>
+      </p></dd><dt><span class="term">testmode_dump</span></dt><dd><p>
+Implement a test mode dump. The cb-&gt;args[2] and up may be
+used by the function, but 0 and 1 must not be touched. Additionally,
+return error codes other than -ENOBUFS and -ENOENT will terminate the
+dump and return to userspace with an error, so be careful. If any data
+was passed in from userspace then the data/len arguments will be present
+and point to the data contained in <code class="constant">NL80211_ATTR_TESTDATA</code>.
+      </p></dd><dt><span class="term">set_bitrate_mask</span></dt><dd><p>
+set the bitrate mask configuration
+      </p></dd><dt><span class="term">dump_survey</span></dt><dd><p>
+get site survey information.
+      </p></dd><dt><span class="term">set_pmksa</span></dt><dd><p>
+Cache a PMKID for a BSSID. This is mostly useful for fullmac
+devices running firmwares capable of generating the (re) association
+RSN IE. It allows for faster roaming between WPA2 BSSIDs.
+      </p></dd><dt><span class="term">del_pmksa</span></dt><dd><p>
+Delete a cached PMKID.
+      </p></dd><dt><span class="term">flush_pmksa</span></dt><dd><p>
+Flush all cached PMKIDs.
+      </p></dd><dt><span class="term">remain_on_channel</span></dt><dd><p>
+Request the driver to remain awake on the specified
+channel for the specified duration to complete an off-channel
+operation (e.g., public action frame exchange). When the driver is
+ready on the requested channel, it must indicate this with an event
+notification by calling <code class="function">cfg80211_ready_on_channel</code>.
+      </p></dd><dt><span class="term">cancel_remain_on_channel</span></dt><dd><p>
+Cancel an on-going remain-on-channel operation.
+This allows the operation to be terminated prior to timeout based on
+the duration value.
+      </p></dd><dt><span class="term">mgmt_tx</span></dt><dd><p>
+Transmit a management frame.
+      </p></dd><dt><span class="term">mgmt_tx_cancel_wait</span></dt><dd><p>
+Cancel the wait time from transmitting a management
+frame on another channel
+      </p></dd><dt><span class="term">set_power_mgmt</span></dt><dd><p>
+Configure WLAN power management. A timeout value of -1
+allows the driver to adjust the dynamic ps timeout value.
+      </p></dd><dt><span class="term">set_cqm_rssi_config</span></dt><dd><p>
+Configure connection quality monitor RSSI threshold.
+      </p></dd><dt><span class="term">set_cqm_txe_config</span></dt><dd><p>
+Configure connection quality monitor TX error
+thresholds.
+      </p></dd><dt><span class="term">mgmt_frame_register</span></dt><dd><p>
+Notify driver that a management frame type was
+registered. Note that this callback may not sleep, and cannot run
+concurrently with itself.
+      </p></dd><dt><span class="term">set_antenna</span></dt><dd><p>
+Set antenna configuration (tx_ant, rx_ant) on the device.
+Parameters are bitmaps of allowed antennas to use for TX/RX. Drivers may
+reject TX/RX mask combinations they cannot support by returning -EINVAL
+(also see nl80211.h <em class="parameter"><code>NL80211_ATTR_WIPHY_ANTENNA_TX</code></em>).
+      </p></dd><dt><span class="term">get_antenna</span></dt><dd><p>
+Get current antenna configuration from device (tx_ant, rx_ant).
+      </p></dd><dt><span class="term">sched_scan_start</span></dt><dd><p>
+Tell the driver to start a scheduled scan.
+      </p></dd><dt><span class="term">sched_scan_stop</span></dt><dd><p>
+Tell the driver to stop an ongoing scheduled scan. This
+call must stop the scheduled scan and be ready for starting a new one
+before it returns, i.e. <em class="parameter"><code>sched_scan_start</code></em> may be called immediately
+after that again and should not fail in that case. The driver should
+not call <code class="function">cfg80211_sched_scan_stopped</code> for a requested stop (when this
+method returns 0.)
+      </p></dd><dt><span class="term">set_rekey_data</span></dt><dd><p>
+give the data necessary for GTK rekeying to the driver
+      </p></dd><dt><span class="term">tdls_mgmt</span></dt><dd><p>
+Transmit a TDLS management frame.
+      </p></dd><dt><span class="term">tdls_oper</span></dt><dd><p>
+Perform a high-level TDLS operation (e.g. TDLS link setup).
+      </p></dd><dt><span class="term">probe_client</span></dt><dd><p>
+probe an associated client, must return a cookie that it
+later passes to <code class="function">cfg80211_probe_status</code>.
+      </p></dd><dt><span class="term">set_noack_map</span></dt><dd><p>
+Set the NoAck Map for the TIDs.
+      </p></dd><dt><span class="term">get_channel</span></dt><dd><p>
+Get the current operating channel for the virtual interface.
+For monitor interfaces, it should return <code class="constant">NULL</code> unless there's a single
+current monitoring channel.
+      </p></dd><dt><span class="term">start_p2p_device</span></dt><dd><p>
+Start the given P2P device.
+      </p></dd><dt><span class="term">stop_p2p_device</span></dt><dd><p>
+Stop the given P2P device.
+      </p></dd><dt><span class="term">set_mac_acl</span></dt><dd><p>
+Sets MAC address control list in AP and P2P GO mode.
+Parameters include ACL policy, an array of MAC address of stations
+and the number of MAC addresses. If there is already a list in driver
+this new list replaces the existing one. Driver has to clear its ACL
+when number of MAC addresses entries is passed as 0. Drivers which
+advertise the support for MAC based ACL have to implement this callback.
+      </p></dd><dt><span class="term">start_radar_detection</span></dt><dd><p>
+Start radar detection in the driver.
+      </p></dd><dt><span class="term">update_ft_ies</span></dt><dd><p>
+Provide updated Fast BSS Transition information to the
+driver. If the SME is in the driver/firmware, this information can be
+used in building Authentication and Reassociation Request frames.
+      </p></dd><dt><span class="term">crit_proto_start</span></dt><dd><p>
+Indicates a critical protocol needs more link reliability
+for a given duration (milliseconds). The protocol is provided so the
+driver can take the most appropriate actions.
+      </p></dd><dt><span class="term">crit_proto_stop</span></dt><dd><p>
+Indicates critical protocol no longer needs increased link
+reliability. This operation can not fail.
+      </p></dd><dt><span class="term">set_coalesce</span></dt><dd><p>
+Set coalesce parameters.
+      </p></dd><dt><span class="term">channel_switch</span></dt><dd><p>
+initiate channel-switch procedure (with CSA). Driver is
+responsible for veryfing if the switch is possible. Since this is
+inherently tricky driver may decide to disconnect an interface later
+with <code class="function">cfg80211_stop_iface</code>. This doesn't mean driver can accept
+everything. It should do it's best to verify requests and reject them
+as soon as possible.
+      </p></dd><dt><span class="term">set_qos_map</span></dt><dd><p>
+Set QoS mapping information to the driver
+      </p></dd><dt><span class="term">set_ap_chanwidth</span></dt><dd><p>
+Set the AP (including P2P GO) mode channel width for the
+given interface This is used e.g. for dynamic HT 20/40 MHz channel width
+changes during the lifetime of the BSS.
+      </p></dd><dt><span class="term">add_tx_ts</span></dt><dd><p>
+validate (if admitted_time is 0) or add a TX TS to the device
+with the given parameters; action frame exchange has been handled by
+userspace so this just has to modify the TX path to take the TS into
+account.
+If the admitted time is 0 just validate the parameters to make sure
+the session can be created at all; it is valid to just always return
+success for that but that may result in inefficient behaviour (handshake
+with the peer followed by immediate teardown when the addition is later
+rejected)
+      </p></dd><dt><span class="term">del_tx_ts</span></dt><dd><p>
+remove an existing TX TS
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm1909"></a><h2>Description</h2><p>
+   </p><p>
+
+   This struct is registered by fullmac card drivers and/or wireless stacks
+   in order to handle configuration requests on their interfaces.
+   </p><p>
+
+   All callbacks except where otherwise noted should return 0
+   on success or a negative error code.
+   </p><p>
+
+   All operations are currently invoked under rtnl for consistency with the
+   wireless extensions but this is subject to reevaluation as soon as this
+   code is used more widely and we have a first user without wext.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="bk01ch02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="bk01ch02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-vif-params.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. Actions and configuration </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct vif_params</span></td></tr></table></div></body></html>

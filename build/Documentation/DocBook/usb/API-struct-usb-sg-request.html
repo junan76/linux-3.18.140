@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct usb_sg_request</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="hostside.html" title="Chapter 4. Host-Side Data Types and Macros"><link rel="prev" href="API-usb-urb-dir-out.html" title="usb_urb_dir_out"><link rel="next" href="usbcore.html" title="Chapter 5. USB Core APIs"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct usb_sg_request</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-usb-urb-dir-out.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Host-Side Data Types and Macros</th><td width="20%" align="right"> <a accesskey="n" href="usbcore.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-usb-sg-request"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct usb_sg_request — 
+     support for scatter/gather I/O
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct usb_sg_request {
+  int status;
+  size_t bytes;
+};  </pre></div><div class="refsect1"><a name="idm1906"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">status</span></dt><dd><p>
+   zero indicates success, else negative errno
+      </p></dd><dt><span class="term">bytes</span></dt><dd><p>
+   counts bytes transferred.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm1917"></a><h2>Description</h2><p>
+   These requests are initialized using <code class="function">usb_sg_init</code>, and then are used
+   as request handles passed to <code class="function">usb_sg_wait</code> or <code class="function">usb_sg_cancel</code>.  Most
+   members of the request object aren't for driver access.
+   </p><p>
+
+   The status and bytecount values are valid only after <code class="function">usb_sg_wait</code>
+   returns.  If the status is zero, then the bytecount matches the total
+   from the request.
+   </p><p>
+
+   After an error completion, drivers may need to clear a halt condition
+   on the endpoint.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-usb-urb-dir-out.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="hostside.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="usbcore.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">usb_urb_dir_out</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 5. USB Core APIs</td></tr></table></div></body></html>

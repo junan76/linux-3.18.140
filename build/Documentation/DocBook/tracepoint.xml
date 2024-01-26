@@ -1,0 +1,1870 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+	"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" []>
+
+<book id="Tracepoints">
+ <bookinfo>
+  <title>The Linux Kernel Tracepoint API</title>
+
+  <authorgroup>
+   <author>
+    <firstname>Jason</firstname>
+    <surname>Baron</surname>
+    <affiliation>
+     <address>
+      <email>jbaron@redhat.com</email>
+     </address>
+    </affiliation>
+   </author>
+   <author>
+    <firstname>William</firstname>
+    <surname>Cohen</surname>
+    <affiliation>
+     <address>
+      <email>wcohen@redhat.com</email>
+     </address>
+    </affiliation>
+   </author>
+  </authorgroup>
+
+  <legalnotice>
+   <para>
+     This documentation is free software; you can redistribute
+     it and/or modify it under the terms of the GNU General Public
+     License as published by the Free Software Foundation; either
+     version 2 of the License, or (at your option) any later
+     version.
+   </para>
+
+   <para>
+     This program is distributed in the hope that it will be
+     useful, but WITHOUT ANY WARRANTY; without even the implied
+     warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+     See the GNU General Public License for more details.
+   </para>
+
+   <para>
+     You should have received a copy of the GNU General Public
+     License along with this program; if not, write to the Free
+     Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+     MA 02111-1307 USA
+   </para>
+
+   <para>
+     For more details see the file COPYING in the source
+     distribution of Linux.
+   </para>
+  </legalnotice>
+ </bookinfo>
+
+ <toc></toc>
+  <chapter id="intro">
+   <title>Introduction</title>
+   <para>
+     Tracepoints are static probe points that are located in strategic points
+     throughout the kernel. 'Probes' register/unregister with tracepoints
+     via a callback mechanism. The 'probes' are strictly typed functions that
+     are passed a unique set of parameters defined by each tracepoint.
+   </para>
+
+   <para>
+     From this simple callback mechanism, 'probes' can be used to profile, debug,
+     and understand kernel behavior. There are a number of tools that provide a
+     framework for using 'probes'. These tools include Systemtap, ftrace, and
+     LTTng.
+   </para>
+
+   <para>
+     Tracepoints are defined in a number of header files via various macros. Thus,
+     the purpose of this document is to provide a clear accounting of the available
+     tracepoints. The intention is to understand not only what tracepoints are
+     available but also to understand where future tracepoints might be added.
+   </para>
+
+   <para>
+     The API presented has functions of the form:
+     <function>trace_tracepointname(function parameters)</function>. These are the
+     tracepoints callbacks that are found throughout the code. Registering and
+     unregistering probes with these callback sites is covered in the
+     <filename>Documentation/trace/*</filename> directory.
+   </para>
+  </chapter>
+
+  <chapter id="irq">
+   <title>IRQ</title>
+<!-- include/trace/events/irq.h -->
+<refentry id="API-trace-irq-handler-entry">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_irq_handler_entry</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_irq_handler_entry</refname>
+ <refpurpose>
+  called immediately before the irq action handler
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_irq_handler_entry </function></funcdef>
+   <paramdef>int <parameter>irq</parameter></paramdef>
+   <paramdef>struct irqaction * <parameter>action</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>irq</parameter></term>
+   <listitem>
+    <para>
+     irq number
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>action</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct irqaction
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   The struct irqaction pointed to by <parameter>action</parameter> contains various
+   information about the handler, including the device name,
+   <parameter>action</parameter>-&gt;name, and the device id, <parameter>action</parameter>-&gt;dev_id. When used in
+   conjunction with the irq_handler_exit tracepoint, we can figure
+   out irq handler latencies.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-irq-handler-exit">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_irq_handler_exit</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_irq_handler_exit</refname>
+ <refpurpose>
+     called immediately after the irq action handler returns
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_irq_handler_exit </function></funcdef>
+   <paramdef>int <parameter>irq</parameter></paramdef>
+   <paramdef>struct irqaction * <parameter>action</parameter></paramdef>
+   <paramdef>int <parameter>ret</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>irq</parameter></term>
+   <listitem>
+    <para>
+     irq number
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>action</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct irqaction
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>ret</parameter></term>
+   <listitem>
+    <para>
+     return value
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   If the <parameter>ret</parameter> value is set to IRQ_HANDLED, then we know that the corresponding
+   <parameter>action</parameter>-&gt;handler scuccessully handled this irq. Otherwise, the irq might be
+   a shared irq line, or the irq was not handled successfully. Can be used in
+   conjunction with the irq_handler_entry to understand irq handler latencies.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-softirq-entry">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_softirq_entry</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_softirq_entry</refname>
+ <refpurpose>
+     called immediately before the softirq handler
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_softirq_entry </function></funcdef>
+   <paramdef>unsigned int <parameter>vec_nr</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>vec_nr</parameter></term>
+   <listitem>
+    <para>
+     softirq vector number
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   When used in combination with the softirq_exit tracepoint
+   we can determine the softirq handler routine.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-softirq-exit">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_softirq_exit</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_softirq_exit</refname>
+ <refpurpose>
+     called immediately after the softirq handler returns
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_softirq_exit </function></funcdef>
+   <paramdef>unsigned int <parameter>vec_nr</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>vec_nr</parameter></term>
+   <listitem>
+    <para>
+     softirq vector number
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   When used in combination with the softirq_entry tracepoint
+   we can determine the softirq handler routine.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-softirq-raise">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_softirq_raise</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_softirq_raise</refname>
+ <refpurpose>
+     called immediately when a softirq is raised
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_softirq_raise </function></funcdef>
+   <paramdef>unsigned int <parameter>vec_nr</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>vec_nr</parameter></term>
+   <listitem>
+    <para>
+     softirq vector number
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   When used in combination with the softirq_entry tracepoint
+   we can determine the softirq raise to run latency.
+</para>
+</refsect1>
+</refentry>
+
+  </chapter>
+
+  <chapter id="signal">
+   <title>SIGNAL</title>
+<!-- include/trace/events/signal.h -->
+<refentry id="API-trace-signal-generate">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_signal_generate</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_signal_generate</refname>
+ <refpurpose>
+  called when a signal is generated
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_signal_generate </function></funcdef>
+   <paramdef>int <parameter>sig</parameter></paramdef>
+   <paramdef>struct siginfo * <parameter>info</parameter></paramdef>
+   <paramdef>struct task_struct * <parameter>task</parameter></paramdef>
+   <paramdef>int <parameter>group</parameter></paramdef>
+   <paramdef>int <parameter>result</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>sig</parameter></term>
+   <listitem>
+    <para>
+     signal number
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>info</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct siginfo
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>task</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct task_struct
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>group</parameter></term>
+   <listitem>
+    <para>
+     shared or private
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>result</parameter></term>
+   <listitem>
+    <para>
+     TRACE_SIGNAL_*
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Current process sends a 'sig' signal to 'task' process with
+   'info' siginfo. If 'info' is SEND_SIG_NOINFO or SEND_SIG_PRIV,
+   'info' is not a pointer and you can't access its field. Instead,
+   SEND_SIG_NOINFO means that si_code is SI_USER, and SEND_SIG_PRIV
+   means that si_code is SI_KERNEL.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-signal-deliver">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_signal_deliver</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_signal_deliver</refname>
+ <refpurpose>
+     called when a signal is delivered
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_signal_deliver </function></funcdef>
+   <paramdef>int <parameter>sig</parameter></paramdef>
+   <paramdef>struct siginfo * <parameter>info</parameter></paramdef>
+   <paramdef>struct k_sigaction * <parameter>ka</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>sig</parameter></term>
+   <listitem>
+    <para>
+     signal number
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>info</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct siginfo
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>ka</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct k_sigaction
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   A 'sig' signal is delivered to current process with 'info' siginfo,
+   and it will be handled by 'ka'. ka-&gt;sa.sa_handler can be SIG_IGN or
+   SIG_DFL.
+   Note that some signals reported by signal_generate tracepoint can be
+   lost, ignored or modified (by debugger) before hitting this tracepoint.
+   This means, this can show which signals are actually delivered, but
+   matching generated signals and delivered signals may not be correct.
+</para>
+</refsect1>
+</refentry>
+
+  </chapter>
+
+  <chapter id="block">
+   <title>Block IO</title>
+<!-- include/trace/events/block.h -->
+<refentry id="API-trace-block-touch-buffer">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_touch_buffer</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_touch_buffer</refname>
+ <refpurpose>
+  mark a buffer accessed
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_touch_buffer </function></funcdef>
+   <paramdef>struct buffer_head * <parameter>bh</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>bh</parameter></term>
+   <listitem>
+    <para>
+     buffer_head being touched
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Called from <function>touch_buffer</function>.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-dirty-buffer">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_dirty_buffer</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_dirty_buffer</refname>
+ <refpurpose>
+     mark a buffer dirty
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_dirty_buffer </function></funcdef>
+   <paramdef>struct buffer_head * <parameter>bh</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>bh</parameter></term>
+   <listitem>
+    <para>
+     buffer_head being dirtied
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Called from <function>mark_buffer_dirty</function>.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-rq-abort">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_rq_abort</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_rq_abort</refname>
+ <refpurpose>
+     abort block operation request
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_rq_abort </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct request * <parameter>rq</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue containing the block operation request
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rq</parameter></term>
+   <listitem>
+    <para>
+     block IO operation request
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Called immediately after pending block IO operation request <parameter>rq</parameter> in
+   queue <parameter>q</parameter> is aborted. The fields in the operation request <parameter>rq</parameter>
+   can be examined to determine which device and sectors the pending
+   operation would access.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-rq-requeue">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_rq_requeue</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_rq_requeue</refname>
+ <refpurpose>
+     place block IO request back on a queue
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_rq_requeue </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct request * <parameter>rq</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue holding operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rq</parameter></term>
+   <listitem>
+    <para>
+     block IO operation request
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   The block operation request <parameter>rq</parameter> is being placed back into queue
+   <parameter>q</parameter>.  For some reason the request was not completed and needs to be
+   put back in the queue.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-rq-complete">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_rq_complete</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_rq_complete</refname>
+ <refpurpose>
+     block IO operation completed by device driver
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_rq_complete </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct request * <parameter>rq</parameter></paramdef>
+   <paramdef>unsigned int <parameter>nr_bytes</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue containing the block operation request
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rq</parameter></term>
+   <listitem>
+    <para>
+     block operations request
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>nr_bytes</parameter></term>
+   <listitem>
+    <para>
+     number of completed bytes
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   The block_rq_complete tracepoint event indicates that some portion
+   of operation request has been completed by the device driver.  If
+   the <parameter>rq</parameter>-&gt;bio is <constant>NULL</constant>, then there is absolutely no additional work to
+   do for the request. If <parameter>rq</parameter>-&gt;bio is non-NULL then there is
+   additional work required to complete the request.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-rq-insert">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_rq_insert</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_rq_insert</refname>
+ <refpurpose>
+     insert block operation request into queue
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_rq_insert </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct request * <parameter>rq</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     target queue
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rq</parameter></term>
+   <listitem>
+    <para>
+     block IO operation request
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Called immediately before block operation request <parameter>rq</parameter> is inserted
+   into queue <parameter>q</parameter>.  The fields in the operation request <parameter>rq</parameter> struct can
+   be examined to determine which device and sectors the pending
+   operation would access.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-rq-issue">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_rq_issue</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_rq_issue</refname>
+ <refpurpose>
+     issue pending block IO request operation to device driver
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_rq_issue </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct request * <parameter>rq</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue holding operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rq</parameter></term>
+   <listitem>
+    <para>
+     block IO operation operation request
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Called when block operation request <parameter>rq</parameter> from queue <parameter>q</parameter> is sent to a
+   device driver for processing.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-bio-bounce">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_bio_bounce</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_bio_bounce</refname>
+ <refpurpose>
+     used bounce buffer when processing block operation
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_bio_bounce </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct bio * <parameter>bio</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue holding the block operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bio</parameter></term>
+   <listitem>
+    <para>
+     block operation
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   A bounce buffer was used to handle the block operation <parameter>bio</parameter> in <parameter>q</parameter>.
+   This occurs when hardware limitations prevent a direct transfer of
+   data between the <parameter>bio</parameter> data memory area and the IO device.  Use of a
+   bounce buffer requires extra copying of data and decreases
+   performance.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-bio-complete">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_bio_complete</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_bio_complete</refname>
+ <refpurpose>
+     completed all work on the block operation
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_bio_complete </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct bio * <parameter>bio</parameter></paramdef>
+   <paramdef>int <parameter>error</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue holding the block operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bio</parameter></term>
+   <listitem>
+    <para>
+     block operation completed
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>error</parameter></term>
+   <listitem>
+    <para>
+     io error value
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   This tracepoint indicates there is no further work to do on this
+   block IO operation <parameter>bio</parameter>.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-bio-backmerge">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_bio_backmerge</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_bio_backmerge</refname>
+ <refpurpose>
+     merging block operation to the end of an existing operation
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_bio_backmerge </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct request * <parameter>rq</parameter></paramdef>
+   <paramdef>struct bio * <parameter>bio</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue holding operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rq</parameter></term>
+   <listitem>
+    <para>
+     request bio is being merged into
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bio</parameter></term>
+   <listitem>
+    <para>
+     new block operation to merge
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Merging block request <parameter>bio</parameter> to the end of an existing block request
+   in queue <parameter>q</parameter>.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-bio-frontmerge">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_bio_frontmerge</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_bio_frontmerge</refname>
+ <refpurpose>
+     merging block operation to the beginning of an existing operation
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_bio_frontmerge </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct request * <parameter>rq</parameter></paramdef>
+   <paramdef>struct bio * <parameter>bio</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue holding operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rq</parameter></term>
+   <listitem>
+    <para>
+     request bio is being merged into
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bio</parameter></term>
+   <listitem>
+    <para>
+     new block operation to merge
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Merging block IO operation <parameter>bio</parameter> to the beginning of an existing block
+   operation in queue <parameter>q</parameter>.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-bio-queue">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_bio_queue</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_bio_queue</refname>
+ <refpurpose>
+     putting new block IO operation in queue
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_bio_queue </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct bio * <parameter>bio</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue holding operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bio</parameter></term>
+   <listitem>
+    <para>
+     new block operation
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   About to place the block IO operation <parameter>bio</parameter> into queue <parameter>q</parameter>.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-getrq">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_getrq</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_getrq</refname>
+ <refpurpose>
+     get a free request entry in queue for block IO operations
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_getrq </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct bio * <parameter>bio</parameter></paramdef>
+   <paramdef>int <parameter>rw</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue for operations
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bio</parameter></term>
+   <listitem>
+    <para>
+     pending block IO operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rw</parameter></term>
+   <listitem>
+    <para>
+     low bit indicates a read (<constant>0</constant>) or a write (<constant>1</constant>)
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   A request struct for queue <parameter>q</parameter> has been allocated to handle the
+   block IO operation <parameter>bio</parameter>.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-sleeprq">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_sleeprq</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_sleeprq</refname>
+ <refpurpose>
+     waiting to get a free request entry in queue for block IO operation
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_sleeprq </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct bio * <parameter>bio</parameter></paramdef>
+   <paramdef>int <parameter>rw</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue for operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bio</parameter></term>
+   <listitem>
+    <para>
+     pending block IO operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rw</parameter></term>
+   <listitem>
+    <para>
+     low bit indicates a read (<constant>0</constant>) or a write (<constant>1</constant>)
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   In the case where a request struct cannot be provided for queue <parameter>q</parameter>
+   the process needs to wait for an request struct to become
+   available.  This tracepoint event is generated each time the
+   process goes to sleep waiting for request struct become available.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-plug">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_plug</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_plug</refname>
+ <refpurpose>
+     keep operations requests in request queue
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_plug </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     request queue to plug
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Plug the request queue <parameter>q</parameter>.  Do not allow block operation requests
+   to be sent to the device driver. Instead, accumulate requests in
+   the queue to improve throughput performance of the block device.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-unplug">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_unplug</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_unplug</refname>
+ <refpurpose>
+     release of operations requests in request queue
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_unplug </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>unsigned int <parameter>depth</parameter></paramdef>
+   <paramdef>bool <parameter>explicit</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     request queue to unplug
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>depth</parameter></term>
+   <listitem>
+    <para>
+     number of requests just added to the queue
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>explicit</parameter></term>
+   <listitem>
+    <para>
+     whether this was an explicit unplug, or one from <function>schedule</function>
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Unplug request queue <parameter>q</parameter> because device driver is scheduled to work
+   on elements in the request queue.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-split">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_split</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_split</refname>
+ <refpurpose>
+     split a single bio struct into two bio structs
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_split </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct bio * <parameter>bio</parameter></paramdef>
+   <paramdef>unsigned int <parameter>new_sector</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue containing the bio
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bio</parameter></term>
+   <listitem>
+    <para>
+     block operation being split
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>new_sector</parameter></term>
+   <listitem>
+    <para>
+     The starting sector for the new bio
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   The bio request <parameter>bio</parameter> in request queue <parameter>q</parameter> needs to be split into two
+   bio requests. The newly created <parameter>bio</parameter> request starts at
+   <parameter>new_sector</parameter>. This split may be required due to hardware limitation
+   such as operation crossing device boundaries in a RAID system.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-bio-remap">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_bio_remap</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_bio_remap</refname>
+ <refpurpose>
+     map request for a logical device to the raw device
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_bio_remap </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct bio * <parameter>bio</parameter></paramdef>
+   <paramdef>dev_t <parameter>dev</parameter></paramdef>
+   <paramdef>sector_t <parameter>from</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue holding the operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>bio</parameter></term>
+   <listitem>
+    <para>
+     revised operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>dev</parameter></term>
+   <listitem>
+    <para>
+     device for the operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>from</parameter></term>
+   <listitem>
+    <para>
+     original sector for the operation
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   An operation for a logical device has been mapped to the
+   raw block device.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-block-rq-remap">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_block_rq_remap</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_block_rq_remap</refname>
+ <refpurpose>
+     map request for a block operation request
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_block_rq_remap </function></funcdef>
+   <paramdef>struct request_queue * <parameter>q</parameter></paramdef>
+   <paramdef>struct request * <parameter>rq</parameter></paramdef>
+   <paramdef>dev_t <parameter>dev</parameter></paramdef>
+   <paramdef>sector_t <parameter>from</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>q</parameter></term>
+   <listitem>
+    <para>
+     queue holding the operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>rq</parameter></term>
+   <listitem>
+    <para>
+     block IO operation request
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>dev</parameter></term>
+   <listitem>
+    <para>
+     device for the operation
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>from</parameter></term>
+   <listitem>
+    <para>
+     original sector for the operation
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   The block operation request <parameter>rq</parameter> in <parameter>q</parameter> has been remapped.  The block
+   operation request <parameter>rq</parameter> holds the current information and <parameter>from</parameter> hold
+   the original sector.
+</para>
+</refsect1>
+</refentry>
+
+  </chapter>
+
+  <chapter id="workqueue">
+   <title>Workqueue</title>
+<!-- include/trace/events/workqueue.h -->
+<refentry id="API-trace-workqueue-queue-work">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_workqueue_queue_work</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_workqueue_queue_work</refname>
+ <refpurpose>
+  called when a work gets queued
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_workqueue_queue_work </function></funcdef>
+   <paramdef>unsigned int <parameter>req_cpu</parameter></paramdef>
+   <paramdef>struct pool_workqueue * <parameter>pwq</parameter></paramdef>
+   <paramdef>struct work_struct * <parameter>work</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>req_cpu</parameter></term>
+   <listitem>
+    <para>
+     the requested cpu
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>pwq</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct pool_workqueue
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><parameter>work</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct work_struct
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   This event occurs when a work is queued immediately or once a
+   delayed work is actually queued on a workqueue (ie: once the delay
+   has been reached).
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-workqueue-activate-work">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_workqueue_activate_work</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_workqueue_activate_work</refname>
+ <refpurpose>
+     called when a work gets activated
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_workqueue_activate_work </function></funcdef>
+   <paramdef>struct work_struct * <parameter>work</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>work</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct work_struct
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   This event occurs when a queued work is put on the active queue,
+   which happens immediately after queueing unless <parameter>max_active</parameter> limit
+   is reached.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-workqueue-execute-start">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_workqueue_execute_start</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_workqueue_execute_start</refname>
+ <refpurpose>
+     called immediately before the workqueue callback
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_workqueue_execute_start </function></funcdef>
+   <paramdef>struct work_struct * <parameter>work</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>work</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct work_struct
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Allows to track workqueue execution.
+</para>
+</refsect1>
+</refentry>
+
+<refentry id="API-trace-workqueue-execute-end">
+<refentryinfo>
+ <title>LINUX</title>
+ <productname>Kernel Hackers Manual</productname>
+ <date>January 2024</date>
+</refentryinfo>
+<refmeta>
+ <refentrytitle><phrase>trace_workqueue_execute_end</phrase></refentrytitle>
+ <manvolnum>9</manvolnum>
+ <refmiscinfo class="version">3.18.140</refmiscinfo>
+</refmeta>
+<refnamediv>
+ <refname>trace_workqueue_execute_end</refname>
+ <refpurpose>
+     called immediately after the workqueue callback
+ </refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+ <title>Synopsis</title>
+  <funcsynopsis><funcprototype>
+   <funcdef>void <function>trace_workqueue_execute_end </function></funcdef>
+   <paramdef>struct work_struct * <parameter>work</parameter></paramdef>
+  </funcprototype></funcsynopsis>
+</refsynopsisdiv>
+<refsect1>
+ <title>Arguments</title>
+ <variablelist>
+  <varlistentry>
+   <term><parameter>work</parameter></term>
+   <listitem>
+    <para>
+     pointer to struct work_struct
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</refsect1>
+<refsect1>
+<title>Description</title>
+<para>
+   Allows to track workqueue execution.
+</para>
+</refsect1>
+</refentry>
+
+  </chapter>
+</book>

@@ -1,0 +1,82 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Accessing From Interrupt Context</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="Examples.html" title="Chapter 7. Common Examples"><link rel="prev" href="Examples.html" title="Chapter 7. Common Examples"><link rel="next" href="examples-refcnt.html" title="Exposing Objects Outside This File"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Accessing From Interrupt Context</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Examples.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Common Examples</th><td width="20%" align="right"> <a accesskey="n" href="examples-refcnt.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="examples-interrupt"></a>Accessing From Interrupt Context</h2></div></div></div><p>
+Now consider the case where <code class="function">cache_find</code> can be
+called from interrupt context: either a hardware interrupt or a
+softirq.  An example would be a timer which deletes object from the
+cache.
+    </p><p>
+The change is shown below, in standard patch format: the
+<span class="symbol">-</span> are lines which are taken away, and the
+<span class="symbol">+</span> are lines which are added.
+    </p><pre class="programlisting">
+--- cache.c.usercontext	2003-12-09 13:58:54.000000000 +1100
++++ cache.c.interrupt	2003-12-09 14:07:49.000000000 +1100
+@@ -12,7 +12,7 @@
+         int popularity;
+ };
+
+-static DEFINE_MUTEX(cache_lock);
++static DEFINE_SPINLOCK(cache_lock);
+ static LIST_HEAD(cache);
+ static unsigned int cache_num = 0;
+ #define MAX_CACHE_SIZE 10
+@@ -55,6 +55,7 @@
+ int cache_add(int id, const char *name)
+ {
+         struct object *obj;
++        unsigned long flags;
+
+         if ((obj = kmalloc(sizeof(*obj), GFP_KERNEL)) == NULL)
+                 return -ENOMEM;
+@@ -63,30 +64,33 @@
+         obj-&gt;id = id;
+         obj-&gt;popularity = 0;
+
+-        mutex_lock(&amp;cache_lock);
++        spin_lock_irqsave(&amp;cache_lock, flags);
+         __cache_add(obj);
+-        mutex_unlock(&amp;cache_lock);
++        spin_unlock_irqrestore(&amp;cache_lock, flags);
+         return 0;
+ }
+
+ void cache_delete(int id)
+ {
+-        mutex_lock(&amp;cache_lock);
++        unsigned long flags;
++
++        spin_lock_irqsave(&amp;cache_lock, flags);
+         __cache_delete(__cache_find(id));
+-        mutex_unlock(&amp;cache_lock);
++        spin_unlock_irqrestore(&amp;cache_lock, flags);
+ }
+
+ int cache_find(int id, char *name)
+ {
+         struct object *obj;
+         int ret = -ENOENT;
++        unsigned long flags;
+
+-        mutex_lock(&amp;cache_lock);
++        spin_lock_irqsave(&amp;cache_lock, flags);
+         obj = __cache_find(id);
+         if (obj) {
+                 ret = 0;
+                 strcpy(name, obj-&gt;name);
+         }
+-        mutex_unlock(&amp;cache_lock);
++        spin_unlock_irqrestore(&amp;cache_lock, flags);
+         return ret;
+ }
+</pre><p>
+Note that the <code class="function">spin_lock_irqsave</code> will turn off
+interrupts if they are on, otherwise does nothing (if we are already
+in an interrupt handler), hence these functions are safe to call from
+any context.
+    </p><p>
+Unfortunately, <code class="function">cache_add</code> calls
+<code class="function">kmalloc</code> with the <span class="symbol">GFP_KERNEL</span>
+flag, which is only legal in user context.  I have assumed that
+<code class="function">cache_add</code> is still only called in user context,
+otherwise this should become a parameter to
+<code class="function">cache_add</code>.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Examples.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="Examples.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="examples-refcnt.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 7. Common Examples </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Exposing Objects Outside This File</td></tr></table></div></body></html>

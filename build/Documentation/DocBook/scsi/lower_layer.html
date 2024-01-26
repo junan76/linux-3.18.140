@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 4. SCSI lower layer</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="index.html" title="SCSI Interfaces Guide"><link rel="prev" href="API-srp-release-transport.html" title="srp_release_transport"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. SCSI lower layer</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-srp-release-transport.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> </td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="lower_layer"></a>Chapter 4. SCSI lower layer</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="lower_layer.html#hba_drivers">Host Bus Adapter transport types</a></span></dt><dd><dl><dt><span class="sect2"><a href="lower_layer.html#scsi_debug.c">Debug transport</a></span></dt><dt><span class="sect2"><a href="lower_layer.html#todo">todo</a></span></dt></dl></dd></dl></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="hba_drivers"></a>Host Bus Adapter transport types</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="sect2"><a href="lower_layer.html#scsi_debug.c">Debug transport</a></span></dt><dt><span class="sect2"><a href="lower_layer.html#todo">todo</a></span></dt></dl></div><p>
+        Many modern device controllers use the SCSI command set as a protocol to
+        communicate with their devices through many different types of physical
+        connections.
+      </p><p>
+        In SCSI language a bus capable of carrying SCSI commands is
+        called a "transport", and a controller connecting to such a bus is
+        called a "host bus adapter" (HBA).
+      </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="scsi_debug.c"></a>Debug transport</h3></div></div></div><p>
+          The file drivers/scsi/scsi_debug.c simulates a host adapter with a
+          variable number of disks (or disk like devices) attached, sharing a
+          common amount of RAM.  Does a lot of checking to make sure that we are
+          not getting blocks mixed up, and panics the kernel if anything out of
+          the ordinary is seen.
+        </p><p>
+          To be more realistic, the simulated devices have the transport
+          attributes of SAS disks.
+        </p><p>
+          For documentation see
+          <a class="ulink" href="http://sg.danny.cz/sg/sdebug26.html" target="_top">http://sg.danny.cz/sg/sdebug26.html</a>
+        </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="todo"></a>todo</h3></div></div></div><p>Parallel (fast/wide/ultra) SCSI, USB, SATA,
+        SAS, Fibre Channel, FireWire, ATAPI devices, Infiniband,
+        I20, iSCSI, Parallel ports, netlink...
+        </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-srp-release-transport.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">srp_release_transport</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 2. Consumer driver interface</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Voltage and current regulator API"><link rel="up" href="index.html" title="Voltage and current regulator API"><link rel="prev" href="intro.html" title="Chapter 1. Introduction"><link rel="next" href="consumer-config.html" title="Configuration"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. Consumer driver interface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="intro.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="consumer-config.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="consumer"></a>Chapter 2. Consumer driver interface</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="consumer.html#consumer-enable">Enabling and disabling</a></span></dt><dt><span class="sect1"><a href="consumer-config.html">Configuration</a></span></dt><dt><span class="sect1"><a href="consumer-callback.html">Callbacks</a></span></dt></dl></div><p>
+       This offers a similar API to the kernel clock framework.
+       Consumer drivers use <a class="link" href="API-regulator-get.html" title="regulator_get">get</a> and <a class="link" href="API-regulator-put.html" title="regulator_put">put</a> operations to acquire and
+       release regulators.  Functions are
+       provided to <a class="link" href="API-regulator-enable.html" title="regulator_enable">enable</a>
+       and <a class="link" href="API-regulator-disable.html" title="regulator_disable">disable</a> the
+       regulator and to get and set the runtime parameters of the
+       regulator.
+     </p><p>
+       When requesting regulators consumers use symbolic names for their
+       supplies, such as "Vcc", which are mapped into actual regulator
+       devices by the machine interface.
+     </p><p>
+	A stub version of this API is provided when the regulator
+	framework is not in use in order to minimise the need to use
+	ifdefs.
+     </p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="consumer-enable"></a>Enabling and disabling</h2></div></div></div><p>
+         The regulator API provides reference counted enabling and
+	 disabling of regulators. Consumer devices use the <code class="function"><a class="link" href="API-regulator-enable.html" title="regulator_enable">regulator_enable</a></code>
+	 and <code class="function"><a class="link" href="API-regulator-disable.html" title="regulator_disable">regulator_disable</a>
+	 </code> functions to enable and disable regulators.  Calls
+	 to the two functions must be balanced.
+       </p><p>
+         Note that since multiple consumers may be using a regulator and
+	 machine constraints may not allow the regulator to be disabled
+	 there is no guarantee that calling
+	 <code class="function">regulator_disable</code> will actually cause the
+	 supply provided by the regulator to be disabled. Consumer
+	 drivers should assume that the regulator may be enabled at all
+	 times.
+       </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="intro.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="consumer-config.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Introduction </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Configuration</td></tr></table></div></body></html>

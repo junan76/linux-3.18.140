@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct ccw1</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing s390 channel device drivers"><link rel="up" href="ccw.html#channelIO" title="I/O functions for channel-attached devices"><link rel="prev" href="ccw.html" title="Chapter 2. The ccw bus"><link rel="next" href="API-struct-erw.html" title="struct erw"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct ccw1</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ccw.html">Prev</a> </td><th width="60%" align="center">I/O functions for channel-attached devices</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-erw.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-ccw1"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct ccw1 — 
+  channel command word
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct ccw1 {
+  __u8 cmd_code;
+  __u8 flags;
+  __u16 count;
+  __u32 cda;
+};  </pre></div><div class="refsect1"><a name="idm48"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">cmd_code</span></dt><dd><p>
+command code
+      </p></dd><dt><span class="term">flags</span></dt><dd><p>
+flags, like IDA addressing, etc.
+      </p></dd><dt><span class="term">count</span></dt><dd><p>
+byte count
+      </p></dd><dt><span class="term">cda</span></dt><dd><p>
+data address
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm67"></a><h2>Description</h2><p>
+   The ccw is the basic structure to build channel programs that perform
+   operations with the device or the control unit. Only Format-1 channel
+   command words are supported.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ccw.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ccw.html#channelIO">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-erw.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. The ccw bus </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct erw</span></td></tr></table></div></body></html>

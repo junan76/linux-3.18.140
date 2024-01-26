@@ -1,0 +1,56 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>idr/ida Functions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="kernel-lib.html" title="Chapter 3. Basic Kernel Library Functions"><link rel="prev" href="API-crc-ccitt.html" title="crc_ccitt"><link rel="next" href="API-idr-preload.html" title="idr_preload"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">idr/ida Functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-crc-ccitt.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Basic Kernel Library Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-idr-preload.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idr"></a>idr/ida Functions</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-idr-preload.html"><span class="phrase">idr_preload</span></a></span><span class="refpurpose"> — 
+  preload for <code class="function">idr_alloc</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-idr-alloc.html"><span class="phrase">idr_alloc</span></a></span><span class="refpurpose"> — 
+     allocate new idr entry
+ </span></dt><dt><span class="refentrytitle"><a href="API-idr-alloc-cyclic.html"><span class="phrase">idr_alloc_cyclic</span></a></span><span class="refpurpose"> — 
+     allocate new idr entry in a cyclical fashion
+ </span></dt><dt><span class="refentrytitle"><a href="API-idr-remove.html"><span class="phrase">idr_remove</span></a></span><span class="refpurpose"> — 
+     remove the given id and free its slot
+ </span></dt><dt><span class="refentrytitle"><a href="API-idr-destroy.html"><span class="phrase">idr_destroy</span></a></span><span class="refpurpose"> — 
+     release all cached layers within an idr tree
+ </span></dt><dt><span class="refentrytitle"><a href="API-idr-for-each.html"><span class="phrase">idr_for_each</span></a></span><span class="refpurpose"> — 
+     iterate through all stored pointers
+ </span></dt><dt><span class="refentrytitle"><a href="API-idr-get-next.html"><span class="phrase">idr_get_next</span></a></span><span class="refpurpose"> — 
+     lookup next object of id to given id.
+ </span></dt><dt><span class="refentrytitle"><a href="API-idr-replace.html"><span class="phrase">idr_replace</span></a></span><span class="refpurpose"> — 
+     replace pointer for given id
+ </span></dt><dt><span class="refentrytitle"><a href="API-idr-init.html"><span class="phrase">idr_init</span></a></span><span class="refpurpose"> — 
+     initialize idr handle
+ </span></dt><dt><span class="refentrytitle"><a href="API-ida-pre-get.html"><span class="phrase">ida_pre_get</span></a></span><span class="refpurpose"> — 
+     reserve resources for ida allocation
+ </span></dt><dt><span class="refentrytitle"><a href="API-ida-get-new-above.html"><span class="phrase">ida_get_new_above</span></a></span><span class="refpurpose"> — 
+     allocate new ID above or equal to a start id
+ </span></dt><dt><span class="refentrytitle"><a href="API-ida-remove.html"><span class="phrase">ida_remove</span></a></span><span class="refpurpose"> — 
+     remove the given ID
+ </span></dt><dt><span class="refentrytitle"><a href="API-ida-destroy.html"><span class="phrase">ida_destroy</span></a></span><span class="refpurpose"> — 
+     release all cached layers within an ida tree
+ </span></dt><dt><span class="refentrytitle"><a href="API-ida-simple-get.html"><span class="phrase">ida_simple_get</span></a></span><span class="refpurpose"> — 
+     get a new id.
+ </span></dt><dt><span class="refentrytitle"><a href="API-ida-simple-remove.html"><span class="phrase">ida_simple_remove</span></a></span><span class="refpurpose"> — 
+     remove an allocated id.
+ </span></dt><dt><span class="refentrytitle"><a href="API-ida-init.html"><span class="phrase">ida_init</span></a></span><span class="refpurpose"> — 
+     initialize ida handle
+ </span></dt></dl></div><p>
+   idr synchronization (stolen from radix-tree.h)
+   </p><p>
+   <code class="function">idr_find</code> is able to be called locklessly, using RCU. The caller must
+   ensure calls to this function are made within <code class="function">rcu_read_lock</code> regions.
+   Other readers (lock-free or otherwise) and modifications may be running
+   concurrently.
+   </p><p>
+   It is still required that the caller manage the synchronization and
+   lifetimes of the items. So if RCU lock-free lookups are used, typically
+   this would mean that the items have their own locks, or are amenable to
+   lock-free access; and that the items are freed by RCU (or only freed after
+   having been deleted from the idr tree *and* a <code class="function">synchronize_rcu</code> grace
+   period).
+</p><p>
+   IDA - IDR based ID allocator
+   </p><p>
+   This is id allocator without id -&gt; pointer translation.  Memory
+   usage is much lower than full blown idr because each id only
+   occupies a bit.  ida uses a custom leaf node which contains
+   IDA_BITMAP_BITS slots.
+   </p><p>
+   2007-04-25  written by Tejun Heo &lt;htejun<em class="parameter"><code>gmail</code></em>.com&gt;
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-crc-ccitt.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="kernel-lib.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-idr-preload.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">crc_ccitt</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">idr_preload</span></td></tr></table></div></body></html>

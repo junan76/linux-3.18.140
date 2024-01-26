@@ -1,0 +1,64 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct ieee80211_rx_status</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The 802.11 subsystems – for kernel developers"><link rel="up" href="bk02pt01ch04s05.html" title="functions/definitions"><link rel="prev" href="bk02pt01ch04s05.html" title="functions/definitions"><link rel="next" href="API-enum-mac80211-rx-flags.html" title="enum mac80211_rx_flags"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct ieee80211_rx_status</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="bk02pt01ch04s05.html">Prev</a> </td><th width="60%" align="center">functions/definitions</th><td width="20%" align="right"> <a accesskey="n" href="API-enum-mac80211-rx-flags.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-ieee80211-rx-status"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct ieee80211_rx_status — 
+  receive status
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct ieee80211_rx_status {
+  u64 mactime;
+  u32 device_timestamp;
+  u32 ampdu_reference;
+  u32 flag;
+  u16 freq;
+  u8 vht_flag;
+  u8 rate_idx;
+  u8 vht_nss;
+  u8 rx_flags;
+  u8 band;
+  u8 antenna;
+  s8 signal;
+  u8 chains;
+  s8 chain_signal[IEEE80211_MAX_CHAINS];
+  u8 ampdu_delimiter_crc;
+};  </pre></div><div class="refsect1"><a name="idm7261"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">mactime</span></dt><dd><p>
+value in microseconds of the 64-bit Time Synchronization Function
+(TSF) timer when the first data symbol (MPDU) arrived at the hardware.
+      </p></dd><dt><span class="term">device_timestamp</span></dt><dd><p>
+arbitrary timestamp for the device, mac80211 doesn't use
+it but can store it and pass it back to the driver for synchronisation
+      </p></dd><dt><span class="term">ampdu_reference</span></dt><dd><p>
+A-MPDU reference number, must be a different value for
+each A-MPDU but the same for each subframe within one A-MPDU
+      </p></dd><dt><span class="term">flag</span></dt><dd><p>
+<code class="constant">RX_FLAG_</code>*
+      </p></dd><dt><span class="term">freq</span></dt><dd><p>
+frequency the radio was tuned to when receiving this frame, in MHz
+      </p></dd><dt><span class="term">vht_flag</span></dt><dd><p>
+<code class="constant">RX_VHT_FLAG_</code>*
+      </p></dd><dt><span class="term">rate_idx</span></dt><dd><p>
+index of data rate into band's supported rates or MCS index if
+HT or VHT is used (<code class="constant">RX_FLAG_HT</code>/<code class="constant">RX_FLAG_VHT</code>)
+      </p></dd><dt><span class="term">vht_nss</span></dt><dd><p>
+number of streams (VHT only)
+      </p></dd><dt><span class="term">rx_flags</span></dt><dd><p>
+internal RX flags for mac80211
+      </p></dd><dt><span class="term">band</span></dt><dd><p>
+the active band when this frame was received
+      </p></dd><dt><span class="term">antenna</span></dt><dd><p>
+antenna used
+      </p></dd><dt><span class="term">signal</span></dt><dd><p>
+signal strength when receiving this frame, either in dBm, in dB or
+unspecified depending on the hardware capabilities flags
+<em class="parameter"><code>IEEE80211_HW_SIGNAL_</code></em>*
+      </p></dd><dt><span class="term">chains</span></dt><dd><p>
+bitmask of receive chains for which separate signal strength
+values were filled.
+      </p></dd><dt><span class="term">chain_signal[IEEE80211_MAX_CHAINS]</span></dt><dd><p>
+per-chain signal strength, in dBm (unlike <em class="parameter"><code>signal</code></em>, doesn't
+support dB or unspecified units)
+      </p></dd><dt><span class="term">ampdu_delimiter_crc</span></dt><dd><p>
+A-MPDU delimiter CRC
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm7330"></a><h2>Description</h2><p>
+   </p><p>
+
+   The low-level driver should provide this information (the subset
+   supported by hardware) to the 802.11 code with each received
+   frame, in the skb's control buffer (cb).
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="bk02pt01ch04s05.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="bk02pt01ch04s05.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-enum-mac80211-rx-flags.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">functions/definitions </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">enum mac80211_rx_flags</span></td></tr></table></div></body></html>

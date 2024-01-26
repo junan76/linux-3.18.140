@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>skb_unshare</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s02.html" title="Socket Buffer Functions"><link rel="prev" href="API-skb-share-check.html" title="skb_share_check"><link rel="next" href="API-skb-peek.html" title="skb_peek"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">skb_unshare</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-skb-share-check.html">Prev</a> </td><th width="60%" align="center">Socket Buffer Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-skb-peek.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-skb-unshare"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>skb_unshare — 
+     make a copy of a shared buffer
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">struct sk_buff * <b class="fsfunc">skb_unshare </b>(</code></td><td>struct sk_buff * <var class="pdparam">skb</var>, </td></tr><tr><td> </td><td>gfp_t <var class="pdparam">pri</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm995"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>skb</code></em></span></dt><dd><p>
+     buffer to check
+    </p></dd><dt><span class="term"><em class="parameter"><code>pri</code></em></span></dt><dd><p>
+     priority for memory allocation
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1008"></a><h2>Description</h2><p>
+   If the socket buffer is a clone then this function creates a new
+   copy of the data, drops a reference count on the old copy and returns
+   the new copy with the reference count at 1. If the buffer is not a clone
+   the original buffer is returned. When called with a spinlock held or
+   from interrupt state <em class="parameter"><code>pri</code></em> must be <code class="constant">GFP_ATOMIC</code>
+   </p><p>
+
+   <code class="constant">NULL</code> is returned on a memory allocation failure.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-skb-share-check.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-skb-peek.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">skb_share_check</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">skb_peek</span></td></tr></table></div></body></html>

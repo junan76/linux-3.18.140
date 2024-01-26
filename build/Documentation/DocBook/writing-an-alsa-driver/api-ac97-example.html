@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Full Code Example</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="api-ac97.html" title="Chapter 7. API for AC97 Codec"><link rel="prev" href="api-ac97.html" title="Chapter 7. API for AC97 Codec"><link rel="next" href="api-ac97-constructor.html" title="Constructor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Full Code Example</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="api-ac97.html">Prev</a> </td><th width="60%" align="center">Chapter 7. API for AC97 Codec</th><td width="20%" align="right"> <a accesskey="n" href="api-ac97-constructor.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="api-ac97-example"></a>Full Code Example</h2></div></div></div><p>
+          </p><div class="example"><a name="idm1068"></a><p class="title"><b>Example 7.1. Example of AC97 Interface</b></p><div class="example-contents"><pre class="programlisting">
+
+  struct mychip {
+          ....
+          struct snd_ac97 *ac97;
+          ....
+  };
+
+  static unsigned short snd_mychip_ac97_read(struct snd_ac97 *ac97,
+                                             unsigned short reg)
+  {
+          struct mychip *chip = ac97-&gt;private_data;
+          ....
+          /* read a register value here from the codec */
+          return the_register_value;
+  }
+
+  static void snd_mychip_ac97_write(struct snd_ac97 *ac97,
+                                   unsigned short reg, unsigned short val)
+  {
+          struct mychip *chip = ac97-&gt;private_data;
+          ....
+          /* write the given register value to the codec */
+  }
+
+  static int snd_mychip_ac97(struct mychip *chip)
+  {
+          struct snd_ac97_bus *bus;
+          struct snd_ac97_template ac97;
+          int err;
+          static struct snd_ac97_bus_ops ops = {
+                  .write = snd_mychip_ac97_write,
+                  .read = snd_mychip_ac97_read,
+          };
+
+          err = snd_ac97_bus(chip-&gt;card, 0, &amp;ops, NULL, &amp;bus);
+          if (err &lt; 0)
+                  return err;
+          memset(&amp;ac97, 0, sizeof(ac97));
+          ac97.private_data = chip;
+          return snd_ac97_mixer(bus, &amp;ac97, &amp;chip-&gt;ac97);
+  }
+
+
+          </pre></div></div><p><br class="example-break">
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="api-ac97.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="api-ac97.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="api-ac97-constructor.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 7. API for AC97 Codec </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Constructor</td></tr></table></div></body></html>

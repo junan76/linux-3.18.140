@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>blk_lld_busy</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="blkdev.html" title="Chapter 14. Block Devices"><link rel="prev" href="API-rq-flush-dcache-pages.html" title="rq_flush_dcache_pages"><link rel="next" href="API-blk-rq-unprep-clone.html" title="blk_rq_unprep_clone"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">blk_lld_busy</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-rq-flush-dcache-pages.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Block Devices</th><td width="20%" align="right"> <a accesskey="n" href="API-blk-rq-unprep-clone.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-blk-lld-busy"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>blk_lld_busy — 
+     Check if underlying low-level drivers of a device are busy
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">blk_lld_busy </b>(</code></td><td>struct request_queue * <var class="pdparam">q</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm26673"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>q</code></em></span></dt><dd><p>
+     the queue of the device being checked
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm26681"></a><h2>Description</h2><p>
+   Check if underlying low-level drivers of a device are busy.
+   If the drivers want to export their busy state, they must set own
+   exporting function using <code class="function">blk_queue_lld_busy</code> first.
+   </p><p>
+
+   Basically, this function is used only by request stacking drivers
+   to stop dispatching requests to underlying devices when underlying
+   devices are busy.  This behavior helps more I/O merging on the queue
+   of the request stacking driver and prevents I/O throughput regression
+   on burst I/O load.
+</p></div><div class="refsect1"><a name="idm26686"></a><h2>Return</h2><p>
+   0 - Not busy (The request stacking driver should dispatch request)
+   1 - Busy (The request stacking driver should stop dispatching request)
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-rq-flush-dcache-pages.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="blkdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-blk-rq-unprep-clone.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">rq_flush_dcache_pages</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">blk_rq_unprep_clone</span></td></tr></table></div></body></html>

@@ -1,0 +1,49 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Control Names</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="control-interface.html" title="Chapter 6. Control Interface"><link rel="prev" href="control-interface-definition.html" title="Definition of Controls"><link rel="next" href="control-interface-access-flags.html" title="Access Flags"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Control Names</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="control-interface-definition.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Control Interface</th><td width="20%" align="right"> <a accesskey="n" href="control-interface-access-flags.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="control-interface-control-names"></a>Control Names</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="control-interface-control-names.html#control-interface-control-names-global">Global capture and playback</a></span></dt><dt><span class="section"><a href="control-interface-control-names.html#control-interface-control-names-tone">Tone-controls</a></span></dt><dt><span class="section"><a href="control-interface-control-names.html#control-interface-control-names-3d">3D controls</a></span></dt><dt><span class="section"><a href="control-interface-control-names.html#control-interface-control-names-mic">Mic boost</a></span></dt></dl></div><p>
+        There are some standards to define the control names. A
+      control is usually defined from the three parts as
+      <span class="quote">“<span class="quote">SOURCE DIRECTION FUNCTION</span>”</span>. 
+      </p><p>
+        The first, <code class="constant">SOURCE</code>, specifies the source
+      of the control, and is a string such as <span class="quote">“<span class="quote">Master</span>”</span>,
+      <span class="quote">“<span class="quote">PCM</span>”</span>, <span class="quote">“<span class="quote">CD</span>”</span> and
+      <span class="quote">“<span class="quote">Line</span>”</span>. There are many pre-defined sources. 
+      </p><p>
+        The second, <code class="constant">DIRECTION</code>, is one of the
+      following strings according to the direction of the control:
+      <span class="quote">“<span class="quote">Playback</span>”</span>, <span class="quote">“<span class="quote">Capture</span>”</span>, <span class="quote">“<span class="quote">Bypass
+      Playback</span>”</span> and <span class="quote">“<span class="quote">Bypass Capture</span>”</span>. Or, it can
+      be omitted, meaning both playback and capture directions. 
+      </p><p>
+        The third, <code class="constant">FUNCTION</code>, is one of the
+      following strings according to the function of the control:
+      <span class="quote">“<span class="quote">Switch</span>”</span>, <span class="quote">“<span class="quote">Volume</span>”</span> and
+      <span class="quote">“<span class="quote">Route</span>”</span>. 
+      </p><p>
+        The example of control names are, thus, <span class="quote">“<span class="quote">Master Capture
+      Switch</span>”</span> or <span class="quote">“<span class="quote">PCM Playback Volume</span>”</span>. 
+      </p><p>
+        There are some exceptions:
+      </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="control-interface-control-names-global"></a>Global capture and playback</h3></div></div></div><p>
+          <span class="quote">“<span class="quote">Capture Source</span>”</span>, <span class="quote">“<span class="quote">Capture Switch</span>”</span>
+        and <span class="quote">“<span class="quote">Capture Volume</span>”</span> are used for the global
+        capture (input) source, switch and volume. Similarly,
+        <span class="quote">“<span class="quote">Playback Switch</span>”</span> and <span class="quote">“<span class="quote">Playback
+        Volume</span>”</span> are used for the global output gain switch and
+        volume. 
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="control-interface-control-names-tone"></a>Tone-controls</h3></div></div></div><p>
+          tone-control switch and volumes are specified like
+        <span class="quote">“<span class="quote">Tone Control - XXX</span>”</span>, e.g. <span class="quote">“<span class="quote">Tone Control -
+        Switch</span>”</span>, <span class="quote">“<span class="quote">Tone Control - Bass</span>”</span>,
+        <span class="quote">“<span class="quote">Tone Control - Center</span>”</span>.  
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="control-interface-control-names-3d"></a>3D controls</h3></div></div></div><p>
+          3D-control switches and volumes are specified like <span class="quote">“<span class="quote">3D
+        Control - XXX</span>”</span>, e.g. <span class="quote">“<span class="quote">3D Control -
+        Switch</span>”</span>, <span class="quote">“<span class="quote">3D Control - Center</span>”</span>, <span class="quote">“<span class="quote">3D
+        Control - Space</span>”</span>. 
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="control-interface-control-names-mic"></a>Mic boost</h3></div></div></div><p>
+          Mic-boost switch is set as <span class="quote">“<span class="quote">Mic Boost</span>”</span> or
+        <span class="quote">“<span class="quote">Mic Boost (6dB)</span>”</span>. 
+        </p><p>
+          More precise information can be found in
+        <code class="filename">Documentation/sound/alsa/ControlNames.txt</code>.
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="control-interface-definition.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="control-interface.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="control-interface-access-flags.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Definition of Controls </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Access Flags</td></tr></table></div></body></html>

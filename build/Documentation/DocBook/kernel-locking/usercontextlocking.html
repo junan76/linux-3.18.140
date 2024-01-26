@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Locking Only In User Context</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="locks.html" title="Chapter 3. Locking in the Linux Kernel"><link rel="prev" href="uniprocessor.html" title="Locks and Uniprocessor Kernels"><link rel="next" href="lock-user-bh.html" title="Locking Between User Context and Softirqs"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Locking Only In User Context</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="uniprocessor.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Locking in the Linux Kernel</th><td width="20%" align="right"> <a accesskey="n" href="lock-user-bh.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="usercontextlocking"></a>Locking Only In User Context</h2></div></div></div><p>
+       If you have a data structure which is only ever accessed from
+       user context, then you can use a simple mutex
+       (<code class="filename">include/linux/mutex.h</code>) to protect it.  This
+       is the most trivial case: you initialize the mutex.  Then you can
+       call <code class="function">mutex_lock_interruptible()</code> to grab the mutex,
+       and <code class="function">mutex_unlock()</code> to release it.  There is also a 
+       <code class="function">mutex_lock()</code>, which should be avoided, because it 
+       will not return if a signal is received.
+     </p><p>
+       Example: <code class="filename">net/netfilter/nf_sockopt.c</code> allows 
+       registration of new <code class="function">setsockopt()</code> and 
+       <code class="function">getsockopt()</code> calls, with
+       <code class="function">nf_register_sockopt()</code>.  Registration and 
+       de-registration are only done on module load and unload (and boot 
+       time, where there is no concurrency), and the list of registrations 
+       is only consulted for an unknown <code class="function">setsockopt()</code>
+       or <code class="function">getsockopt()</code> system call.  The 
+       <code class="varname">nf_sockopt_mutex</code> is perfect to protect this,
+       especially since the setsockopt and getsockopt calls may well
+       sleep.
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="uniprocessor.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="locks.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="lock-user-bh.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Locks and Uniprocessor Kernels </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Locking Between User Context and Softirqs</td></tr></table></div></body></html>

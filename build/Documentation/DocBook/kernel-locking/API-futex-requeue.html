@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>futex_requeue</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Unreliable Guide To Locking"><link rel="up" href="apiref-futex.html" title="Chapter 12. Futex API reference"><link rel="prev" href="API-futex-proxy-trylock-atomic.html" title="futex_proxy_trylock_atomic"><link rel="next" href="API-queue-me.html" title="queue_me"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">futex_requeue</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-futex-proxy-trylock-atomic.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Futex API reference</th><td width="20%" align="right"> <a accesskey="n" href="API-queue-me.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-futex-requeue"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>futex_requeue — 
+     Requeue waiters from uaddr1 to uaddr2
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">futex_requeue </b>(</code></td><td>u32 __user * <var class="pdparam">uaddr1</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">flags</var>, </td></tr><tr><td> </td><td>u32 __user * <var class="pdparam">uaddr2</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">nr_wake</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">nr_requeue</var>, </td></tr><tr><td> </td><td>u32 * <var class="pdparam">cmpval</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">requeue_pi</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1407"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>uaddr1</code></em></span></dt><dd><p>
+     source futex user address
+    </p></dd><dt><span class="term"><em class="parameter"><code>flags</code></em></span></dt><dd><p>
+     futex flags (FLAGS_SHARED, etc.)
+    </p></dd><dt><span class="term"><em class="parameter"><code>uaddr2</code></em></span></dt><dd><p>
+     target futex user address
+    </p></dd><dt><span class="term"><em class="parameter"><code>nr_wake</code></em></span></dt><dd><p>
+     number of waiters to wake (must be 1 for requeue_pi)
+    </p></dd><dt><span class="term"><em class="parameter"><code>nr_requeue</code></em></span></dt><dd><p>
+     number of waiters to requeue (0-INT_MAX)
+    </p></dd><dt><span class="term"><em class="parameter"><code>cmpval</code></em></span></dt><dd><p>
+     <em class="parameter"><code>uaddr1</code></em> expected value (or <code class="constant">NULL</code>)
+    </p></dd><dt><span class="term"><em class="parameter"><code>requeue_pi</code></em></span></dt><dd><p>
+     if we are attempting to requeue from a non-pi futex to a
+     pi futex (pi to pi requeue is not supported)
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1447"></a><h2>Description</h2><p>
+   Requeue waiters on uaddr1 to uaddr2. In the requeue_pi case, try to acquire
+   uaddr2 atomically on behalf of the top waiter.
+</p></div><div class="refsect1"><a name="idm1450"></a><h2>Return</h2><p>
+   &gt;=0 - on success, the number of tasks requeued or woken;
+   &lt;0 - on error
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-futex-proxy-trylock-atomic.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="apiref-futex.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-queue-me.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">futex_proxy_trylock_atomic</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">queue_me</span></td></tr></table></div></body></html>

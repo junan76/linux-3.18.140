@@ -1,0 +1,113 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Constructor</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="basic-flow.html" title="Chapter 2. Basic Flow for PCI Drivers"><link rel="prev" href="basic-flow-example.html" title="Full Code Example"><link rel="next" href="basic-flow-destructor.html" title="Destructor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Constructor</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="basic-flow-example.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Basic Flow for PCI Drivers</th><td width="20%" align="right"> <a accesskey="n" href="basic-flow-destructor.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="basic-flow-constructor"></a>Constructor</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="basic-flow-constructor.html#basic-flow-constructor-device-index">1) Check and increment the device index.</a></span></dt><dt><span class="section"><a href="basic-flow-constructor.html#basic-flow-constructor-create-card">2) Create a card instance</a></span></dt><dt><span class="section"><a href="basic-flow-constructor.html#basic-flow-constructor-create-main">3) Create a main component</a></span></dt><dt><span class="section"><a href="basic-flow-constructor.html#basic-flow-constructor-main-component">4) Set the driver ID and name strings.</a></span></dt><dt><span class="section"><a href="basic-flow-constructor.html#basic-flow-constructor-create-other">5) Create other components, such as mixer, MIDI, etc.</a></span></dt><dt><span class="section"><a href="basic-flow-constructor.html#basic-flow-constructor-register-card">6) Register the card instance.</a></span></dt><dt><span class="section"><a href="basic-flow-constructor.html#basic-flow-constructor-set-pci">7) Set the PCI driver data and return zero.</a></span></dt></dl></div><p>
+        The real constructor of PCI drivers is the <code class="function">probe</code> callback.
+      The <code class="function">probe</code> callback and other component-constructors which are called
+      from the <code class="function">probe</code> callback cannot be used with
+      the <em class="parameter"><code>__init</code></em> prefix
+      because any PCI device could be a hotplug device. 
+      </p><p>
+        In the <code class="function">probe</code> callback, the following scheme is often used.
+      </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="basic-flow-constructor-device-index"></a>1) Check and increment the device index.</h3></div></div></div><p>
+          </p><div class="informalexample"><pre class="programlisting">
+
+  static int dev;
+  ....
+  if (dev &gt;= SNDRV_CARDS)
+          return -ENODEV;
+  if (!enable[dev]) {
+          dev++;
+          return -ENOENT;
+  }
+
+            </pre></div><p>
+
+        where enable[dev] is the module option.
+        </p><p>
+          Each time the <code class="function">probe</code> callback is called, check the
+        availability of the device. If not available, simply increment
+        the device index and returns. dev will be incremented also
+        later (<a class="link" href="basic-flow-constructor.html#basic-flow-constructor-set-pci" title="7) Set the PCI driver data and return zero."><em class="citetitle">step
+        7</em></a>). 
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="basic-flow-constructor-create-card"></a>2) Create a card instance</h3></div></div></div><p>
+          </p><div class="informalexample"><pre class="programlisting">
+
+  struct snd_card *card;
+  int err;
+  ....
+  err = snd_card_new(&amp;pci-&gt;dev, index[dev], id[dev], THIS_MODULE,
+                     0, &amp;card);
+
+            </pre></div><p>
+        </p><p>
+          The details will be explained in the section
+          <a class="link" href="card-management.html#card-management-card-instance" title="Card Instance"><em class="citetitle">
+          Management of Cards and Components</em></a>.
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="basic-flow-constructor-create-main"></a>3) Create a main component</h3></div></div></div><p>
+          In this part, the PCI resources are allocated.
+
+          </p><div class="informalexample"><pre class="programlisting">
+
+  struct mychip *chip;
+  ....
+  err = snd_mychip_create(card, pci, &amp;chip);
+  if (err &lt; 0) {
+          snd_card_free(card);
+          return err;
+  }
+
+            </pre></div><p>
+
+          The details will be explained in the section <a class="link" href="pci-resource.html" title="Chapter 4. PCI Resource Management"><em class="citetitle">PCI Resource
+        Management</em></a>.
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="basic-flow-constructor-main-component"></a>4) Set the driver ID and name strings.</h3></div></div></div><p>
+          </p><div class="informalexample"><pre class="programlisting">
+
+  strcpy(card-&gt;driver, "My Chip");
+  strcpy(card-&gt;shortname, "My Own Chip 123");
+  sprintf(card-&gt;longname, "%s at 0x%lx irq %i",
+          card-&gt;shortname, chip-&gt;ioport, chip-&gt;irq);
+
+            </pre></div><p>
+
+          The driver field holds the minimal ID string of the
+        chip. This is used by alsa-lib's configurator, so keep it
+        simple but unique. 
+          Even the same driver can have different driver IDs to
+        distinguish the functionality of each chip type. 
+        </p><p>
+          The shortname field is a string shown as more verbose
+        name. The longname field contains the information
+        shown in <code class="filename">/proc/asound/cards</code>. 
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="basic-flow-constructor-create-other"></a>5) Create other components, such as mixer, MIDI, etc.</h3></div></div></div><p>
+          Here you define the basic components such as
+          <a class="link" href="pcm-interface.html" title="Chapter 5. PCM Interface"><em class="citetitle">PCM</em></a>,
+          mixer (e.g. <a class="link" href="api-ac97.html" title="Chapter 7. API for AC97 Codec"><em class="citetitle">AC97</em></a>),
+          MIDI (e.g. <a class="link" href="midi-interface.html" title="Chapter 8. MIDI (MPU401-UART) Interface"><em class="citetitle">MPU-401</em></a>),
+          and other interfaces.
+          Also, if you want a <a class="link" href="proc-interface.html" title="Chapter 12. Proc Interface"><em class="citetitle">proc
+        file</em></a>, define it here, too.
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="basic-flow-constructor-register-card"></a>6) Register the card instance.</h3></div></div></div><p>
+          </p><div class="informalexample"><pre class="programlisting">
+
+  err = snd_card_register(card);
+  if (err &lt; 0) {
+          snd_card_free(card);
+          return err;
+  }
+
+            </pre></div><p>
+        </p><p>
+          Will be explained in the section <a class="link" href="card-management-registration.html" title="Registration and Release"><em class="citetitle">Management
+        of Cards and Components</em></a>, too. 
+        </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="basic-flow-constructor-set-pci"></a>7) Set the PCI driver data and return zero.</h3></div></div></div><p>
+          </p><div class="informalexample"><pre class="programlisting">
+
+        pci_set_drvdata(pci, card);
+        dev++;
+        return 0;
+
+            </pre></div><p>
+
+          In the above, the card record is stored. This pointer is
+        used in the remove callback and power-management
+        callbacks, too. 
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="basic-flow-example.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="basic-flow.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="basic-flow-destructor.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Full Code Example </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Destructor</td></tr></table></div></body></html>

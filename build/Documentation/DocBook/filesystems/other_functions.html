@@ -1,0 +1,175 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Other Functions</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Filesystems API"><link rel="up" href="vfs.html" title="Chapter 1. The Linux VFS"><link rel="prev" href="API-sys-flock.html" title="sys_flock"><link rel="next" href="API-mpage-readpages.html" title="mpage_readpages"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Other Functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-sys-flock.html">Prev</a> </td><th width="60%" align="center">Chapter 1. The Linux VFS</th><td width="20%" align="right"> <a accesskey="n" href="API-mpage-readpages.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="other_functions"></a>Other Functions</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="refentrytitle"><a href="API-mpage-readpages.html"><span class="phrase">mpage_readpages</span></a></span><span class="refpurpose"> — 
+  populate an address space with some pages &amp; start reads against them
+ </span></dt><dt><span class="refentrytitle"><a href="API-mpage-writepages.html"><span class="phrase">mpage_writepages</span></a></span><span class="refpurpose"> — 
+     walk the list of dirty pages of the given address space &amp; <code class="function">writepage</code> all of them
+ </span></dt><dt><span class="refentrytitle"><a href="API-generic-permission.html"><span class="phrase">generic_permission</span></a></span><span class="refpurpose"> — 
+  check for access rights on a Posix-like filesystem
+ </span></dt><dt><span class="refentrytitle"><a href="API---inode-permission.html"><span class="phrase">__inode_permission</span></a></span><span class="refpurpose"> — 
+     Check for access rights to a given inode
+ </span></dt><dt><span class="refentrytitle"><a href="API-inode-permission.html"><span class="phrase">inode_permission</span></a></span><span class="refpurpose"> — 
+     Check for access rights to a given inode
+ </span></dt><dt><span class="refentrytitle"><a href="API-path-get.html"><span class="phrase">path_get</span></a></span><span class="refpurpose"> — 
+     get a reference to a path
+ </span></dt><dt><span class="refentrytitle"><a href="API-path-put.html"><span class="phrase">path_put</span></a></span><span class="refpurpose"> — 
+     put a reference to a path
+ </span></dt><dt><span class="refentrytitle"><a href="API-vfs-path-lookup.html"><span class="phrase">vfs_path_lookup</span></a></span><span class="refpurpose"> — 
+     lookup a file path relative to a dentry-vfsmount pair
+ </span></dt><dt><span class="refentrytitle"><a href="API-lookup-one-len.html"><span class="phrase">lookup_one_len</span></a></span><span class="refpurpose"> — 
+     filesystem helper to lookup single pathname component
+ </span></dt><dt><span class="refentrytitle"><a href="API-vfs-unlink.html"><span class="phrase">vfs_unlink</span></a></span><span class="refpurpose"> — 
+     unlink a filesystem object
+ </span></dt><dt><span class="refentrytitle"><a href="API-vfs-link.html"><span class="phrase">vfs_link</span></a></span><span class="refpurpose"> — 
+     create a new link
+ </span></dt><dt><span class="refentrytitle"><a href="API-vfs-rename.html"><span class="phrase">vfs_rename</span></a></span><span class="refpurpose"> — 
+     rename a filesystem object
+ </span></dt><dt><span class="refentrytitle"><a href="API-sync-mapping-buffers.html"><span class="phrase">sync_mapping_buffers</span></a></span><span class="refpurpose"> — 
+  write out &amp; wait upon a mapping's <span class="quote">“<span class="quote">associated</span>”</span> buffers
+ </span></dt><dt><span class="refentrytitle"><a href="API-mark-buffer-dirty.html"><span class="phrase">mark_buffer_dirty</span></a></span><span class="refpurpose"> — 
+     mark a buffer_head as needing writeout
+ </span></dt><dt><span class="refentrytitle"><a href="API---bread-gfp.html"><span class="phrase">__bread_gfp</span></a></span><span class="refpurpose"> — 
+     reads a specified block and returns the bh
+ </span></dt><dt><span class="refentrytitle"><a href="API-block-invalidatepage.html"><span class="phrase">block_invalidatepage</span></a></span><span class="refpurpose"> — 
+     invalidate part or all of a buffer-backed page
+ </span></dt><dt><span class="refentrytitle"><a href="API-ll-rw-block.html"><span class="phrase">ll_rw_block</span></a></span><span class="refpurpose"> — 
+     level access to block devices (DEPRECATED)
+ </span></dt><dt><span class="refentrytitle"><a href="API-bh-uptodate-or-lock.html"><span class="phrase">bh_uptodate_or_lock</span></a></span><span class="refpurpose"> — 
+     Test whether the buffer is uptodate
+ </span></dt><dt><span class="refentrytitle"><a href="API-bh-submit-read.html"><span class="phrase">bh_submit_read</span></a></span><span class="refpurpose"> — 
+     Submit a locked buffer for reading
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-reset.html"><span class="phrase">bio_reset</span></a></span><span class="refpurpose"> — 
+  reinitialize a bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-chain.html"><span class="phrase">bio_chain</span></a></span><span class="refpurpose"> — 
+     chain bio completions
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-alloc-bioset.html"><span class="phrase">bio_alloc_bioset</span></a></span><span class="refpurpose"> — 
+     allocate a bio for I/O
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-put.html"><span class="phrase">bio_put</span></a></span><span class="refpurpose"> — 
+     release a reference to a bio
+ </span></dt><dt><span class="refentrytitle"><a href="API---bio-clone-fast.html"><span class="phrase">__bio_clone_fast</span></a></span><span class="refpurpose"> — 
+     clone a bio that shares the original bio's biovec
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-clone-fast.html"><span class="phrase">bio_clone_fast</span></a></span><span class="refpurpose"> — 
+     clone a bio that shares the original bio's biovec
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-clone-bioset.html"><span class="phrase">bio_clone_bioset</span></a></span><span class="refpurpose"> — 
+     clone a bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-get-nr-vecs.html"><span class="phrase">bio_get_nr_vecs</span></a></span><span class="refpurpose"> — 
+     return approx number of vecs
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-add-pc-page.html"><span class="phrase">bio_add_pc_page</span></a></span><span class="refpurpose"> — 
+     attempt to add page to bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-add-page.html"><span class="phrase">bio_add_page</span></a></span><span class="refpurpose"> — 
+     attempt to add page to bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-submit-bio-wait.html"><span class="phrase">submit_bio_wait</span></a></span><span class="refpurpose"> — 
+     submit a bio, and wait until it completes
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-advance.html"><span class="phrase">bio_advance</span></a></span><span class="refpurpose"> — 
+     increment/complete a bio by some number of bytes
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-alloc-pages.html"><span class="phrase">bio_alloc_pages</span></a></span><span class="refpurpose"> — 
+     allocates a single page for each bvec in a bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-copy-data.html"><span class="phrase">bio_copy_data</span></a></span><span class="refpurpose"> — 
+     copy contents of data buffers from one chain of bios to another
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-uncopy-user.html"><span class="phrase">bio_uncopy_user</span></a></span><span class="refpurpose"> — 
+     finish previously mapped bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-copy-user.html"><span class="phrase">bio_copy_user</span></a></span><span class="refpurpose"> — 
+     copy user data to bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-map-user.html"><span class="phrase">bio_map_user</span></a></span><span class="refpurpose"> — 
+     map user address into bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-unmap-user.html"><span class="phrase">bio_unmap_user</span></a></span><span class="refpurpose"> — 
+     unmap a bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-map-kern.html"><span class="phrase">bio_map_kern</span></a></span><span class="refpurpose"> — 
+     map kernel address into bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-copy-kern.html"><span class="phrase">bio_copy_kern</span></a></span><span class="refpurpose"> — 
+     copy kernel address into bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-endio.html"><span class="phrase">bio_endio</span></a></span><span class="refpurpose"> — 
+     end I/O on a bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-endio-nodec.html"><span class="phrase">bio_endio_nodec</span></a></span><span class="refpurpose"> — 
+     end I/O on a bio, without decrementing bi_remaining
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-split.html"><span class="phrase">bio_split</span></a></span><span class="refpurpose"> — 
+     split a bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bio-trim.html"><span class="phrase">bio_trim</span></a></span><span class="refpurpose"> — 
+     trim a bio
+ </span></dt><dt><span class="refentrytitle"><a href="API-bioset-create.html"><span class="phrase">bioset_create</span></a></span><span class="refpurpose"> — 
+     Create a bio_set
+ </span></dt><dt><span class="refentrytitle"><a href="API-bioset-create-nobvec.html"><span class="phrase">bioset_create_nobvec</span></a></span><span class="refpurpose"> — 
+     Create a bio_set without bio_vec mempool
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-open.html"><span class="phrase">seq_open</span></a></span><span class="refpurpose"> — 
+  initialize sequential file
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-read.html"><span class="phrase">seq_read</span></a></span><span class="refpurpose"> — 
+     -&gt;<code class="function">read</code> method for sequential files.
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-lseek.html"><span class="phrase">seq_lseek</span></a></span><span class="refpurpose"> — 
+     -&gt;<code class="function">llseek</code> method for sequential files.
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-release.html"><span class="phrase">seq_release</span></a></span><span class="refpurpose"> — 
+     free the structures associated with sequential file.
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-escape.html"><span class="phrase">seq_escape</span></a></span><span class="refpurpose"> — 
+     print string into buffer, escaping some characters
+ </span></dt><dt><span class="refentrytitle"><a href="API-mangle-path.html"><span class="phrase">mangle_path</span></a></span><span class="refpurpose"> — 
+     mangle and copy path to buffer beginning
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-path.html"><span class="phrase">seq_path</span></a></span><span class="refpurpose"> — 
+     seq_file interface to print a pathname
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-write.html"><span class="phrase">seq_write</span></a></span><span class="refpurpose"> — 
+     write arbitrary data to buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-pad.html"><span class="phrase">seq_pad</span></a></span><span class="refpurpose"> — 
+     write padding spaces to buffer
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-hlist-start.html"><span class="phrase">seq_hlist_start</span></a></span><span class="refpurpose"> — 
+     start an iteration of a hlist
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-hlist-start-head.html"><span class="phrase">seq_hlist_start_head</span></a></span><span class="refpurpose"> — 
+     start an iteration of a hlist
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-hlist-next.html"><span class="phrase">seq_hlist_next</span></a></span><span class="refpurpose"> — 
+     move to the next position of the hlist
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-hlist-start-rcu.html"><span class="phrase">seq_hlist_start_rcu</span></a></span><span class="refpurpose"> — 
+     start an iteration of a hlist protected by RCU
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-hlist-start-head-rcu.html"><span class="phrase">seq_hlist_start_head_rcu</span></a></span><span class="refpurpose"> — 
+     start an iteration of a hlist protected by RCU
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-hlist-next-rcu.html"><span class="phrase">seq_hlist_next_rcu</span></a></span><span class="refpurpose"> — 
+     move to the next position of the hlist protected by RCU
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-hlist-start-percpu.html"><span class="phrase">seq_hlist_start_percpu</span></a></span><span class="refpurpose"> — 
+     start an iteration of a percpu hlist array
+ </span></dt><dt><span class="refentrytitle"><a href="API-seq-hlist-next-percpu.html"><span class="phrase">seq_hlist_next_percpu</span></a></span><span class="refpurpose"> — 
+     move to the next position of the percpu hlist array
+ </span></dt><dt><span class="refentrytitle"><a href="API-register-filesystem.html"><span class="phrase">register_filesystem</span></a></span><span class="refpurpose"> — 
+  register a new filesystem
+ </span></dt><dt><span class="refentrytitle"><a href="API-unregister-filesystem.html"><span class="phrase">unregister_filesystem</span></a></span><span class="refpurpose"> — 
+     unregister a file system
+ </span></dt><dt><span class="refentrytitle"><a href="API-writeback-in-progress.html"><span class="phrase">writeback_in_progress</span></a></span><span class="refpurpose"> — 
+  determine whether there is writeback in progress
+ </span></dt><dt><span class="refentrytitle"><a href="API---mark-inode-dirty.html"><span class="phrase">__mark_inode_dirty</span></a></span><span class="refpurpose"> — 
+     internal function
+ </span></dt><dt><span class="refentrytitle"><a href="API-writeback-inodes-sb-nr.html"><span class="phrase">writeback_inodes_sb_nr</span></a></span><span class="refpurpose"> — 
+     writeback dirty inodes from given super_block
+ </span></dt><dt><span class="refentrytitle"><a href="API-writeback-inodes-sb.html"><span class="phrase">writeback_inodes_sb</span></a></span><span class="refpurpose"> — 
+     writeback dirty inodes from given super_block
+ </span></dt><dt><span class="refentrytitle"><a href="API-try-to-writeback-inodes-sb-nr.html"><span class="phrase">try_to_writeback_inodes_sb_nr</span></a></span><span class="refpurpose"> — 
+     try to start writeback if none underway
+ </span></dt><dt><span class="refentrytitle"><a href="API-try-to-writeback-inodes-sb.html"><span class="phrase">try_to_writeback_inodes_sb</span></a></span><span class="refpurpose"> — 
+     try to start writeback if none underway
+ </span></dt><dt><span class="refentrytitle"><a href="API-sync-inodes-sb.html"><span class="phrase">sync_inodes_sb</span></a></span><span class="refpurpose"> — 
+     sync sb inode pages
+ </span></dt><dt><span class="refentrytitle"><a href="API-write-inode-now.html"><span class="phrase">write_inode_now</span></a></span><span class="refpurpose"> — 
+     write an inode to disk
+ </span></dt><dt><span class="refentrytitle"><a href="API-sync-inode.html"><span class="phrase">sync_inode</span></a></span><span class="refpurpose"> — 
+     write an inode and its pages to disk.
+ </span></dt><dt><span class="refentrytitle"><a href="API-sync-inode-metadata.html"><span class="phrase">sync_inode_metadata</span></a></span><span class="refpurpose"> — 
+     write an inode to disk
+ </span></dt><dt><span class="refentrytitle"><a href="API-freeze-bdev.html"><span class="phrase">freeze_bdev</span></a></span><span class="refpurpose"> — 
+  - lock a filesystem and force it into a consistent state
+ </span></dt><dt><span class="refentrytitle"><a href="API-thaw-bdev.html"><span class="phrase">thaw_bdev</span></a></span><span class="refpurpose"> — 
+     - unlock filesystem
+ </span></dt><dt><span class="refentrytitle"><a href="API-bdev-read-page.html"><span class="phrase">bdev_read_page</span></a></span><span class="refpurpose"> — 
+     Start reading a page from a block device
+ </span></dt><dt><span class="refentrytitle"><a href="API-bdev-write-page.html"><span class="phrase">bdev_write_page</span></a></span><span class="refpurpose"> — 
+     Start writing a page to a block device
+ </span></dt><dt><span class="refentrytitle"><a href="API-bdgrab.html"><span class="phrase">bdgrab</span></a></span><span class="refpurpose"> — 
+     - Grab a reference to an already referenced block device
+ </span></dt><dt><span class="refentrytitle"><a href="API-bd-link-disk-holder.html"><span class="phrase">bd_link_disk_holder</span></a></span><span class="refpurpose"> — 
+     create symlinks between holding disk and slave bdev
+ </span></dt><dt><span class="refentrytitle"><a href="API-bd-unlink-disk-holder.html"><span class="phrase">bd_unlink_disk_holder</span></a></span><span class="refpurpose"> — 
+     destroy symlinks created by <code class="function">bd_link_disk_holder</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-check-disk-size-change.html"><span class="phrase">check_disk_size_change</span></a></span><span class="refpurpose"> — 
+     checks for disk size change and adjusts bdev size.
+ </span></dt><dt><span class="refentrytitle"><a href="API-revalidate-disk.html"><span class="phrase">revalidate_disk</span></a></span><span class="refpurpose"> — 
+     wrapper for lower-level driver's revalidate_disk call-back
+ </span></dt><dt><span class="refentrytitle"><a href="API-blkdev-get.html"><span class="phrase">blkdev_get</span></a></span><span class="refpurpose"> — 
+     open a block device
+ </span></dt><dt><span class="refentrytitle"><a href="API-blkdev-get-by-path.html"><span class="phrase">blkdev_get_by_path</span></a></span><span class="refpurpose"> — 
+     open a block device by name
+ </span></dt><dt><span class="refentrytitle"><a href="API-blkdev-get-by-dev.html"><span class="phrase">blkdev_get_by_dev</span></a></span><span class="refpurpose"> — 
+     open a block device by device number
+ </span></dt><dt><span class="refentrytitle"><a href="API-lookup-bdev.html"><span class="phrase">lookup_bdev</span></a></span><span class="refpurpose"> — 
+     lookup a struct block_device by name
+ </span></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-sys-flock.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="vfs.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-mpage-readpages.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">sys_flock</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">mpage_readpages</span></td></tr></table></div></body></html>

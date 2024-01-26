@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>scsi_execute</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="SCSI Interfaces Guide"><link rel="up" href="mid_layer.html#scsi_lib.c" title="drivers/scsi/scsi_lib.c"><link rel="prev" href="API-scsi-nonblockable-ioctl.html" title="scsi_nonblockable_ioctl"><link rel="next" href="API-scsi-mode-select.html" title="scsi_mode_select"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">scsi_execute</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-scsi-nonblockable-ioctl.html">Prev</a> </td><th width="60%" align="center">drivers/scsi/scsi_lib.c</th><td width="20%" align="right"> <a accesskey="n" href="API-scsi-mode-select.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-scsi-execute"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>scsi_execute — 
+  insert request and wait for the result
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">scsi_execute </b>(</code></td><td>struct scsi_device * <var class="pdparam">sdev</var>, </td></tr><tr><td> </td><td>const unsigned char * <var class="pdparam">cmd</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">data_direction</var>, </td></tr><tr><td> </td><td>void * <var class="pdparam">buffer</var>, </td></tr><tr><td> </td><td>unsigned <var class="pdparam">bufflen</var>, </td></tr><tr><td> </td><td>unsigned char * <var class="pdparam">sense</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">timeout</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">retries</var>, </td></tr><tr><td> </td><td>u64 <var class="pdparam">flags</var>, </td></tr><tr><td> </td><td>int * <var class="pdparam">resid</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm1853"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>sdev</code></em></span></dt><dd><p>
+     scsi device
+    </p></dd><dt><span class="term"><em class="parameter"><code>cmd</code></em></span></dt><dd><p>
+     scsi command
+    </p></dd><dt><span class="term"><em class="parameter"><code>data_direction</code></em></span></dt><dd><p>
+     data direction
+    </p></dd><dt><span class="term"><em class="parameter"><code>buffer</code></em></span></dt><dd><p>
+     data buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>bufflen</code></em></span></dt><dd><p>
+     len of buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>sense</code></em></span></dt><dd><p>
+     optional sense buffer
+    </p></dd><dt><span class="term"><em class="parameter"><code>timeout</code></em></span></dt><dd><p>
+     request timeout in seconds
+    </p></dd><dt><span class="term"><em class="parameter"><code>retries</code></em></span></dt><dd><p>
+     number of times to retry request
+    </p></dd><dt><span class="term"><em class="parameter"><code>flags</code></em></span></dt><dd><p>
+     or into request flags;
+    </p></dd><dt><span class="term"><em class="parameter"><code>resid</code></em></span></dt><dd><p>
+     optional residual length
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm1906"></a><h2>Description</h2><p>
+   returns the req-&gt;errors value which is the scsi_cmnd result
+   field.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-scsi-nonblockable-ioctl.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="mid_layer.html#scsi_lib.c">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-scsi-mode-select.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">scsi_nonblockable_ioctl</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">scsi_mode_select</span></td></tr></table></div></body></html>

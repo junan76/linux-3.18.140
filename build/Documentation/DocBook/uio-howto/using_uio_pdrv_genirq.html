@@ -1,0 +1,33 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Using uio_pdrv_genirq for platform devices</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Userspace I/O HOWTO"><link rel="up" href="custom_kernel_module.html" title="Chapter 3. Writing your own kernel module"><link rel="prev" href="using_uio_pdrv.html" title="Using uio_pdrv for platform devices"><link rel="next" href="using%20uio_dmem_genirq.html" title="Using uio_dmem_genirq for platform devices"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Using uio_pdrv_genirq for platform devices</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="using_uio_pdrv.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Writing your own kernel module</th><td width="20%" align="right"> <a accesskey="n" href="using%20uio_dmem_genirq.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using_uio_pdrv_genirq"></a>Using uio_pdrv_genirq for platform devices</h2></div></div></div><p>
+	Especially in embedded devices, you frequently find chips where the
+	irq pin is tied to its own dedicated interrupt line. In such cases,
+	where you can be really sure the interrupt is not shared, we can take
+	the concept of <code class="varname">uio_pdrv</code> one step further and use a
+	generic interrupt handler. That's what
+	<code class="varname">uio_pdrv_genirq</code> does.
+	</p><p>
+	The setup for this driver is the same as described above for
+	<code class="varname">uio_pdrv</code>, except that you do not implement an
+	interrupt handler. The <code class="varname">.handler</code> element of
+	<code class="varname">struct uio_info</code> must remain
+	<code class="varname">NULL</code>. The  <code class="varname">.irq_flags</code> element
+	must not contain <code class="varname">IRQF_SHARED</code>.
+	</p><p>
+	You will set the <code class="varname">.name</code> element of
+	<code class="varname">struct platform_device</code> to
+	<code class="varname">"uio_pdrv_genirq"</code> to use this driver.
+	</p><p>
+	The generic interrupt handler of <code class="varname">uio_pdrv_genirq</code>
+	will simply disable the interrupt line using
+	<code class="function">disable_irq_nosync()</code>. After doing its work,
+	userspace can reenable the interrupt by writing 0x00000001 to the UIO
+	device file. The driver already implements an
+	<code class="function">irq_control()</code> to make this possible, you must not
+	implement your own.
+	</p><p>
+	Using <code class="varname">uio_pdrv_genirq</code> not only saves a few lines of
+	interrupt handler code. You also do not need to know anything about
+	the chip's internal registers to create the kernel part of the driver.
+	All you need to know is the irq number of the pin the chip is
+	connected to.
+	</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="using_uio_pdrv.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="custom_kernel_module.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="using%20uio_dmem_genirq.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Using uio_pdrv for platform devices </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Using uio_dmem_genirq for platform devices</td></tr></table></div></body></html>

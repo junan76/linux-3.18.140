@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>blk_update_request</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="blkdev.html" title="Chapter 14. Block Devices"><link rel="prev" href="API-blk-fetch-request.html" title="blk_fetch_request"><link rel="next" href="API-blk-unprep-request.html" title="blk_unprep_request"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">blk_update_request</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-blk-fetch-request.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Block Devices</th><td width="20%" align="right"> <a accesskey="n" href="API-blk-unprep-request.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-blk-update-request"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>blk_update_request — 
+     Special helper function for request stacking drivers
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">bool <b class="fsfunc">blk_update_request </b>(</code></td><td>struct request * <var class="pdparam">req</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">error</var>, </td></tr><tr><td> </td><td>unsigned int <var class="pdparam">nr_bytes</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm26173"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>req</code></em></span></dt><dd><p>
+     the request being processed
+    </p></dd><dt><span class="term"><em class="parameter"><code>error</code></em></span></dt><dd><p>
+     <code class="constant">0</code> for success, &lt; <code class="constant">0</code> for error
+    </p></dd><dt><span class="term"><em class="parameter"><code>nr_bytes</code></em></span></dt><dd><p>
+     number of bytes to complete <em class="parameter"><code>req</code></em>
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm26194"></a><h2>Description</h2><p>
+   Ends I/O on a number of bytes attached to <em class="parameter"><code>req</code></em>, but doesn't complete
+   the request structure even if <em class="parameter"><code>req</code></em> doesn't have leftover.
+   If <em class="parameter"><code>req</code></em> has leftover, sets it up for the next range of segments.
+   </p><p>
+
+   This special helper function is only for request stacking drivers
+   (e.g. request-based dm) so that they can handle partial completion.
+   Actual device drivers should use blk_end_request instead.
+   </p><p>
+
+   Passing the result of <code class="function">blk_rq_bytes</code> as <em class="parameter"><code>nr_bytes</code></em> guarantees
+   <code class="constant">false</code> return from this function.
+</p></div><div class="refsect1"><a name="idm26205"></a><h2>Return</h2><p>
+   <code class="constant">false</code> - this request doesn't have any more data
+   <code class="constant">true</code>  - this request has more data
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-blk-fetch-request.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="blkdev.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-blk-unprep-request.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">blk_fetch_request</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">blk_unprep_request</span></td></tr></table></div></body></html>

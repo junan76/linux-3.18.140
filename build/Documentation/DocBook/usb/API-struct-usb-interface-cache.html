@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct usb_interface_cache</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="up" href="hostside.html" title="Chapter 4. Host-Side Data Types and Macros"><link rel="prev" href="API-struct-usb-interface.html" title="struct usb_interface"><link rel="next" href="API-struct-usb-host-config.html" title="struct usb_host_config"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct usb_interface_cache</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-usb-interface.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Host-Side Data Types and Macros</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-usb-host-config.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-usb-interface-cache"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct usb_interface_cache — 
+     long-term representation of a device interface
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct usb_interface_cache {
+  unsigned num_altsetting;
+  struct kref ref;
+  struct usb_host_interface altsetting[0];
+};  </pre></div><div class="refsect1"><a name="idm281"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">num_altsetting</span></dt><dd><p>
+   number of altsettings defined.
+      </p></dd><dt><span class="term">ref</span></dt><dd><p>
+   reference counter.
+      </p></dd><dt><span class="term">altsetting[0]</span></dt><dd><p>
+   variable-length array of interface structures, one for
+   each alternate setting that may be selected.  Each one includes a
+   set of endpoint configurations.  They will be in no particular order.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm296"></a><h2>Description</h2><p>
+   These structures persist for the lifetime of a usb_device, unlike
+   struct usb_interface (which persists only as long as its configuration
+   is installed).  The altsetting arrays can be accessed through these
+   structures at any time, permitting comparison of configurations and
+   providing support for the /proc/bus/usb/devices pseudo-file.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-usb-interface.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="hostside.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-usb-host-config.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct usb_interface</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct usb_host_config</span></td></tr></table></div></body></html>

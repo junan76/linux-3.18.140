@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>skb_cow_data</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Linux Networking and Network Devices APIs"><link rel="up" href="ch01s02.html" title="Socket Buffer Functions"><link rel="prev" href="API-skb-to-sgvec.html" title="skb_to_sgvec"><link rel="next" href="API-skb-clone-sk.html" title="skb_clone_sk"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">skb_cow_data</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-skb-to-sgvec.html">Prev</a> </td><th width="60%" align="center">Socket Buffer Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-skb-clone-sk.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-skb-cow-data"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>skb_cow_data — 
+     Check that a socket buffer's data buffers are writable
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">skb_cow_data </b>(</code></td><td>struct sk_buff * <var class="pdparam">skb</var>, </td></tr><tr><td> </td><td>int <var class="pdparam">tailbits</var>, </td></tr><tr><td> </td><td>struct sk_buff ** <var class="pdparam">trailer</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm5746"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>skb</code></em></span></dt><dd><p>
+     The socket buffer to check.
+    </p></dd><dt><span class="term"><em class="parameter"><code>tailbits</code></em></span></dt><dd><p>
+     Amount of trailing space to be added
+    </p></dd><dt><span class="term"><em class="parameter"><code>trailer</code></em></span></dt><dd><p>
+     Returned pointer to the skb where the <em class="parameter"><code>tailbits</code></em> space begins
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm5765"></a><h2>Description</h2><p>
+   Make sure that the data buffers attached to a socket buffer are
+   writable. If they are not, private copies are made of the data buffers
+   and the socket buffer is set to use these instead.
+   </p><p>
+
+   If <em class="parameter"><code>tailbits</code></em> is given, make sure that there is space to write <em class="parameter"><code>tailbits</code></em>
+   bytes of data beyond current end of socket buffer.  <em class="parameter"><code>trailer</code></em> will be
+   set to point to the skb in which this space begins.
+   </p><p>
+
+   The number of scatterlist elements required to completely map the
+   COW'd and extended socket buffer will be returned.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-skb-to-sgvec.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-skb-clone-sk.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">skb_to_sgvec</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">skb_clone_sk</span></td></tr></table></div></body></html>

@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>zap_vma_ptes</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API-try-to-release-page.html" title="try_to_release_page"><link rel="next" href="API-vm-insert-page.html" title="vm_insert_page"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">zap_vma_ptes</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-try-to-release-page.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-vm-insert-page.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-zap-vma-ptes"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>zap_vma_ptes — 
+  remove ptes mapping the vma
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">int <b class="fsfunc">zap_vma_ptes </b>(</code></td><td>struct vm_area_struct * <var class="pdparam">vma</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">address</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">size</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm9579"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>vma</code></em></span></dt><dd><p>
+     vm_area_struct holding ptes to be zapped
+    </p></dd><dt><span class="term"><em class="parameter"><code>address</code></em></span></dt><dd><p>
+     starting address of pages to zap
+    </p></dd><dt><span class="term"><em class="parameter"><code>size</code></em></span></dt><dd><p>
+     number of bytes to zap
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm9597"></a><h2>Description</h2><p>
+   This function only unmaps ptes assigned to VM_PFNMAP vmas.
+   </p><p>
+
+   The entire address range must be fully contained within the vma.
+   </p><p>
+
+   Returns 0 if successful.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-try-to-release-page.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-vm-insert-page.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">try_to_release_page</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">vm_insert_page</span></td></tr></table></div></body></html>

@@ -1,0 +1,85 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 17. Clock Framework</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="index.html" title="The Linux Kernel API"><link rel="prev" href="API-misc-deregister.html" title="misc_deregister"><link rel="next" href="API-struct-clk-notifier.html" title="struct clk_notifier"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 17. Clock Framework</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-misc-deregister.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="API-struct-clk-notifier.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="clk"></a>Chapter 17. Clock Framework</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="refentrytitle"><a href="API-struct-clk-notifier.html"><span class="phrase">struct clk_notifier</span></a></span><span class="refpurpose"> — 
+  associate a clk with a notifier
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-clk-notifier-data.html"><span class="phrase">struct clk_notifier_data</span></a></span><span class="refpurpose"> — 
+     rate data to pass to the notifier callback
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-notifier-register.html"><span class="phrase">clk_notifier_register</span></a></span><span class="refpurpose"> — 
+     change notifier callback
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-notifier-unregister.html"><span class="phrase">clk_notifier_unregister</span></a></span><span class="refpurpose"> — 
+     change notifier callback
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-get-accuracy.html"><span class="phrase">clk_get_accuracy</span></a></span><span class="refpurpose"> — 
+     obtain the clock accuracy in ppb (parts per billion) for a clock source.
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-set-phase.html"><span class="phrase">clk_set_phase</span></a></span><span class="refpurpose"> — 
+     adjust the phase shift of a clock signal
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-get-phase.html"><span class="phrase">clk_get_phase</span></a></span><span class="refpurpose"> — 
+     return the phase shift of a clock signal
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-prepare.html"><span class="phrase">clk_prepare</span></a></span><span class="refpurpose"> — 
+     prepare a clock source
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-unprepare.html"><span class="phrase">clk_unprepare</span></a></span><span class="refpurpose"> — 
+     undo preparation of a clock source
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-get.html"><span class="phrase">clk_get</span></a></span><span class="refpurpose"> — 
+     lookup and obtain a reference to a clock producer.
+ </span></dt><dt><span class="refentrytitle"><a href="API-devm-clk-get.html"><span class="phrase">devm_clk_get</span></a></span><span class="refpurpose"> — 
+     lookup and obtain a managed reference to a clock producer.
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-enable.html"><span class="phrase">clk_enable</span></a></span><span class="refpurpose"> — 
+     inform the system when the clock source should be running.
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-disable.html"><span class="phrase">clk_disable</span></a></span><span class="refpurpose"> — 
+     inform the system when the clock source is no longer required.
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-get-rate.html"><span class="phrase">clk_get_rate</span></a></span><span class="refpurpose"> — 
+     obtain the current clock rate (in Hz) for a clock source. This is only valid once the clock source has been enabled.
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-put.html"><span class="phrase">clk_put</span></a></span><span class="refpurpose"> — 
+     "free" the clock source
+ </span></dt><dt><span class="refentrytitle"><a href="API-devm-clk-put.html"><span class="phrase">devm_clk_put</span></a></span><span class="refpurpose"> — 
+     "free" a managed clock source
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-round-rate.html"><span class="phrase">clk_round_rate</span></a></span><span class="refpurpose"> — 
+     adjust a rate to the exact rate a clock can provide
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-set-rate.html"><span class="phrase">clk_set_rate</span></a></span><span class="refpurpose"> — 
+     set the clock rate for a clock source
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-set-parent.html"><span class="phrase">clk_set_parent</span></a></span><span class="refpurpose"> — 
+     set the parent clock source for this clock
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-get-parent.html"><span class="phrase">clk_get_parent</span></a></span><span class="refpurpose"> — 
+     get the parent clock source for this clock
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-get-sys.html"><span class="phrase">clk_get_sys</span></a></span><span class="refpurpose"> — 
+     get a clock based upon the device name
+ </span></dt><dt><span class="refentrytitle"><a href="API-clk-add-alias.html"><span class="phrase">clk_add_alias</span></a></span><span class="refpurpose"> — 
+     add a new clock alias
+ </span></dt></dl></div><p>
+	The clock framework defines programming interfaces to support
+	software management of the system clock tree.
+	This framework is widely used with System-On-Chip (SOC) platforms
+	to support power management and various devices which may need
+	custom clock rates.
+	Note that these "clocks" don't relate to timekeeping or real
+	time clocks (RTCs), each of which have separate frameworks.
+	These <span class="structname">struct clk</span> instances may be used
+	to manage for example a 96 MHz signal that is used to shift bits
+	into and out of peripherals or busses, or otherwise trigger
+	synchronous state machine transitions in system hardware.
+     </p><p>
+	Power management is supported by explicit software clock gating:
+	unused clocks are disabled, so the system doesn't waste power
+	changing the state of transistors that aren't in active use.
+	On some systems this may be backed by hardware clock gating,
+	where clocks are gated without being disabled in software.
+	Sections of chips that are powered but not clocked may be able
+	to retain their last state.
+	This low power state is often called a <span class="emphasis"><em>retention
+	mode</em></span>.
+	This mode still incurs leakage currents, especially with finer
+	circuit geometries, but for CMOS circuits power is mostly used
+	by clocked state changes.
+     </p><p>
+	Power-aware drivers only enable their clocks when the device
+	they manage is in active use.  Also, system sleep states often
+	differ according to which clock domains are active:  while a
+	"standby" state may allow wakeup from several active domains, a
+	"mem" (suspend-to-RAM) state may require a more wholesale shutdown
+	of clocks derived from higher speed PLLs and oscillators, limiting
+	the number of possible wakeup event sources.  A driver's suspend
+	method may need to be aware of system-specific clock constraints
+	on the target sleep state.
+     </p><p>
+        Some platforms support programmable clock generators.  These
+	can be used by external chips of various kinds, such as other
+	CPUs, multimedia codecs, and devices with strict requirements
+	for interface clocking.
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-misc-deregister.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="API-struct-clk-notifier.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">misc_deregister</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct clk_notifier</span></td></tr></table></div></body></html>

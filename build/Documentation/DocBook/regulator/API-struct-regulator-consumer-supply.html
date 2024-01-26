@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>struct regulator_consumer_supply</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Voltage and current regulator API"><link rel="up" href="api.html" title="Chapter 5. API reference"><link rel="prev" href="API-struct-regulation-constraints.html" title="struct regulation_constraints"><link rel="next" href="API-struct-regulator-init-data.html" title="struct regulator_init_data"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">struct regulator_consumer_supply</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-regulation-constraints.html">Prev</a> </td><th width="60%" align="center">Chapter 5. API reference</th><td width="20%" align="right"> <a accesskey="n" href="API-struct-regulator-init-data.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-struct-regulator-consumer-supply"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>struct regulator_consumer_supply — 
+     supply -&gt; device mapping
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><pre class="programlisting">
+struct regulator_consumer_supply {
+  const char * dev_name;
+  const char * supply;
+};  </pre></div><div class="refsect1"><a name="idm334"></a><h2>Members</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">dev_name</span></dt><dd><p>
+   Result of <code class="function">dev_name</code> for the consumer.
+      </p></dd><dt><span class="term">supply</span></dt><dd><p>
+   Name for the supply.
+      </p></dd></dl></div></div><div class="refsect1"><a name="idm346"></a><h2>Description</h2><p>
+   </p><p>
+
+   This maps a supply name to a device. Use of dev_name allows support for
+   buses which make struct device available late such as I2C.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-regulation-constraints.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="api.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-struct-regulator-init-data.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct regulation_constraints</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">struct regulator_init_data</span></td></tr></table></div></body></html>

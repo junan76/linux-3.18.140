@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>page_cache_next_hole</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux Kernel API"><link rel="up" href="ch04s03.html" title="More Memory Management Functions"><link rel="prev" href="API---lock-page.html" title="__lock_page"><link rel="next" href="API-page-cache-prev-hole.html" title="page_cache_prev_hole"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">page_cache_next_hole</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API---lock-page.html">Prev</a> </td><th width="60%" align="center">More Memory Management Functions</th><td width="20%" align="right"> <a accesskey="n" href="API-page-cache-prev-hole.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-page-cache-next-hole"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>page_cache_next_hole — 
+     find the next hole (not-present entry)
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">pgoff_t <b class="fsfunc">page_cache_next_hole </b>(</code></td><td>struct address_space * <var class="pdparam">mapping</var>, </td></tr><tr><td> </td><td>pgoff_t <var class="pdparam">index</var>, </td></tr><tr><td> </td><td>unsigned long <var class="pdparam">max_scan</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm8885"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>mapping</code></em></span></dt><dd><p>
+     mapping
+    </p></dd><dt><span class="term"><em class="parameter"><code>index</code></em></span></dt><dd><p>
+     index
+    </p></dd><dt><span class="term"><em class="parameter"><code>max_scan</code></em></span></dt><dd><p>
+     maximum range to search
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm8903"></a><h2>Description</h2><p>
+   Search the set [index, min(index+max_scan-1, MAX_INDEX)] for the
+   lowest indexed hole.
+</p></div><div class="refsect1"><a name="idm8906"></a><h2>Returns</h2><p>
+   the index of the hole if found, otherwise returns an index
+   outside of the set specified (in which case 'return - index &gt;=
+   max_scan' will be true). In rare cases of index wrap-around, 0 will
+   be returned.
+   </p><p>
+
+   page_cache_next_hole may be called under rcu_read_lock. However,
+   like radix_tree_gang_lookup, this will not atomically search a
+   snapshot of the tree at a single point in time. For example, if a
+   hole is created at index 5, then subsequently a hole is created at
+   index 10, page_cache_next_hole covering both indexes may return 10
+   if called under rcu_read_lock.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API---lock-page.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-page-cache-prev-hole.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">__lock_page</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">page_cache_prev_hole</span></td></tr></table></div></body></html>

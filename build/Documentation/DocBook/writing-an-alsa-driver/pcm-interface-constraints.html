@@ -1,0 +1,110 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Constraints</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Writing an ALSA Driver"><link rel="up" href="pcm-interface.html" title="Chapter 5. PCM Interface"><link rel="prev" href="pcm-interface-atomicity.html" title="Atomicity"><link rel="next" href="control-interface.html" title="Chapter 6. Control Interface"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Constraints</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pcm-interface-atomicity.html">Prev</a> </td><th width="60%" align="center">Chapter 5. PCM Interface</th><td width="20%" align="right"> <a accesskey="n" href="control-interface.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pcm-interface-constraints"></a>Constraints</h2></div></div></div><p>
+        If your chip supports unconventional sample rates, or only the
+      limited samples, you need to set a constraint for the
+      condition. 
+      </p><p>
+        For example, in order to restrict the sample rates in the some
+        supported values, use
+	<code class="function">snd_pcm_hw_constraint_list()</code>.
+	You need to call this function in the open callback.
+
+        </p><div class="example"><a name="idm817"></a><p class="title"><b>Example 5.5. Example of Hardware Constraints</b></p><div class="example-contents"><pre class="programlisting">
+
+  static unsigned int rates[] =
+          {4000, 10000, 22050, 44100};
+  static struct snd_pcm_hw_constraint_list constraints_rates = {
+          .count = ARRAY_SIZE(rates),
+          .list = rates,
+          .mask = 0,
+  };
+
+  static int snd_mychip_pcm_open(struct snd_pcm_substream *substream)
+  {
+          int err;
+          ....
+          err = snd_pcm_hw_constraint_list(substream-&gt;runtime, 0,
+                                           SNDRV_PCM_HW_PARAM_RATE,
+                                           &amp;constraints_rates);
+          if (err &lt; 0)
+                  return err;
+          ....
+  }
+
+          </pre></div></div><p><br class="example-break">
+      </p><p>
+        There are many different constraints.
+        Look at <code class="filename">sound/pcm.h</code> for a complete list.
+        You can even define your own constraint rules.
+        For example, let's suppose my_chip can manage a substream of 1 channel
+        if and only if the format is S16_LE, otherwise it supports any format
+        specified in the <span class="structname">snd_pcm_hardware</span> structure (or in any
+        other constraint_list). You can build a rule like this:
+
+        </p><div class="example"><a name="idm823"></a><p class="title"><b>Example 5.6. Example of Hardware Constraints for Channels</b></p><div class="example-contents"><pre class="programlisting">
+
+  static int hw_rule_channels_by_format(struct snd_pcm_hw_params *params,
+                                        struct snd_pcm_hw_rule *rule)
+  {
+          struct snd_interval *c = hw_param_interval(params,
+                        SNDRV_PCM_HW_PARAM_CHANNELS);
+          struct snd_mask *f = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
+          struct snd_interval ch;
+
+          snd_interval_any(&amp;ch);
+          if (f-&gt;bits[0] == SNDRV_PCM_FMTBIT_S16_LE) {
+                  ch.min = ch.max = 1;
+                  ch.integer = 1;
+                  return snd_interval_refine(c, &amp;ch);
+          }
+          return 0;
+  }
+
+          </pre></div></div><p><br class="example-break">
+      </p><p>
+        Then you need to call this function to add your rule:
+
+       </p><div class="informalexample"><pre class="programlisting">
+
+  snd_pcm_hw_rule_add(substream-&gt;runtime, 0, SNDRV_PCM_HW_PARAM_CHANNELS,
+                      hw_rule_channels_by_format, NULL,
+                      SNDRV_PCM_HW_PARAM_FORMAT, -1);
+
+          </pre></div><p>
+      </p><p>
+        The rule function is called when an application sets the PCM
+	format, and it refines the number of channels accordingly.
+        But an application may set the number of channels before
+	setting the format. Thus you also need to define the inverse rule:
+
+       </p><div class="example"><a name="idm830"></a><p class="title"><b>Example 5.7. Example of Hardware Constraints for Formats</b></p><div class="example-contents"><pre class="programlisting">
+
+  static int hw_rule_format_by_channels(struct snd_pcm_hw_params *params,
+                                        struct snd_pcm_hw_rule *rule)
+  {
+          struct snd_interval *c = hw_param_interval(params,
+                SNDRV_PCM_HW_PARAM_CHANNELS);
+          struct snd_mask *f = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
+          struct snd_mask fmt;
+
+          snd_mask_any(&amp;fmt);    /* Init the struct */
+          if (c-&gt;min &lt; 2) {
+                  fmt.bits[0] &amp;= SNDRV_PCM_FMTBIT_S16_LE;
+                  return snd_mask_refine(f, &amp;fmt);
+          }
+          return 0;
+  }
+
+          </pre></div></div><p><br class="example-break">
+      </p><p>
+      ...and in the open callback:
+       </p><div class="informalexample"><pre class="programlisting">
+
+  snd_pcm_hw_rule_add(substream-&gt;runtime, 0, SNDRV_PCM_HW_PARAM_FORMAT,
+                      hw_rule_format_by_channels, NULL,
+                      SNDRV_PCM_HW_PARAM_CHANNELS, -1);
+
+          </pre></div><p>
+      </p><p>
+        I won't give more details here, rather I
+        would like to say, <span class="quote">“<span class="quote">Luke, use the source.</span>”</span>
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pcm-interface-atomicity.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="pcm-interface.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="control-interface.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Atomicity </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 6. Control Interface</td></tr></table></div></body></html>

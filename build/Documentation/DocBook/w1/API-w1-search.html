@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>w1_search</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="W1: Dallas' 1-wire bus"><link rel="up" href="w1_internal.html#w1.c" title="drivers/w1/w1.c"><link rel="prev" href="API-struct-w1-async-cmd.html" title="struct w1_async_cmd"><link rel="next" href="API-w1-process-callbacks.html" title="w1_process_callbacks"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="phrase">w1_search</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="API-struct-w1-async-cmd.html">Prev</a> </td><th width="60%" align="center">drivers/w1/w1.c</th><td width="20%" align="right"> <a accesskey="n" href="API-w1-process-callbacks.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="API-w1-search"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>w1_search — 
+  Performs a ROM Search &amp; registers any devices found.
+ </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="funcsynopsis"><table border="0" class="funcprototype-table" summary="Function synopsis" style="cellspacing: 0; cellpadding: 0;"><tr><td><code class="funcdef">void <b class="fsfunc">w1_search </b>(</code></td><td>struct w1_master * <var class="pdparam">dev</var>, </td></tr><tr><td> </td><td>u8 <var class="pdparam">search_type</var>, </td></tr><tr><td> </td><td>w1_slave_found_callback <var class="pdparam">cb</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div></div><div class="refsect1"><a name="idm418"></a><h2>Arguments</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="parameter"><code>dev</code></em></span></dt><dd><p>
+     The master device to search
+    </p></dd><dt><span class="term"><em class="parameter"><code>search_type</code></em></span></dt><dd><p>
+     W1_SEARCH to search all devices, or W1_ALARM_SEARCH
+     to return only devices in the alarmed state
+    </p></dd><dt><span class="term"><em class="parameter"><code>cb</code></em></span></dt><dd><p>
+     Function to call when a device is found
+    </p></dd></dl></div></div><div class="refsect1"><a name="idm436"></a><h2>Description</h2><p>
+   The 1-wire search is a simple binary tree search.
+   For each bit of the address, we read two bits and write one bit.
+   The bit written will put to sleep all devies that don't match that bit.
+   When the two reads differ, the direction choice is obvious.
+   When both bits are 0, we must choose a path to take.
+   When we can scan all 64 bits without having to choose a path, we are done.
+   </p><p>
+
+   See <span class="quote">“<span class="quote">Application note 187 1-wire search algorithm</span>”</span> at www.maxim-ic.com
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="API-struct-w1-async-cmd.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="w1_internal.html#w1.c">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="API-w1-process-callbacks.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="phrase">struct w1_async_cmd</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="phrase">w1_process_callbacks</span></td></tr></table></div></body></html>

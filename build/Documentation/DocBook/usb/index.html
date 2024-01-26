@@ -1,0 +1,276 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>The Linux-USB Host Side API</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="The Linux-USB Host Side API"><link rel="next" href="intro.html" title="Chapter 1. Introduction to USB on Linux"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">The Linux-USB Host Side API</th></tr><tr><td width="20%" align="left"> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="intro.html">Next</a></td></tr></table><hr></div><div class="book"><div class="titlepage"><div><div><h1 class="title"><a name="Linux-USB-API"></a>The Linux-USB Host Side API</h1></div><div><div class="legalnotice"><a name="idm4"></a><p>
+     This documentation is free software; you can redistribute
+     it and/or modify it under the terms of the GNU General Public
+     License as published by the Free Software Foundation; either
+     version 2 of the License, or (at your option) any later
+     version.
+   </p><p>
+     This program is distributed in the hope that it will be
+     useful, but WITHOUT ANY WARRANTY; without even the implied
+     warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+     See the GNU General Public License for more details.
+   </p><p>
+     You should have received a copy of the GNU General Public
+     License along with this program; if not, write to the Free
+     Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+     MA 02111-1307 USA
+   </p><p>
+     For more details see the file COPYING in the source
+     distribution of Linux.
+   </p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="chapter"><a href="intro.html">1. Introduction to USB on Linux</a></span></dt><dt><span class="chapter"><a href="host.html">2. USB Host-Side API Model</a></span></dt><dt><span class="chapter"><a href="types.html">3. USB-Standard Types</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-usb-speed-string.html"><span class="phrase">usb_speed_string</span></a></span><span class="refpurpose"> — 
+  Returns human readable-name of the speed.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-state-string.html"><span class="phrase">usb_state_string</span></a></span><span class="refpurpose"> — 
+     Returns human readable name for the state.
+ </span></dt></dl></dd><dt><span class="chapter"><a href="hostside.html">4. Host-Side Data Types and Macros</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-struct-usb-host-endpoint.html"><span class="phrase">struct usb_host_endpoint</span></a></span><span class="refpurpose"> — 
+  host-side endpoint descriptor and queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-interface.html"><span class="phrase">struct usb_interface</span></a></span><span class="refpurpose"> — 
+     what usb device drivers talk to
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-interface-cache.html"><span class="phrase">struct usb_interface_cache</span></a></span><span class="refpurpose"> — 
+     long-term representation of a device interface
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-host-config.html"><span class="phrase">struct usb_host_config</span></a></span><span class="refpurpose"> — 
+     representation of a device's configuration
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-device.html"><span class="phrase">struct usb_device</span></a></span><span class="refpurpose"> — 
+     kernel's representation of a USB device
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hub-for-each-child.html"><span class="phrase">usb_hub_for_each_child</span></a></span><span class="refpurpose"> — 
+     iterate over all child devices on the hub
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-interface-claimed.html"><span class="phrase">usb_interface_claimed</span></a></span><span class="refpurpose"> — 
+     returns true iff an interface is claimed
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-make-path.html"><span class="phrase">usb_make_path</span></a></span><span class="refpurpose"> — 
+     returns stable device path in the usb tree
+ </span></dt><dt><span class="refentrytitle"><a href="API-USB-DEVICE.html"><span class="phrase">USB_DEVICE</span></a></span><span class="refpurpose"> — 
+     macro used to describe a specific usb device
+ </span></dt><dt><span class="refentrytitle"><a href="API-USB-DEVICE-VER.html"><span class="phrase">USB_DEVICE_VER</span></a></span><span class="refpurpose"> — 
+     describe a specific usb device with a version range
+ </span></dt><dt><span class="refentrytitle"><a href="API-USB-DEVICE-INTERFACE-CLASS.html"><span class="phrase">USB_DEVICE_INTERFACE_CLASS</span></a></span><span class="refpurpose"> — 
+     describe a usb device with a specific interface class
+ </span></dt><dt><span class="refentrytitle"><a href="API-USB-DEVICE-INTERFACE-PROTOCOL.html"><span class="phrase">USB_DEVICE_INTERFACE_PROTOCOL</span></a></span><span class="refpurpose"> — 
+     describe a usb device with a specific interface protocol
+ </span></dt><dt><span class="refentrytitle"><a href="API-USB-DEVICE-INTERFACE-NUMBER.html"><span class="phrase">USB_DEVICE_INTERFACE_NUMBER</span></a></span><span class="refpurpose"> — 
+     describe a usb device with a specific interface number
+ </span></dt><dt><span class="refentrytitle"><a href="API-USB-DEVICE-INFO.html"><span class="phrase">USB_DEVICE_INFO</span></a></span><span class="refpurpose"> — 
+     macro used to describe a class of usb devices
+ </span></dt><dt><span class="refentrytitle"><a href="API-USB-INTERFACE-INFO.html"><span class="phrase">USB_INTERFACE_INFO</span></a></span><span class="refpurpose"> — 
+     macro used to describe a class of usb interfaces
+ </span></dt><dt><span class="refentrytitle"><a href="API-USB-DEVICE-AND-INTERFACE-INFO.html"><span class="phrase">USB_DEVICE_AND_INTERFACE_INFO</span></a></span><span class="refpurpose"> — 
+     describe a specific usb device with a class of usb interfaces
+ </span></dt><dt><span class="refentrytitle"><a href="API-USB-VENDOR-AND-INTERFACE-INFO.html"><span class="phrase">USB_VENDOR_AND_INTERFACE_INFO</span></a></span><span class="refpurpose"> — 
+     describe a specific usb vendor with a class of usb interfaces
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usbdrv-wrap.html"><span class="phrase">struct usbdrv_wrap</span></a></span><span class="refpurpose"> — 
+     wrapper for driver-model structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-driver.html"><span class="phrase">struct usb_driver</span></a></span><span class="refpurpose"> — 
+     identifies USB interface driver to usbcore
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-device-driver.html"><span class="phrase">struct usb_device_driver</span></a></span><span class="refpurpose"> — 
+     identifies USB device driver to usbcore
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-class-driver.html"><span class="phrase">struct usb_class_driver</span></a></span><span class="refpurpose"> — 
+     identifies a USB driver that wants to use the USB major number
+ </span></dt><dt><span class="refentrytitle"><a href="API-module-usb-driver.html"><span class="phrase">module_usb_driver</span></a></span><span class="refpurpose"> — 
+     Helper macro for registering a USB driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-urb.html"><span class="phrase">struct urb</span></a></span><span class="refpurpose"> — 
+     USB Request Block
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-fill-control-urb.html"><span class="phrase">usb_fill_control_urb</span></a></span><span class="refpurpose"> — 
+     initializes a control urb
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-fill-bulk-urb.html"><span class="phrase">usb_fill_bulk_urb</span></a></span><span class="refpurpose"> — 
+     macro to help initialize a bulk urb
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-fill-int-urb.html"><span class="phrase">usb_fill_int_urb</span></a></span><span class="refpurpose"> — 
+     macro to help initialize a interrupt urb
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-urb-dir-in.html"><span class="phrase">usb_urb_dir_in</span></a></span><span class="refpurpose"> — 
+     check if an URB describes an IN transfer
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-urb-dir-out.html"><span class="phrase">usb_urb_dir_out</span></a></span><span class="refpurpose"> — 
+     check if an URB describes an OUT transfer
+ </span></dt><dt><span class="refentrytitle"><a href="API-struct-usb-sg-request.html"><span class="phrase">struct usb_sg_request</span></a></span><span class="refpurpose"> — 
+     support for scatter/gather I/O
+ </span></dt></dl></dd><dt><span class="chapter"><a href="usbcore.html">5. USB Core APIs</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-usb-init-urb.html"><span class="phrase">usb_init_urb</span></a></span><span class="refpurpose"> — 
+  initializes a urb so that it can be used by a USB driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-alloc-urb.html"><span class="phrase">usb_alloc_urb</span></a></span><span class="refpurpose"> — 
+     creates a new urb for a USB driver to use
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-free-urb.html"><span class="phrase">usb_free_urb</span></a></span><span class="refpurpose"> — 
+     frees the memory used by a urb when all users of it are finished
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-get-urb.html"><span class="phrase">usb_get_urb</span></a></span><span class="refpurpose"> — 
+     increments the reference count of the urb
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-anchor-urb.html"><span class="phrase">usb_anchor_urb</span></a></span><span class="refpurpose"> — 
+     anchors an URB while it is processed
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-unanchor-urb.html"><span class="phrase">usb_unanchor_urb</span></a></span><span class="refpurpose"> — 
+     unanchors an URB
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-submit-urb.html"><span class="phrase">usb_submit_urb</span></a></span><span class="refpurpose"> — 
+     issue an asynchronous transfer request for an endpoint
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-unlink-urb.html"><span class="phrase">usb_unlink_urb</span></a></span><span class="refpurpose"> — 
+     abort/cancel a transfer request for an endpoint
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-kill-urb.html"><span class="phrase">usb_kill_urb</span></a></span><span class="refpurpose"> — 
+     cancel a transfer request and wait for it to finish
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-poison-urb.html"><span class="phrase">usb_poison_urb</span></a></span><span class="refpurpose"> — 
+     reliably kill a transfer and prevent further use of an URB
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-block-urb.html"><span class="phrase">usb_block_urb</span></a></span><span class="refpurpose"> — 
+     reliably prevent further use of an URB
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-kill-anchored-urbs.html"><span class="phrase">usb_kill_anchored_urbs</span></a></span><span class="refpurpose"> — 
+     cancel transfer requests en masse
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-poison-anchored-urbs.html"><span class="phrase">usb_poison_anchored_urbs</span></a></span><span class="refpurpose"> — 
+     cease all traffic from an anchor
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-unpoison-anchored-urbs.html"><span class="phrase">usb_unpoison_anchored_urbs</span></a></span><span class="refpurpose"> — 
+     let an anchor be used successfully again
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-unlink-anchored-urbs.html"><span class="phrase">usb_unlink_anchored_urbs</span></a></span><span class="refpurpose"> — 
+     asynchronously cancel transfer requests en masse
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-anchor-suspend-wakeups.html"><span class="phrase">usb_anchor_suspend_wakeups</span></a></span><span class="refpurpose"> — 
+   </span></dt><dt><span class="refentrytitle"><a href="API-usb-anchor-resume-wakeups.html"><span class="phrase">usb_anchor_resume_wakeups</span></a></span><span class="refpurpose"> — 
+   </span></dt><dt><span class="refentrytitle"><a href="API-usb-wait-anchor-empty-timeout.html"><span class="phrase">usb_wait_anchor_empty_timeout</span></a></span><span class="refpurpose"> — 
+     wait for an anchor to be unused
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-get-from-anchor.html"><span class="phrase">usb_get_from_anchor</span></a></span><span class="refpurpose"> — 
+     get an anchor's oldest urb
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-scuttle-anchored-urbs.html"><span class="phrase">usb_scuttle_anchored_urbs</span></a></span><span class="refpurpose"> — 
+     unanchor all an anchor's urbs
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-anchor-empty.html"><span class="phrase">usb_anchor_empty</span></a></span><span class="refpurpose"> — 
+     is an anchor empty
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-control-msg.html"><span class="phrase">usb_control_msg</span></a></span><span class="refpurpose"> — 
+  Builds a control urb, sends it off and waits for completion
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-interrupt-msg.html"><span class="phrase">usb_interrupt_msg</span></a></span><span class="refpurpose"> — 
+     Builds an interrupt urb, sends it off and waits for completion
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-bulk-msg.html"><span class="phrase">usb_bulk_msg</span></a></span><span class="refpurpose"> — 
+     Builds a bulk urb, sends it off and waits for completion
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-sg-init.html"><span class="phrase">usb_sg_init</span></a></span><span class="refpurpose"> — 
+     initializes scatterlist-based bulk/interrupt I/O request
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-sg-wait.html"><span class="phrase">usb_sg_wait</span></a></span><span class="refpurpose"> — 
+     synchronously execute scatter/gather request
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-sg-cancel.html"><span class="phrase">usb_sg_cancel</span></a></span><span class="refpurpose"> — 
+     stop scatter/gather i/o issued by <code class="function">usb_sg_wait</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-get-descriptor.html"><span class="phrase">usb_get_descriptor</span></a></span><span class="refpurpose"> — 
+     issues a generic GET_DESCRIPTOR request
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-string.html"><span class="phrase">usb_string</span></a></span><span class="refpurpose"> — 
+     returns UTF-8 version of a string descriptor
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-get-status.html"><span class="phrase">usb_get_status</span></a></span><span class="refpurpose"> — 
+     issues a GET_STATUS call
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-clear-halt.html"><span class="phrase">usb_clear_halt</span></a></span><span class="refpurpose"> — 
+     tells device to clear endpoint halt/stall condition
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-reset-endpoint.html"><span class="phrase">usb_reset_endpoint</span></a></span><span class="refpurpose"> — 
+     Reset an endpoint's state.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-set-interface.html"><span class="phrase">usb_set_interface</span></a></span><span class="refpurpose"> — 
+     Makes a particular alternate setting be current
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-reset-configuration.html"><span class="phrase">usb_reset_configuration</span></a></span><span class="refpurpose"> — 
+     lightweight device reset
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-driver-set-configuration.html"><span class="phrase">usb_driver_set_configuration</span></a></span><span class="refpurpose"> — 
+     Provide a way for drivers to change device configurations
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-register-dev.html"><span class="phrase">usb_register_dev</span></a></span><span class="refpurpose"> — 
+  register a USB device, and ask for a minor number
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-deregister-dev.html"><span class="phrase">usb_deregister_dev</span></a></span><span class="refpurpose"> — 
+     deregister a USB device's dynamic minor.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-driver-claim-interface.html"><span class="phrase">usb_driver_claim_interface</span></a></span><span class="refpurpose"> — 
+  bind a driver to an interface
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-driver-release-interface.html"><span class="phrase">usb_driver_release_interface</span></a></span><span class="refpurpose"> — 
+     unbind a driver from an interface
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-match-id.html"><span class="phrase">usb_match_id</span></a></span><span class="refpurpose"> — 
+     find first usb_device_id matching device or interface
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-register-device-driver.html"><span class="phrase">usb_register_device_driver</span></a></span><span class="refpurpose"> — 
+     register a USB device (not interface) driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-deregister-device-driver.html"><span class="phrase">usb_deregister_device_driver</span></a></span><span class="refpurpose"> — 
+     unregister a USB device (not interface) driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-register-driver.html"><span class="phrase">usb_register_driver</span></a></span><span class="refpurpose"> — 
+     register a USB interface driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-deregister.html"><span class="phrase">usb_deregister</span></a></span><span class="refpurpose"> — 
+     unregister a USB interface driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-enable-autosuspend.html"><span class="phrase">usb_enable_autosuspend</span></a></span><span class="refpurpose"> — 
+     allow a USB device to be autosuspended
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-disable-autosuspend.html"><span class="phrase">usb_disable_autosuspend</span></a></span><span class="refpurpose"> — 
+     prevent a USB device from being autosuspended
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-autopm-put-interface.html"><span class="phrase">usb_autopm_put_interface</span></a></span><span class="refpurpose"> — 
+     decrement a USB interface's PM-usage counter
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-autopm-put-interface-async.html"><span class="phrase">usb_autopm_put_interface_async</span></a></span><span class="refpurpose"> — 
+     decrement a USB interface's PM-usage counter
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-autopm-put-interface-no-suspend.html"><span class="phrase">usb_autopm_put_interface_no_suspend</span></a></span><span class="refpurpose"> — 
+     decrement a USB interface's PM-usage counter
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-autopm-get-interface.html"><span class="phrase">usb_autopm_get_interface</span></a></span><span class="refpurpose"> — 
+     increment a USB interface's PM-usage counter
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-autopm-get-interface-async.html"><span class="phrase">usb_autopm_get_interface_async</span></a></span><span class="refpurpose"> — 
+     increment a USB interface's PM-usage counter
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-autopm-get-interface-no-resume.html"><span class="phrase">usb_autopm_get_interface_no_resume</span></a></span><span class="refpurpose"> — 
+     increment a USB interface's PM-usage counter
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-find-alt-setting.html"><span class="phrase">usb_find_alt_setting</span></a></span><span class="refpurpose"> — 
+  Given a configuration, find the alternate setting for the given interface.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-ifnum-to-if.html"><span class="phrase">usb_ifnum_to_if</span></a></span><span class="refpurpose"> — 
+     get the interface object with a given interface number
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-altnum-to-altsetting.html"><span class="phrase">usb_altnum_to_altsetting</span></a></span><span class="refpurpose"> — 
+     get the altsetting structure with a given alternate setting number.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-find-interface.html"><span class="phrase">usb_find_interface</span></a></span><span class="refpurpose"> — 
+     find usb_interface pointer for driver and device
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-for-each-dev.html"><span class="phrase">usb_for_each_dev</span></a></span><span class="refpurpose"> — 
+     iterate over all USB devices in the system
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-alloc-dev.html"><span class="phrase">usb_alloc_dev</span></a></span><span class="refpurpose"> — 
+     usb device constructor (usbcore-internal)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-get-dev.html"><span class="phrase">usb_get_dev</span></a></span><span class="refpurpose"> — 
+     increments the reference count of the usb device structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-put-dev.html"><span class="phrase">usb_put_dev</span></a></span><span class="refpurpose"> — 
+     release a use of the usb device structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-get-intf.html"><span class="phrase">usb_get_intf</span></a></span><span class="refpurpose"> — 
+     increments the reference count of the usb interface structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-put-intf.html"><span class="phrase">usb_put_intf</span></a></span><span class="refpurpose"> — 
+     release a use of the usb interface structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-lock-device-for-reset.html"><span class="phrase">usb_lock_device_for_reset</span></a></span><span class="refpurpose"> — 
+     cautiously acquire the lock for a usb device structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-get-current-frame-number.html"><span class="phrase">usb_get_current_frame_number</span></a></span><span class="refpurpose"> — 
+     return current bus frame number
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-alloc-coherent.html"><span class="phrase">usb_alloc_coherent</span></a></span><span class="refpurpose"> — 
+     allocate dma-consistent buffer for URB_NO_xxx_DMA_MAP
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-free-coherent.html"><span class="phrase">usb_free_coherent</span></a></span><span class="refpurpose"> — 
+     free memory allocated with <code class="function">usb_alloc_coherent</code>
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-buffer-map.html"><span class="phrase">usb_buffer_map</span></a></span><span class="refpurpose"> — 
+     create DMA mapping(s) for an urb
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-buffer-dmasync.html"><span class="phrase">usb_buffer_dmasync</span></a></span><span class="refpurpose"> — 
+     synchronize DMA and CPU view of buffer(s)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-buffer-unmap.html"><span class="phrase">usb_buffer_unmap</span></a></span><span class="refpurpose"> — 
+     free DMA mapping(s) for an urb
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-buffer-map-sg.html"><span class="phrase">usb_buffer_map_sg</span></a></span><span class="refpurpose"> — 
+     create scatterlist DMA mapping(s) for an endpoint
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-buffer-dmasync-sg.html"><span class="phrase">usb_buffer_dmasync_sg</span></a></span><span class="refpurpose"> — 
+     synchronize DMA and CPU view of scatterlist buffer(s)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-buffer-unmap-sg.html"><span class="phrase">usb_buffer_unmap_sg</span></a></span><span class="refpurpose"> — 
+     free DMA mapping(s) for a scatterlist
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hub-clear-tt-buffer.html"><span class="phrase">usb_hub_clear_tt_buffer</span></a></span><span class="refpurpose"> — 
+  clear control/bulk TT state in high speed hub
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-set-device-state.html"><span class="phrase">usb_set_device_state</span></a></span><span class="refpurpose"> — 
+     change a device's current state (usbcore, hcds)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-root-hub-lost-power.html"><span class="phrase">usb_root_hub_lost_power</span></a></span><span class="refpurpose"> — 
+     called by HCD if the root hub lost Vbus power
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-reset-device.html"><span class="phrase">usb_reset_device</span></a></span><span class="refpurpose"> — 
+     warn interface drivers and perform a USB port reset
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-queue-reset-device.html"><span class="phrase">usb_queue_reset_device</span></a></span><span class="refpurpose"> — 
+     Reset a USB device from an atomic context
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hub-find-child.html"><span class="phrase">usb_hub_find_child</span></a></span><span class="refpurpose"> — 
+     Get the pointer of child device attached to the port which is specified by <em class="parameter"><code>port1</code></em>.
+ </span></dt></dl></dd><dt><span class="chapter"><a href="hcd.html">6. Host Controller APIs</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="API-usb-calc-bus-time.html"><span class="phrase">usb_calc_bus_time</span></a></span><span class="refpurpose"> — 
+  approximate periodic transaction time in nanoseconds
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-link-urb-to-ep.html"><span class="phrase">usb_hcd_link_urb_to_ep</span></a></span><span class="refpurpose"> — 
+     add an URB to its endpoint queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-check-unlink-urb.html"><span class="phrase">usb_hcd_check_unlink_urb</span></a></span><span class="refpurpose"> — 
+     check whether an URB may be unlinked
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-unlink-urb-from-ep.html"><span class="phrase">usb_hcd_unlink_urb_from_ep</span></a></span><span class="refpurpose"> — 
+     remove an URB from its endpoint queue
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-giveback-urb.html"><span class="phrase">usb_hcd_giveback_urb</span></a></span><span class="refpurpose"> — 
+     return URB from HCD to device driver
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-alloc-streams.html"><span class="phrase">usb_alloc_streams</span></a></span><span class="refpurpose"> — 
+     allocate bulk endpoint stream IDs.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-free-streams.html"><span class="phrase">usb_free_streams</span></a></span><span class="refpurpose"> — 
+     free bulk endpoint stream IDs.
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-resume-root-hub.html"><span class="phrase">usb_hcd_resume_root_hub</span></a></span><span class="refpurpose"> — 
+     called by HCD to resume its root hub
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-bus-start-enum.html"><span class="phrase">usb_bus_start_enum</span></a></span><span class="refpurpose"> — 
+     start immediate enumeration (for OTG)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-irq.html"><span class="phrase">usb_hcd_irq</span></a></span><span class="refpurpose"> — 
+     hook IRQs to HCD framework (bus glue)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hc-died.html"><span class="phrase">usb_hc_died</span></a></span><span class="refpurpose"> — 
+     report abnormal shutdown of a host controller (bus glue)
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-create-shared-hcd.html"><span class="phrase">usb_create_shared_hcd</span></a></span><span class="refpurpose"> — 
+     create and initialize an HCD structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-create-hcd.html"><span class="phrase">usb_create_hcd</span></a></span><span class="refpurpose"> — 
+     create and initialize an HCD structure
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-add-hcd.html"><span class="phrase">usb_add_hcd</span></a></span><span class="refpurpose"> — 
+     finish generic HCD structure initialization and register
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-remove-hcd.html"><span class="phrase">usb_remove_hcd</span></a></span><span class="refpurpose"> — 
+     shutdown processing for generic HCDs
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-pci-probe.html"><span class="phrase">usb_hcd_pci_probe</span></a></span><span class="refpurpose"> — 
+  initialize PCI-based HCDs
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-pci-remove.html"><span class="phrase">usb_hcd_pci_remove</span></a></span><span class="refpurpose"> — 
+     shutdown processing for PCI-based HCDs
+ </span></dt><dt><span class="refentrytitle"><a href="API-usb-hcd-pci-shutdown.html"><span class="phrase">usb_hcd_pci_shutdown</span></a></span><span class="refpurpose"> — 
+     shutdown host controller
+ </span></dt><dt><span class="refentrytitle"><a href="API-hcd-buffer-create.html"><span class="phrase">hcd_buffer_create</span></a></span><span class="refpurpose"> — 
+  initialize buffer pools
+ </span></dt><dt><span class="refentrytitle"><a href="API-hcd-buffer-destroy.html"><span class="phrase">hcd_buffer_destroy</span></a></span><span class="refpurpose"> — 
+     deallocate buffer pools
+ </span></dt></dl></dd><dt><span class="chapter"><a href="usbfs.html">7. The USB Filesystem (usbfs)</a></span></dt><dd><dl><dt><span class="sect1"><a href="usbfs.html#usbfs-files">What files are in "usbfs"?</a></span></dt><dt><span class="sect1"><a href="usbfs-fstab.html">Mounting and Access Control</a></span></dt><dt><span class="sect1"><a href="usbfs-devices.html">/proc/bus/usb/devices</a></span></dt><dt><span class="sect1"><a href="usbfs-bbbddd.html">/proc/bus/usb/BBB/DDD</a></span></dt><dt><span class="sect1"><a href="usbfs-lifecycle.html">Life Cycle of User Mode Drivers</a></span></dt><dt><span class="sect1"><a href="usbfs-ioctl.html">The ioctl() Requests</a></span></dt><dd><dl><dt><span class="sect2"><a href="usbfs-ioctl.html#usbfs-mgmt">Management/Status Requests</a></span></dt><dt><span class="sect2"><a href="usbfs-ioctl.html#usbfs-sync">Synchronous I/O Support</a></span></dt><dt><span class="sect2"><a href="usbfs-ioctl.html#usbfs-async">Asynchronous I/O Support</a></span></dt></dl></dd></dl></dd></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="intro.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"> </td><td width="40%" align="right" valign="top"> Chapter 1. Introduction to USB on Linux</td></tr></table></div></body></html>
