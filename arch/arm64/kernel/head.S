@@ -230,17 +230,33 @@ section_table:
 #endif
 
 ENTRY(stext)
+	/* 
+	 * 记录设备树在内存中的地址到x21
+	 */
 	mov	x21, x0				// x21=FDT
 	bl	el2_setup			// Drop to EL1, w20=cpu_boot_mode
+
+	/*
+	 * 计算物理地址和虚拟地址的偏移, 保存到x28
+	 */
 	bl	__calc_phys_offset		// x24=PHYS_OFFSET, x28=PHYS_OFFSET-PAGE_OFFSET
 	bl	set_cpu_boot_mode_flag
 	mrs	x22, midr_el1			// x22=cpuid
 	mov	x0, x22
+
+	/*
+	 * 查找cpu_table数组的地址, 并保存到x23
+	 */
 	bl	lookup_processor_type
 	mov	x23, x0				// x23=current cpu_table
 	cbz	x23, __error_p			// invalid processor (x23=0)?
+
+	/*
+	 * 验证设备树, 创建初始页表
+	 */
 	bl	__vet_fdt
 	bl	__create_page_tables		// x25=TTBR0, x26=TTBR1
+	
 	/*
 	 * The following calls CPU specific code in a position independent
 	 * manner. See arch/arm64/mm/proc.S for details. x23 = base of
@@ -248,9 +264,24 @@ ENTRY(stext)
 	 * On return, the CPU will be ready for the MMU to be turned on and
 	 * the TCR will have been set.
 	 */
+
+	/*
+	 * 加载__mmap_switched的虚拟地址到x27, __mmap_switched最终会调用start_kernel,
+	 * __switch_data指向的地址还保存了其他重要数据. 
+	 */
 	ldr	x27, __switch_data		// address to jump to after
 						// MMU has been enabled
+
+	/*
+	 * 设置lr寄存器的值为__enable_mmu. 所以, 之后的ret指令将返回到__enable_mmu, 此函数的作用是开启MMU,
+	 * 初始页表在此函数调用之前已经创建完毕.
+	 */
 	adr	lr, __enable_mmu		// return (PIC) address
+
+	/*
+	 * 获取cpu_table中的cpu_setup函数指针, 转成物理地址之后调用, 该指针指向arch/arm64/mm/proc.S
+	 * 中定义的__cpu_setup.
+	 */
 	ldr	x12, [x23, #CPU_INFO_SETUP]
 	add	x12, x12, x28			// __virt_to_phys
 	br	x12				// initialise processor
